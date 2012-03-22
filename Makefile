@@ -36,6 +36,8 @@ install: mut_queue_C.so
 	if [ "$$TARG" != "" ];then \
 		echo cp mut_queue_C.so $$TARG/ ;\
 		cp mut_queue_C.so $$TARG/ ;\
+		echo cp nano_acquis_pureconvert_C.so $$TARG/ ;\
+		cp nano_acquis_pureconvert_C.so $$TARG/ ;\
 		ls -l $$TARG/;\
 	else\
 		echo ERROR; echo "  " NO PATH FOR MACRO. CREATE SOME IN ~/.rootrc;\
@@ -47,7 +49,7 @@ plugins: plug_analyze.so plug_queue.so
 
 
 plug_queue.so:  plug_queue.o
-	gcc -shared -o plug_queue.so plug_queue.o
+	g++ -shared `root-config --libs --cflags --glibs` -o plug_queue.so plug_queue.o
 
 
 plug_queue.o: plug_queue.cpp
@@ -56,7 +58,7 @@ plug_queue.o: plug_queue.cpp
 
 
 plug_analyze.so:	  plug_analyze.o
-	gcc -shared -o plug_analyze.so plug_analyze.o
+	g++ -shared `root-config --libs --cflags --glibs` -o plug_analyze.so plug_analyze.o
 
 
 plug_analyze.o: plug_analyze.cpp 

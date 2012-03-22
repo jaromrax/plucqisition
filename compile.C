@@ -2,6 +2,10 @@
   // THIS IS A TYPICAL LINE TO COMPILE UNDER ROOT CINT
   // avoiding loading things via .rootlogon
 
+  //difficult with 5.32.00...............
+ gSystem->Load("/usr/lib/libdl.so");
+
+gROOT->ProcessLine(".L nano_acquis_pureconvert.C++g");
 gROOT->ProcessLine(".L mut_queue.C++g");
 
 
