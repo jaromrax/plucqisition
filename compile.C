@@ -2,6 +2,7 @@
   // THIS IS A TYPICAL LINE TO COMPILE UNDER ROOT CINT
   // avoiding loading things via .rootlogon
 
+
   //difficult with 5.32.00...............
  gSystem->Load("/usr/lib/libdl.so");
 
@@ -23,6 +24,6 @@ and
 gSystem->Load("/usr/lib/libdl.so");
 
 to get it to compile!!!!
-
+AND I cannot get proper links to TSocket ....crashes....
 
  */

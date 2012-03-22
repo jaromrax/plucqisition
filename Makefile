@@ -17,7 +17,7 @@ all:
 	echo "            coppies the .so file to MACRO path";
 
 mut:mut_queue.h mut_queue.C cuts_manip.h nano_acquis_pureconvert.C xml_attr.c xml_attr.h logterm.C
-	root -n -b -q  compile.C  ; echo ECHO $?
+	root -n -b -q  compile.C  ; echo ECHO
 
 
 install: mut_queue_C.so
@@ -45,28 +45,21 @@ install: mut_queue_C.so
 
 
 
-plugins: plug_analyze.so plug_queue.so
+plugins: plug_queue.cpp plug_analyze.cpp mut_queue.h cuts_manip.h nano_acquis_pureconvert.C xml_attr.c xml_attr.h logterm.C plug_queue.so plug_analyze.so
 
 
-plug_queue.so:  plug_queue.o
-	g++ -shared `root-config --libs --cflags --glibs` -o plug_queue.so plug_queue.o
+plug_queue.so: mut_queue.h cuts_manip.h nano_acquis_pureconvert.C xml_attr.c xml_attr.h logterm.C
+	`root-config --cxx --cflags` -fPIC -shared -o plug_queue.so plug_queue.cpp -lXMLIO `root-config --glibs`
 
-
-plug_queue.o: plug_queue.cpp
-	g++ -fPIC -c plug_queue.cpp `root-config --libs --cflags --glibs`
-
-
-
-plug_analyze.so:	  plug_analyze.o
-	g++ -shared `root-config --libs --cflags --glibs` -o plug_analyze.so plug_analyze.o
-
-
-plug_analyze.o: plug_analyze.cpp 
-	g++ -fPIC -c plug_analyze.cpp `root-config --libs --cflags --glibs`
+plug_analyze.so: mut_queue.h cuts_manip.h nano_acquis_pureconvert.C xml_attr.c xml_attr.h logterm.C
+	`root-config --cxx --cflags` -fPIC -shared -o plug_analyze.so plug_analyze.cpp -lXMLIO `root-config --glibs`
+#
+#I add -l XMLIO to have TXML...
+##`root-config --libs --cflags --glibs` -lXMLIO
 
 
 clean:
-	  rm plug_analyze.so  plug_queue.so plug_analyze.o plug_queue.o
+	  rm plug_analyze.so  plug_queue.so mut_queue_C.so mut_queue_C.d
 
 ##	g++ -fPIC -c plug_queue.cpp `root-config --libs --cflags --glibs`  &&  gcc -shared -o plug_queue.so plug_queue.o
 ##	g++ -fPIC -c plug_analyze.cpp `root-config --libs --cflags --glibs`  &&  gcc -shared -o plug_analyze.so plug_analyze.o
