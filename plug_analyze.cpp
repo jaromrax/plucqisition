@@ -42,6 +42,11 @@ extern "C" {
   //===========================================
 
 
+ int* evt_analyze_empty(int* par){
+   concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
+   if(XTERM!=NULL)fprintf(XTERM,"evt_analyze_remote  ..........................\n" );
+   usleep(1000*1000);
+ }
 
 
   /**************************************************

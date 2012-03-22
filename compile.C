@@ -2,6 +2,10 @@
   // THIS IS A TYPICAL LINE TO COMPILE UNDER ROOT CINT
   // avoiding loading things via .rootlogon
 
+
+
+ gSystem->Load("/usr/lib/libdl.so");                                                                                                              
+gROOT->ProcessLine(".L nano_acquis_pureconvert.C++g");
 gROOT->ProcessLine(".L mut_queue.C++g");
 
 
@@ -19,6 +23,6 @@ and
 gSystem->Load("/usr/lib/libdl.so");
 
 to get it to compile!!!!
-
+AND I cannot get proper links to TSocket ....crashes....
 
  */

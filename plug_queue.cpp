@@ -212,11 +212,12 @@ void hello() {
  int* evt_pusher_file(int* par){
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    if(XTERM!=NULL)fprintf(XTERM,"evt_pusher_remote (file)  par==%d; pointer==%d\n", par,(int)buffer );
-
+   int  wait=1;
       FILE *infile;  char fname[400];
       int buffer4;
       long long int cnt=0;
       size_t result;
+      int kilo=250000;
       TSmallish_xml xml("mut_queue.xml");
       xml.DisplayTele( xml.mainnode, 0, "files","pusher","file" );
       sprintf( fname,"%s", xml.output  );
@@ -224,10 +225,17 @@ void hello() {
       if(XTERM!=NULL)fprintf(XTERM,"opened %s\n", fname);
       if (infile!=NULL){
        while (!feof(infile)) {
-	 if ((cnt%250000)==0){if(XTERM!=NULL)fprintf(XTERM,"R %7lld kB\n",4*cnt/1000);} cnt++;
+	 kilo=25;
+	 if ((cnt%kilo)==0){if(XTERM!=NULL)fprintf(XTERM,"R %7lld kB\n",4*cnt/1000);} cnt++;
 	result=fread( &buffer4, 1, 4, infile );
-	if (result == 4) {	buffer->push( buffer4 ); }
-       }
+	if (result == 4) {	buffer->push( buffer4 );}
+	wait=MyCond.TimedWaitRelative( 3  ) ; //
+	if (wait==0){ 
+	  if(XTERM!=NULL)fprintf(XTERM,"PUSH RS evt_pusher_netw got BROADCAST SIGNAL... %s\n", "" );
+	  fclose(infile);
+	  break; 
+	}//wait==0
+       }//WHILE
        if(XTERM!=NULL)fprintf(XTERM,"evt_pusher_file closed....%s\n", fname );
 	fclose(infile);
       }else{
@@ -351,7 +359,13 @@ void hello() {
 
 
 
-
+ int* evt_poper_empty(int* par){
+   concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
+   if(XTERM!=NULL)fprintf(XTERM,"  POP evt_poper_remote  par==%d; pointer==%d\n", par,(int)buffer );
+   int datum=0;
+   int runempty=0;
+   usleep(1000*1000*5);
+ }
 
 
   /**************************************************
@@ -408,7 +422,7 @@ void hello() {
 
 
 
-
+ 
 
 
 
