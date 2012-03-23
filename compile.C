@@ -4,6 +4,11 @@
 
   //gROOT->ProcessLine(".L mut_queue.C++g");
 
+gSystem->Load("/usr/lib/libdl.so");
+
+gROOT->ProcessLine(".L nano_acquis_pureconvert.C++g");
+
+gROOT->ProcessLine(".L mut_queue.C++g");
 
 printf("\n\nroot -n -b -q  compile.C  %s\n\n\n","");
 
