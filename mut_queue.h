@@ -25,8 +25,6 @@
    .L mut_queue.C+ 
 ................maybe I do gSystem->Load("libThread"); in .rootlogon, but necessary?
 
-   g++  -ggdb3  -lpthread  -fPIC  `root-config --libs --cflags --glibs`   -Wall -rdynamic -ldl -lXMLIO mut_queue.c -o  mut_queue2
-
    g++  -ggdb3  -lpthread  -fPIC  `root-config --libs --cflags --glibs`   -Wall -rdynamic -ldl mut_queue.c -o  mut_queue2
 
 //    g++  -fPIC  `root-config --libs --cflags --glibs`   -Wall -rdynamic -ldl standalone.cpp -o standalone

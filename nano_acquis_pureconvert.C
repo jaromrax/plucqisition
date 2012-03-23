@@ -419,9 +419,7 @@ int  conv_u_init(const char* filename, const char* options){
   file_ptr=0;   file_max=0; buf_ptr=0; //  Zacinam na 0, file closed....
   printf("       zeroing, TH1F   %s\n" , "" );
 
-   counting=(TH1F*)gDirectory->Get("counting");
-  //  gDirectory->GetObject("counting", counting);
-
+  counting=(TH1F*)gDirectory->Get("counting");
   if (counting==NULL){
     counting=new TH1F("counting","counting statistics",255,0,255);// 255 possible channels
     printf("NEW TH COUNTING %x\n", (int)counting );

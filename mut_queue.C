@@ -223,7 +223,7 @@ void *mut_queue_masterthread(void* arg){
    sprintf(tinfo[3].file, "%s","temporary.root");// send also filename
 
 
-   if(XTERM!=NULL)fprintf(XTERM,"creating pusher_thread 0== %d\n",(int)TThread::GetThread("pusher_thread") );
+   if(XTERM!=NULL)fprintf(XTERM,"creating pusher_thread = %d\n",(int)TThread::GetThread("pusher_thread") );
    t=TThread::GetThread("pusher_thread");
    if (t!=NULL){
      if (t->GetState()==6){ t->Delete();}//canceled
@@ -241,7 +241,7 @@ void *mut_queue_masterthread(void* arg){
 
 
 
-   if(XTERM!=NULL)fprintf(XTERM,"creating poper_thread 0==%d\n",(int)TThread::GetThread("poper_thread") );
+   if(XTERM!=NULL)fprintf(XTERM,"creating poper_thread = %d\n",(int)TThread::GetThread("poper_thread") );
    if (TThread::GetThread("poper_thread")==0){
     shspe_threads[2] = new TThread( "poper_thread"  , evt_poper, (void*) &tinfo[2] );
     shspe_threads[2]->Run();
@@ -251,7 +251,7 @@ void *mut_queue_masterthread(void* arg){
 
 
 
-   if(XTERM!=NULL)fprintf(XTERM,"creating analyze_thread 0== %d\n",(int)TThread::GetThread("analyze_thread") );
+   if(XTERM!=NULL)fprintf(XTERM,"creating analyze_thread = %d\n",(int)TThread::GetThread("analyze_thread") );
    TThread *thq=(TThread*)TThread::GetThread("analyze_thread");
    if (thq!=NULL){
      if (thq->GetState()==6){printf("Killing analyze_thread\n");thq->Delete();}
@@ -266,7 +266,7 @@ void *mut_queue_masterthread(void* arg){
 
 
    // ***************************   PREVIOUS JOIN DELETE ETC.............
-    printf("MASTER: I wait to JOIN ALL Threads. The dl_handle %d\n", (int)dl_handle);
+    printf("MASTER: I wait to JOIN ALL T. The dl_handle %d\n", (int)dl_handle);
     while (   (TThread::GetThread("pusher_thread")!=0)|| 
 	      (TThread::GetThread("poper_thread")!=0)||
 	      (TThread::GetThread("analyze_thread")!=0)
@@ -587,7 +587,6 @@ void *evt_pusher( void *arg )  // loads the queue
 {
  struct thread_info *tinfo = (struct thread_info *) arg;
  int nt=tinfo->thread_num;
- printf("starting thread %d pusher  \n", nt );
      evt_pusher_remote( (int*)&buffer ); //#########EVENT#########
   tinfo->running=0;// say stop
  printf("%s","evt_pusher - stop \n");
@@ -605,15 +604,13 @@ void *evt_pusher( void *arg )  // loads the queue
  */
 void *evt_poper( void *arg )  // reads the queue (pop)
 {
-  usleep(1000*1000);
-
  struct thread_info *tinfo = (struct thread_info *) arg;
  int nt=tinfo->thread_num;
  int call=tinfo->callnumber; tinfo->callnumber++;// to keep track opened file
- printf("starting thread %d poper for the %dth time\n", nt, call );
+ // printf("starting thread %d poper for the %dth time\n", nt, call );
  //     printf("removing ........bufsize==%10d   empty==%d \n", buffer.size(), buffer.empty() );
      evt_poper_remote(  (int*)&buffer  );
- printf("%s","evt_remote (poper) - stop \n");
+ printf("%s","evt_remote - stop \n");
   tinfo->running=0;// say stop
      return NULL;
 //jak to budu analyzovat? konec eventu je kde????
@@ -638,11 +635,9 @@ void *evt_poper( void *arg )  // reads the queue (pop)
  */
 void *evt_analyze( void *arg )  // 
 {
-  usleep(1000*1000);
  struct thread_info *tinfo = (struct thread_info *) arg;
  int nt=tinfo->thread_num;
  int call=tinfo->callnumber; tinfo->callnumber++;// to keep track opened file
- printf("starting thread %d analyze for the %dth time\n", nt, call );
    evt_analyze_remote(  (int*)&buffer  ); //#########EVENT#########
  printf("%s","evt_analyze - stop \n");
   tinfo->running=0;// say stop
