@@ -89,7 +89,7 @@ void *mut_queue_masterthread(void* arg){
 
   TThread *t;
 
-    int res;
+  //unused     int res;
 
   printf("mut_queue_masterthread is launched\n%s", "");
 

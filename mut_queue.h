@@ -192,22 +192,31 @@ int fexists (char * fileName)
 // RUNS XTERM TO LOG
 void logterm(){
   char devpts[80]="";
-  char devpts2[80]="";
-  int res=4;
+  //unused  char devpts2[80]="";
+  //unused  int res=4;
   /*
    *  part I. tricky.  sort all /dev/pts/ *   by reverse number, first believe is xterm with cat shell
    *
    *  I search ps for "cat" (my xterm shell)....
-   *
    */
-  system("rm /tmp/mut_terminal_log");
+
+	std::string name;
+	name = getenv("USER");
+	char touchfile[200];
+	char commandrm[200];
+	sprintf(touchfile, "/tmp/mut_terminal_%s.log" , name.c_str() );
+	sprintf(commandrm, "rm %s" , touchfile);
+  system(commandrm);
       usleep(1000*100);
       //  system("ps -ef |grep xterm | grep mut_terminal_log >/tmp/mut_terminal_log");
       //  system("ps -ef |grep xterm | grep mut_terminal_log | awk '{print \"/dev/\"$6}' >/tmp/mut_terminal_log");
-  system("ps -ef |grep \"00 cat$\"|grep -v \"00 sh\"|grep -v grep|grep pts|sort -rn >/tmp/mut_terminal_log2");
-  system("ps -ef |grep \"00 cat$\"|grep -v \"00 sh\"|grep -v grep|grep pts|sort -rn| awk '{print \"/dev/\"$6}' >/tmp/mut_terminal_log");
+	char commandps[300];
+	sprintf( commandps, "ps -ef |grep \"00 cat$\"|grep -v \"00 sh\"|grep -v grep|grep pts|sort -rn >%s2", touchfile );
+	system( commandps );
+	sprintf( commandps, "ps -ef |grep \"00 cat$\"|grep -v \"00 sh\"|grep -v grep|grep pts|sort -rn| awk '{print \"/dev/\"$6}' > %s", touchfile );
+	system( commandps );
       usleep(1000*100);
-  FILE *f=fopen("/tmp/mut_terminal_log","r");
+  FILE *f=fopen( touchfile ,"r");
   if (f!=NULL){
     fscanf(f,"%s", devpts);
     printf("1Content of devpts == %s, \n",devpts);
