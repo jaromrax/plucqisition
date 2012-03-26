@@ -6,7 +6,7 @@
  */
 #include <stdlib.h>
 //#include <pthread.h> //  THIS COMPILES WITH g++
-#include "TThread.h"   //  CINT?
+#include "TThread.h"   //  CINT?   //  -lThread
 #include<sys/stat.h>  // struct stat
 
 
@@ -18,7 +18,7 @@
 //#include "vmblock.cxx"
 #include <iostream>
 #include <dlfcn.h>
-#include "TString.h"
+#include "TString.h"        //  -lCore
 
 #endif
 /*  

@@ -6,6 +6,8 @@
  *           scalers - nekde se vali gPads....      
  *           contury - online conturovani           --~OK
  *
+ * NEW PROBLEM - before compile we need (@ 5.32)
+ *               gSystem->Load("/usr/lib/libdl.so")
  */
 #include "mut_queue.h"
 #include "xml_attr.h"    
