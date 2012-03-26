@@ -45,18 +45,19 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "TF1.h"
-#include "TH1.h"
+#include "TF1.h"         //  -lHist
+#include "TH1.h"         
 #include "TH1F.h"
 #include "TH1D.h"
 #include "TH2F.h"
 // TFile - ttree one
-#include "TFile.h"
-#include "TTree.h"
+#include "TFile.h"           //    -lRIO
+#include "TTree.h"           //  -lTree
 
 #include <time.h>
 // gROOT->cd()
-#include "TROOT.h"
+#include "TROOT.h"           //    -lCore
+#include "TDirectory.h"           //    -lCore
 
 //static const int BUFSIZE  =100E+6;        // allocate  
 //  BUFSIZE must be   4* something not to split datum
@@ -419,8 +420,15 @@ int  conv_u_init(const char* filename, const char* options){
   file_ptr=0;   file_max=0; buf_ptr=0; //  Zacinam na 0, file closed....
   printf("       zeroing, TH1F   %s\n" , "" );
 
+  printf("       gdirectory is to be got   %s\n" , "" );
+  usleep(1000*500);
+  printf("       gdirectory is to be got   %s\n" , "" );
+  printf("       gdirectory is to be got  #== %d\n" , (int)gDirectory );
+  printf("       gdirectory is to be got   %s\n" , "" );
   counting=(TH1F*)gDirectory->Get("counting");
+  printf("       gdirectory is got   %s\n" , "" );
   if (counting==NULL){
+    printf("       counting ==NULL, we create it   %s\n" , "" );
     counting=new TH1F("counting","counting statistics",255,0,255);// 255 possible channels
     printf("NEW TH COUNTING %x\n", (int)counting );
   }
