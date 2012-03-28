@@ -50,7 +50,7 @@ void savecut(TCutG *cut, const char* name){
 void loadcuts(){
   gROOT->GetListOfSpecials()->ls();// ORIGINAL
   TDirectory *dir=gDirectory;
-  TFile *nf=new TFile("cuts.root", "UPDATE");
+  TFile *nf=new TFile("cuts.root", "READ"); // WAS UPDATE, touched cuts.root..
   // UNUSED int n=gDirectory->GetNkeys();
   if (gDirectory->GetListOfKeys()){
       TObject *o;
@@ -86,6 +86,7 @@ void rmcut(const char* name, int version=0){
     printf("make a backup and use the version number  ;1 ;2%s\n","");
     return;
   }
+  TDirectory *dir=gDirectory;
     TFile *nf=new TFile("cuts.root", "UPDATE");
     char name2[100];
     sprintf( name2 , "%s;%d", name, version );
@@ -93,10 +94,12 @@ void rmcut(const char* name, int version=0){
     gDirectory->rmdir( name2 );
     nf->ls();
     nf->Close();
+  dir->cd();
 }
 
 
 void cpcut(const char* name, const char* newname){
+  TDirectory *dir=gDirectory;
 
   TFile *nf=new TFile("cuts.root", "UPDATE");
   TObject *o;
@@ -107,6 +110,18 @@ void cpcut(const char* name, const char* newname){
     //  newcut->Print();  newcut->Draw("pawl");
   nf->ls();
   nf->Close();
+  dir->cd();
+
+}
+
+
+void lscuts(){
+  TDirectory *dir=gDirectory;
+
+  TFile *nf=new TFile("cuts.root", "");
+  nf->ls();
+  nf->Close();
+  dir->cd();
 
 }
 
