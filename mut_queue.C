@@ -146,9 +146,9 @@ void *mut_queue_masterthread(void* arg){
   const char *dlsym_error;
 
 
-    printf("I want   to OPEN PUSH/POP   library==\"%s\"\n", so_push);
+  //    printf("I want   to OPEN PUSH/POP   library==\"%s\"\n", so_push);
     dl_handle = dlopen( so_push , RTLD_GLOBAL |  RTLD_LAZY);
-    printf("I wanted to OPEN the dl_handle %d\n", (int)dl_handle);
+    //    printf("I wanted to OPEN the dl_handle %d\n", (int)dl_handle);
     if (!dl_handle) {printf("Cannot open library: %s; %s\n", so_push,dlerror() );
 	 return 0;//can return 0
     }//if (dl_handle) 
@@ -182,9 +182,9 @@ void *mut_queue_masterthread(void* arg){
 
 
 
-    printf("I want   to OPEN ANALYZE   library==\"%s\"\n", so_analyze);
+    //    printf("I want   to OPEN ANALYZE   library==\"%s\"\n", so_analyze);
     dl_handle_analyze = dlopen( so_analyze , RTLD_GLOBAL |  RTLD_LAZY);
-    printf("I wanted to OPEN the dl_handle_analyze %d\n", (int)dl_handle_analyze);
+    //    printf("I wanted to OPEN the dl_handle_analyze %d\n", (int)dl_handle_analyze);
     if (!dl_handle_analyze) {printf("Cannot open library: %s; %s\n", so_push,dlerror() );
 	 return 0;//can return 0
     }//if (dl_handle_analyze) 
@@ -268,7 +268,7 @@ void *mut_queue_masterthread(void* arg){
 
 
    // ***************************   PREVIOUS JOIN DELETE ETC.............
-    printf("MASTER: I wait to JOIN ALL T. The dl_handle %d\n", (int)dl_handle);
+    printf("\nMASTER: waiting to JOIN ALL T. dl_handle==%d\n",(int)dl_handle);
     while (   (TThread::GetThread("pusher_thread")!=0)|| 
 	      (TThread::GetThread("poper_thread")!=0)||
 	      (TThread::GetThread("analyze_thread")!=0)

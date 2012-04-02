@@ -356,7 +356,7 @@ time_t timet;
 
 /***********************************************
  *  INIT
- *
+ *        filename must be "" for acquisition
  */
 
 int  conv_u_init(const char* filename, const char* options){
