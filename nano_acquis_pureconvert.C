@@ -505,7 +505,7 @@ for (int i=CODING_CHANNELS_LOW;i<=CODING_CHANNELS_HIGH;i++){
   }else{
      sprintf( ch    ,"%s.root",   filename );
      sprintf( chtxt ,"%s.txt",  filename);
-  }
+  }//----------filename-----------
 
   ftree=new TFile( ch  , "NEW");  // crashes if file exists
   printf("NEW filename of root-tree file  (NEW)  ==== <%s> =======\n",ch);

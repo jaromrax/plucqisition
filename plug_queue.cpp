@@ -104,6 +104,29 @@ extern "C" {
 
 
 
+  /**********************************************
+   *            PUSH TEXT  
+   */
+ int* evt_pusher_txtfile(int* par){
+   concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
+   if(XTERM!=NULL)fprintf(XTERM,
+		  "PUSH (textFILE) START buffer=%d\n",(int)buffer );
+   char ch[180];
+   for (int i=1;i<15;i++){  //........4*300M = 1200MB
+     sprintf(ch, "%d %d %d %d\n", i, i+1, i+2, i+3 );
+     usleep(1000); // wait x  us every push
+     if(XTERM!=NULL)fprintf(XTERM,"P <%s>\n", ch );
+     for (int j=0;j<strlen(ch);j++){
+       buffer->push( ch[j] );
+     }
+   }//for
+   if(XTERM!=NULL)fprintf(XTERM,
+		  "evt_pusher (textFILE)  EXIT buffer=%d\n",(int)buffer );
+ }/*****************************end of function *********************/
+
+
+
+
 
 
 
@@ -306,6 +329,9 @@ extern "C" {
 
 
 
+
+
+
   /**************************************************
    *            SIMPLE PRINTOUT  txt
    */
@@ -352,19 +378,120 @@ extern "C" {
  }// ****************************end of function **********
 
 
+
+
+
+
+
+
+
+
+
+
+
+
   //===================== SHOULD BE IN SEPARATE FILE ==========
+  TTree *txt_ttree;  // similar to global def in nano_acquis_pureconvert
+
+  // prepare TTree===========================================
   // tell number of values on the line
   int evt_poper_get_npar( const char* ch ){
-    return 1;
+    TString oneline=ch, token; int j=0; double bu; 
+      TObjArray *tar; 
+        if(XTERM!=NULL)fprintf(XTERM,"Analyzing string:%s\n",ch);
+        tar= oneline.Tokenize(" ");
+        while (j<tar->GetEntries()){
+         token= ((TObjString*)(tar->At(j)))->GetString();
+         bu= token.Atof(); 
+	 if(XTERM!=NULL)fprintf(XTERM,"  token %d/  <%f>\n", j, bu);
+	 j++;
+	}
+	return (j); // j-1? not... here 0->  names are 1->
   }
-  // prepare TTree
+
+
   struct{
     double t[1024]; // structre to address by ttree.
-  } t_event;//text event
+  } t_event;      //text event------------------------------
+
+
+
+  int evt_poper_txt_record( const char* chse ){
+    TString oneline=chse, token; int j=0; double bu; 
+      TObjArray *tar; 
+
+   char brname[100];  // main branch in texto......
+   int  CIRCULAR=100000;
+   char ttree_name[50];
+   char ch[1000];
+   
+    sprintf( ttree_name, "%s",  "texto"  ); 
+    sprintf( brname, "%s",  "main" );  // main,  not mainV
+    if ( gDirectory->Get( ttree_name ) != NULL){
+
+      //printf("taking prev. existing ttree %x !!!!!!!!!\n", (int)ttree);
+     txt_ttree->SetBranchAddress( brname , &t_event.t[0] );
+
+    }
+
+    //        if(XTERM!=NULL)fprintf(XTERM,"Analyzing string:%s\n",ch);
+        tar= oneline.Tokenize(" ");
+	j=0; 
+        while (j<tar->GetEntries()){
+         token= ((TObjString*)(tar->At(j)))->GetString();
+         t_event.t[j]= token.Atof(); 
+	 // printf("  token %d/  <%f>\n", j, t_event.t[j] );
+	 j++;
+	}
+	txt_ttree->Fill();
+    return j;
+  }
+
+
+
   int conv_t_init( int npar ){; // similar to conv_u_init; t[0]...t[n]
+   char brname[100];  // main branch in texto......
+   int  CIRCULAR=100000;
+   char ttree_name[50];
+   char ch[1000];
+   
+
+    sprintf( ttree_name, "%s",  "texto"  ); 
+    sprintf( brname, "%s",  "main" );  // main,  not mainV
+    if ( gDirectory->Get( ttree_name ) != NULL){
+
+      if(XTERM!=NULL)fprintf(XTERM,
+	    "taking previously existing ttree %x !!!!\n", (int)txt_ttree);
+     txt_ttree->SetBranchAddress( brname , &t_event.t[0] );
+
+    }else{// texto already exists  
+
+      gROOT->cd(); // go memory resident ttree like in "" and nano_conv.
+      txt_ttree = new TTree( ttree_name , "ttree_from_textline");
+       if(XTERM!=NULL)fprintf(XTERM,"NEW TTREE %x\n", (int)txt_ttree );
+      if (CIRCULAR!=0){ txt_ttree->SetCircular(CIRCULAR);}
+      //  /s  is short.  
+    sprintf(ch ,"%s%03d/D", "T",  1 );  
+    for (int i=2;i<=npar;i++){
+      sprintf(ch ,"%s:%s%03d/D", ch,  "T",  i );  
+
+    }// all channels branch
+     if(XTERM!=NULL)fprintf(XTERM,
+	"This row defines the  Branch  main :\n%s\n", ch );  
+    txt_ttree->Branch(brname , &t_event.t[0], ch );// 
+     if(XTERM!=NULL)fprintf(XTERM,
+	     " ttree initialized ok    %x\n" , (int)txt_ttree );
+    txt_ttree->ls();
+      if(XTERM!=NULL)fprintf(XTERM,
+	      "      ttree initialized ok see ls Print()   %x  n== %lld\n" , (int)txt_ttree ,txt_ttree->GetEntries());
+
+    }//-------------------------------------TTree 
     //    TTree 
     //->SetBranch("MAIN", &t_event.t[0] );
   }
+
+
+
 
 
 
@@ -400,14 +527,16 @@ extern "C" {
      if ( (int)cc!=10){//  10== \n -------------- EOL ----
        sprintf( ch, "%s%c", ch, cc  );
      }else{//  \n found
-       if(XTERM!=NULL)fprintf(XTERM,"FINAL:%s\n",ch);
+       if(XTERM!=NULL)fprintf(XTERM,"TEXT=%s\n",ch);
 
        if (ttree_inited==0){
+       if(XTERM!=NULL)fprintf(XTERM,"%s\n","creating the tree.....");
        nparams=evt_poper_get_npar( ch );
+       if(XTERM!=NULL)fprintf(XTERM,"       nparams==%d\n",nparams);
        conv_t_init( nparams ); // similar to conv_u_init; t[0]...t[n]
        ttree_inited=1;// no more try to init
        }// ---ttree was not initied.........
-
+       evt_poper_txt_record( ch );
        sprintf( ch , "%s", ""); //reset
      }//--------------------------- EOL/not EOL------------
       cnt++; 
