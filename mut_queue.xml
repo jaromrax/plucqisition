@@ -5,18 +5,18 @@ A COMMENT MUST BE HERE
 
 <plugins>
   <!-- pusher  so="./plug_queue.so" func="evt_pusher_file"> </pusher -->
-  <pusher  so="./plug_queue.so" func="evt_pusher_net"  ip="127.0.0.1"  port="9302"> </pusher>
-  <poper   so="./plug_queue.so" func="evt_poper_sort"> </poper>
+  <pusher  so="./plug_queue.so" func="evt_pusher_net"  ip="127.0.0.1"  port="9302" file="runx.dat"> </pusher>
+  <poper   so="./plug_queue.so" func="evt_poper_sort" file="runx_out.dat"> </poper>
   <analyze so="./plug_analyze.so" func="evt_analyze_test"> </analyze>
 </plugins>
 
 
-<files>
+<!-- files  not to be used from 20120410>
  <pusher file="runx.dat" delayus="1"> 
  </pusher>
  <poper file="runx_out.dat" delayus="1"> 
  </poper>
-</files>
+</files -->
 
 
 <acq_channels>

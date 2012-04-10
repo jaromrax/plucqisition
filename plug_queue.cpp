@@ -104,22 +104,57 @@ extern "C" {
 
 
 
+
+
+
+
   /**********************************************
-   *            PUSH TEXT  
+   *            PUSH TEXT  FILE
    */
  int* evt_pusher_txtfile(int* par){
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    if(XTERM!=NULL)fprintf(XTERM,
 		  "PUSH (textFILE) START buffer=%d\n",(int)buffer );
    char ch[180];
-   for (int i=1;i<15;i++){  //........4*300M = 1200MB
-     sprintf(ch, "%d %d %d %d\n", i, i+1, i+2, i+3 );
-     usleep(1000); // wait x  us every push
-     if(XTERM!=NULL)fprintf(XTERM,"P <%s>\n", ch );
-     for (int j=0;j<strlen(ch);j++){
-       buffer->push( ch[j] );
-     }
-   }//for
+      FILE *infile;  char fname[400];
+
+      int c;// character ... as in tutorial
+      int wait=1; // wait==0 means broadcast....
+      int first_timer=1;
+      fpos_t position;// I want to save the position of the pointer
+
+      TSmallish_xml xml("mut_queue.xml");
+      xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","file" );
+      sprintf( fname,"%s", xml.output  );
+
+      do{ // MAIN WHILE
+
+      infile=fopen( fname,"r"  );
+
+      if(XTERM!=NULL)fprintf(XTERM,"opened %s in TEXT MODE\n", fname);
+      if (infile!=NULL){
+	if (first_timer==1){//set pos
+	  first_timer=0;}else{
+	  fsetpos (infile, &position);}// restore the last position
+       while (!feof(infile)) {
+	 
+	c = fgetc ( infile );
+	buffer->push( c ); 
+	
+	//	if(XTERM!=NULL)fprintf(XTERM,"P <%s>\n", ch );
+
+       }// while  not feof 
+      }// infile not NULL  
+      fgetpos (infile, &position);
+      fclose(infile); 
+
+      if(XTERM!=NULL)fprintf(XTERM,
+		  "evt_pusher (textFILE) closed file. %d\n",(int)buffer );
+
+     wait=MyCond.TimedWaitRelative( 1000  ) ; // wait 500 
+
+      }while(wait != 0);
+
    if(XTERM!=NULL)fprintf(XTERM,
 		  "evt_pusher (textFILE)  EXIT buffer=%d\n",(int)buffer );
  }/*****************************end of function *********************/
@@ -130,8 +165,12 @@ extern "C" {
 
 
 
+
+
+
+
   /**********************************************
-   *            PUSH DATA FROM A FILE ......
+   *            PUSH binary (nanot) DATA FROM A FILE ......
    */
  int* evt_pusher_file(int* par){
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
@@ -142,7 +181,7 @@ extern "C" {
       long long int cnt=0;
       size_t result;
       TSmallish_xml xml("mut_queue.xml");
-      xml.DisplayTele( xml.mainnode, 0, "files","pusher","file" );
+      xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","file" );
       sprintf( fname,"%s", xml.output  );
       infile=fopen( fname,"rb"  );
       if(XTERM!=NULL)fprintf(XTERM,"opened %s\n", fname);
@@ -521,6 +560,8 @@ extern "C" {
    char ch[1024]=""; // 1kB text line
    // I AM COMPLETELY LOST WITH THERE CONVERSIONS &...
    char cc;
+   do{//-------------------
+   sprintf( ch , "%s", ""); //reset
    while( !buffer->empty() ){
      buffer->wait_and_pop(datum); //( datum ***)
      cc=char( datum ); 
@@ -547,6 +588,8 @@ extern "C" {
    if (wait==0){ 
      if(XTERM!=NULL)fprintf(XTERM,"POP got BROADCAST SIGNAL... %s\n","");
    }
+   wait=MyCond.TimedWaitRelative( 500  );
+ }while(wait!=0);// ON BROADCAST
    if(XTERM!=NULL)fprintf(XTERM,"POP logtxt v.2.: EXIT %d\n",(int)buffer);
  }// ****************************end of function **********
 
@@ -573,7 +616,7 @@ extern "C" {
       long long int cnt=0;
       size_t result;
       TSmallish_xml xml("mut_queue.xml");
-      xml.DisplayTele( xml.mainnode, 0, "files","poper","file" );
+      xml.DisplayTele( xml.mainnode, 0, "plugins","poper","file" );
       sprintf( fname ,"%s", xml.output  );
 
       if ( strlen(fname)>0){
