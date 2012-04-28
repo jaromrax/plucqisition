@@ -486,8 +486,9 @@ int mut_queue(const char * startstop="start")
 
     if (not_deads>0){ 	 return 0; }
 
+    int cdown=10;
     while(TThread::GetThread("master_thread")!=0){
-      printf("--------------------after the tthread masacre wait for MASTER\n%s", "");
+      printf("--------------------tthreads ended OK, wait for MASTER ... %d\n", cdown-- );
       usleep(1000*200);
       if (TThread::GetThread("master_thread")->GetState()==6){
 	TThread::GetThread("master_thread")->Delete();

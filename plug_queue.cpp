@@ -14,6 +14,9 @@
 #include "cuts_manip.h"  //loadcuts,savecut,rmcut,cpcut.......
 
 #include "TSocket.h"   //net thread
+//---------------------------try server (for a client with txt...)
+#include "TServerSocket.h"
+#include "TMonitor.h"
 
 /****
 IF C++ => care about namemangling....
@@ -206,11 +209,98 @@ extern "C" {
 
 
 
+  // TServerSocket *ss=new TServerSocket(i,kTRUE);
+ int* evt_pusher_net_txtserv(int* par){
+   concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
+   if(XTERM!=NULL)fprintf(XTERM,"PUSH RS evt_pusher_remote (network,txt)  par==%d; pointer==%d\n", par,(int)buffer );
+      long long int cnt=0;
+
+   char ipaddress[100];
+   int port;
+      TSmallish_xml xml("mut_queue.xml");
+      xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","ip" );
+      sprintf( ipaddress,"%s", xml.output  ); // 127.0.0.1, else not possible
+      xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","port" );
+      port=atoi(xml.output  );
+
+
+   TServerSocket *ss = new TServerSocket(port, kTRUE);
+   TMonitor *mon = new TMonitor;
+   mon->Add(ss);
+   int wait=1;
+
+   TSocket *s0 = 0;
+   char aaa[1000];
+   int nekonec=1;  int i; int get=999;
+
+
+ while (wait) {
+   //    for (i=0;i<get;i++){ aaa[i]='\0';}
+      printf("STOJIM NA POCATKU :%s\n", aaa );
+
+      TSocket  *s;
+      do{
+	s = mon->Select(1000);   //  s=-1 if timeout   
+     	wait=MyCond.TimedWaitRelative( 300  ) ; 
+	printf("%s\n", "." );
+	//      printf("preskok pres mon/select : ss==%d, s==%d s0==%d #%d  s:(%d)\n",
+	//	     mon->IsActive(ss), mon->IsActive(s), mon->IsActive(s0),mon->GetActive(),   (int)s );
+      }while(  (mon->IsActive(s)==0)&&(wait!=0) ); // jumpout on wait==0
+      printf("while is over  s0:%s\n", aaa );
+      if (s->IsA() == TServerSocket::Class()) {
+         if (!s0) {
+            s0 = ((TServerSocket *)s)->Accept();
+            mon->Add(s0);
+
+         }else{	usleep(1000*1000);printf(".......socket s0 already open\n");}
+	 /*     nevim proc...
+	  if (s0) {
+	   printf("removing  from monitor :%s\n", aaa );
+            mon->Remove(ss);    ss->Close();
+	    }*/
+         continue;
+      }//---------------s->IsA()
+      char newline='\n';
+      if (s0){
+	get=(int)s->RecvRaw( aaa , 1000, kDontBlock);
+      if (  (strlen(aaa)>0)&& (aaa[ strlen(aaa)-1]==newline) ){
+	aaa[ strlen(aaa)-1]='\0';
+      }
+      printf("======== PRISLO RAW :<%s> RESKOD==%d\n", aaa , get );
+      }
+      if (s0)
+	{ printf("removing  s0:%s\n", aaa );
+	  mon->Remove(s0);s0->Close(); s0=NULL;// s0:odpojuji socket
+	}
+      if ( get<=0){ 
+	   printf("removing  from monitor 2 (possible ctrl-c; ctrl-d not wrk) :%s\n", aaa );
+	    wait=0;// means konec while
+      }
+
+   printf( "INSIDE  WAITing, just after NOT IsA() :<%s>\n",  aaa );
+   if (wait!=0){wait=MyCond.TimedWaitRelative( 100  ) ; }
+ }//while 1
+
+            mon->Remove(ss); ss->Close();
+
+
+
+
+
+ }//=====================================================================END FUNCTION
+
+
+
+
+
+
+
 
 
 
   /**********************************************
    *              cat runx.dat |  nc -l -p 9302
+   *                         this is a client that connects to a server...
    */
  int* evt_pusher_net(int* par){
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
