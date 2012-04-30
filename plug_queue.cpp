@@ -225,63 +225,45 @@ extern "C" {
 
 
    TServerSocket *ss = new TServerSocket(port, kTRUE);
-   TMonitor *mon = new TMonitor;
-   mon->Add(ss);
    int wait=1;
 
    TSocket *s0 = 0;
-   char aaa[1000];
+   char aaa[100000];
    int nekonec=1;  int i; int get=999;
-
 
  while (wait) {
    //    for (i=0;i<get;i++){ aaa[i]='\0';}
-      printf("STOJIM NA POCATKU :%s\n", aaa );
+   //      printf("STOJIM NA POCATKU :%s\n", aaa );
+      if(XTERM!=NULL)fprintf(XTERM,"%s","(pusher:nettxtsrv)Starting Accept..\n");
+      s0=ss->Accept(); // THIS ONE BLOCKS........
+      //	printf("%s\n", "." );
 
-      TSocket  *s;
-      do{
-	s = mon->Select(1000);   //  s=-1 if timeout   
-     	wait=MyCond.TimedWaitRelative( 300  ) ; 
-	printf("%s\n", "." );
-	//      printf("preskok pres mon/select : ss==%d, s==%d s0==%d #%d  s:(%d)\n",
-	//	     mon->IsActive(ss), mon->IsActive(s), mon->IsActive(s0),mon->GetActive(),   (int)s );
-      }while(  (mon->IsActive(s)==0)&&(wait!=0) ); // jumpout on wait==0
-      printf("while is over  s0:%s\n", aaa );
-      if (s->IsA() == TServerSocket::Class()) {
-         if (!s0) {
-            s0 = ((TServerSocket *)s)->Accept();
-            mon->Add(s0);
-
-         }else{	usleep(1000*1000);printf(".......socket s0 already open\n");}
-	 /*     nevim proc...
-	  if (s0) {
-	   printf("removing  from monitor :%s\n", aaa );
-            mon->Remove(ss);    ss->Close();
-	    }*/
-         continue;
-      }//---------------s->IsA()
       char newline='\n';
       if (s0){
-	get=(int)s->RecvRaw( aaa , 1000, kDontBlock);
-      if (  (strlen(aaa)>0)&& (aaa[ strlen(aaa)-1]==newline) ){
-	aaa[ strlen(aaa)-1]='\0';
-      }
-      printf("======== PRISLO RAW :<%s> RESKOD==%d\n", aaa , get );
-      }
-      if (s0)
-	{ printf("removing  s0:%s\n", aaa );
-	  mon->Remove(s0);s0->Close(); s0=NULL;// s0:odpojuji socket
-	}
-      if ( get<=0){ 
-	   printf("removing  from monitor 2 (possible ctrl-c; ctrl-d not wrk) :%s\n", aaa );
-	    wait=0;// means konec while
-      }
+	while (get>0){
+	get=(int)s0->RecvRaw( aaa , 1, kDontBlock);
+	//        if (  (strlen(aaa)>0)&& (aaa[ strlen(aaa)-1]==newline) ){//remove EOL
+	//	  aaa[ strlen(aaa)-1]='\0';
+	//        }
+	if(XTERM!=NULL)fprintf(XTERM,"%s",aaa);
+	for (int j=0;j<strlen(aaa);j++){buffer->push( aaa[j] );}		       
+	//        printf("======== PRISLO RAW :<%s> RESKOD==%d\n", aaa , get );
+	//	printf("%s (errno: %d)\n",aaa,gSystem->GetErrno()); 
+       	}//while get>0
+	for (i=0;i<get;i++){ aaa[i]='\0';}
+	//	 printf("removing  s0:%s\n", aaa );
+	 s0->Close(); s0=NULL;// s0:odpojuji socket
 
-   printf( "INSIDE  WAITing, just after NOT IsA() :<%s>\n",  aaa );
+      if ( get<=0){ 
+	//	   printf("removing  from monitor 2 (possible ctrl-c; ctrl-d not wrk) :%s\n", aaa );
+	    wait=0;// means konec while
+      }//get<=
+      }//s0
+      //   printf( "INSIDE  WAITing, just after NOT IsA() :<%s>\n",  aaa );
    if (wait!=0){wait=MyCond.TimedWaitRelative( 100  ) ; }
  }//while 1
 
-            mon->Remove(ss); ss->Close();
+            ss->Close();
 
 
 
