@@ -55,7 +55,7 @@ using namespace std;
 
 
 
-
+const char acqxml[100]="acq_setup.xml";
 
 TCondition MyCond(0);  // this has an internal mutex --------
 

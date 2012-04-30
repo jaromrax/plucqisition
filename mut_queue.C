@@ -56,21 +56,13 @@ plugin_tint evt_analyze_remote ;
 
 /*
 bool fexists(const char *filename)
-{
-  ifstream ifile(filename);
-  return ifile;
-}
+{  ifstream ifile(filename);  return ifile;}
 */
-
 
 
 TTimeStamp t_start;
 
-
-
  struct thread_info *tinfo;// create n threads ..... array. calloc:
-
-
 
 
 /*********************************************************************
@@ -83,18 +75,15 @@ TTimeStamp t_start;
   /*****************************
    *  I start dlopen rather here....................... PUSHER PART
    */
-  void* dl_handle;
+  void* dl_handle_push;
+  void* dl_handle_pop;
   void* dl_handle_analyze;
 
 
 void *mut_queue_masterthread(void* arg){
 
   TThread *t;
-
-  //unused     int res;
-
   printf("mut_queue_masterthread is launched\n%s", "");
-
   /******************************
    * I do xml readout
    *  so-lib and function.....
@@ -108,10 +97,11 @@ void *mut_queue_masterthread(void* arg){
   char file_push[1000];
   char file_pop[1000];
   /*
-   * collect:  name of plugin.so,  function names, files (in/out)
+   * collect:  name of plugin.so,  function names ; files (in/out),ip,port
    * 
    */
-   TSmallish_xml xml("mut_queue.xml");
+  //   TSmallish_xml xml("mut_queue.xml");
+   TSmallish_xml xml(    acqxml      );
    xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","so" );
    sprintf( so_push,"%s", xml.output  );
    xml.DisplayTele( xml.mainnode, 0, "plugins","poper","so" );//must be the same *.so
@@ -128,55 +118,57 @@ void *mut_queue_masterthread(void* arg){
    sprintf( func_analyze,"%s", xml.output  );
 
 
-  xml.DisplayTele( xml.mainnode, 0, "files","pusher","file" );
+  xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","file" );
    sprintf( file_push,"%s", xml.output  );
-  xml.DisplayTele( xml.mainnode, 0, "files","poper","file" );
+  xml.DisplayTele( xml.mainnode, 0, "plugins","poper","file" );
    sprintf( file_pop,"%s", xml.output  );
 
-   if (fexists(file_pop)==1){printf("File %s already exists\n",file_pop);return NULL;}
-
-  /*****************************
-   *  I start dlopen rather here....................... PUSHER PART
-   */
-   //  void* dl_handle;
-   //  void* dl_handle_analyze;
-
+   if (fexists(file_pop)==1){ printf("File %s already exists, STOPPING\n",file_pop);return NULL;}
+   if ( (strlen(file_push)>0)&&(fexists(file_push)!=1) ){printf("File %s DOESNOT exist,  STOPPING\n",file_push);return NULL;}
 
 
   const char *dlsym_error;
 
 
   //    printf("I want   to OPEN PUSH/POP   library==\"%s\"\n", so_push);
-    dl_handle = dlopen( so_push , RTLD_GLOBAL |  RTLD_LAZY);
+    dl_handle_push = dlopen( so_push , RTLD_GLOBAL |  RTLD_LAZY);
     //    printf("I wanted to OPEN the dl_handle %d\n", (int)dl_handle);
-    if (!dl_handle) {printf("Cannot open library: %s; %s\n", so_push,dlerror() );
+    if (!dl_handle_push) {printf("Cannot open library: %s; %s\n", so_push,dlerror() );
 	 return 0;//can return 0
-    }//if (dl_handle) 
+    }//if (dl_handle_push) 
 
     /*****************************
      *  I start  here....................... PUSH PART
      */
     dlerror();
     // global...   plugin_tint 
-      evt_pusher_remote = (plugin_tint) dlsym(dl_handle, func_push  );
+      evt_pusher_remote = (plugin_tint) dlsym(dl_handle_push, func_push  );
     dlsym_error = dlerror();
     if (dlsym_error) {
       printf("Cannot load symbol: %s; %s\n", func_push,dlsym_error );
-        dlclose(dl_handle);
+        dlclose(dl_handle_push);
         return 0;//can return 0
     }// if (dlsym_error) {.....
 
 
+
+
+  //    printf("I want   to OPEN PUSH/POP   library==\"%s\"\n", so_push);
+    dl_handle_pop = dlopen( so_pop , RTLD_GLOBAL |  RTLD_LAZY);
+    //    printf("I wanted to OPEN the dl_handle %d\n", (int)dl_handle);
+    if (!dl_handle_pop) {printf("Cannot open library: %s; %s\n", so_pop,dlerror() );
+	 return 0;//can return 0
+    }//if (dl_handle_pop) 
     /******************************************************
    *  I start  here....................... POP PART
    */
     dlerror();
     // global...   plugin_tint 
-      evt_poper_remote = (plugin_tint) dlsym(dl_handle,func_pop );
+      evt_poper_remote = (plugin_tint) dlsym(dl_handle_pop,func_pop );
     dlsym_error = dlerror();
     if (dlsym_error) {
         printf("Cannot load symbol: %s; %s\n", func_pop,dlsym_error );
-        dlclose(dl_handle);
+        dlclose(dl_handle_pop);
         return 0;//can return 0
     }// if (dlsym_error) {.....
 
@@ -268,7 +260,7 @@ void *mut_queue_masterthread(void* arg){
 
 
    // ***************************   PREVIOUS JOIN DELETE ETC.............
-    printf("\nMASTER: waiting to JOIN ALL T. dl_handle==%d\n",(int)dl_handle);
+   printf("\nMASTER: waiting to JOIN ALL T. dl_handleS==%d/%d\n",(int)dl_handle_push,(int)dl_handle_pop);
     while (   (TThread::GetThread("pusher_thread")!=0)|| 
 	      (TThread::GetThread("poper_thread")!=0)||
 	      (TThread::GetThread("analyze_thread")!=0)
@@ -276,7 +268,7 @@ void *mut_queue_masterthread(void* arg){
       usleep(1000*600);  //  MAIN  WAIT IN MASTER
       if(XTERM!=NULL)fprintf(XTERM,"%s", "" );
     }
-  if(XTERM!=NULL)fprintf(XTERM,"MASTER: ALL Threads OVER. The dl_handle %d\n",(int)dl_handle);
+    if(XTERM!=NULL)fprintf(XTERM,"%s","MASTER: ALL Threads OVER. The dl_handle \n");
 
 
     /*   NO JOINS, al lare to be killed..........................
@@ -343,7 +335,7 @@ void *mut_queue_masterthread(void* arg){
 
 
 
-int mut_queue(const char * startstop="start")
+int acq(const char * startstop="start")
 {
   TThread *t;
 
