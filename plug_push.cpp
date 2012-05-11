@@ -225,17 +225,19 @@ extern "C" {
       port=atoi(xml.output  );
 
 
+  while( 1==1 ){// GLOBAL WAIT
    TServerSocket *ss = new TServerSocket(port, kTRUE);
    int wait=1;
 
    TSocket *s0 = 0;
    char aaa[100000];
    int nekonec=1;  int i; int get=999;
-
- while (wait) {
+   int eotraqn=1;
+   while (wait||(eotran)) {
    //    for (i=0;i<get;i++){ aaa[i]='\0';}
    //      printf("STOJIM NA POCATKU :%s\n", aaa );
-      if(XTERM!=NULL)fprintf(XTERM,"%s","(pusher:nettxtsrv)Starting Accept..\n");
+      if(XTERM!=NULL)fprintf(XTERM,
+	  "(pusher:nettxtsrv)Starting Accept on %s:%d..\n", ipaddress, port);
       s0=ss->Accept(); // THIS ONE BLOCKS........
       //	printf("%s\n", "." );
 
@@ -259,19 +261,20 @@ extern "C" {
       if ( get<=0){ 
 	//	   printf("removing  from monitor 2 (possible ctrl-c; ctrl-d not wrk) :%s\n", aaa );
 	if(XTERM!=NULL)fprintf(XTERM,"(pusher:nettxtsrv) wait<=0: because %d==get<=0...\n", get);
-	    wait=0;// means konec while
+	eotran=0;//wait=0;// means konec while
       }//get<=
       }//s0
       //   printf( "INSIDE  WAITing, just after NOT IsA() :<%s>\n",  aaa );
    if (wait!=0){wait=MyCond.TimedWaitRelative( 100  ) ; }
    if(XTERM!=NULL)fprintf(XTERM,"%s","(pusher:nettxtsrv)waiting..\n");
- }//while 1
+   if (wait==0)break;
+ }//while 1==1
 
    if(XTERM!=NULL)fprintf(XTERM,"%s","(pusher:nettxtsrv)END, closing ss serversocket..\n");
             ss->Close();
 	    // WHEN I DO tail -f file | nc ...... then it goes through this
 
-
+      }//GLOGABL WHILE
 
 
  }//=====================================================================END FUNCTION

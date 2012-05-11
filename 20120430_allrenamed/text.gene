@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for ((i=0;i<10000;i++)); do 
+ t=`date +%s`
+echo $t $i $i  >> text
+sleep 1
+done
