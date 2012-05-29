@@ -1,0 +1,34 @@
+<!--
+A COMMENT MUST BE HERE
+-->
+<xmlconfig>
+
+<plugins>
+  <!-- pusher  so="./plug_queue.so" func="evt_pusher_file"> </pusher -->
+  <!--pusher  so="../plug_queue.so" func="evt_pusher_int"  ip="127.0.0.1"  port="9302"> </pusher-->
+  <!--poper   so="../plug_queue.so" func="evt_poper_logint"> </poper-->
+
+  <pusher  so="../plug_push.so" func="evt_pusher_net"  ip="192.168.1.6"  port="9302"> </pusher>
+  <poper   so="../plug_pop.so" func="evt_poper_sort" file="a"> </poper>
+  <analyze so="./plug_analyze.so" func="evt_analyze_test"> </analyze>
+</plugins>
+
+
+<!-- files    not to be used after 20120410 >
+ <pusher file="runx.dat" delayus="1">     </pusher>
+ <poper file="runx_out.dat" delayus="1">  </poper>
+</files -->
+
+
+<acq_channels>
+  <data chanlo="1" chanhi="32"></data>
+  <counter kc014A="-1" kc014B="-1" kc014C="-1" c257="-1" c32="-1" v560na="33" v560nb="65"></counter>
+  <time ltime="1024" btime="141" tzero="7.889112e+08"></time>
+  <number bnum="140" rnum="139"></number>
+  <crate parnam="V"></crate>
+  <buffer circular="100000"></buffer>
+</acq_channels>
+
+
+</xmlconfig>
+
