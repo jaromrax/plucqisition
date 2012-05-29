@@ -166,6 +166,8 @@ extern "C" {
       TObjArray *tar; 
         if(XTERM!=NULL)fprintf(XTERM,"Analyzing string:%s\n",ch);
         tar= oneline.Tokenize(" ");
+
+
         while (j<tar->GetEntries()){
          token= ((TObjString*)(tar->At(j)))->GetString();
          bu= token.Atof(); 
@@ -176,7 +178,8 @@ extern "C" {
   }
 
 
-  struct{
+  struct{    
+    UInt_t n;// 4 bytr integer.... is enough for one run (same as nano_acquis)
     double t[1024]; // structre to address by ttree.
   } t_event;      //text event------------------------------
 
@@ -190,13 +193,14 @@ extern "C" {
    int  CIRCULAR=100000;
    char ttree_name[50];
    char ch[1000];
-   
+
     sprintf( ttree_name, "%s",  "texto"  ); 
     sprintf( brname, "%s",  "main" );  // main,  not mainV
     if ( gDirectory->Get( ttree_name ) != NULL){
 
       //printf("taking prev. existing ttree %x !!!!!!!!!\n", (int)ttree);
-     txt_ttree->SetBranchAddress( brname , &t_event.t[0] );
+      //     txt_ttree->SetBranchAddress( brname , &t_event.t[0] );
+     txt_ttree->SetBranchAddress( brname , &t_event.n );
 
     }
 
@@ -209,6 +213,7 @@ extern "C" {
 	 // printf("  token %d/  <%f>\n", j, t_event.t[j] );
 	 j++;
 	}
+	t_event.n++;
 	txt_ttree->Fill();
     return j;
   }
@@ -228,7 +233,8 @@ extern "C" {
 
       if(XTERM!=NULL)fprintf(XTERM,
 	    "taking previously existing ttree %x !!!!\n", (int)txt_ttree);
-     txt_ttree->SetBranchAddress( brname , &t_event.t[0] );
+      //     txt_ttree->SetBranchAddress( brname , &t_event.t[0] );
+     txt_ttree->SetBranchAddress( brname , &t_event.n );
 
     }else{// texto already exists  
 
@@ -237,14 +243,16 @@ extern "C" {
        if(XTERM!=NULL)fprintf(XTERM,"NEW TTREE %x\n", (int)txt_ttree );
       if (CIRCULAR!=0){ txt_ttree->SetCircular(CIRCULAR);}
       //  /s  is short.  
-    sprintf(ch ,"%s%03d/D", "T",  1 );  
+      sprintf(ch ,"%s/i", "n" );              // n    UInt_t : ordered
+      sprintf(ch ,"%s:%s%03d/D", ch, "T",  1 );  //T001  double
     for (int i=2;i<=npar;i++){
       sprintf(ch ,"%s:%s%03d/D", ch,  "T",  i );  
 
     }// all channels branch
      if(XTERM!=NULL)fprintf(XTERM,
 	"This row defines the  Branch  main :\n%s\n", ch );  
-    txt_ttree->Branch(brname , &t_event.t[0], ch );// 
+     //    txt_ttree->Branch(brname , &t_event.t[0], ch );// 
+    txt_ttree->Branch(brname , &t_event.n, ch );// 
      if(XTERM!=NULL)fprintf(XTERM,
 	     " ttree initialized ok    %x\n" , (int)txt_ttree );
     txt_ttree->ls();
@@ -287,6 +295,7 @@ extern "C" {
    char ch[1024]=""; // 1kB text line
    // I AM COMPLETELY LOST WITH THERE CONVERSIONS &...
    char cc;
+   t_event.n=0; // reset the evvent number to 0
    do{//-------------------
    sprintf( ch , "%s", ""); //reset
    while( !buffer->empty() ){
@@ -295,7 +304,7 @@ extern "C" {
      if ( (int)cc!=10){//  10== \n -------------- EOL ----
        sprintf( ch, "%s%c", ch, cc  );
      }else{//  \n found
-       if(XTERM!=NULL)fprintf(XTERM,"TEXT=%s\n",ch);
+       //   if(XTERM!=NULL)fprintf(XTERM,"TEXT=%s\n",ch);
 
        if (ttree_inited==0){
        if(XTERM!=NULL)fprintf(XTERM,"%s\n","creating the tree.....");
@@ -309,7 +318,7 @@ extern "C" {
      }//--------------------------- EOL/not EOL------------
       cnt++; 
       TThread::CancelPoint(); // When CancelOn()...
-   }
+   }// while ! buffer empty
    //useless here...............but 
    wait=MyCond.TimedWaitRelative( 300  );
    if (wait==0){ 

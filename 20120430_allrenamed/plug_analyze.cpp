@@ -64,9 +64,35 @@ extern "C" {
 
 
 
+  //=====================================================
+  //==========================================
+  //====================================
+  //==        analyze of text data
+  /**************************************************
+   *            TXT  TTREE 
+   */
+ int* evt_analyze_test(int* par){
+   concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
+   if(XTERM!=NULL)fprintf(XTERM,"evt_analyze ..........................TEXT\n" );
+   usleep(1000*1000);
 
+struct {
+     UInt_t n;// 4 bytr integer.... is enough for one run// decided in nano_acq
+    double t[100];
+ } MyEvent;
 
+   UShort_t cha[1255];// TRICK ~ I address channels by ch[1] later !!!!
+   double time[12];
 
+   double ran=gRandom->Uniform(4000.);
+
+      //-----------------typpical creation of 2D matrix--------------
+      TH2F *mtx1;
+      mtx1=(TH2F*)gDirectory->Get("mtx1");
+      if (mtx1==NULL){
+	mtx1=new TH2F("mtx1","mtx1",1024,0,5000,1024,0,5000);
+      }
+ }//******************************************* END OF EVENT
 
 
 
@@ -77,7 +103,7 @@ extern "C" {
   //=====================================================
   //==========================================
   //====================================
-  //==        empty 
+  //==        analyze of binary data 
   /**************************************************
    *            TEST TO   TTREE 
    */

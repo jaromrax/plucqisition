@@ -232,7 +232,7 @@ extern "C" {
    TSocket *s0 = 0;
    char aaa[100000];
    int nekonec=1;  int i; int get=999;
-   int eotraqn=1;
+   int eotran=1;
    while (wait||(eotran)) {
    //    for (i=0;i<get;i++){ aaa[i]='\0';}
    //      printf("STOJIM NA POCATKU :%s\n", aaa );
@@ -248,7 +248,7 @@ extern "C" {
 	//        if (  (strlen(aaa)>0)&& (aaa[ strlen(aaa)-1]==newline) ){//remove EOL
 	//	  aaa[ strlen(aaa)-1]='\0';
 	//        }
-	if(XTERM!=NULL)fprintf(XTERM,"%s",aaa);
+	//TEXTOUT if(XTERM!=NULL)fprintf(XTERM,"%s",aaa);
 	for (int j=0;j<strlen(aaa);j++){buffer->push( aaa[j] );}		       
 	//        printf("======== PRISLO RAW :<%s> RESKOD==%d\n", aaa , get );
 	//	printf("%s (errno: %d)\n",aaa,gSystem->GetErrno()); 
