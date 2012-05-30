@@ -106,42 +106,42 @@ struct {
       TH2F *mtx1;
       mtx1=(TH2F*)gDirectory->Get("mtx1");
       if (mtx1==NULL){
-	mtx1=new TH2F("mtx1","mtx1",1024,0,5000,1024,0,5000);
+	mtx1=new TH2F("mtx1","V017:V017+V001",1024,0,5000,1024,0,5000);
       }
       TH2F *mtx2;
       mtx2=(TH2F*)gDirectory->Get("mtx2");
       if (mtx2==NULL){
-	mtx2=new TH2F("mtx2","mtx2",1024,0,5000,1024,0,5000);
+	mtx2=new TH2F("mtx2","V018:V018+V002",1024,0,5000,1024,0,5000);
       }
       TH2F *mtx3;
       mtx3=(TH2F*)gDirectory->Get("mtx3");
       if (mtx3==NULL){
-	mtx3=new TH2F("mtx3","mtx3",1024,0,5000,1024,0,5000);
+	mtx3=new TH2F("mtx3","V019:V019+V003",1024,0,5000,1024,0,5000);
       }
       TH2F *mtx4;
       mtx4=(TH2F*)gDirectory->Get("mtx4");
       if (mtx4==NULL){
-	mtx4=new TH2F("mtx4","mtx4",1024,0,5000,1024,0,5000);
+	mtx4=new TH2F("mtx4","V020:V020+V004",1024,0,5000,1024,0,5000);
       }
       TH2F *mtx5;
       mtx5=(TH2F*)gDirectory->Get("mtx5");
       if (mtx5==NULL){
-	mtx5=new TH2F("mtx5","mtx5",1024,0,5000,1024,0,5000);
+	mtx5=new TH2F("mtx5","V021:V021+V005",1024,0,5000,1024,0,5000);
       }
       TH2F *mtx6;
       mtx6=(TH2F*)gDirectory->Get("mtx6");
       if (mtx6==NULL){
-	mtx6=new TH2F("mtx6","mtx6",1024,0,5000,1024,0,5000);
+	mtx6=new TH2F("mtx6","V022:V022+V006",1024,0,5000,1024,0,5000);
       }
       TH2F *mtx7;
       mtx7=(TH2F*)gDirectory->Get("mtx7");
       if (mtx7==NULL){
-	mtx7=new TH2F("mtx7","mtx7",1024,0,5000,1024,0,5000);
+	mtx7=new TH2F("mtx7","V023:V023+V007",1024,0,5000,1024,0,5000);
       }
       TH2F *mtx8;
       mtx8=(TH2F*)gDirectory->Get("mtx8");
       if (mtx8==NULL){
-	mtx8=new TH2F("mtx8","mtx8",1024,0,5000,1024,0,5000);
+	mtx8=new TH2F("mtx8","V024:V024+V008",1024,0,5000,1024,0,5000);
       }
 
 
