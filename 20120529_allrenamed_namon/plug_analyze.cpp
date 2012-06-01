@@ -325,7 +325,7 @@ struct {
 
 
 
-      TH1F *h_events;
+      TH1F *h_events; // THING to monitor analyzed event number 
       h_events=(TH1F*)gDirectory->Get("h_events");
       if (h_events==NULL){
 	h_events=new TH1F("h_events","h_events",100000,0,100000);
@@ -392,9 +392,9 @@ struct {
        if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :   CALIBATION == %lld .... n==%d (total==%lld)\n", 
 			      circular_bias, MyEvent.n , entr );
 
-       }else{
+       }else{//if (entr>0){
 	 circular_bias=0;last_event_n=0;
-       }
+       }//if (entr>0){
        //       tree_addr->GetEntry( tree_addr->GetEntries()-100  );
        //       if(XTERM!=NULL)fprintf(XTERM,"B  FTREE  :   CALIBATION == %d .... n==%ld\n", 
        //			      tree_addr->GetEntries()-100, MyEvent.n );

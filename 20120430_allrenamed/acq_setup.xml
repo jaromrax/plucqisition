@@ -10,7 +10,7 @@ A COMMENT MUST BE HERE
 
   <pusher  so="../plug_push.so" func="evt_pusher_net_txtserv"  ip="127.0.0.1"  port="9302"> </pusher>
   <poper   so="../plug_pop.so" func="evt_poper_txttree" file="a"> </poper>
-  <analyze so="./plug_analyze.so" func="evt_analyze_empty"> </analyze>
+  <analyze so="./plug_analyze.so" func="evt_analyze_text"> </analyze>
 </plugins>
 
 

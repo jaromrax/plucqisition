@@ -71,17 +71,19 @@ extern "C" {
   /**************************************************
    *            TXT  TTREE 
    */
- int* evt_analyze_test(int* par){
+ int* evt_analyze_text(int* par){
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    if(XTERM!=NULL)fprintf(XTERM,"evt_analyze ..........................TEXT\n" );
    usleep(1000*1000);
 
 struct {
-     UInt_t n;// 4 bytr integer.... is enough for one run// decided in nano_acq
+    UInt_t n;// 4 bytr integer.... is enough for one run. from nano_acq
     double t[100];
  } MyEvent;
 
-   UShort_t cha[1255];// TRICK ~ I address channels by ch[1] later !!!!
+//   UShort_t cha[1255];// TRICK ~ I address channels by ch[1] later !!!!
+//   double cha[1255];// TRICK ~ I address channels by ch[1] later !!!!
+   double *cha=&MyEvent.t[1];// TRICK2 ~ I address channels by ch[1] later !!
    double time[12];
 
    double ran=gRandom->Uniform(4000.);
@@ -90,9 +92,102 @@ struct {
       TH2F *mtx1;
       mtx1=(TH2F*)gDirectory->Get("mtx1");
       if (mtx1==NULL){
-	mtx1=new TH2F("mtx1","mtx1",1024,0,5000,1024,0,5000);
+	mtx1=new TH2F("mtx1","T001:T002",1024,0,5000,1024,0,5000);
       }
+
+      //-------------------------- typical load of cuts -----------------
+      loadcuts();//  from cuts_manip.h             ONLY WHEN acq("start")
+      TCutG *m1_d;
+      m1_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("m1_d");
+
+      //--------------typical creation of 1d spectra --------------
+      TH1F *mtx1_d;      mtx1_d=(TH1F*)gDirectory->Get("mtx1_d");
+      if (mtx1_d==NULL){ mtx1_d=new TH1F("mtx1_d","mtx1_d",5000,0,5000); }
+
+
+       //--------------typical procedure to recollect events ------------
+ 
+      TH1F *h_events; // THING to monitor analyzed event number 
+      h_events=(TH1F*)gDirectory->Get("h_events");
+      if (h_events==NULL){
+	h_events=new TH1F("h_events","h_events",100000,0,100000);
+      }
+
+     long long int last_event_n=0; //track the last event ...
+     long long int ii; // for loop from the last to the latest.
+     long long int entr;// number of entries - important to start with it
+     int  wait=1;
+      while (wait!=0){//INFINITE INFINITE INFINITE INFINITE INFINITE INFINITE INFINITE 
+     TTree *tree_addr_old=(TTree*)gDirectory->FindObject("texto");
+     if ( tree_addr_old!=NULL ){ //  ============================
+      TTree *tree_addr=(TTree*)tree_addr_old->Clone();
+      tree_addr->SetTitle("CLONE");
+      tree_addr->SetMakeClass(1);//to use int,float.?http://root.cern.ch/drupal/content/accessing-ttree-tselector
+      tree_addr->SetBranchStatus("*",0); //disable all branches
+      tree_addr->SetBranchStatus("main",1);//active
+      //      tree_addr->SetBranchAddress("main", &cha[1] ); // MY TRICK TO HAVE V001 ~ cha[1] !!!!!!
+      tree_addr->SetBranchAddress("main", &MyEvent ); // MY TRICK TO HAVE n and T001 ~ cha[1] !!!!!!
+      entr=tree_addr->GetEntries();
+      long long  int circular_bias=0; // important to have both - pos/neg 
+      if (entr>0){ //      =================BEGIN
+	 tree_addr->GetEntry(0);// this really starts at event #1
+       if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :   CALIBATION == %d .... n==%d (last_event==%lld)\n", 
+			      0, MyEvent.n, last_event_n );
+       circular_bias=last_event_n-MyEvent.n+1;
+       if (circular_bias<0){ circular_bias=0;}
+       tree_addr->GetEntry(1);
+       if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :   CALIBATION == %d .... n==%d (last_event==%lld)\n", 
+			      1, MyEvent.n, last_event_n );
+       tree_addr->GetEntry(2);
+       if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :   CALIBATION == %d .... n==%d (last_event==%lld)\n", 
+			      2, MyEvent.n, last_event_n );
+       tree_addr->GetEntry(circular_bias-1);
+       if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :   CALIBATION == %lld .... n==%d (total==%lld)\n", 
+			      circular_bias-1, MyEvent.n , entr );
+       tree_addr->GetEntry(circular_bias);
+       if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :   CALIBATION == %lld .... n==%d (total==%lld)\n", 
+			      circular_bias, MyEvent.n , entr );
+
+
+      }else{//if (entr>0){=================MIDDLE
+	 circular_bias=0;last_event_n=0;
+       }     //if (entr>0){=================END
+      if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :   LOOP ii= %lld ;ii < %lld \n", 
+			      circular_bias, entr );
+      for(  ii=circular_bias; ii<entr; ii++)  {//=====FORALL START
+	 tree_addr->GetEntry(ii);
+	 if (MyEvent.n!=last_event_n+1){ 
+	          if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :   PROBLEM myevent.n== %d at ii==%lld. Should be %lld. BREAK\n", 
+					 MyEvent.n , ii ,  last_event_n+1 );
+		  if (last_event_n!=0){ break; }// I spoted this when last==0
+	 }
+	 last_event_n=MyEvent.n;
+	 h_events->Fill( MyEvent.n );
+
+  //-----------------  typical matrix fill----------BEGIN
+  //-----------------  typical matrix fill----------END
+
+       }//FOR ALL AVAILABLE EVENTS             //=====FORALL START
+      tree_addr->Delete();//DO NOT keep clones!
+     }// if ( tree_addr_old!=NULL ){ ============================
+	
+     wait=MyCond.TimedWaitRelative( 2500  ) ; // wait 500 
+     if (wait==0)break;
+      }//INFINITE LOOP over always new clone;  *** wait!=0***
+
+    if(XTERM!=NULL)fprintf(XTERM,"\n\n  FTREE  :  Exiting ANALYZE  - remote function ...\n\n%s","");
  }//******************************************* END OF EVENT
+
+
+
+
+
+
+
+
+
+
+
 
 
 

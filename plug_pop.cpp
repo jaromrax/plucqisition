@@ -295,7 +295,7 @@ extern "C" {
    char ch[1024]=""; // 1kB text line
    // I AM COMPLETELY LOST WITH THERE CONVERSIONS &...
    char cc;
-   t_event.n=0; // reset the evvent number to 0
+   t_event.n=0; // reset the number to 0 .... 
    do{//-------------------
    sprintf( ch , "%s", ""); //reset
    while( !buffer->empty() ){
