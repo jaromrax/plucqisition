@@ -95,7 +95,8 @@ struct {
     unsigned short int chan[255];//  16bit /s
  } MyEvent;
 
-   UShort_t cha[1255];// TRICK ~ I address channels by ch[1] later !!!!
+   UShort_t cha[1255];// TRICK ~ I address channels by cha[1] later !!!!/s
+   int cnt[1255];     // TRICK ~ I address counter  by cnt[1] later !!!!/i
    double time[12];
    
 
@@ -353,9 +354,11 @@ struct {
       tree_addr->SetMakeClass(1);//to use int,float.?http://root.cern.ch/drupal/content/accessing-ttree-tselector
       tree_addr->SetBranchStatus("*",0); //disable all branches
       tree_addr->SetBranchStatus("mainV",1);//active
+      tree_addr->SetBranchStatus("counters",1);//active
       tree_addr->SetBranchStatus("time",1);//active
 
       tree_addr->SetBranchAddress("mainV", &cha[1] ); // MY TRICK TO HAVE V001 ~ cha[1] !!!!!!
+      tree_addr->SetBranchAddress("counters", &cnt[1] );//active
 
       //      tree_addr->SetBranchAddress("time", &time[0] ); // worked ......
       tree_addr->SetBranchAddress("time", &MyEvent );
@@ -427,6 +430,7 @@ struct {
 	 //	 	 printf(" %4d/               %11.2f chan 1 ====%d \n", ii, time[0], cha[1]   );
 
 	 h_events->Fill( MyEvent.n );
+	 if (cnt[1]>0){ printf("Q==%d\n", cnt[1];);
   //-----------------  typical matrix fill----------
 	 if (cha[17]>0) mtx1->Fill( cha[1]+cha[17], cha[17] ); 
 	 if (cha[18]>0) mtx2->Fill( cha[2]+cha[18], cha[18] ); 
@@ -445,6 +449,7 @@ struct {
 	   mtx1_1d_d->Fill( cha[1]+cha[17]  );
 	 }
 	 */
+	 //	 v560na_1    33
 
 	 if ( (m1_d!=NULL)&&(m1_d->IsInside( cha[1]+cha[17], cha[17] ) ) ){
 	   mtx1_d->Fill( cha[1]+cha[17]  );
