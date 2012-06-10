@@ -27,6 +27,7 @@ circular buffer seems safe. but how to get right number?
 
 #include <math.h>   //net thread
 
+#include "TGraphErrors.h"   //net thread
 
 
 /**********compile command:
@@ -106,6 +107,15 @@ struct {
 
    double ran=gRandom->Uniform(4000.);
 
+
+      //-----------------typpical creation of 2D matrix--------------
+   TGraphErrors *gt6q;
+   gt6q=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gt6q");
+   if (gt6q==NULL){
+     gt6q=new TGraphErrors; 
+     gt6q->SetName("gt6q");
+     gROOT->GetListOfSpecials()->Add(gt6q);
+   }
 
       //-----------------typpical creation of 2D matrix--------------
       TH2F *mtx1;
@@ -437,7 +447,10 @@ struct {
 
 
 	 if (cnt[1]>0){ 
-	   printf("**********   Q==%d   t6/q=%14.4f +- %f\n", cnt[1] , t6q/cnt[1],  sqrt(t6q)/cnt[1] );
+	   printf("**********   Q==%d   t6/q=%14.4f  %f\n", cnt[1] , t6q/cnt[1],  sqrt(t6q)/cnt[1] );
+	   int ima=gt6q->GetN();
+	   gt6q->SetPoint(      ima, ima, t6q/cnt[1] );
+	   gt6q->SetPointError( ima, 0.0, sqrt(t6q)/cnt[1] );
 	   t6q=0;
 	 }
 
@@ -508,6 +521,8 @@ struct {
 	 }
 	 if ( (m6_p!=NULL)&&(m6_p->IsInside( cha[6]+cha[22], cha[22] ) ) ){
 	   mtx6_p->Fill( cha[6]+cha[22]  );
+	   // deuteron / q   should be the same
+	   t6q=t6q+1.0;
 	 }
 	 if ( (m7_p!=NULL)&&(m7_p->IsInside( cha[7]+cha[23], cha[23] ) ) ){
 	   mtx7_p->Fill( cha[7]+cha[23]  );
