@@ -25,6 +25,10 @@ circular buffer seems safe. but how to get right number?
 
 #include "TSocket.h"   //net thread
 
+#include <math.h>   //net thread
+
+
+
 /**********compile command:
 g++ -fPIC -c plug_queue.cpp `root-config --libs --cflags --glibs`  &&  gcc -shared -o plug_queue.so plug_queue.o 
 
@@ -333,7 +337,7 @@ struct {
       }
 
 
-
+      double t6q=0.0;
 
 
       long long int last_event_n=0;
@@ -430,7 +434,14 @@ struct {
 	 //	 	 printf(" %4d/               %11.2f chan 1 ====%d \n", ii, time[0], cha[1]   );
 
 	 h_events->Fill( MyEvent.n );
-	 if (cnt[1]>0){ printf("Q==%d\n", cnt[1];);
+
+
+	 if (cnt[1]>0){ 
+	   printf("**********   Q==%d   t6/q=%14.4f +- %f\n", cnt[1] , t6q/cnt[1],  sqrt(t6q)/cnt[1] );
+	   t6q=0;
+	 }
+
+
   //-----------------  typical matrix fill----------
 	 if (cha[17]>0) mtx1->Fill( cha[1]+cha[17], cha[17] ); 
 	 if (cha[18]>0) mtx2->Fill( cha[2]+cha[18], cha[18] ); 
@@ -468,6 +479,8 @@ struct {
 	 }
 	 if ( (m6_d!=NULL)&&(m6_d->IsInside( cha[6]+cha[22], cha[22] ) ) ){
 	   mtx6_d->Fill( cha[6]+cha[22]  );
+	   // deuteron / q   should be the same
+	   t6q=t6q+1.0;
 	 }
 	 if ( (m7_d!=NULL)&&(m7_d->IsInside( cha[7]+cha[23], cha[23] ) ) ){
 	   mtx7_d->Fill( cha[7]+cha[23]  );
