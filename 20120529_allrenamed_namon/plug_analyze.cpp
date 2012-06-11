@@ -117,6 +117,23 @@ struct {
      gt6G->SetName("gt6G");
      gROOT->GetListOfSpecials()->Add(gt6G);
    }
+   TGraphErrors *gQ;
+   gQ=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gQ");
+   if (gQ==NULL){
+     printf("creating new gQ%s\n","");
+     gQ=new TGraphErrors; 
+     gQ->SetName("gQ");
+     gROOT->GetListOfSpecials()->Add(gQ);
+   }
+
+   TGraphErrors *gt1q;
+   gt1q=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gt1q");
+   if (gt1q==NULL){
+     printf("creating new gt1q%s\n","");
+     gt1q=new TGraphErrors; 
+     gt1q->SetName("gt1q");
+     gROOT->GetListOfSpecials()->Add(gt1q);
+   }
    TGraphErrors *gt6q;
    gt6q=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gt6q");
    if (gt6q==NULL){
@@ -191,6 +208,8 @@ struct {
 
       //-------------------------- typical load of Gcuts -----------------
       // EXTRA CUTS
+      TCutG *m1_monitor;
+      m1_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("m1_monitor");
       TCutG *m6_monitor;
       m6_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("m6_monitor");
       TCutG *m7_monitor;
@@ -372,6 +391,7 @@ struct {
 
 
       double t6G=0.0;
+      double t1q=0.0;
       double t6q=0.0;
       double t7q=0.0;
 
@@ -476,10 +496,19 @@ struct {
 	   printf("*****************   Q==%5d :  t6/q=%14.4f  %6f  :  t7/q=%14.4f  %6f  : \n", 
 		  cnt[1] , t6q/cnt[1],  sqrt(t6q)/cnt[1] ,  t7q/cnt[1],  sqrt(t7q)/cnt[1] );
 	   int ima;
+	   ima=gQ->GetN();
+	   gQ->SetPoint(      ima, MyEvent.time, cnt[1]/60.0 );
+	   gQ->SetPointError( ima, 0.0, 1.0/60.0 );
+
 	   ima=gt6G->GetN();
 	   gt6G->SetPoint(      ima, MyEvent.time, t6G/60.0 );
-	   gt6G->SetPointError( ima, 0.0, 1.0 );
+	   gt6G->SetPointError( ima, 0.0, 1.0/60.0 );
 	   t6G=0.0;
+
+	   ima=gt1q->GetN();
+	   gt1q->SetPoint(      ima, MyEvent.time, t1q/cnt[1] );
+	   gt1q->SetPointError( ima, 0.0, sqrt(t1q)/cnt[1] );
+	   t1q=0.0;
 	   ima=gt6q->GetN();
 	   gt6q->SetPoint(      ima, MyEvent.time, t6q/cnt[1] );
 	   gt6q->SetPointError( ima, 0.0, sqrt(t6q)/cnt[1] );
@@ -511,9 +540,12 @@ struct {
 	 */
 	 //	 v560na_1    33
 
-	   // MONITOR T6  deuteron / q   should be the same
+	   // MONITOR T6 / q   should be the same
 	 if ( (m6_g !=NULL)&&(m6_g->IsInside( cha[6]+cha[22], cha[22] ) ) ){
 	   t6G=t6G+1.0;
+	 }
+	 if ( (m1_monitor!=NULL)&&(m1_monitor->IsInside( cha[1]+cha[17], cha[17] ) ) ){
+	   t1q=t1q+1.0;
 	 }
 	 if ( (m6_monitor!=NULL)&&(m6_monitor->IsInside( cha[6]+cha[22], cha[22] ) ) ){
 	   t6q=t6q+1.0;
