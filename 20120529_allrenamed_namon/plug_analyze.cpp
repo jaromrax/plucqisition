@@ -109,6 +109,14 @@ struct {
 
 
       //-----------------typpical creation of TGraphErrors--------------
+   TGraphErrors *gt6G;
+   gt6G=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gt6G");
+   if (gt6G==NULL){
+     printf("creating new gt6G%s\n","");
+     gt6G=new TGraphErrors; 
+     gt6G->SetName("gt6G");
+     gROOT->GetListOfSpecials()->Add(gt6G);
+   }
    TGraphErrors *gt6q;
    gt6q=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gt6q");
    if (gt6q==NULL){
@@ -125,7 +133,7 @@ struct {
      gt7q->SetName("gt7q");
      gROOT->GetListOfSpecials()->Add(gt7q);
    }
-
+ 
       //-----------------typpical creation of 2D matrix--------------
       TH2F *mtx1;
       mtx1=(TH2F*)gDirectory->Get("mtx1");
@@ -363,6 +371,7 @@ struct {
       }
 
 
+      double t6G=0.0;
       double t6q=0.0;
       double t7q=0.0;
 
@@ -464,9 +473,13 @@ struct {
 
 
 	 if (cnt[1]>0){ 
-	   printf("*****************   Q==%d   t6/q=%14.4f  %6f   t7/q=%14.4f  %6f   \n", 
+	   printf("*****************   Q==%5d :  t6/q=%14.4f  %6f  :  t7/q=%14.4f  %6f  : \n", 
 		  cnt[1] , t6q/cnt[1],  sqrt(t6q)/cnt[1] ,  t7q/cnt[1],  sqrt(t7q)/cnt[1] );
 	   int ima;
+	   ima=gt6G->GetN();
+	   gt6G->SetPoint(      ima, MyEvent.time, t6G/60.0 );
+	   gt6G->SetPointError( ima, 0.0, 1.0 );
+	   t6G=0.0;
 	   ima=gt6q->GetN();
 	   gt6q->SetPoint(      ima, MyEvent.time, t6q/cnt[1] );
 	   gt6q->SetPointError( ima, 0.0, sqrt(t6q)/cnt[1] );
@@ -499,6 +512,9 @@ struct {
 	 //	 v560na_1    33
 
 	   // MONITOR T6  deuteron / q   should be the same
+	 if ( (m6_g !=NULL)&&(m6_g->IsInside( cha[6]+cha[22], cha[22] ) ) ){
+	   t6G=t6G+1.0;
+	 }
 	 if ( (m6_monitor!=NULL)&&(m6_monitor->IsInside( cha[6]+cha[22], cha[22] ) ) ){
 	   t6q=t6q+1.0;
 	 }
