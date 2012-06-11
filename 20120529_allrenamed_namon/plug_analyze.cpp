@@ -108,13 +108,22 @@ struct {
    double ran=gRandom->Uniform(4000.);
 
 
-      //-----------------typpical creation of 2D matrix--------------
+      //-----------------typpical creation of TGraphErrors--------------
    TGraphErrors *gt6q;
    gt6q=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gt6q");
    if (gt6q==NULL){
+     printf("creating new gt6q%s\n","");
      gt6q=new TGraphErrors; 
      gt6q->SetName("gt6q");
      gROOT->GetListOfSpecials()->Add(gt6q);
+   }
+   TGraphErrors *gt7q;
+   gt7q=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gt7q");
+   if (gt7q==NULL){
+     printf("creating new gt7q%s\n","");
+     gt7q=new TGraphErrors; 
+     gt7q->SetName("gt7q");
+     gROOT->GetListOfSpecials()->Add(gt7q);
    }
 
       //-----------------typpical creation of 2D matrix--------------
@@ -173,6 +182,13 @@ struct {
       */
 
       //-------------------------- typical load of Gcuts -----------------
+      // EXTRA CUTS
+      TCutG *m6_monitor;
+      m6_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("m6_monitor");
+      TCutG *m7_monitor;
+      m7_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("m7_monitor");
+
+      
       //deuterons
       TCutG *m1_d;
       m1_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("m1_d");
@@ -348,6 +364,7 @@ struct {
 
 
       double t6q=0.0;
+      double t7q=0.0;
 
 
       long long int last_event_n=0;
@@ -447,11 +464,17 @@ struct {
 
 
 	 if (cnt[1]>0){ 
-	   printf("**********   Q==%d   t6/q=%14.4f  %f\n", cnt[1] , t6q/cnt[1],  sqrt(t6q)/cnt[1] );
-	   int ima=gt6q->GetN();
-	   gt6q->SetPoint(      ima, ima, t6q/cnt[1] );
+	   printf("*****************   Q==%d   t6/q=%14.4f  %6f   t7/q=%14.4f  %6f   \n", 
+		  cnt[1] , t6q/cnt[1],  sqrt(t6q)/cnt[1] ,  t7q/cnt[1],  sqrt(t7q)/cnt[1] );
+	   int ima;
+	   ima=gt6q->GetN();
+	   gt6q->SetPoint(      ima, MyEvent.time, t6q/cnt[1] );
 	   gt6q->SetPointError( ima, 0.0, sqrt(t6q)/cnt[1] );
-	   t6q=0;
+	   t6q=0.0;
+	   ima=gt7q->GetN();
+	   gt7q->SetPoint(      ima, MyEvent.time, t7q/cnt[1] );
+	   gt7q->SetPointError( ima, 0.0, sqrt(t7q)/cnt[1] );
+	   t7q=0.0;
 	 }
 
 
@@ -475,6 +498,17 @@ struct {
 	 */
 	 //	 v560na_1    33
 
+	   // MONITOR T6  deuteron / q   should be the same
+	 if ( (m6_monitor!=NULL)&&(m6_monitor->IsInside( cha[6]+cha[22], cha[22] ) ) ){
+	   t6q=t6q+1.0;
+	 }
+	 if ( (m7_monitor!=NULL)&&(m7_monitor->IsInside( cha[7]+cha[23], cha[23] ) ) ){
+	   t7q=t7q+1.0;
+	 }
+
+
+	 //FILL 1d  spectra -  matrices 
+
 	 if ( (m1_d!=NULL)&&(m1_d->IsInside( cha[1]+cha[17], cha[17] ) ) ){
 	   mtx1_d->Fill( cha[1]+cha[17]  );
 	 }
@@ -492,8 +526,6 @@ struct {
 	 }
 	 if ( (m6_d!=NULL)&&(m6_d->IsInside( cha[6]+cha[22], cha[22] ) ) ){
 	   mtx6_d->Fill( cha[6]+cha[22]  );
-	   // deuteron / q   should be the same
-	   t6q=t6q+1.0;
 	 }
 	 if ( (m7_d!=NULL)&&(m7_d->IsInside( cha[7]+cha[23], cha[23] ) ) ){
 	   mtx7_d->Fill( cha[7]+cha[23]  );
@@ -521,8 +553,6 @@ struct {
 	 }
 	 if ( (m6_p!=NULL)&&(m6_p->IsInside( cha[6]+cha[22], cha[22] ) ) ){
 	   mtx6_p->Fill( cha[6]+cha[22]  );
-	   // deuteron / q   should be the same
-	   t6q=t6q+1.0;
 	 }
 	 if ( (m7_p!=NULL)&&(m7_p->IsInside( cha[7]+cha[23], cha[23] ) ) ){
 	   mtx7_p->Fill( cha[7]+cha[23]  );
