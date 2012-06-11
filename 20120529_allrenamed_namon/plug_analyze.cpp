@@ -109,6 +109,8 @@ struct {
 
 
       //-----------------typpical creation of TGraphErrors--------------
+   //  gt6G  generators in t6 matrix  cut  m6_g
+   //  gG    generators
    TGraphErrors *gt6G;
    gt6G=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gt6G");
    if (gt6G==NULL){
@@ -117,6 +119,15 @@ struct {
      gt6G->SetName("gt6G");
      gROOT->GetListOfSpecials()->Add(gt6G);
    }
+   TGraphErrors *gG;
+   gG=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gG");
+   if (gG==NULL){
+     printf("creating new gG%s\n","");
+     gG=new TGraphErrors; 
+     gG->SetName("gG");
+     gROOT->GetListOfSpecials()->Add(gG);
+   }
+
    TGraphErrors *gQ;
    gQ=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gQ");
    if (gQ==NULL){
@@ -491,7 +502,7 @@ struct {
 
 	 h_events->Fill( MyEvent.n );
 
-
+	 //-----------when there is Q (every minute when there is a beam)
 	 if (cnt[1]>0){ 
 	   printf("*****************   Q==%5d :  t6/q=%14.4f  %6f  :  t7/q=%14.4f  %6f  : \n", 
 		  cnt[1] , t6q/cnt[1],  sqrt(t6q)/cnt[1] ,  t7q/cnt[1],  sqrt(t7q)/cnt[1] );
@@ -500,10 +511,15 @@ struct {
 	   gQ->SetPoint(      ima, MyEvent.time, cnt[1]/60.0 );
 	   gQ->SetPointError( ima, 0.0, 1.0/60.0 );
 
-	   ima=gt6G->GetN();
+	   ima=gt6G->GetN();//generator in the matrix t6 cut m6_g
 	   gt6G->SetPoint(      ima, MyEvent.time, t6G/60.0 );
 	   gt6G->SetPointError( ima, 0.0, 1.0/60.0 );
 	   t6G=0.0;
+
+	   ima=gG->GetN();//  74.1 counter generators
+	   gG->SetPoint(      ima, MyEvent.time, cnt[3]/60.0 );
+	   gG->SetPointError( ima, 0.0, 1.0/60.0 );
+
 
 	   ima=gt1q->GetN();
 	   gt1q->SetPoint(      ima, MyEvent.time, t1q/cnt[1] );
