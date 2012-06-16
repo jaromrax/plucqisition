@@ -101,7 +101,7 @@ struct {
  } MyEvent;
 
    UShort_t cha[1255];// TRICK ~ I address channels by cha[1] later !!!!/s
-   int cnt[1255];     // TRICK ~ I address counter  by cnt[1] later !!!!/i
+   UInt_t cnt[1255];     // TRICK ~ I address counter  by cnt[1] later !!!!/i
    double time[12];
    
 
@@ -111,6 +111,7 @@ struct {
       //-----------------typpical creation of TGraphErrors--------------
    //  gt6G  generators in t6 matrix  cut  m6_g
    //  gG    generators
+   //  gQ    charge * 10 -10 C
    TGraphErrors *gt6G;
    gt6G=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gt6G");
    if (gt6G==NULL){
@@ -118,6 +119,14 @@ struct {
      gt6G=new TGraphErrors; 
      gt6G->SetName("gt6G");
      gROOT->GetListOfSpecials()->Add(gt6G);
+   }
+   TGraphErrors *gt6GG;
+   gt6GG=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gt6GG");
+   if (gt6GG==NULL){
+     printf("creating new gt6GG%s\n","");
+     gt6GG=new TGraphErrors; 
+     gt6GG->SetName("gt6GG");
+     gROOT->GetListOfSpecials()->Add(gt6GG);
    }
    TGraphErrors *gG;
    gG=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gG");
@@ -127,7 +136,6 @@ struct {
      gG->SetName("gG");
      gROOT->GetListOfSpecials()->Add(gG);
    }
-
    TGraphErrors *gQ;
    gQ=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gQ");
    if (gQ==NULL){
@@ -136,6 +144,19 @@ struct {
      gQ->SetName("gQ");
      gROOT->GetListOfSpecials()->Add(gQ);
    }
+
+
+
+   TGraphErrors *gt6t1; // ------  relation between t6 x t1 : should be independent
+   gt6t1=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gt6t1");
+   if (gt6t1==NULL){
+     printf("creating new gt6t1%s\n","");
+     gt6t1=new TGraphErrors; 
+     gt6t1->SetName("gt6t1");
+     gROOT->GetListOfSpecials()->Add(gt6t1);
+   }
+
+
 
    TGraphErrors *gt1q;
    gt1q=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gt1q");
@@ -406,6 +427,7 @@ struct {
       }
 
 
+      int    remove_counter1=1;  // to remove 1st point in tgraph
       double t6G=0.0;
       double t1q=0.0;
       double t6q=0.0;
@@ -509,36 +531,49 @@ struct {
 
 	 //-----------when there is Q (every minute when there is a beam)
 	 if (cnt[1]>0){ 
-	   printf("*****************   Q==%5d :  t6/q=%14.4f  %6f  :  t7/q=%14.4f  %6f  : \n", 
-		  cnt[1] , t6q/cnt[1],  sqrt(t6q)/cnt[1] ,  t7q/cnt[1],  sqrt(t7q)/cnt[1] );
+	   printf("*****************   Q==%5d :  t6/q=%14.4f  %6f  :  t7/q=%14.4f  %6f  : CNT %d*%d*%d  \n", 
+		  cnt[1] , t6q/cnt[1],  sqrt(t6q)/cnt[1] ,  t7q/cnt[1],  sqrt(t7q)/cnt[1] , cnt[2], cnt[3],cnt[4] );
+	   if (	 remove_counter1!=1 ){
 	   int ima;
 	   ima=gQ->GetN();
 	   gQ->SetPoint(      ima, MyEvent.time, cnt[1]/60.0 );
-	   gQ->SetPointError( ima, 0.0, 1.0/60.0 );
+	   gQ->SetPointError( ima, 0.0,  0.03*cnt[1]/60.0   );  // integrator error is typical 0.3% @ 50nA
 
 	   ima=gt6G->GetN();//generator in the matrix t6 cut m6_g
 	   gt6G->SetPoint(      ima, MyEvent.time, t6G/60.0 );
 	   gt6G->SetPointError( ima, 0.0, 1.0/60.0 );
-	   t6G=0.0;
+
+	   ima=gt6GG->GetN();//generator in the matrix t6 cut m6_g / generator in counter
+	   gt6GG->SetPoint(      ima, MyEvent.time, t6G/cnt[4] );
+	   gt6GG->SetPointError( ima, 0.0, 1.0/74.1 );
 
 	   ima=gG->GetN();//  74.1 counter generators
-	   gG->SetPoint(      ima, MyEvent.time, cnt[3]/60.0 );
+	   gG->SetPoint(      ima, MyEvent.time, cnt[4]/60.0 );
 	   gG->SetPointError( ima, 0.0, 1.0/60.0 );
 
 
 	   ima=gt1q->GetN();
 	   gt1q->SetPoint(      ima, MyEvent.time, t1q/cnt[1] );
 	   gt1q->SetPointError( ima, 0.0, sqrt(t1q)/cnt[1] );
-	   t1q=0.0;
+
 	   ima=gt6q->GetN();
 	   gt6q->SetPoint(      ima, MyEvent.time, t6q/cnt[1] );
 	   gt6q->SetPointError( ima, 0.0, sqrt(t6q)/cnt[1] );
-	   t6q=0.0;
+
 	   ima=gt7q->GetN();
 	   gt7q->SetPoint(      ima, MyEvent.time, t7q/cnt[1] );
 	   gt7q->SetPointError( ima, 0.0, sqrt(t7q)/cnt[1] );
+
+	   ima=gt6t1->GetN();
+	   gt6t1->SetPoint(      ima, t6q,  t1q );
+	   gt6t1->SetPointError( ima, sqrt(t6q), sqrt(t1q) );
+
+	   }else{ remove_counter1=0; } //do not use 1st point
+	   t6G=0.0;
+	   t1q=0.0;
+	   t6q=0.0;
 	   t7q=0.0;
-	 }
+	 }// cnt[1] >0 == Q>0
 
 
   //-----------------  typical matrix fill----------x,y
