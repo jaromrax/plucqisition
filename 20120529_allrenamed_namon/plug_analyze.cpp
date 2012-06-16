@@ -184,10 +184,15 @@ struct {
    }
  
       //-----------------typpical creation of 2D matrix-------------y,x-
-      TH2F *mtx1_6;
-      mtx1_6=(TH2F*)gDirectory->Get("mtx1_6");
-      if (mtx1_6==NULL){
-	mtx1_6=new TH2F("mtx1","V022+V006:V017+V001",1024,0,5000,1024,0,5000);
+      TH2F *mtx1_6full;
+      mtx1_6full=(TH2F*)gDirectory->Get("mtx1_6full");
+      if (mtx1_6full==NULL){
+	mtx1_6full=new TH2F("mtx1_6full","V022+V006:V017+V001",1024,0,5000,1024,0,5000);
+      }
+      TH2F *mtx1_6de;
+      mtx1_6de=(TH2F*)gDirectory->Get("mtx1_6de");
+      if (mtx1_6de==NULL){
+	mtx1_6de=new TH2F("mtx1_6de","V022:V017",1024,0,5000,1024,0,5000);
       }
       TH2F *mtx1;
       mtx1=(TH2F*)gDirectory->Get("mtx1");
@@ -577,7 +582,9 @@ struct {
 
 
   //-----------------  typical matrix fill----------x,y
-	 if ((cha[17]>0)&&(cha[22]>0)) mtx1_6->Fill( cha[1]+cha[17],cha[6]+cha[22]  ); 
+	 if ((cha[17]>0)&&(cha[22]>0)) mtx1_6full->Fill( cha[1]+cha[17],cha[6]+cha[22]  ); 
+	 if ((cha[17]>0)&&(cha[22]>0)) mtx1_6de->Fill( cha[17], cha[22]  ); 
+
 	 if (cha[17]>0) mtx1->Fill( cha[1]+cha[17], cha[17] ); 
 	 if (cha[18]>0) mtx2->Fill( cha[2]+cha[18], cha[18] ); 
 	 if (cha[19]>0) mtx3->Fill( cha[3]+cha[19], cha[19] ); 
