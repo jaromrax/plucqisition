@@ -162,6 +162,122 @@ public:
 FILE* XTERM;
 
 
+//http://www.go4expert.com/forums/showthread.php?t=871
+void xprintf(const char * lpOutputString, ... )
+{
+    
+    va_list argptr;    
+    
+    va_start( argptr, lpOutputString );            
+    
+    char OutMsg[1000];
+    char format[1000];
+    
+    for(int i=0,j=0;lpOutputString[i] != '\0';i++) 
+    {
+        format[j++] = lpOutputString[i];
+        // If escape character
+        if(lpOutputString[i] == '\\')
+        {
+            i++;
+            continue;
+        }
+        // if not a substitutal character
+        if(lpOutputString[i] != '%')
+            continue;
+        
+        format[j++] = lpOutputString[++i];
+        format[j] = '\0';
+        switch(lpOutputString[i])
+        {
+            // string
+        case 's':
+            {
+                char* s = va_arg( argptr, char * );
+                sprintf(OutMsg,format,s);
+                strcpy(format,OutMsg);
+                j = strlen(format);
+                strcat(format," ");
+                break;
+            }
+            // character
+        case 'c':
+            {
+                char c = (char) va_arg( argptr, int );
+                sprintf(OutMsg,format,c);
+                strcpy(format,OutMsg);
+                j = strlen(format);
+                strcat(format," ");
+                break;
+            }
+            // integer
+        case 'd':
+            {
+                int d = va_arg( argptr, int );
+                sprintf(OutMsg,format,d);
+                strcpy(format,OutMsg);
+                j = strlen(format);
+                strcat(format," ");
+                break;
+            }
+        case 'f':
+            {
+                double f = va_arg( argptr, double );
+                sprintf(OutMsg,format,f);
+                strcpy(format,OutMsg);
+                j = strlen(format);
+                strcat(format," ");
+                break;
+            }
+        }
+    }           
+    printf("%s\n",OutMsg);
+    va_end( argptr );
+}
+
+
+
+int xxxprintf( const char* Format, ... ){
+      va_list Arguments;
+      va_start(Arguments, Format);
+      double FArg;
+      int IArg;
+      char adva;
+	printf("formati==<%s>\n",Format );
+      for(int i = 0; Format[i] != '\0'; ++i )
+      {
+
+	if( Format[i] != '%')
+            continue;
+        
+
+	    if (Format[i+1] == 'f')
+            {
+	      double d=(double)va_arg(Arguments, double);
+                  printf("Caught a float : %.3lf\n",d);
+            }
+            else if (Format[i+1] == 'd')
+            {
+	      int i=(int)va_arg(Arguments, int);
+                  printf("Caught an integer : %d\n", i);
+            }
+            else if (Format[i+1] == 'c')
+            {
+	      char c=(char)va_arg(Arguments, int);
+                  printf("Caught an char : %c\n",c);
+            }
+            else if (Format[i+1] == 's')
+            {
+	      char *s=va_arg(Arguments, char *);
+                  printf("Caught an char* : %s\n",s);
+            }
+      }//FOR 
+      va_end(Arguments);
+  printf("%15s  %15s  %15s\n", "PUSH ok" , "POP ok",  "ANALYZE ok" );
+}
+
+
+
 int fexists (char * fileName)
 {
    struct stat buf;
