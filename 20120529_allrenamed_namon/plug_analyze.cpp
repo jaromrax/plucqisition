@@ -442,7 +442,8 @@ struct {
       long long int last_event_n=0;
       long long int entr;
       long long int ii; 
-      int down=5;
+        long long int last_ii;//printout after
+     int down=5;
       double downtime; int downtimef, downtimei,  wait=1;
       while (wait!=0){//INFINITE INFINITE INFINITE INFINITE INFINITE INFINITE INFINITE 
 	//	down--;
@@ -476,59 +477,67 @@ struct {
 
       long long  int circular_bias=0; // important to have both - pos/neg 
        if (entr>0){
-	 tree_addr->GetEntry(0);// this really starts at event #1
-       if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :   CALIBATION == %d .... n==%d (last_event==%lld)\n", 
-			      0, MyEvent.n, last_event_n );
+
+
+       tree_addr->GetEntry(0);// this really starts at event #1
+       if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :    entry:%6d .... evt.n==%6d (last_event==%lld  tot==%lld)\n", 
+			      0, MyEvent.n, last_event_n, entr  );
+
        circular_bias=last_event_n-MyEvent.n+1;
        //we can have last_event==0; but n==120123 ! ...negative event...so:
        if (circular_bias<0){ circular_bias=0;}
 
        tree_addr->GetEntry(1);
-       if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :   CALIBATION == %d .... n==%d (last_event==%lld)\n", 
-			      1, MyEvent.n, last_event_n );
+       if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :    entry:%6d .... evt.n==%6d\n", 1, MyEvent.n );
        tree_addr->GetEntry(2);
-       if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :   CALIBATION == %d .... n==%d (last_event==%lld)\n", 
-			      2, MyEvent.n, last_event_n );
-
-
+       if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :    entry:%6d .... evt.n==%6d\n", 2, MyEvent.n);
+ 
+       //      if (circular_bias>0){//I need it for comparison
        tree_addr->GetEntry(circular_bias-1);
-       if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :   CALIBATION == %lld .... n==%d (total==%lld)\n", 
-			      circular_bias-1, MyEvent.n , entr );
+       if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :    entry:%6lld .... evt.n==%6d \n", circular_bias-1, MyEvent.n );
        tree_addr->GetEntry(circular_bias);
-       if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :   CALIBATION == %lld .... n==%d (total==%lld)\n", 
-			      circular_bias, MyEvent.n , entr );
+       if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :    entry:%6lld .... evt.n==%6d \n", circular_bias, MyEvent.n  );
+       //       }//cicr bias>0
 
        }else{//if (entr>0){
 	 circular_bias=0;last_event_n=0;
        }//if (entr>0){
-       //       tree_addr->GetEntry( tree_addr->GetEntries()-100  );
-       //       if(XTERM!=NULL)fprintf(XTERM,"B  FTREE  :   CALIBATION == %d .... n==%ld\n", 
-       //			      tree_addr->GetEntries()-100, MyEvent.n );
+    
 
-
-       //       if ( (starting_point>0) ){
-       //       if(XTERM!=NULL)fprintf(XTERM,"  FTREE  :  ANALYZE  - ENTRIES== %lld ; LAST n== %lld ...\n",
-       //			      entr, starting_point);
-       //       }
-
-       //       if (starting_point<=MyEvent.n){
-       //	  if(XTERM!=NULL)fprintf(XTERM,"  FTREE  :  ANALYZE  - \n", starting_point);
-       //       }
+       //circular_bias LLD
+       //entr          LLD
+       //ii            LLD
+       //MyEvent.n     UInt_t n;// 4 bytr integer ! decided in nano_acq
+       //last_event    LLD
        if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :   LOOP ii= %lld ;ii < %lld \n", 
 			      circular_bias, entr );
-
+       if (last_event_n<MyEvent.n ){
+	 if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :   SKIP BY  %lld EVENTS\n", 
+			 MyEvent.n-last_event_n );
+	 	 last_event_n=MyEvent.n-1;
+       } // we fix the jumnp
+       /*
+	* LOOP 
+	*/
        //       for(  ii=circular_bias; ii<circular_bias+entr; ii++)  {
+       // pojedu od experimentalne nalezeneho biasu  az do entries.
+       // pokud dalsi udalost neni v rade => breaknu to 
+       long long int last_ii;//printout after
        for(  ii=circular_bias; ii<entr; ii++)  {
+	 last_ii=ii;//printout after
 	 //	 if ((ii%1000)==0){if(XTERM!=NULL)fprintf(XTERM,"T        %7lld e^3 evts\n",(int)(ii/1000) );} 
 	 tree_addr->GetEntry(ii);
-	 //last_event_n++;// THE most simple way to track the events processed
+         if(  ((ii<circular_bias+5)||(ii>entr-5))  &&(XTERM!=NULL) )fprintf(XTERM,"A  FTREE  :    entry:%6lld .... evt.n==%6d last==%6lld\n", 
+									    last_ii , MyEvent.n , last_event_n );
+ 	 //last_event_n++;// THE most simple way to track the events processed
 	 if (MyEvent.n!=last_event_n+1){ 
-	          if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :   PROBLEM myevent.n== %d at ii==%lld. Should be %lld. BREAK\n", 
+	          if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  : circ.buff edge: myevent.n== %d at ii==%lld. Should be %lld. BREAK\n", 
 					 MyEvent.n , ii ,  last_event_n+1 );
 		  if (last_event_n!=0){ break; }// I spoted this when last==0
+		  break;
 
 	 }
-	 last_event_n=MyEvent.n;
+	 last_event_n=(long long int)MyEvent.n;
 	 //	 printf(" %4d/ %11.2f chan 0 ====%d \n", ii, time[0], cha[1]   );
 	 //	 	 printf(" %4d/               %11.2f chan 1 ====%d \n", ii, time[0], cha[1]   );
 
@@ -729,7 +738,11 @@ struct {
 
 
 		 //	 if (ii>200)break;
-       }//FOR ALL AVAILABLE EVENTS
+       }//FOR ALL AVAILABLE EVENTS    ii=circular_bias ->  entr....................
+       /*       if(XTERM!=NULL)fprintf(XTERM,"A  FTREE  :    entry:%6d .... evt.n==%6d\n", 
+			     last_ii , MyEvent.n );
+       */
+ 
        //       last_event_n=entr;
        tree_addr->Delete();
     }// ttree NOT NULL

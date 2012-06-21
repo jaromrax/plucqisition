@@ -523,13 +523,16 @@ extern "C" {
 	  cnt_evt++;
 	  //one_buffer_process( (void*)buffer,  int(nminibuffer/4) , int(startup/4) ); //
 	  one_buffer_process( (void*)&oneeventbuf, pointer , 0 ); //
+	  if (cnt_evt%50000 ==0){
+	  if(XTERM!=NULL)fprintf(XTERM,"PQ OBP %lld\n",cnt_evt );fflush(XTERM);
+	  }
 	}//WHILE --- next event
 	if (status==0){
       if(XTERM!=NULL)fprintf(XTERM,
 		 "POP PQ (int)cnt=== %lld,  events=%lld --leaving poper\n",
 			     cnt,  cnt_evt);
 	}//status==0
-	if(XTERM!=NULL)fprintf(XTERM,"%s",".");fflush(XTERM);
+	if(XTERM!=NULL)fprintf(XTERM,"PQ %lld\n",cnt_evt );fflush(XTERM);
 	//	usleep(1000*300);//buffer empty:100ms wait before next try
 	status++;
 

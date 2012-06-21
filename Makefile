@@ -6,7 +6,7 @@ mpath2 := $(shell echo  $(mpath) | sed  's/:/ /g')
 
 
 
-all: 
+all: mut plugins
 	@echo "make:";\
 	echo "      this help";\
 	echo "make plugins:";\

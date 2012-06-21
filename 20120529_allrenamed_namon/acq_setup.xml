@@ -8,8 +8,9 @@ A COMMENT MUST BE HERE
   <!--pusher  so="../plug_queue.so" func="evt_pusher_int"  ip="127.0.0.1"  port="9302"> </pusher-->
   <!--poper   so="../plug_queue.so" func="evt_poper_logint"> </poper-->
 
-  <pusher  so="../plug_push.so" func="evt_pusher_net"  ip="192.168.1.6"  port="9302"> </pusher>
-  <poper   so="../plug_pop.so" func="evt_poper_sort" file="a"> </poper>
+  <!-- pusher  so="../plug_push.so" func="evt_pusher_net"  ip="192.168.1.6"  port="9302"> </pusher-->
+  <pusher  so="../plug_push.so" func="evt_pusher_file"  file="/home/mrazek/DATA/20120608_ne22_3He/RUN1016_V"> </pusher>
+  <poper   so="../plug_pop.so" func="evt_poper_sort"> </poper>
   <analyze so="./plug_analyze.so" func="evt_analyze_test"> </analyze>
 </plugins>
 

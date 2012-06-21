@@ -356,7 +356,7 @@ void logterm(){
    *
    */
   if (XTERM==NULL){
-    printf("file NOT readable\n%s","");
+    printf("XTERM file NOT readable\n%s","");
   for (int i=0;i<35;i++){
     sprintf(devpts,"/dev/pts/%d", i);
     //    printf( "file = %d\n", file_exists(devpts) );
