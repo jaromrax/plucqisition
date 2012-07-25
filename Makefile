@@ -42,7 +42,7 @@ install: mut_queue_C.so
 	fi;
 
 
-plugins: plug_push.so plug_pop.so plug_analyze.so
+plugins: plug_push.so plug_pop.so 
 
 
 plug_push.so: plug_push.cpp mut_queue.h cuts_manip.h nano_acquis_pureconvert.C xml_attr.c xml_attr.h logterm.C
@@ -53,12 +53,12 @@ plug_pop.so: plug_pop.cpp mut_queue.h cuts_manip.h nano_acquis_pureconvert.C xml
 	`root-config --cxx --cflags` -fPIC -shared -o plug_pop.so plug_pop.cpp     -lHist -lNet -lCore -lRIO -lGpad -lMathCore -lPhysics -lTree -lThread -lXMLIO `root-config --glibs`
 
 
-plug_analyze.so: plug_analyze.cpp mut_queue.h cuts_manip.h nano_acquis_pureconvert.C xml_attr.c xml_attr.h logterm.C
-	`root-config --cxx --cflags` -fPIC -shared -o plug_analyze.so plug_analyze.cpp -lHist -lNet -lCore -lRIO -lGpad -lMathCore -lPhysics -lTree -lThread -lXMLIO `root-config --glibs`
+###not here in main;analyze is always down  plug_analyze.so: plug_analyze.cpp mut_queue.h cuts_manip.h nano_acquis_pureconvert.C xml_attr.c xml_attr.h logterm.C
+####	`root-config --cxx --cflags` -fPIC -shared -o plug_analyze.so plug_analyze.cpp -lHist -lNet -lCore -lRIO -lGpad -lMathCore -lPhysics -lTree -lThread -lXMLIO `root-config --glibs`
 
 
 clean:
-	  rm plug_analyze.so  plug_pop.so plug_push.so
+	  rm plug_pop.so plug_push.so
 
 ##	g++ -fPIC -c plug_queue.cpp `root-config --libs --cflags --glibs`  &&  gcc -shared -o plug_queue.so plug_queue.o
 ##	g++ -fPIC -c plug_analyze.cpp `root-config --libs --cflags --glibs`  &&  gcc -shared -o plug_analyze.so plug_analyze.o

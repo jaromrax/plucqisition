@@ -64,7 +64,8 @@ extern "C" {
   /**********************************************
    *            PUSH only integers 1.....200
    */
- int* evt_pusher_int(int* par){
+  int* push_int(int* par){// TEST....just integers into the queue
+
       concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    //   concurrent_queue *buffer=(concurrent_queue*)par;
       if(XTERM!=NULL)fprintf(XTERM,
@@ -78,7 +79,7 @@ extern "C" {
      buffer->push( i );
    }//for
       if(XTERM!=NULL)fprintf(XTERM,
-		  "evt_pusher (integers)  EXIT buffer=%d\n",(int)buffer );
+		  "push (integers)  EXIT buffer=%d\n",(int)buffer );
  }/*****************************end of function *********************/
 
 
@@ -87,7 +88,8 @@ extern "C" {
   /**********************************************
    *            PUSH TEXT  
    */
- int* evt_pusher_txt(int* par){
+  int* push_txt(int* par){//TEST ... pushes text with 4 numbers in one line
+
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    if(XTERM!=NULL)fprintf(XTERM,
 		  "PUSH (text) START buffer=%d\n",(int)buffer );
@@ -101,7 +103,7 @@ extern "C" {
      }
    }//for
    if(XTERM!=NULL)fprintf(XTERM,
-		  "evt_pusher (text)  EXIT buffer=%d\n",(int)buffer );
+		  "push (text)  EXIT buffer=%d\n",(int)buffer );
  }/*****************************end of function *********************/
 
 
@@ -114,7 +116,7 @@ extern "C" {
   /**********************************************
    *            PUSH TEXT  FILE
    */
- int* evt_pusher_txtfile(int* par){
+ int* push_txtfile(int* par){
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    if(XTERM!=NULL)fprintf(XTERM,
 		  "PUSH (textFILE) START buffer=%d\n",(int)buffer );
@@ -152,14 +154,14 @@ extern "C" {
       fclose(infile); 
 
       if(XTERM!=NULL)fprintf(XTERM,
-		  "evt_pusher (textFILE) closed file. %d\n",(int)buffer );
+		  "push (textFILE) closed file. %d\n",(int)buffer );
 
      wait=MyCond.TimedWaitRelative( 1000  ) ; // wait 500 
 
       }while(wait != 0);
 
    if(XTERM!=NULL)fprintf(XTERM,
-		  "evt_pusher (textFILE)  EXIT buffer=%d\n",(int)buffer );
+		  "push (textFILE)  EXIT buffer=%d\n",(int)buffer );
  }/*****************************end of function *********************/
 
 
@@ -175,9 +177,10 @@ extern "C" {
   /**********************************************
    *            PUSH binary (nanot) DATA FROM A FILE ......
    */
- int* evt_pusher_file(int* par){
+  int* push_file(int* par){// BINARY FILE .....
+
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   if(XTERM!=NULL)fprintf(XTERM,"evt_pusher_remote (file)  par==%d; pointer==%d\n", par,(int)buffer );
+   if(XTERM!=NULL)fprintf(XTERM,"push-remote (file)  par==%d; pointer==%d\n", par,(int)buffer );
 
       FILE *infile;  char fname[400];
       int buffer4;
@@ -194,12 +197,12 @@ extern "C" {
 	result=fread( &buffer4, 1, 4, infile );
 	if (result == 4) {	buffer->push( buffer4 ); }
        }
-       if(XTERM!=NULL)fprintf(XTERM,"evt_pusher_file closed....%s\n", fname );
+       if(XTERM!=NULL)fprintf(XTERM,"push-file closed....%s\n", fname );
 	fclose(infile);
       }else{
 	if(XTERM!=NULL)fprintf(XTERM,"infile %s == NULL\n%s", fname );
       }
-      if(XTERM!=NULL)fprintf(XTERM,"evt_pusher_file call finished....%s: PUSHER FINISHED\n", fname );
+      if(XTERM!=NULL)fprintf(XTERM,"push-file call finished....%s: PUSHER FINISHED\n", fname );
  }/*****************************end of function ***********************/
 
 
@@ -211,9 +214,10 @@ extern "C" {
 
   // TServerSocket *ss=new TServerSocket(i,kTRUE);
   //     tail -f text | nc localhost 9302
- int* evt_pusher_net_txtserv(int* par){
+  int* push_net_txtserv(int* par){ // SERVER FOR TEXT FILE ... cannot be stopped, ->select crashes
+
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   if(XTERM!=NULL)fprintf(XTERM,"PUSH RS evt_pusher_remote (network,txt)  par==%d; pointer==%d\n", par,(int)buffer );
+   if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-remote (network,txt)  par==%d; pointer==%d\n", par,(int)buffer );
       long long int cnt=0;
 
    char ipaddress[100];
@@ -288,13 +292,96 @@ extern "C" {
 
 
 
+  //     tail -f text | nc localhost 9302
+  int* push_net_txtserv2(int* par){ // SERVER FOR TEXT FILE ... we try ->select
+                                    //  PADA TO NA PRVNI,2. ZMACKNUTI ENTER
+
+    //   concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
+    //   if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-remote (network,txt2)  par==%d; pointer==%d\n", par,(int)buffer );
+
+   long long int cnt=0;
+   char ipaddress[100];
+   int port;
+      TSmallish_xml xml(    acqxml   );
+      xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","ip" );
+      sprintf( ipaddress,"%s", xml.output  ); // 127.0.0.1, else not possible
+      xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","port" );
+      port=atoi(xml.output  );
+
+
+  while( 1==1 ){// GLOBAL WAIT ==================================================
+    printf("%s\n" ,"entered main while");
+   TServerSocket *ss = new TServerSocket(port, kTRUE);
+   TMonitor *mon = new TMonitor;
+    //   TServerSocket *ss = new TServerSocket(port, kTRUE);
+   //---------now from hserv3.C
+    //   TMonitor *mon = new TMonitor;
+   mon->Add(ss);
+   TSocket *s0 = 0, *s1 = 0, *s2 = 0;
+   int wait=1; //EXTRA
+   while (1) {
+      TSocket  *s;
+     do{ s = mon->Select( 1000 ); printf("%s",".\n" );}while(  (int)s==-1 );
+
+      if (s->IsA() == TServerSocket::Class()) {
+         if (!s0) {
+           s0 = ((TServerSocket *)s)->Accept();
+            mon->Add(s0);
+         } else if (!s1) {
+	   printf("STOJIM NA s1 :%s\n","" );
+            s1 = ((TServerSocket *)s)->Accept();
+            mon->Add(s1);
+         }  
+        continue;
+      }//if  IsA
+
+      //   printf("STOJIM  na RECVRAW  :active ==%d\n", mon->GetActive() );
+      char aaa[1000]; int get;
+       char newline='\n';
+     get=s->RecvRaw( aaa , 1000, kDontBlock);
+      printf("Client %d: get==%d:           <%s>\n", s==s0 ? 0 : 1, get, aaa );
+     aaa[get]='\0';
+     //      if (  (strlen(aaa)>0)&& (aaa[ strlen(aaa)-1]==newline) ){ aaa[ strlen(aaa)-1]='\0'; }
+
+      printf("Client %d: get==%d:           <%s>\n", s==s0 ? 0 : 1, get, aaa );
+
+      if (get==0){
+         mon->Remove(s);
+	 s0=NULL; // one client is fine for me (i can do two), here I recycle the s0 socket
+      }// get==0
+      if (strstr(aaa,"kill")!=0){
+         printf("STOJIM  v kill : active==%d\n", mon->GetActive() );
+	 mon->Remove(s);// this is removed. others not
+         mon->Remove(ss); ss->Close();
+         printf("STOJIM  v kill : active==%d\n", mon->GetActive() );
+      }
+      if (mon->GetActive() == 0) {
+            printf("No more active clients... stopping\n");
+            break;
+      }
+
+   }//while (1)
+
+
+  } // BIG  WHILE 1==1
+ }//=====================================================================END FUNCTION 2
+
+ 
+
+
+
+
+
+
+
+
   /**********************************************
    *              cat runx.dat |  nc -l -p 9302
    *                         this is a client that connects to a server...
    */
- int* evt_pusher_net(int* par){
+ int* push_net(int* par){
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   if(XTERM!=NULL)fprintf(XTERM,"PUSH RS evt_pusher_remote (network)  par==%d; pointer==%d\n", par,(int)buffer );
+   if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-remote (network)  par==%d; pointer==%d\n", par,(int)buffer );
       long long int cnt=0;
 
    char ipaddress[100];
@@ -331,33 +418,33 @@ extern "C" {
 
     if (i>0) {//####CASE i>0 ####
       d=(int)socket->RecvRaw(strbuf, maxtrans, kDontBlock  ); // read small buffer
-      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS evt_pusher_netw socket got %d bytes \n", d );
+      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw socket got %d bytes \n", d );
      ii=0;
       while(ii*4<d){
 	buffer->push( buffer4p[ii]  );
 	ii++;
 	if ((cnt%25000)==0){if(XTERM!=NULL)fprintf(XTERM,"P %7lld kB\n",4*cnt/1000);} cnt++;
       }//while - push
-      //      if(XTERM!=NULL)fprintf(XTERM,"PUSH evt_pusher_netw wait 100ms....%s; iii*4==%d, d=%d\n", ipaddress,ii*4,d );
+      //      if(XTERM!=NULL)fprintf(XTERM,"PUSH push-netw wait 100ms....%s; iii*4==%d, d=%d\n", ipaddress,ii*4,d );
     }//####CASE i>0 ####  socket select was DONE;   i >0
 
     if(XTERM!=NULL)fprintf(XTERM,"%s","^");fflush(XTERM);
     //    usleep(1000*300); //wait
     wait=MyCond.TimedWaitRelative( 300  ) ; //
     if (wait==0){ 
-      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS evt_pusher_netw got BROADCAST SIGNAL... %s\n", "" );
+      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw got BROADCAST SIGNAL... %s\n", "" );
       socket->Close(); 
       break; 
     }
     //cannot be here    TThread::CancelPoint(); // When CancelOn(), here the thread can be interrupted.
 
     if (i<0){ //####CASE i<0 ####
-       if(XTERM!=NULL)fprintf(XTERM,"PUSH RS evt_pusher_netw SOCKET LOST....%s; iii*4==%d, d=%d\n", ipaddress,ii*4,d );
+       if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw SOCKET LOST....%s; iii*4==%d, d=%d\n", ipaddress,ii*4,d );
       socket->Close(); break; 
     }//####CASE i<0 #### 
 
     if (i==0){ //####CASE i==0  ####
-       if(XTERM!=NULL)fprintf(XTERM,"PUSH RS evt_pusher_netw I RELEASE SOCKET(ZERO)..%s; iii*4==%d, d=%d\n",
+       if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw I RELEASE SOCKET(ZERO)..%s; iii*4==%d, d=%d\n",
 			                                                            ipaddress,ii*4,d);
       socket->Close(); break; 
     }//####CASE i==0  ####
@@ -384,7 +471,7 @@ extern "C" {
 
 
   // socket must be already closed here....socket->Close();
-      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS evt_pusher_file call finished....%s: PUSHER FINISHED\n", ipaddress );
+      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-file call finished....%s: PUSHER FINISHED\n", ipaddress );
  }/*****************************end of function ***********************/
 
 

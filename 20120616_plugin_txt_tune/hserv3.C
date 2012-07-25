@@ -18,7 +18,7 @@
             mon->Add(s1);
          }  
         continue;
-      }
+      }//if  IsA
 
       //   printf("STOJIM  na RECVRAW  :active ==%d\n", mon->GetActive() );
       char aaa[1000]; int get;
@@ -31,7 +31,7 @@
       if (get==0){
          mon->Remove(s);
 	 s0=NULL; // one client is fine for me (i can do two), here I recycle the s0 socket
-      }
+      }// get==0
       if (strstr(aaa,"kill")!=0){
          printf("STOJIM  v kill : active==%d\n", mon->GetActive() );
 	 mon->Remove(s);// this is removed. others not

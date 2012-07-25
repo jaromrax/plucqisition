@@ -61,7 +61,28 @@ extern "C" {
   /**************************************************
    *            SIMPLE PRINTOUT  int
    */
- int* evt_poper_logint(int* par){
+  int* pop_empty(int* par){// SIMPLE PRINTOUT ....
+
+    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
+    int i=0;
+    while (i<30){
+   if(XTERM!=NULL)fprintf(XTERM,"  POP empty: pointer==%d\n", (int)buffer );
+
+   usleep(1* 1000*1000);
+   i++;
+    }
+
+   if(XTERM!=NULL)fprintf(XTERM,"  POP empty: EXIT buf==%d\n", (int)buffer );
+
+  }//-----------------------------------------------
+
+
+
+  /**************************************************
+   *            SIMPLE PRINTOUT  int
+   */
+  int* pop_logint(int* par){// SIMPLE PRINTOUT ....
+
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    if(XTERM!=NULL)fprintf(XTERM,"  POP log: pointer==%d\n", (int)buffer );
    int datum=0;// (int datum  ***)
@@ -98,10 +119,14 @@ extern "C" {
 
 
 
+
+
+
   /**************************************************
    *            SIMPLE PRINTOUT  txt
    */
- int* evt_poper_logtxt(int* par){
+  int* pop_logtxt(int* par){// I DONT KNOW .... just printout??? NOt useful, ends very fasst.
+
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    if(XTERM!=NULL)fprintf(XTERM,"  POP logtxt v.2 : %d\n", (int)buffer );
    int datum=0;// (int datum  ***)
@@ -156,12 +181,14 @@ extern "C" {
 
 
 
+
+
   //===================== SHOULD BE IN SEPARATE FILE ==========
   TTree *txt_ttree;  // similar to global def in nano_acquis_pureconvert
 
   // prepare TTree===========================================
   // tell number of values on the line
-  int evt_poper_get_npar( const char* ch ){
+  int pop_get_npar( const char* ch ){
     TString oneline=ch, token; int j=0; double bu; 
       TObjArray *tar; 
         if(XTERM!=NULL)fprintf(XTERM,"Analyzing string:%s\n",ch);
@@ -185,7 +212,7 @@ extern "C" {
 
 
 
-  int evt_poper_txt_record( const char* chse ){
+  int pop_txt_record( const char* chse ){
     TString oneline=chse, token; int j=0; double bu; 
       TObjArray *tar; 
 
@@ -217,6 +244,7 @@ extern "C" {
 	txt_ttree->Fill();
     return j;
   }
+
 
 
 
@@ -270,11 +298,16 @@ extern "C" {
 
 
 
+
+
+
+
   //  ted bych chtel takovy plugin, ktery by tvoril TTree z txt.
   /**************************************************
    *            TXT TO TTREE
    */
- int* evt_poper_txttree(int* par){
+  int* pop_txttree(int* par){// THIS WORKS - IT takes 1st line and defines the tree - and accumulates
+
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    if(XTERM!=NULL)fprintf(XTERM,"  POP logtxt v.2 : %d\n", (int)buffer );
    int datum=0;// (int datum  ***)
@@ -308,12 +341,12 @@ extern "C" {
 
        if (ttree_inited==0){
        if(XTERM!=NULL)fprintf(XTERM,"%s\n","creating the tree.....");
-       nparams=evt_poper_get_npar( ch );
+       nparams=pop_get_npar( ch );
        if(XTERM!=NULL)fprintf(XTERM,"       nparams==%d\n",nparams);
        conv_t_init( nparams ); // similar to conv_u_init; t[0]...t[n]
        ttree_inited=1;// no more try to init
        }// ---ttree was not initied.........
-       evt_poper_txt_record( ch );
+       pop_txt_record( ch );
        sprintf( ch , "%s", ""); //reset
      }//--------------------------- EOL/not EOL------------
       cnt++; 
@@ -340,9 +373,10 @@ extern "C" {
   /**************************************************
    *            TO FILE OR JUST  POP     
    */
- int* evt_poper_file(int* par){
+  int* pop_file(int* par){// POP TO FILE ...
+
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   if(XTERM!=NULL)fprintf(XTERM,"  POP evt_poper_remote  par==%d; pointer==%d\n", par,(int)buffer );
+   if(XTERM!=NULL)fprintf(XTERM,"  POP pop-remote  par==%d; pointer==%d\n", par,(int)buffer );
    int datum=0;
    int runempty=0;
 
@@ -401,11 +435,11 @@ extern "C" {
   /*****************************************************************
    *            TEST TO SORT THE EVENTS ...........  CREATE TTREE
    */
- int* evt_poper_sort(int* par){
+  int* pop_sort(int* par){// POP ... nanot ZD data 4*int system; CONVERSION
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   if(XTERM!=NULL)fprintf(XTERM,"  POP evt_poper SORT *******%s\n", "" );
-   if(XTERM!=NULL)fprintf(XTERM,"  POP evt_poper SORT *******%s\n", "" );
-   if(XTERM!=NULL)fprintf(XTERM,"  POP evt_poper SORT *******%s\n", "" );
+   if(XTERM!=NULL)fprintf(XTERM,"  POP pop SORT *******%s\n", "" );
+   if(XTERM!=NULL)fprintf(XTERM,"  POP pop SORT *******%s\n", "" );
+   if(XTERM!=NULL)fprintf(XTERM,"  POP pop SORT *******%s\n", "" );
 
       double downtime; int downtimef, downtimei,  wait=1;
 
