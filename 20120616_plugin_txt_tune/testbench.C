@@ -22,20 +22,28 @@ void net_server( void *arg )
    TSocket *s0 = 0, *s1 = 0, *s2 = 0;
    int wait=1; //EXTRA
    while (1) {
-      TSocket  *s;
-     do{ s = mon->Select( 1000 ); printf("%s",".\n" );}while(  (int)s==-1 );
+      TSocket  *s=NULL;
+      while (s==NULL){
+	do{ mon->ResetInterrupt();
+	  s=mon->Select( );
+	  printf("%d:%s",(int)s,"\n" );fflush(stdout);}while(s==(TSocket *)-1 );
+      printf("out of select  .... %d\n" , (int)s );fflush(stdout);
+      }
+      printf("out of select2 .... %d\n" , (int)s );fflush(stdout);
 
       if (s->IsA() == TServerSocket::Class()) {
          if (!s0) {
-           s0 = ((TServerSocket *)s)->Accept();
+      printf("%s","I am in s0\n" );fflush(stdout);
+          s0 = ((TServerSocket *)s)->Accept();
             mon->Add(s0);
          } else if (!s1) {
-	   printf("I am in s1 :%s\n","" );
+	   printf("I am in s1 :%s\n","" );fflush(stdout);
             s1 = ((TServerSocket *)s)->Accept();
             mon->Add(s1);
          }  
         continue;
       }//if  IsA
+      printf("%s","after continue...\n" );fflush(stdout);
 
       char aaa[1000]; int get;
        char newline='\n';
@@ -45,6 +53,7 @@ void net_server( void *arg )
       printf("Client %d: get==%d:           <%s>\n", s==s0 ? 0 : 1, get, aaa );
 
       if (get==0){
+      printf("%s","mon remove....\n" );
          mon->Remove(s);
 	 s0=NULL; // one client is fine for me (i can do two), here I recycle the s0 socket
       }// get==0

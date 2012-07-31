@@ -1,0 +1,2183 @@
+31/07/2012 11:29:30.79 - QUIT#############################################
+31/07/2012 11:29:30.80 - q  #############################################
+31/07/2012 11:29:30.83 -    issuing   quit to device [0]: < echo QUIT TO NETWORK >
+31/07/2012 11:29:30.90 -    issuing   quit to device [1]: < echo q | nc 192.168.1.6 9100 >
+31/07/2012 11:30:10.39 - QUIT#############################################
+31/07/2012 11:30:10.41 - q  #############################################
+31/07/2012 11:30:10.43 -    issuing   quit to device [0]: < echo QUIT TO NETWORK >
+31/07/2012 11:30:10.46 -    issuing   quit to device [1]: < >
+31/07/2012 11:30:29.08 - QUIT#############################################
+31/07/2012 11:30:29.09 - q  #############################################
+31/07/2012 11:30:29.11 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:30:29.13 -    issuing   quit to device [1]: < >
+31/07/2012 11:33:03.76 - QUIT#############################################
+31/07/2012 11:33:03.76 - q  #############################################
+31/07/2012 11:33:03.78 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:33:03.79 -    issuing   quit to device [1]: < >
+31/07/2012 11:33:11.77 - QUIT#############################################
+31/07/2012 11:33:11.78 - q  #############################################
+31/07/2012 11:33:11.79 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:33:11.81 -    issuing   quit to device [1]: < >
+31/07/2012 11:33:21.64 - INIT#############################################
+           comment
+31/07/2012 11:33:21.65 -    issuing   init to device [0]: < echo _RUNUM 1 >
+31/07/2012 11:33:21.66 -       finished   init to device [0]
+31/07/2012 11:33:21.68 -    issuing   init to device [1]: < rm text >
+31/07/2012 11:33:21.69 -       NOT SUCCESFULL !!!!!!!!!!!!!!
+31/07/2012 11:33:53.18 - QUIT#############################################
+31/07/2012 11:33:53.19 - q  #############################################
+31/07/2012 11:33:53.20 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:33:53.22 -    issuing   quit to device [1]: < >
+31/07/2012 11:34:00.11 - INIT#############################################
+           comment
+31/07/2012 11:34:00.12 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 11:34:00.13 -       finished   init to device [0]
+31/07/2012 11:34:00.14 -    issuing   init to device [1]: < rm text >
+31/07/2012 11:34:00.15 -       NOT SUCCESFULL !!!!!!!!!!!!!!
+31/07/2012 11:34:11.68 - QUIT#############################################
+31/07/2012 11:34:11.69 - q  #############################################
+31/07/2012 11:34:11.72 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:34:11.75 -    issuing   quit to device [1]: < >
+31/07/2012 11:34:51.87 - INIT#############################################
+           comment
+31/07/2012 11:34:51.90 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 11:34:51.91 -       finished   init to device [0]
+31/07/2012 11:34:51.94 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 11:34:51.96 -       finished   init to device [1]
+31/07/2012 11:35:07.03 - START#############################################
+           comment
+31/07/2012 11:35:07.06 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 11:35:07.09 -       finished  start to device [0]
+31/07/2012 11:35:07.10 -    issuing  start to device [1]: < for ((i=0;i!=10;i++)); do t=`date +%s`; echo $t $i $i >> text; sleep 1; done >
+31/07/2012 11:35:07.11 -       NOT SUCCESFULL !!!!!!!!!!!!!!
+31/07/2012 11:35:24.61 - STOP#############################################
+31/07/2012 11:35:24.62 - 17.058 seconds length to this point 
+31/07/2012 11:35:24.63 - waiting to finish kills, sleep 0 seconds
+31/07/2012 11:35:24.64 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 11:35:24.66 -    finished  stop to device [0]
+31/07/2012 11:35:24.68 -    issuing   stop to device [1]: < >
+31/07/2012 11:35:24.69 -       NOT SUCCESFULL !!!!!!!!!!!!!!
+31/07/2012 11:35:29.39 - QUIT#############################################
+31/07/2012 11:35:29.40 - q  #############################################
+31/07/2012 11:35:29.42 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:35:29.44 -    issuing   quit to device [1]: < >
+31/07/2012 11:42:48.80 - INIT#############################################
+           comment
+31/07/2012 11:42:48.83 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 11:42:48.85 -       finished   init to device [0]
+31/07/2012 11:42:48.86 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 11:42:48.88 -       finished   init to device [1]
+31/07/2012 11:42:51.65 - START#############################################
+           comment
+31/07/2012 11:42:51.68 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 11:42:51.70 -       finished  start to device [0]
+31/07/2012 11:42:51.72 -    issuing  start to device [1]: < for ((i=0;i!=10;i++)); do t=`date +%s`; echo $t $i $i >> text; sleep 1; done >
+31/07/2012 11:43:01.76 -       finished  start to device [1]
+31/07/2012 11:43:29.88 - START#############################################
+           comment
+31/07/2012 11:43:29.91 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 11:43:29.93 -       finished  start to device [0]
+31/07/2012 11:43:29.95 -    issuing  start to device [1]: < for ((i=0;i!=10;i++)); do t=`date +%s`; echo $t $i $i >> text; sleep 1; done >
+31/07/2012 11:43:39.98 -       finished  start to device [1]
+31/07/2012 11:43:40.01 - Func# 0 ON <Listen_test>
+31/07/2012 11:43:40.02 - Func# 1 ON < sendTXT>
+31/07/2012 11:43:40.08 -    #ActiveThread :     #Starting client 1           
+31/07/2012 11:43:40.08 -    #ActiveThread :     #Starting client 0           
+31/07/2012 11:43:40.11 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_114340; date; sleep 1; date; sleep 1; >
+31/07/2012 11:43:40.11 -    issuing  start to device [1]: < echo TEST 1 PC1_20120731_114340; date; sleep 2; date; sleep 1; >
+31/07/2012 11:43:42.14 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 11:43:42.24 - Func# 0 OFF ... was found in off state... 2.926 sec.
+31/07/2012 11:43:43.15 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 11:43:43.26 - Func# 1 OFF ... was found in off state... 3.023 sec.
+31/07/2012 11:43:47.93 - STOP#############################################
+31/07/2012 11:43:47.94 - 18.005 seconds length to this point 
+31/07/2012 11:43:47.95 - waiting to finish kills, sleep 0 seconds
+31/07/2012 11:43:47.96 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 11:43:47.98 -    finished  stop to device [0]
+31/07/2012 11:43:48.00 -    issuing   stop to device [1]: < >
+31/07/2012 11:43:48.03 -    finished  stop to device [1]
+31/07/2012 11:43:48.03 - STOPPED##########################################
+31/07/2012 11:43:48.04 - 18.915 seconds length
+31/07/2012 11:44:44.57 - QUIT#############################################
+31/07/2012 11:44:44.60 - q  #############################################
+31/07/2012 11:44:44.61 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:44:44.63 -    issuing   quit to device [1]: < >
+31/07/2012 11:44:47.68 - INIT#############################################
+           comment
+31/07/2012 11:44:47.69 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 11:44:47.71 -       finished   init to device [0]
+31/07/2012 11:44:47.73 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 11:44:47.75 -       finished   init to device [1]
+31/07/2012 11:45:02.33 - START#############################################
+           comment
+31/07/2012 11:45:02.35 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 11:45:02.36 -       finished  start to device [0]
+31/07/2012 11:45:02.39 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 11:45:02.40 -       finished  start to device [1]
+31/07/2012 11:45:02.42 - Func# 1 ON ... by AutoRetrig 
+31/07/2012 11:45:02.52 -    #ActiveThread :     #Starting client 1           
+31/07/2012 11:45:02.53 -    issuing  start to device [1]: < for ((i=0;i!=10;i++)); do t=`date +%s`; echo $t $i $i >> text; sleep 1; done >
+31/07/2012 11:45:12.57 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 11:45:12.64 - Func# 1 OFF ... was found in off state... 10.023 sec.
+31/07/2012 11:45:12.65 - Func# 1 ON ... by AutoRetrig 
+31/07/2012 11:45:12.68 -    #ActiveThread :     #Starting client 1           
+31/07/2012 11:45:12.69 -    issuing  start to device [1]: < for ((i=0;i!=10;i++)); do t=`date +%s`; echo $t $i $i >> text; sleep 1; done >
+31/07/2012 11:45:22.74 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 11:45:22.77 - Func# 1 OFF ... was found in off state... 10.012 sec.
+31/07/2012 11:45:22.79 - Func# 1 ON ... by AutoRetrig 
+31/07/2012 11:45:22.84 -    #ActiveThread :     #Starting client 1           
+31/07/2012 11:45:22.86 -    issuing  start to device [1]: < for ((i=0;i!=10;i++)); do t=`date +%s`; echo $t $i $i >> text; sleep 1; done >
+31/07/2012 11:45:32.90 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 11:45:33.00 - Func# 1 OFF ... was found in off state... 10.022 sec.
+31/07/2012 11:45:33.01 - Func# 1 ON ... by AutoRetrig 
+31/07/2012 11:45:33.01 -    #ActiveThread :     #Starting client 1           
+31/07/2012 11:45:33.03 -    issuing  start to device [1]: < for ((i=0;i!=10;i++)); do t=`date +%s`; echo $t $i $i >> text; sleep 1; done >
+31/07/2012 11:45:37.79 - STOP#############################################
+31/07/2012 11:45:37.80 - 35.046 seconds length to this point 
+31/07/2012 11:45:37.81 - waiting to finish kills, sleep 0 seconds
+31/07/2012 11:45:37.82 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 11:45:37.83 -    finished  stop to device [0]
+31/07/2012 11:45:37.84 -    issuing   stop to device [1]: < >
+31/07/2012 11:45:37.85 -    finished  stop to device [1]
+31/07/2012 11:45:37.86 - STOPPED##########################################
+31/07/2012 11:45:37.87 - 35.052 seconds length
+31/07/2012 11:45:43.08 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 11:45:43.10 - Func# 1 OFF ... was found in off state... 10.009 sec.
+31/07/2012 11:46:16.05 - START#############################################
+           comment
+31/07/2012 11:46:16.08 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 11:46:16.10 -       finished  start to device [0]
+31/07/2012 11:46:16.12 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 11:46:16.13 -       finished  start to device [1]
+31/07/2012 11:46:16.14 - Func# 0 ON <Listen_test>
+31/07/2012 11:46:16.16 -    #ActiveThread :     #Starting client 0           
+31/07/2012 11:46:16.15 - Func# 1 ON < sendTXT>
+31/07/2012 11:46:16.17 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_114616; date; sleep 1; date; sleep 1; >
+31/07/2012 11:46:16.26 -    #ActiveThread :     #Starting client 1           
+31/07/2012 11:46:16.29 -    issuing  start to device [1]: < for ((i=0;i!=10;i++)); do t=`date +%s`; echo $t $i $i >> text; sleep 1; done >
+31/07/2012 11:46:18.19 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 11:46:18.29 - Func# 0 OFF ... was found in off state... 2.015 sec.
+31/07/2012 11:46:26.10 - STOP#############################################
+31/07/2012 11:46:26.11 - 10.005 seconds length to this point 
+31/07/2012 11:46:26.12 - waiting to finish kills, sleep 0 seconds
+31/07/2012 11:46:26.16 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 11:46:26.17 -    finished  stop to device [0]
+31/07/2012 11:46:26.18 -    issuing   stop to device [1]: < >
+31/07/2012 11:46:26.19 -    finished  stop to device [1]
+31/07/2012 11:46:26.20 - STOPPED##########################################
+31/07/2012 11:46:26.21 - 10.014 seconds length
+31/07/2012 11:46:26.32 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 11:46:26.43 - Func# 1 OFF ... was found in off state... 10.027 sec.
+31/07/2012 11:46:59.61 - QUIT#############################################
+31/07/2012 11:46:59.62 - q  #############################################
+31/07/2012 11:46:59.65 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:46:59.68 -    issuing   quit to device [1]: < echo Quit ... No action.... >
+31/07/2012 11:47:02.66 - INIT#############################################
+           comment
+31/07/2012 11:47:02.67 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 11:47:02.68 -       finished   init to device [0]
+31/07/2012 11:47:02.70 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 11:47:02.71 -       finished   init to device [1]
+31/07/2012 11:47:05.96 - START#############################################
+           comment
+31/07/2012 11:47:06.99 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 11:47:06.02 -       finished  start to device [0]
+31/07/2012 11:47:06.03 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 11:47:06.04 -       finished  start to device [1]
+31/07/2012 11:47:06.05 - Func# 0 ON <Listen_test>
+31/07/2012 11:47:06.07 - Func# 1 ON < sendTXT>
+31/07/2012 11:47:06.15 -    #ActiveThread :     #Starting client 0           
+31/07/2012 11:47:06.15 -    #ActiveThread :     #Starting client 1           
+31/07/2012 11:47:06.17 -    issuing  start to device [1]: < for ((i=0;i!=10;i++)); do t=`date +%s`; echo $t $i $i >> text; sleep 1; done >
+31/07/2012 11:47:06.17 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_114706; date; sleep 1; date; sleep 1; >
+31/07/2012 11:47:08.19 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 11:47:08.30 -    #ActiveThread :     #Starting client 0           
+31/07/2012 11:47:08.30 - Func# 0 OFF ... was found in off state... 2.025 sec.
+31/07/2012 11:47:08.32 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_114708; date; sleep 1; date; sleep 1; >
+31/07/2012 11:47:09.07 - STOP#############################################
+31/07/2012 11:47:09.09 - 3.911 seconds length to this point 
+31/07/2012 11:47:09.10 - waiting to finish kills, sleep 0 seconds
+31/07/2012 11:47:09.13 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 11:47:09.14 -    finished  stop to device [0]
+31/07/2012 11:47:09.15 -    issuing   stop to device [1]: < echo Stop ... No action.... >
+31/07/2012 11:47:09.16 -    finished  stop to device [1]
+31/07/2012 11:47:09.17 - STOPPED##########################################
+31/07/2012 11:47:09.18 - 3.920 seconds length
+31/07/2012 11:47:10.34 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 11:47:12.34 -    #killing  grandchild  20443
+ now
+31/07/2012 11:47:12.34 - Func# 1 OFF                              ... 6.029 sec.
+31/07/2012 11:47:16.23 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 11:47:17.03 - Func# 1 ON < sendTXT>
+31/07/2012 11:47:17.05 -    #ActiveThread :     #Starting client 1           
+31/07/2012 11:47:17.07 -    issuing  start to device [1]: < for ((i=0;i!=10;i++)); do t=`date +%s`; echo $t $i $i >> text; sleep 1; done >
+31/07/2012 11:47:17.89 -    #killing  grandchild  21045
+ now
+31/07/2012 11:47:17.90 - Func# 1 OFF                              ... 0.993 sec.
+31/07/2012 11:47:22.87 - QUIT#############################################
+31/07/2012 11:47:22.88 - q  #############################################
+31/07/2012 11:47:22.91 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:47:22.94 -    issuing   quit to device [1]: < echo Quit ... No action.... >
+31/07/2012 11:47:35.21 - INIT#############################################
+           comment
+31/07/2012 11:47:35.24 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 11:47:35.26 -       finished   init to device [0]
+31/07/2012 11:47:35.27 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 11:47:35.29 -       finished   init to device [1]
+31/07/2012 11:47:38.16 - START#############################################
+           comment
+31/07/2012 11:47:38.18 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 11:47:38.21 -       finished  start to device [0]
+31/07/2012 11:47:38.22 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 11:47:38.24 -       finished  start to device [1]
+31/07/2012 11:47:40.26 - Func# 1 ON < sendTXT>
+31/07/2012 11:47:40.29 -    #ActiveThread :     #Starting client 1           
+31/07/2012 11:47:40.31 -    issuing  start to device [1]: < for ((i=0;i!=10;i++)); do t=`date +%s`; echo $t $i $i >> text; sleep 1; done >
+31/07/2012 11:47:45.42 -    #killing  grandchild  21774
+ now
+31/07/2012 11:47:45.43 - Func# 1 OFF                              ... 5.027 sec.
+31/07/2012 11:47:47.49 - STOP#############################################
+31/07/2012 11:47:47.50 - 9.033 seconds length to this point 
+31/07/2012 11:47:47.50 - waiting to finish kills, sleep 0 seconds
+31/07/2012 11:47:47.52 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 11:47:47.53 -    finished  stop to device [0]
+31/07/2012 11:47:47.55 -    issuing   stop to device [1]: < echo Stop ... No action.... >
+31/07/2012 11:47:47.58 -    finished  stop to device [1]
+31/07/2012 11:47:47.58 - STOPPED##########################################
+31/07/2012 11:47:47.60 - 9.042 seconds length
+31/07/2012 11:47:48.16 - QUIT#############################################
+31/07/2012 11:47:48.17 - q  #############################################
+31/07/2012 11:47:48.19 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:47:48.21 -    issuing   quit to device [1]: < echo Quit ... No action.... >
+31/07/2012 11:48:06.56 - INIT#############################################
+           comment
+31/07/2012 11:48:06.59 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 11:48:06.62 -       finished   init to device [0]
+31/07/2012 11:48:06.63 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 11:48:06.65 -       finished   init to device [1]
+31/07/2012 11:48:12.02 - START#############################################
+           comment
+31/07/2012 11:48:12.05 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 11:48:12.07 -       finished  start to device [0]
+31/07/2012 11:48:12.09 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 11:48:12.10 -       finished  start to device [1]
+31/07/2012 11:48:12.11 - Func# 0 ON <Listen_test>
+31/07/2012 11:48:12.13 - Func# 1 ON < sendTXT>
+31/07/2012 11:48:12.12 -    #ActiveThread :     #Starting client 0           
+31/07/2012 11:48:12.14 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_114812; date; sleep 1; date; sleep 1; >
+31/07/2012 11:48:12.22 -    #ActiveThread :     #Starting client 1           
+31/07/2012 11:48:12.25 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=`date +%s`; echo $t $i $i >> text; sleep 1; done >
+31/07/2012 11:48:14.17 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 11:48:14.26 - Func# 0 OFF ... was found in off state... 2.014 sec.
+31/07/2012 11:48:27.32 - STOP#############################################
+31/07/2012 11:48:27.33 - 15.030 seconds length to this point 
+31/07/2012 11:48:27.34 - waiting to finish kills, sleep 0 seconds
+31/07/2012 11:48:27.37 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 11:48:27.39 -    finished  stop to device [0]
+31/07/2012 11:48:27.40 -    issuing   stop to device [1]: < echo Stop ... No action.... >
+31/07/2012 11:48:27.41 -    finished  stop to device [1]
+31/07/2012 11:48:27.42 - STOPPED##########################################
+31/07/2012 11:48:27.42 - 15.039 seconds length
+31/07/2012 11:48:30.45 -    #killing  grandchild  22684
+ now
+31/07/2012 11:48:30.46 - Func# 1 OFF                              ... 18.034 sec.
+31/07/2012 11:48:34.92 - QUIT#############################################
+31/07/2012 11:48:34.94 - q  #############################################
+31/07/2012 11:48:34.97 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:48:35.99 -    issuing   quit to device [1]: < echo Quit ... No action.... >
+31/07/2012 11:49:06.85 - INIT#############################################
+           comment
+31/07/2012 11:49:06.88 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 11:49:06.90 -       finished   init to device [0]
+31/07/2012 11:49:06.93 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 11:49:06.94 -       finished   init to device [1]
+31/07/2012 11:49:09.35 - START#############################################
+           comment
+31/07/2012 11:49:09.38 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 11:49:09.41 -       finished  start to device [0]
+31/07/2012 11:49:09.42 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 11:49:09.44 -       finished  start to device [1]
+31/07/2012 11:49:09.45 - Func# 0 ON <Listen_test>
+31/07/2012 11:49:09.47 - Func# 1 ON < sendTXT>
+31/07/2012 11:49:09.54 -    #ActiveThread :     #Starting client 0           
+31/07/2012 11:49:09.55 -    #ActiveThread :     #Starting client 1           
+31/07/2012 11:49:09.56 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_114909; date; sleep 1; date; sleep 1; >
+31/07/2012 11:49:09.57 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=`date +%s`; echo $t $i $i >> text; echo $t $i $i ; sleep 1; done >
+31/07/2012 11:49:11.59 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 11:49:11.69 - Func# 0 OFF ... was found in off state... 2.024 sec.
+31/07/2012 11:50:08.76 -    #killing  grandchild  24123
+ now
+31/07/2012 11:50:08.76 - Func# 1 OFF                              ... 59.031 sec.
+31/07/2012 11:50:08.78 - Func# 1 ON ... by AutoRetrig 
+31/07/2012 11:50:11.99 - STOP#############################################
+31/07/2012 11:50:11.00 - 61.064 seconds length to this point 
+31/07/2012 11:50:11.01 - waiting to finish kills, sleep 0 seconds
+31/07/2012 11:50:11.02 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 11:50:11.04 -    finished  stop to device [0]
+31/07/2012 11:50:11.05 -    issuing   stop to device [1]: < echo Stop ... No action.... >
+31/07/2012 11:50:11.06 -    finished  stop to device [1]
+31/07/2012 11:50:11.07 - STOPPED##########################################
+31/07/2012 11:50:11.07 - 61.971 seconds length
+31/07/2012 11:50:11.79 - Func# 1 OFF                              ... 2.991 sec.
+31/07/2012 11:50:13.11 - QUIT#############################################
+31/07/2012 11:50:13.12 - q  #############################################
+31/07/2012 11:50:13.13 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:50:13.16 -    issuing   quit to device [1]: < echo Quit ... No action.... >
+31/07/2012 11:50:42.43 - INIT#############################################
+           comment
+31/07/2012 11:50:42.45 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 11:50:42.46 -       finished   init to device [0]
+31/07/2012 11:50:42.48 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 11:50:42.50 -       finished   init to device [1]
+31/07/2012 11:50:45.11 - START#############################################
+           comment
+31/07/2012 11:50:45.13 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 11:50:45.14 -       finished  start to device [0]
+31/07/2012 11:50:45.16 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 11:50:45.17 -       finished  start to device [1]
+31/07/2012 11:50:45.19 - Func# 0 ON <Listen_test>
+31/07/2012 11:50:45.21 - Func# 1 ON < sendTXT>
+31/07/2012 11:50:45.28 -    #ActiveThread :     #Starting client 1           
+31/07/2012 11:50:45.29 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=\`date +%s\`; echo $t $i $i >> text; echo $t $i $i ; sleep 1; done >
+31/07/2012 11:50:45.29 -    #ActiveThread :     #Starting client 0           
+31/07/2012 11:50:45.33 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_115045; date; sleep 1; date; sleep 1; >
+31/07/2012 11:50:47.36 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 11:50:47.43 - Func# 0 OFF ... was found in off state... 2.025 sec.
+31/07/2012 11:50:48.05 - STOP#############################################
+31/07/2012 11:50:48.05 - 2.994 seconds length to this point 
+31/07/2012 11:50:48.06 - waiting to finish kills, sleep 0 seconds
+31/07/2012 11:50:48.08 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 11:50:48.09 -    finished  stop to device [0]
+31/07/2012 11:50:48.10 -    issuing   stop to device [1]: < echo Stop ... No action.... >
+31/07/2012 11:50:48.11 -    finished  stop to device [1]
+31/07/2012 11:50:48.12 - STOPPED##########################################
+31/07/2012 11:50:48.13 - 3.000 seconds length
+31/07/2012 11:50:49.17 -    #killing  grandchild  27282
+ now
+31/07/2012 11:50:49.17 - Func# 1 OFF                              ... 3.998 sec.
+31/07/2012 11:50:53.66 - QUIT#############################################
+31/07/2012 11:50:53.68 - q  #############################################
+31/07/2012 11:50:53.70 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:50:53.72 -    issuing   quit to device [1]: < cat text >
+31/07/2012 11:51:23.23 - INIT#############################################
+           comment
+31/07/2012 11:51:23.26 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 11:51:23.28 -       finished   init to device [0]
+31/07/2012 11:51:23.29 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 11:51:23.30 -       finished   init to device [1]
+31/07/2012 11:51:24.07 - START#############################################
+           comment
+31/07/2012 11:51:24.10 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 11:51:24.13 -       finished  start to device [0]
+31/07/2012 11:51:24.14 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 11:51:24.15 -       finished  start to device [1]
+31/07/2012 11:51:24.47 - Func# 1 ON < sendTXT>
+31/07/2012 11:51:24.51 -    #ActiveThread :     #Starting client 1           
+31/07/2012 11:51:24.52 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=1; echo $t $i $i ; sleep 1; done >
+31/07/2012 11:51:27.97 - STOP#############################################
+31/07/2012 11:51:28.98 - 3.090 seconds length to this point 
+31/07/2012 11:51:28.00 - waiting to finish kills, sleep 0 seconds
+31/07/2012 11:51:28.03 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 11:51:28.04 -    finished  stop to device [0]
+31/07/2012 11:51:28.05 -    issuing   stop to device [1]: < echo Stop ... No action.... >
+31/07/2012 11:51:28.06 -    finished  stop to device [1]
+31/07/2012 11:51:28.07 - STOPPED##########################################
+31/07/2012 11:51:28.08 - 3.999 seconds length
+31/07/2012 11:51:28.74 -    #killing  grandchild  28028
+ now
+31/07/2012 11:51:28.74 - Func# 1 OFF                              ... 4.028 sec.
+31/07/2012 11:51:29.41 - QUIT#############################################
+31/07/2012 11:51:29.42 - q  #############################################
+31/07/2012 11:51:29.45 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:51:29.47 -    issuing   quit to device [1]: < cat text >
+31/07/2012 11:51:41.66 - Func# 1 ON < sendTXT>
+31/07/2012 11:51:41.71 -    #ActiveThread :     #Starting client 1           
+31/07/2012 11:51:41.74 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=1; echo $t $i $i ; sleep 1; done >
+31/07/2012 11:51:46.35 -    #killing  grandchild  28466
+ now
+31/07/2012 11:51:46.36 - Func# 1 OFF                              ... 4.972 sec.
+31/07/2012 11:51:48.40 - QUIT#############################################
+31/07/2012 11:51:48.42 - q  #############################################
+31/07/2012 11:51:48.44 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:51:48.47 -    issuing   quit to device [1]: < cat text >
+31/07/2012 11:52:00.54 - INIT#############################################
+           comment
+31/07/2012 11:52:00.57 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 11:52:00.58 -       finished   init to device [0]
+31/07/2012 11:52:00.59 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 11:52:00.61 -       finished   init to device [1]
+31/07/2012 11:52:01.67 - Func# 1 ON < sendTXT>
+31/07/2012 11:52:01.73 -    #ActiveThread :     #Starting client 1           
+31/07/2012 11:52:01.76 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=1; echo $t $i $i >> text ; sleep 1; done >
+31/07/2012 11:52:06.08 -    #killing  grandchild  29016
+ now
+31/07/2012 11:52:06.08 - Func# 1 OFF                              ... 4.944 sec.
+31/07/2012 11:52:07.19 - QUIT#############################################
+31/07/2012 11:52:07.20 - q  #############################################
+31/07/2012 11:52:07.22 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:52:07.24 -    issuing   quit to device [1]: < cat text >
+31/07/2012 11:52:21.99 - INIT#############################################
+           comment
+31/07/2012 11:52:21.02 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 11:52:21.04 -       finished   init to device [0]
+31/07/2012 11:52:21.06 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 11:52:21.07 -       finished   init to device [1]
+31/07/2012 11:52:21.76 - Func# 1 ON < sendTXT>
+31/07/2012 11:52:21.82 -    #ActiveThread :     #Starting client 1           
+31/07/2012 11:52:21.85 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=1; echo $t $i $i \>\> text ; sleep 1; done >
+31/07/2012 11:52:26.52 -    #killing  grandchild  29591
+ now
+31/07/2012 11:52:26.53 - Func# 1 OFF                              ... 4.984 sec.
+31/07/2012 11:52:27.22 - STOP#############################################
+31/07/2012 11:52:27.23 - 6.923 seconds length to this point 
+31/07/2012 11:52:27.25 - waiting to finish kills, sleep 0 seconds
+31/07/2012 11:52:27.27 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 11:52:27.28 -    finished  stop to device [0]
+31/07/2012 11:52:27.29 -    issuing   stop to device [1]: < echo Stop ... No action.... >
+31/07/2012 11:52:27.30 -    finished  stop to device [1]
+31/07/2012 11:52:27.31 - STOPPED##########################################
+31/07/2012 11:52:27.32 - 6.931 seconds length
+31/07/2012 11:52:27.87 - QUIT#############################################
+31/07/2012 11:52:27.87 - q  #############################################
+31/07/2012 11:52:27.88 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:52:27.90 -    issuing   quit to device [1]: < cat text >
+31/07/2012 11:52:40.39 - QUIT#############################################
+31/07/2012 11:52:40.41 - q  #############################################
+31/07/2012 11:52:40.44 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:52:40.46 -    issuing   quit to device [1]: < cat text >
+31/07/2012 11:52:51.61 - INIT#############################################
+           comment
+31/07/2012 11:52:51.64 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 11:52:51.67 -       finished   init to device [0]
+31/07/2012 11:52:51.68 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 11:52:51.70 -       finished   init to device [1]
+31/07/2012 11:52:52.73 - Func# 1 ON < sendTXT>
+31/07/2012 11:52:52.79 -    #ActiveThread :     #Starting client 1           
+31/07/2012 11:52:52.80 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=1; echo $t $i $i >> text ; sleep 1; done >
+31/07/2012 11:52:56.73 -    #killing  grandchild  30372
+ now
+31/07/2012 11:52:56.74 - Func# 1 OFF                              ... 4.002 sec.
+31/07/2012 11:52:57.50 - QUIT#############################################
+31/07/2012 11:52:57.51 - q  #############################################
+31/07/2012 11:52:57.54 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 11:52:57.57 -    issuing   quit to device [1]: < cat text >
+31/07/2012 12:00:09.95 - INIT#############################################
+           comment
+31/07/2012 12:00:10.98 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 12:00:10.00 -       finished   init to device [0]
+31/07/2012 12:00:10.02 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 12:00:10.03 -       finished   init to device [1]
+31/07/2012 12:00:14.94 - Func# 1 ON < sendTXT>
+31/07/2012 12:00:15.01 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:00:15.03 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=1; echo $t $i $i >> text ; sleep 1; done >
+31/07/2012 12:00:15.04 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 12:00:15.06 - Func# 1 OFF ... was found in off state... 0.920 sec.
+31/07/2012 12:00:17.18 - Func# 1 ON < sendTXT>
+31/07/2012 12:00:17.25 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:00:17.28 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=1; echo $t $i $i >> text ; sleep 1; done >
+31/07/2012 12:00:17.30 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 12:00:17.41 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:00:17.41 - Func# 1 OFF ... was found in off state... 0.033 sec.
+31/07/2012 12:00:17.43 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=1; echo $t $i $i >> text ; sleep 1; done >
+31/07/2012 12:00:17.43 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 12:00:22.57 - START#############################################
+           comment
+31/07/2012 12:00:22.58 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 12:00:22.60 -       finished  start to device [0]
+31/07/2012 12:00:22.63 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 12:00:22.64 -       finished  start to device [1]
+31/07/2012 12:00:23.29 - Func# 1 ON < sendTXT>
+31/07/2012 12:00:23.35 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:00:23.36 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=1; echo $t $i $i >> text ; sleep 1; done >
+31/07/2012 12:00:23.37 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 12:00:23.39 - Func# 1 OFF ... was found in off state... 0.010 sec.
+31/07/2012 12:00:24.34 - Func# 1 ON < sendTXT>
+31/07/2012 12:00:24.38 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:00:24.41 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=1; echo $t $i $i >> text ; sleep 1; done >
+31/07/2012 12:00:24.42 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 12:00:24.48 - Func# 1 OFF ... was found in off state... 0.020 sec.
+31/07/2012 12:00:25.86 - STOP#############################################
+31/07/2012 12:00:25.87 - 3.029 seconds length to this point 
+31/07/2012 12:00:25.89 - waiting to finish kills, sleep 0 seconds
+31/07/2012 12:00:25.90 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 12:00:25.91 -    finished  stop to device [0]
+31/07/2012 12:00:25.92 -    issuing   stop to device [1]: < echo Stop ... No action.... >
+31/07/2012 12:00:25.93 -    finished  stop to device [1]
+31/07/2012 12:00:25.94 - STOPPED##########################################
+31/07/2012 12:00:25.95 - 3.036 seconds length
+31/07/2012 12:00:26.52 - QUIT#############################################
+31/07/2012 12:00:26.54 - q  #############################################
+31/07/2012 12:00:26.55 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 12:00:26.58 -    issuing   quit to device [1]: < cat text >
+31/07/2012 12:01:53.48 - INIT#############################################
+           comment
+31/07/2012 12:01:53.50 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 12:01:53.51 -       finished   init to device [0]
+31/07/2012 12:01:53.53 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 12:01:53.54 -       finished   init to device [1]
+31/07/2012 12:01:57.27 - START#############################################
+           comment
+31/07/2012 12:01:57.32 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 12:01:57.34 -       finished  start to device [0]
+31/07/2012 12:01:57.36 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 12:01:57.37 -       finished  start to device [1]
+31/07/2012 12:01:57.39 - Func# 0 ON <Listen_test>
+31/07/2012 12:01:57.41 - Func# 1 ON < sendTXT>
+31/07/2012 12:01:57.44 -    #ActiveThread :     #Starting client 0           
+31/07/2012 12:01:57.44 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:01:57.46 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=1; echo $t $i $i >> text ; sleep 1; done >
+31/07/2012 12:01:57.47 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_120157; date; sleep 1; date; sleep 1; >
+31/07/2012 12:01:59.50 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 12:01:59.53 - Func# 0 OFF ... was found in off state... 2.016 sec.
+31/07/2012 12:02:05.30 -    #killing  grandchild  312
+ now
+31/07/2012 12:02:05.31 - Func# 1 OFF                              ... 7.991 sec.
+31/07/2012 12:02:06.23 - STOP#############################################
+31/07/2012 12:02:06.23 - 8.996 seconds length to this point 
+31/07/2012 12:02:06.24 - waiting to finish kills, sleep 0 seconds
+31/07/2012 12:02:06.26 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 12:02:06.27 -    finished  stop to device [0]
+31/07/2012 12:02:06.29 -    issuing   stop to device [1]: < echo Stop ... No action.... >
+31/07/2012 12:02:06.30 -    finished  stop to device [1]
+31/07/2012 12:02:06.31 - STOPPED##########################################
+31/07/2012 12:02:06.31 - 9.003 seconds length
+31/07/2012 12:02:06.86 - QUIT#############################################
+31/07/2012 12:02:06.87 - q  #############################################
+31/07/2012 12:02:06.91 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 12:02:06.93 -    issuing   quit to device [1]: < cat text >
+31/07/2012 12:06:54.48 - INIT#############################################
+           comment
+31/07/2012 12:06:54.50 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 12:06:54.51 -       finished   init to device [0]
+31/07/2012 12:06:54.53 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 12:06:54.55 -       finished   init to device [1]
+31/07/2012 12:06:55.31 - Func# 1 ON < sendTXT>
+31/07/2012 12:06:55.38 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:06:55.41 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=1; echo $t $i $i >> text ; sleep 1; done >
+31/07/2012 12:06:59.64 -    #killing  grandchild  1355
+ now
+31/07/2012 12:06:59.65 - Func# 1 OFF                              ... 4.038 sec.
+31/07/2012 12:07:02.00 - QUIT#############################################
+31/07/2012 12:07:02.01 - q  #############################################
+31/07/2012 12:07:02.04 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 12:07:02.06 -    issuing   quit to device [1]: < cat text >
+31/07/2012 12:07:18.81 - INIT#############################################
+           comment
+31/07/2012 12:07:18.83 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 12:07:18.84 -       finished   init to device [0]
+31/07/2012 12:07:18.86 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 12:07:18.87 -       finished   init to device [1]
+31/07/2012 12:07:19.72 - Func# 1 ON < sendTXT>
+31/07/2012 12:07:19.79 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:07:19.80 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=1; echo $t $i $i >> text ; sleep 1; done >
+31/07/2012 12:07:21.75 -    #killing  grandchild  1971
+ now
+31/07/2012 12:07:21.75 - Func# 1 OFF                              ... 2.005 sec.
+31/07/2012 12:07:21.75 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 12:07:23.45 - QUIT#############################################
+31/07/2012 12:07:23.46 - q  #############################################
+31/07/2012 12:07:23.47 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 12:07:23.51 -    issuing   quit to device [1]: < cat text >
+31/07/2012 12:07:49.48 - INIT#############################################
+           comment
+31/07/2012 12:07:49.52 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 12:07:49.54 -       finished   init to device [0]
+31/07/2012 12:07:49.55 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 12:07:49.57 -       finished   init to device [1]
+31/07/2012 12:07:50.48 - Func# 1 ON < sendTXT>
+31/07/2012 12:07:50.50 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:07:50.53 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=1; echo $t $i $i 1 2 3 4 5 >> text ; sleep 1; done >
+31/07/2012 12:08:24.14 -    #killing  grandchild  2424
+ now
+31/07/2012 12:08:24.14 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 12:08:24.14 - Func# 1 OFF                              ... 33.976 sec.
+31/07/2012 12:08:39.09 - QUIT#############################################
+31/07/2012 12:08:39.11 - q  #############################################
+31/07/2012 12:08:39.14 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 12:08:39.18 -    issuing   quit to device [1]: < cat text >
+31/07/2012 12:09:54.17 - INIT#############################################
+           comment
+31/07/2012 12:09:54.20 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 12:09:54.22 -       finished   init to device [0]
+31/07/2012 12:09:54.23 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 12:09:54.25 -       finished   init to device [1]
+31/07/2012 12:09:54.82 - Func# 1 ON < sendTXT>
+31/07/2012 12:09:54.93 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:09:54.96 -    issuing  start to device [1]: < for ((i=0;i!=100;i++)); do t=1; echo $t $i \$i 1 2 3 4 5 >> text ; sleep 1; done >
+31/07/2012 12:10:01.62 -    #killing  grandchild  5044
+ now
+31/07/2012 12:10:01.63 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 12:10:01.63 - Func# 1 OFF                              ... 6.986 sec.
+31/07/2012 12:13:09.76 - QUIT#############################################
+31/07/2012 12:13:09.78 - q  #############################################
+31/07/2012 12:13:09.79 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 12:13:09.81 -    issuing   quit to device [1]: < cat text >
+31/07/2012 12:13:22.07 - INIT#############################################
+           comment
+31/07/2012 12:13:22.08 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 12:13:22.10 -       finished   init to device [0]
+31/07/2012 12:13:22.12 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 12:13:22.13 -       finished   init to device [1]
+31/07/2012 12:13:23.32 - Func# 1 ON < sendTXT>
+31/07/2012 12:13:23.41 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:13:23.43 -    issuing  start to device [1]: < for ((i=0;i!=1000;i++)); do t=1; echo $t $i \$i 1 2 3 4 5 >> text ; sleep 1; done >
+31/07/2012 12:13:27.04 -    #killing  grandchild  13703
+ now
+31/07/2012 12:13:27.05 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 12:13:27.05 - Func# 1 OFF                              ... 3.978 sec.
+31/07/2012 12:16:34.38 - QUIT#############################################
+31/07/2012 12:16:34.39 - q  #############################################
+31/07/2012 12:16:34.42 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 12:16:34.45 -    issuing   quit to device [1]: < cat text >
+31/07/2012 12:16:47.04 - INIT#############################################
+           comment
+31/07/2012 12:16:47.07 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 12:16:47.08 -       finished   init to device [0]
+31/07/2012 12:16:47.10 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 12:16:47.11 -       finished   init to device [1]
+31/07/2012 12:16:47.90 - Func# 1 ON < sendTXT>
+31/07/2012 12:16:47.98 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:16:48.01 -    issuing  start to device [1]: < for ((i=0;i!=1000;i++)); do t=1; echo $t $i \$i 1 2 3 4 5 >> text ; sleep 1; done >
+31/07/2012 12:16:55.84 -    #killing  grandchild  22739
+ now
+31/07/2012 12:16:55.84 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 12:16:55.85 - Func# 1 OFF                              ... 8.002 sec.
+31/07/2012 12:17:20.80 - STOP#############################################
+31/07/2012 12:17:20.82 - 33.076 seconds length to this point 
+31/07/2012 12:17:20.83 - waiting to finish kills, sleep 0 seconds
+31/07/2012 12:17:20.86 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 12:17:20.88 -    finished  stop to device [0]
+31/07/2012 12:17:20.91 -    issuing   stop to device [1]: < echo Stop ... No action.... >
+31/07/2012 12:17:20.94 -    finished  stop to device [1]
+31/07/2012 12:17:20.95 - STOPPED##########################################
+31/07/2012 12:17:20.96 - 33.090 seconds length
+31/07/2012 12:17:21.70 - QUIT#############################################
+31/07/2012 12:17:21.71 - q  #############################################
+31/07/2012 12:17:21.75 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 12:17:21.77 -    issuing   quit to device [1]: < cat text >
+31/07/2012 12:17:49.53 - INIT#############################################
+           comment
+31/07/2012 12:17:49.55 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 12:17:49.56 -       finished   init to device [0]
+31/07/2012 12:17:49.58 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 12:17:49.59 -       finished   init to device [1]
+31/07/2012 12:17:50.48 - Func# 1 ON < sendTXT>
+31/07/2012 12:17:50.58 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:17:50.60 -    issuing  start to device [1]: < for ((i=0;i!=1000;i++)); do t=1; echo $t $i \$i 1 2 3 4 5 >> text ; sleep 1; done >
+31/07/2012 12:17:55.38 -    #killing  grandchild  24679
+ now
+31/07/2012 12:17:55.39 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 12:17:55.40 - Func# 1 OFF                              ... 4.995 sec.
+31/07/2012 12:17:56.12 - QUIT#############################################
+31/07/2012 12:17:56.13 - q  #############################################
+31/07/2012 12:17:56.14 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 12:17:56.16 -    issuing   quit to device [1]: < cat text >
+31/07/2012 12:18:51.56 - INIT#############################################
+           comment
+31/07/2012 12:18:51.57 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 12:18:51.58 -       finished   init to device [0]
+31/07/2012 12:18:51.60 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 12:18:51.62 -       finished   init to device [1]
+31/07/2012 12:19:01.51 - Func# 1 ON < sendTXT>
+31/07/2012 12:19:01.57 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:19:01.58 -    issuing  start to device [1]: < for ((i=0;i!=1000;i++)); do t=1; echo $t $i \$i 1 2 3 4 5 >> text ; sleep 1; done >
+31/07/2012 12:19:17.89 -    #killing  grandchild  25729
+ now
+31/07/2012 12:19:17.89 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 12:19:17.91 - Func# 1 OFF                              ... 16.043 sec.
+31/07/2012 12:19:30.07 - QUIT#############################################
+31/07/2012 12:19:30.08 - q  #############################################
+31/07/2012 12:19:30.09 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 12:19:30.11 -    issuing   quit to device [1]: < cat text >
+31/07/2012 12:19:42.90 - INIT#############################################
+           comment
+31/07/2012 12:19:42.93 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 12:19:42.96 -       finished   init to device [0]
+31/07/2012 12:19:42.97 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 12:19:42.98 -       finished   init to device [1]
+31/07/2012 12:19:43.95 - Func# 1 ON < sendTXT>
+31/07/2012 12:19:43.97 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:19:43.99 -    issuing  start to device [1]: < for ((i=0;i!=1000;i++)); do t=1; echo $t $i \$i 1 2 3 4 5 >> text ; sleep 1; done >
+31/07/2012 12:19:50.44 -    #killing  grandchild  27321
+ now
+31/07/2012 12:19:50.46 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 12:19:50.46 - Func# 1 OFF                              ... 6.955 sec.
+31/07/2012 12:24:34.83 - QUIT#############################################
+31/07/2012 12:24:34.84 - q  #############################################
+31/07/2012 12:24:34.85 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 12:24:34.87 -    issuing   quit to device [1]: < cat text >
+31/07/2012 12:24:41.94 - INIT#############################################
+           comment
+31/07/2012 12:24:41.95 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 12:24:41.96 -       finished   init to device [0]
+31/07/2012 12:24:41.98 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 12:24:42.99 -       finished   init to device [1]
+31/07/2012 12:24:43.25 - Func# 1 ON < sendTXT>
+31/07/2012 12:24:43.32 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:24:43.33 -    issuing  start to device [1]: < for ((i=0;i!=1000;i++)); do t=1; echo $t $i \$i 1 2 3 4 5 >> text ; sleep 1; done >
+31/07/2012 12:25:00.99 -    #killing  grandchild  8390
+ now
+31/07/2012 12:25:00.02 - Func# 1 OFF                              ... 16.079 sec.
+31/07/2012 12:25:00.02 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 12:25:15.51 - QUIT#############################################
+31/07/2012 12:25:15.52 - q  #############################################
+31/07/2012 12:25:15.55 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 12:25:15.58 -    issuing   quit to device [1]: < cat text >
+31/07/2012 12:26:13.02 - INIT#############################################
+           comment
+31/07/2012 12:26:13.05 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 12:26:13.07 -       finished   init to device [0]
+31/07/2012 12:26:13.10 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 12:26:13.12 -       finished   init to device [1]
+31/07/2012 12:26:13.57 - Func# 1 ON < sendTXT>
+31/07/2012 12:26:13.64 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:26:13.67 -    issuing  start to device [1]: < for ((i=0;i!=10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; sleep 1; done >
+31/07/2012 12:26:23.30 -    #killing  grandchild  10335
+ now
+31/07/2012 12:26:23.32 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 12:26:23.32 - Func# 1 OFF                              ... 9.977 sec.
+31/07/2012 12:26:31.96 - Func# 1 ON < sendTXT>
+31/07/2012 12:26:32.04 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:26:32.07 -    issuing  start to device [1]: < for ((i=0;i!=10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; sleep 1; done >
+31/07/2012 12:26:51.06 -    #killing  grandchild  11193
+ now
+31/07/2012 12:26:51.08 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 12:26:51.08 - Func# 1 OFF                              ... 19.921 sec.
+31/07/2012 12:26:53.40 - Func# 1 ON < sendTXT>
+31/07/2012 12:26:53.49 -    #ActiveThread :     #Starting client 1           
+31/07/2012 12:26:53.52 -    issuing  start to device [1]: < for ((i=0;i!=10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; sleep 1; done >
+31/07/2012 12:27:05.60 - QUIT#############################################
+31/07/2012 12:27:05.61 - q  #############################################
+31/07/2012 12:27:05.64 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 12:27:05.66 -    issuing   quit to device [1]: < cat text >
+31/07/2012 13:26:40.05 - INIT#############################################
+           comment
+31/07/2012 13:26:40.08 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 13:26:40.10 -       finished   init to device [0]
+31/07/2012 13:26:40.11 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 13:26:40.18 -       finished   init to device [1]
+31/07/2012 13:26:45.72 - START#############################################
+           comment
+31/07/2012 13:26:45.75 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 13:26:45.76 -       finished  start to device [0]
+31/07/2012 13:26:45.78 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 13:26:45.78 -       finished  start to device [1]
+31/07/2012 13:26:45.80 - Func# 0 ON <Listen_test>
+31/07/2012 13:26:45.81 - Func# 1 ON < sendTXT>
+31/07/2012 13:26:45.86 -    #ActiveThread :     #Starting client 1           
+31/07/2012 13:26:45.86 -    #ActiveThread :     #Starting client 0           
+31/07/2012 13:26:45.88 -    issuing  start to device [1]: < for ((i=0;i!=10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; sleep 1; done >
+31/07/2012 13:26:45.88 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_132645; date; sleep 1; date; sleep 1; >
+31/07/2012 13:26:47.90 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 13:26:47.94 - Func# 0 OFF ... was found in off state... 2.015 sec.
+31/07/2012 13:26:53.10 - STOP#############################################
+31/07/2012 13:26:53.12 - 7.938 seconds length to this point 
+31/07/2012 13:26:53.12 - waiting to finish kills, sleep 0 seconds
+31/07/2012 13:26:53.14 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 13:26:53.16 -    finished  stop to device [0]
+31/07/2012 13:26:53.17 -    issuing   stop to device [1]: < echo Stop ... No action.... >
+31/07/2012 13:26:53.20 -    finished  stop to device [1]
+31/07/2012 13:26:53.21 - STOPPED##########################################
+31/07/2012 13:26:53.22 - 7.948 seconds length
+31/07/2012 13:26:54.32 -    #killing  grandchild  17008
+ now
+31/07/2012 13:26:54.35 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 13:26:54.35 - Func# 1 OFF                              ... 8.952 sec.
+31/07/2012 13:27:04.94 - QUIT#############################################
+31/07/2012 13:27:04.95 - q  #############################################
+31/07/2012 13:27:04.98 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 13:27:05.00 -    issuing   quit to device [1]: < cat text >
+31/07/2012 13:28:07.20 - INIT#############################################
+           comment
+31/07/2012 13:28:07.22 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 13:28:07.23 -       finished   init to device [0]
+31/07/2012 13:28:07.26 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 13:28:07.27 -       finished   init to device [1]
+31/07/2012 13:28:11.09 - Func# 1 ON < sendTXT>
+31/07/2012 13:28:11.16 -    #ActiveThread :     #Starting client 1           
+31/07/2012 13:28:11.19 -    issuing  start to device [1]: < for ((i=0;i!=10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text;| echo \$t \$i \$i | nc localhost 9302 sleep 1; done >
+31/07/2012 13:28:11.21 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 13:28:11.32 - Func# 1 OFF ... was found in off state... 0.030 sec.
+31/07/2012 13:28:11.32 -    #ActiveThread :     #Starting client 1           
+31/07/2012 13:28:11.34 -    issuing  start to device [1]: < for ((i=0;i!=10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text;| echo \$t \$i \$i | nc localhost 9302 sleep 1; done >
+31/07/2012 13:28:11.35 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 13:28:19.84 - QUIT#############################################
+31/07/2012 13:28:19.84 - q  #############################################
+31/07/2012 13:28:19.86 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 13:28:19.88 -    issuing   quit to device [1]: < cat text >
+31/07/2012 13:28:31.66 - INIT#############################################
+           comment
+31/07/2012 13:28:31.69 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 13:28:31.71 -       finished   init to device [0]
+31/07/2012 13:28:31.74 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 13:28:31.76 -       finished   init to device [1]
+31/07/2012 13:28:33.56 - Func# 1 ON < sendTXT>
+31/07/2012 13:28:33.60 -    #ActiveThread :     #Starting client 1           
+31/07/2012 13:28:33.61 -    issuing  start to device [1]: < for ((i=0;i!=10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text;| echo \$t \$i \$i | nc localhost 9302 ; sleep 1; done >
+31/07/2012 13:28:33.63 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 13:28:33.69 - Func# 1 OFF ... was found in off state... 0.020 sec.
+31/07/2012 13:28:53.16 - QUIT#############################################
+31/07/2012 13:28:53.18 - q  #############################################
+31/07/2012 13:28:53.20 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 13:28:53.22 -    issuing   quit to device [1]: < cat text >
+31/07/2012 13:28:57.17 - INIT#############################################
+           comment
+31/07/2012 13:28:57.20 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 13:28:57.22 -       finished   init to device [0]
+31/07/2012 13:28:57.23 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 13:28:57.25 -       finished   init to device [1]
+31/07/2012 13:28:58.80 - Func# 1 ON < sendTXT>
+31/07/2012 13:28:58.86 -    #ActiveThread :     #Starting client 1           
+31/07/2012 13:28:58.88 -    issuing  start to device [1]: < for ((i=0;i!=10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 ; sleep 1; done >
+31/07/2012 13:29:33.26 -    #killing  grandchild  20618
+ now
+31/07/2012 13:29:33.28 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 13:29:33.28 - Func# 1 OFF                              ... 34.949 sec.
+31/07/2012 13:29:34.06 - QUIT#############################################
+31/07/2012 13:29:34.07 - q  #############################################
+31/07/2012 13:29:34.10 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 13:29:34.12 -    issuing   quit to device [1]: < cat text >
+31/07/2012 13:31:00.91 - INIT#############################################
+           comment
+31/07/2012 13:31:00.93 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 13:31:01.00 -       finished   init to device [0]
+31/07/2012 13:31:01.02 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 13:31:01.03 -       finished   init to device [1]
+31/07/2012 13:31:02.96 - Func# 1 ON < sendTXT>
+31/07/2012 13:31:02.98 -    #ActiveThread :     #Starting client 1           
+31/07/2012 13:31:03.01 -    issuing  start to device [1]: < for ((i=0;i!=10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 (&) sleep 1; done >
+31/07/2012 13:31:03.02 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 13:31:03.05 - Func# 1 OFF ... was found in off state... 0.910 sec.
+31/07/2012 13:31:17.74 - QUIT#############################################
+31/07/2012 13:31:17.77 - q  #############################################
+31/07/2012 13:31:17.79 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 13:31:17.81 -    issuing   quit to device [1]: < cat text >
+31/07/2012 13:31:22.01 - INIT#############################################
+           comment
+31/07/2012 13:31:22.02 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 13:31:22.04 -       finished   init to device [0]
+31/07/2012 13:31:22.06 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 13:31:22.07 -       finished   init to device [1]
+31/07/2012 13:31:23.06 - Func# 1 ON < sendTXT>
+31/07/2012 13:31:23.15 -    #ActiveThread :     #Starting client 1           
+31/07/2012 13:31:23.16 -    issuing  start to device [1]: < for ((i=0;i!=10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 & sleep 1; done >
+31/07/2012 13:31:37.27 -    #killing  grandchild  23438
+ now
+31/07/2012 13:31:37.29 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 13:31:37.29 - Func# 1 OFF                              ... 14.928 sec.
+31/07/2012 13:31:37.87 - QUIT#############################################
+31/07/2012 13:31:37.88 - q  #############################################
+31/07/2012 13:31:37.89 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 13:31:37.92 -    issuing   quit to device [1]: < cat text >
+31/07/2012 13:32:15.17 - INIT#############################################
+           comment
+31/07/2012 13:32:15.20 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 13:32:15.22 -       finished   init to device [0]
+31/07/2012 13:32:15.24 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 13:32:15.25 -       finished   init to device [1]
+31/07/2012 13:32:15.85 - Func# 1 ON < sendTXT>
+31/07/2012 13:32:15.94 -    #ActiveThread :     #Starting client 1           
+31/07/2012 13:32:15.96 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 & sleep 1; done >
+31/07/2012 13:33:03.15 -    #killing  grandchild  24340
+ now
+31/07/2012 13:33:03.17 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 13:33:03.17 - Func# 1 OFF                              ... 47.939 sec.
+31/07/2012 13:33:03.82 - QUIT#############################################
+31/07/2012 13:33:03.83 - q  #############################################
+31/07/2012 13:33:03.86 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 13:33:03.89 -    issuing   quit to device [1]: < cat text >
+31/07/2012 13:33:06.53 - INIT#############################################
+           comment
+31/07/2012 13:33:06.56 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 13:33:06.58 -       finished   init to device [0]
+31/07/2012 13:33:06.60 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 13:33:06.61 -       finished   init to device [1]
+31/07/2012 13:33:07.11 - Func# 1 ON < sendTXT>
+31/07/2012 13:33:07.16 -    #ActiveThread :     #Starting client 1           
+31/07/2012 13:33:07.18 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 & >/dev/null sleep 1; done >
+31/07/2012 13:33:16.87 -    #killing  grandchild  26712
+ now
+31/07/2012 13:33:16.89 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 13:33:16.89 - Func# 1 OFF                              ... 9.085 sec.
+31/07/2012 13:33:17.41 - QUIT#############################################
+31/07/2012 13:33:17.43 - q  #############################################
+31/07/2012 13:33:17.46 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 13:33:17.48 -    issuing   quit to device [1]: < cat text >
+31/07/2012 13:33:20.16 - INIT#############################################
+           comment
+31/07/2012 13:33:20.19 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 13:33:20.20 -       finished   init to device [0]
+31/07/2012 13:33:20.21 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 13:33:20.23 -       finished   init to device [1]
+31/07/2012 13:33:20.60 - Func# 1 ON < sendTXT>
+31/07/2012 13:33:20.70 -    #ActiveThread :     #Starting client 1           
+31/07/2012 13:33:20.73 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 & 2>/dev/null sleep 1; done >
+31/07/2012 13:33:31.62 -    #killing  grandchild  27401
+ now
+31/07/2012 13:33:31.65 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 13:33:31.65 - Func# 1 OFF                              ... 11.009 sec.
+31/07/2012 13:33:33.58 - QUIT#############################################
+31/07/2012 13:33:33.59 - q  #############################################
+31/07/2012 13:33:33.63 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 13:33:33.66 -    issuing   quit to device [1]: < cat text >
+31/07/2012 13:33:41.13 - INIT#############################################
+           comment
+31/07/2012 13:33:41.16 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 13:33:41.17 -       finished   init to device [0]
+31/07/2012 13:33:41.19 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 13:33:41.20 -       finished   init to device [1]
+31/07/2012 13:33:41.78 - Func# 1 ON < sendTXT>
+31/07/2012 13:33:41.83 -    #ActiveThread :     #Starting client 1           
+31/07/2012 13:33:41.86 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & 2>/dev/null sleep 1; done >
+31/07/2012 13:33:44.95 -    #killing  grandchild  28239
+ now
+31/07/2012 13:33:44.98 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 13:33:44.98 - Func# 1 OFF                              ... 3.024 sec.
+31/07/2012 13:33:45.48 - QUIT#############################################
+31/07/2012 13:33:45.50 - q  #############################################
+31/07/2012 13:33:45.53 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 13:33:45.55 -    issuing   quit to device [1]: < cat text >
+31/07/2012 13:33:54.28 - INIT#############################################
+           comment
+31/07/2012 13:33:54.31 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 13:33:54.33 -       finished   init to device [0]
+31/07/2012 13:33:54.34 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 13:33:54.36 -       finished   init to device [1]
+31/07/2012 13:33:55.76 - Func# 1 ON < sendTXT>
+31/07/2012 13:33:55.82 -    #ActiveThread :     #Starting client 1           
+31/07/2012 13:33:55.85 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:11:44.02 -    #killing  grandchild  28693
+ now
+31/07/2012 15:11:44.04 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:11:44.04 - Func# 1 OFF                              ... 5868.935 sec.
+31/07/2012 15:11:45.19 - QUIT#############################################
+31/07/2012 15:11:45.21 - q  #############################################
+31/07/2012 15:11:45.23 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:11:45.32 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:12:04.33 - INIT#############################################
+           comment
+31/07/2012 15:12:04.36 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:12:04.38 -       finished   init to device [0]
+31/07/2012 15:12:04.41 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:12:04.47 -       finished   init to device [1]
+31/07/2012 15:12:05.73 - Func# 1 ON < sendTXT>
+31/07/2012 15:12:05.79 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:12:05.81 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:12:07.35 -    #killing  grandchild  31902
+ now
+31/07/2012 15:12:07.39 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:12:07.39 - Func# 1 OFF                              ... 1.966 sec.
+31/07/2012 15:12:16.69 - QUIT#############################################
+31/07/2012 15:12:16.70 - q  #############################################
+31/07/2012 15:12:16.73 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:12:16.76 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:12:31.02 - INIT#############################################
+           comment
+31/07/2012 15:12:31.05 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:12:31.07 -       finished   init to device [0]
+31/07/2012 15:12:31.10 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:12:31.13 -       finished   init to device [1]
+31/07/2012 15:12:31.81 - Func# 1 ON < sendTXT>
+31/07/2012 15:12:31.83 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:12:31.85 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:12:33.14 -    #killing  grandchild  32665
+ now
+31/07/2012 15:12:33.18 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:12:33.18 - Func# 1 OFF                              ... 1.940 sec.
+31/07/2012 15:12:34.31 - QUIT#############################################
+31/07/2012 15:12:34.33 - q  #############################################
+31/07/2012 15:12:34.36 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:12:34.38 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:13:39.01 - INIT#############################################
+           comment
+31/07/2012 15:13:39.04 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:13:39.06 -       finished   init to device [0]
+31/07/2012 15:13:39.08 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:13:39.09 -       finished   init to device [1]
+31/07/2012 15:13:39.63 - Func# 1 ON < sendTXT>
+31/07/2012 15:13:39.67 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:13:39.69 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:13:41.41 -    #killing  grandchild  836
+ now
+31/07/2012 15:13:41.46 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:13:41.46 - Func# 1 OFF                              ... 1.981 sec.
+31/07/2012 15:13:42.11 - QUIT#############################################
+31/07/2012 15:13:42.13 - q  #############################################
+31/07/2012 15:13:42.16 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:13:42.18 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:14:24.15 - INIT#############################################
+           comment
+31/07/2012 15:14:24.18 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:14:24.20 -       finished   init to device [0]
+31/07/2012 15:14:24.21 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:14:24.22 -       finished   init to device [1]
+31/07/2012 15:14:24.66 - Func# 1 ON < sendTXT>
+31/07/2012 15:14:24.69 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:14:24.71 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:14:25.27 -    #killing  grandchild  1379
+ now
+31/07/2012 15:14:25.32 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:14:25.32 - Func# 1 OFF                              ... 0.964 sec.
+31/07/2012 15:14:25.92 - QUIT#############################################
+31/07/2012 15:14:25.94 - q  #############################################
+31/07/2012 15:14:25.97 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:14:26.99 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:14:54.20 - INIT#############################################
+           comment
+31/07/2012 15:14:54.24 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:14:54.25 -       finished   init to device [0]
+31/07/2012 15:14:54.27 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:14:54.28 -       finished   init to device [1]
+31/07/2012 15:14:54.82 - Func# 1 ON < sendTXT>
+31/07/2012 15:14:54.93 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:14:54.96 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:14:55.51 -    #killing  grandchild  1837
+ now
+31/07/2012 15:14:55.56 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:14:55.56 - Func# 1 OFF                              ... 0.972 sec.
+31/07/2012 15:14:56.18 - QUIT#############################################
+31/07/2012 15:14:56.20 - q  #############################################
+31/07/2012 15:14:56.23 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:14:56.25 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:15:33.96 - INIT#############################################
+           comment
+31/07/2012 15:15:34.99 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:15:34.01 -       finished   init to device [0]
+31/07/2012 15:15:34.02 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:15:34.03 -       finished   init to device [1]
+31/07/2012 15:15:34.57 - Func# 1 ON < sendTXT>
+31/07/2012 15:15:34.59 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:15:34.62 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:15:36.37 -    #killing  grandchild  2378
+ now
+31/07/2012 15:15:36.41 - Func# 1 OFF                              ... 1.983 sec.
+31/07/2012 15:15:36.41 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:15:36.52 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:15:36.54 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:15:37.49 - QUIT#############################################
+31/07/2012 15:15:37.50 - q  #############################################
+31/07/2012 15:15:37.53 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:15:37.56 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:16:01.35 - INIT#############################################
+           comment
+31/07/2012 15:16:01.38 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:16:01.41 -       finished   init to device [0]
+31/07/2012 15:16:01.42 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:16:01.44 -       finished   init to device [1]
+31/07/2012 15:16:01.98 - Func# 1 ON < sendTXT>
+31/07/2012 15:16:02.05 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:16:02.07 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:16:03.16 -    #killing  grandchild  2930
+ now
+31/07/2012 15:16:03.20 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:16:03.19 - Func# 1 OFF                              ... 1.922 sec.
+31/07/2012 15:16:03.78 - QUIT#############################################
+31/07/2012 15:16:03.79 - q  #############################################
+31/07/2012 15:16:03.80 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:16:03.82 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:16:31.90 - INIT#############################################
+           comment
+31/07/2012 15:16:31.93 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:16:31.96 -       finished   init to device [0]
+31/07/2012 15:16:31.99 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:16:32.00 -       finished   init to device [1]
+31/07/2012 15:16:32.41 - Func# 1 ON < sendTXT>
+31/07/2012 15:16:32.51 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:16:32.54 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:16:34.47 -    #killing  grandchild  3363
+ now
+31/07/2012 15:16:34.50 - Func# 1 OFF                              ... 2.016 sec.
+31/07/2012 15:16:34.50 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:16:34.62 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:16:34.64 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:16:35.61 - QUIT#############################################
+31/07/2012 15:16:35.62 - q  #############################################
+31/07/2012 15:16:35.66 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:16:35.68 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:16:56.45 - INIT#############################################
+           comment
+31/07/2012 15:16:56.48 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:16:56.50 -       finished   init to device [0]
+31/07/2012 15:16:56.53 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:16:56.54 -       finished   init to device [1]
+31/07/2012 15:16:56.91 - Func# 1 ON < sendTXT>
+31/07/2012 15:16:57.99 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:16:57.01 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:16:57.38 -    #killing  grandchild  3808
+ now
+31/07/2012 15:16:57.43 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:16:57.43 - Func# 1 OFF                              ... 0.953 sec.
+31/07/2012 15:16:58.13 - QUIT#############################################
+31/07/2012 15:16:58.14 - q  #############################################
+31/07/2012 15:16:58.16 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:16:58.18 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:17:37.76 - INIT#############################################
+           comment
+31/07/2012 15:17:37.77 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:17:37.79 -       finished   init to device [0]
+31/07/2012 15:17:37.80 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:17:37.81 -       finished   init to device [1]
+31/07/2012 15:17:38.59 - Func# 1 ON < sendTXT>
+31/07/2012 15:17:38.63 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:17:38.65 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:17:39.54 -    #killing  grandchild  4243
+ and  4243 4245 4248 now
+31/07/2012 15:17:39.56 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:17:39.56 - Func# 1 OFF                              ... 1.000 sec.
+31/07/2012 15:17:40.36 - QUIT#############################################
+31/07/2012 15:17:40.38 - q  #############################################
+31/07/2012 15:17:40.41 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:17:40.43 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:18:21.17 - INIT#############################################
+           comment
+31/07/2012 15:18:21.20 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:18:21.22 -       finished   init to device [0]
+31/07/2012 15:18:21.23 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:18:21.25 -       finished   init to device [1]
+31/07/2012 15:18:21.97 - Func# 1 ON < sendTXT>
+31/07/2012 15:18:22.04 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:18:22.07 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:18:22.68 -    #killing  grandchild  4693 and  4693 4695 4698 now
+31/07/2012 15:18:22.70 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:18:22.70 - Func# 1 OFF                              ... 0.982 sec.
+31/07/2012 15:18:23.39 - QUIT#############################################
+31/07/2012 15:18:23.41 - q  #############################################
+31/07/2012 15:18:23.42 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:18:23.44 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:23:05.51 - INIT#############################################
+           comment
+31/07/2012 15:23:05.69 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:23:05.70 -       finished   init to device [0]
+31/07/2012 15:23:05.87 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:23:05.88 -       finished   init to device [1]
+31/07/2012 15:25:02.59 - QUIT#############################################
+31/07/2012 15:25:02.60 - q  #############################################
+31/07/2012 15:25:02.79 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:25:02.97 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:25:07.38 - INIT#############################################
+           comment
+31/07/2012 15:25:07.41 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:25:07.44 -       finished   init to device [0]
+31/07/2012 15:25:07.45 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:25:07.46 -       finished   init to device [1]
+31/07/2012 15:25:08.85 - Func# 1 ON < sendTXT>
+31/07/2012 15:25:08.91 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:25:08.94 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:25:13.34 -    #killing  grandchild  11695 and  11695 11697 11890 now
+31/07/2012 15:25:13.35 - Func# 1 OFF                              ... 4.957 sec.
+31/07/2012 15:25:49.50 - QUIT#############################################
+31/07/2012 15:25:49.52 - q  #############################################
+31/07/2012 15:25:49.55 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:25:49.57 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:25:59.48 - Func# 1 ON < sendTXT>
+31/07/2012 15:25:59.51 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:25:59.53 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:26:00.81 -    #killing  grandchild  13858 and  13858 13860 13913 now
+31/07/2012 15:26:00.82 - Func# 1 OFF                              ... 1.040 sec.
+31/07/2012 15:26:10.40 - INIT#############################################
+           comment
+31/07/2012 15:26:10.43 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:26:10.45 -       finished   init to device [0]
+31/07/2012 15:26:10.47 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:26:10.48 -       finished   init to device [1]
+31/07/2012 15:26:23.45 - START#############################################
+           comment
+31/07/2012 15:26:23.48 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 15:26:23.50 -       finished  start to device [0]
+31/07/2012 15:26:23.51 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 15:26:23.53 -       finished  start to device [1]
+31/07/2012 15:26:23.54 - Func# 1 ON ... by AutoRetrig 
+31/07/2012 15:26:32.48 - STOP#############################################
+31/07/2012 15:26:32.49 - 9.003 seconds length to this point 
+31/07/2012 15:26:32.50 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:26:32.53 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:26:32.54 -    finished  stop to device [0]
+31/07/2012 15:26:32.70 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; ;; >
+31/07/2012 15:26:32.71 -       NOT SUCCESFULL !!!!!!!!!!!!!!
+31/07/2012 15:30:11.22 - QUIT#############################################
+31/07/2012 15:30:11.24 - q  #############################################
+31/07/2012 15:30:11.27 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:30:11.29 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:30:15.54 - INIT#############################################
+           comment
+31/07/2012 15:30:15.57 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:30:15.59 -       finished   init to device [0]
+31/07/2012 15:30:15.61 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:30:15.62 -       finished   init to device [1]
+31/07/2012 15:30:16.78 - Func# 1 ON < sendTXT>
+31/07/2012 15:30:16.84 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:30:16.87 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:30:18.76 - START#############################################
+           comment
+31/07/2012 15:30:18.79 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 15:30:18.81 -       finished  start to device [0]
+31/07/2012 15:30:18.82 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 15:30:18.84 -       finished  start to device [1]
+31/07/2012 15:30:20.91 - STOP#############################################
+31/07/2012 15:30:20.92 - 2.015 seconds length to this point 
+31/07/2012 15:30:20.93 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:30:20.95 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:30:20.96 -    finished  stop to device [0]
+31/07/2012 15:30:20.97 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; $killgrandchildren >
+31/07/2012 15:30:20.98 -    finished  stop to device [1]
+31/07/2012 15:30:20.99 - STOPPED##########################################
+31/07/2012 15:30:21.99 - 2.022 seconds length
+31/07/2012 15:30:54.51 - QUIT#############################################
+31/07/2012 15:30:54.53 - q  #############################################
+31/07/2012 15:30:54.55 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:30:54.58 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:30:56.93 - INIT#############################################
+           comment
+31/07/2012 15:30:56.96 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:30:56.98 -       finished   init to device [0]
+31/07/2012 15:30:57.99 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:30:57.01 -       finished   init to device [1]
+31/07/2012 15:30:57.91 - Func# 1 ON < sendTXT>
+31/07/2012 15:30:57.94 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:30:57.96 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:30:59.55 - START#############################################
+           comment
+31/07/2012 15:30:59.58 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 15:30:59.60 -       finished  start to device [0]
+31/07/2012 15:30:59.61 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 15:30:59.63 -       finished  start to device [1]
+31/07/2012 15:31:01.30 - STOP#############################################
+31/07/2012 15:31:01.32 - 1.975 seconds length to this point 
+31/07/2012 15:31:01.33 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:31:01.36 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:31:01.37 -    finished  stop to device [0]
+31/07/2012 15:31:01.38 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children;  >
+31/07/2012 15:31:01.39 -    finished  stop to device [1]
+31/07/2012 15:31:01.40 - STOPPED##########################################
+31/07/2012 15:31:01.41 - 1.984 seconds length
+31/07/2012 15:31:17.62 - QUIT#############################################
+31/07/2012 15:31:17.64 - q  #############################################
+31/07/2012 15:31:17.67 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:31:17.69 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:33:17.29 - INIT#############################################
+           comment
+31/07/2012 15:33:17.32 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:33:17.34 -       finished   init to device [0]
+31/07/2012 15:33:17.37 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:33:17.40 -       finished   init to device [1]
+31/07/2012 15:33:20.16 - START#############################################
+           comment
+31/07/2012 15:33:20.19 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 15:33:20.21 -       finished  start to device [0]
+31/07/2012 15:33:20.24 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 15:33:20.27 -       finished  start to device [1]
+31/07/2012 15:33:20.29 - Func# 0 ON <Listen_test>
+31/07/2012 15:33:20.33 - Func# 1 ON < sendTXT>
+31/07/2012 15:33:20.38 -    #ActiveThread :     #Starting client 0           
+31/07/2012 15:33:20.39 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:33:20.41 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_153320; date; sleep 1; date; sleep 1; >
+31/07/2012 15:33:20.41 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:33:22.43 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:33:22.46 - Func# 0 OFF ... was found in off state... 2.018 sec.
+31/07/2012 15:33:23.52 - STOP#############################################
+31/07/2012 15:33:23.53 - 3.036 seconds length to this point 
+31/07/2012 15:33:23.54 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:33:23.57 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:33:23.59 -    finished  stop to device [0]
+31/07/2012 15:33:23.61 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children;  >
+31/07/2012 15:33:23.63 -    finished  stop to device [1]
+31/07/2012 15:33:23.65 - STOPPED##########################################
+31/07/2012 15:33:23.66 - 3.047 seconds length
+31/07/2012 15:33:26.36 -    #killing  grandchild  30335 and  30335 30338 30630 now
+31/07/2012 15:33:26.36 - Func# 1 OFF                              ... 6.007 sec.
+31/07/2012 15:33:27.96 - QUIT#############################################
+31/07/2012 15:33:27.98 - q  #############################################
+31/07/2012 15:33:28.01 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:33:28.05 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:35:17.19 - INIT#############################################
+           comment
+31/07/2012 15:35:17.22 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:35:17.23 -       finished   init to device [0]
+31/07/2012 15:35:17.24 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:35:17.25 -       finished   init to device [1]
+31/07/2012 15:35:18.21 - Func# 1 ON < sendTXT>
+31/07/2012 15:35:18.29 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:35:18.32 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:35:19.58 - STOP#############################################
+31/07/2012 15:35:19.59 - 2.039 seconds length to this point 
+31/07/2012 15:35:19.61 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:35:19.62 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:35:19.64 -    finished  stop to device [0]
+31/07/2012 15:35:19.84 -    #killing  grandchild  31324 and  31324 31326 31375 now
+31/07/2012 15:35:19.86 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:35:19.86 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; ; >
+31/07/2012 15:35:19.87 -       NOT SUCCESFULL !!!!!!!!!!!!!!
+31/07/2012 15:35:19.89 - Func# 1 OFF ... was found in off state... 1.072 sec.
+31/07/2012 15:37:53.24 - QUIT#############################################
+31/07/2012 15:37:53.24 - q  #############################################
+31/07/2012 15:37:53.26 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:37:53.29 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:37:57.59 - INIT#############################################
+           comment
+31/07/2012 15:37:57.62 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:37:57.64 -       finished   init to device [0]
+31/07/2012 15:37:57.65 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:37:57.67 -       finished   init to device [1]
+31/07/2012 15:38:00.39 - START#############################################
+           comment
+31/07/2012 15:38:00.42 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 15:38:00.44 -       finished  start to device [0]
+31/07/2012 15:38:00.48 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 15:38:00.49 -       finished  start to device [1]
+31/07/2012 15:38:00.50 - Func# 0 ON <Listen_test>
+31/07/2012 15:38:00.51 -    #ActiveThread :     #Starting client 0           
+31/07/2012 15:38:00.51 - Func# 1 ON < sendTXT>
+31/07/2012 15:38:00.52 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_153800; date; sleep 1; date; sleep 1; >
+31/07/2012 15:38:00.53 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:38:00.54 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:38:02.54 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:38:02.64 - Func# 0 OFF ... was found in off state... 2.014 sec.
+31/07/2012 15:38:03.38 - STOP#############################################
+31/07/2012 15:38:03.39 - 2.999 seconds length to this point 
+31/07/2012 15:38:03.40 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:38:03.42 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:38:03.42 -    finished  stop to device [0]
+31/07/2012 15:38:03.61 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; ; >
+31/07/2012 15:38:03.62 -       NOT SUCCESFULL !!!!!!!!!!!!!!
+31/07/2012 15:40:19.12 - QUIT#############################################
+31/07/2012 15:40:19.13 - q  #############################################
+31/07/2012 15:40:19.16 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:40:19.19 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:40:21.80 - INIT#############################################
+           comment
+31/07/2012 15:40:21.83 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:40:21.85 -       finished   init to device [0]
+31/07/2012 15:40:21.88 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:40:21.90 -       finished   init to device [1]
+31/07/2012 15:40:23.59 - START#############################################
+           comment
+31/07/2012 15:40:23.62 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 15:40:23.65 -       finished  start to device [0]
+31/07/2012 15:40:23.66 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 15:40:23.67 -       finished  start to device [1]
+31/07/2012 15:40:23.69 - Func# 0 ON <Listen_test>
+31/07/2012 15:40:23.70 - Func# 1 ON < sendTXT>
+31/07/2012 15:40:23.71 -    #ActiveThread :     #Starting client 0           
+31/07/2012 15:40:23.71 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:40:23.73 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:40:23.75 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_154023; date; sleep 1; date; sleep 1; >
+31/07/2012 15:40:25.77 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:40:25.83 - Func# 0 OFF ... was found in off state... 2.015 sec.
+31/07/2012 15:40:27.01 - STOP#############################################
+31/07/2012 15:40:27.02 - 3.942 seconds length to this point 
+31/07/2012 15:40:27.03 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:40:27.05 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:40:27.06 -    finished  stop to device [0]
+31/07/2012 15:40:27.26 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; ; >
+31/07/2012 15:40:27.27 -       NOT SUCCESFULL !!!!!!!!!!!!!!
+31/07/2012 15:42:48.45 - QUIT#############################################
+31/07/2012 15:42:48.46 - q  #############################################
+31/07/2012 15:42:48.49 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:42:48.52 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:42:51.31 - INIT#############################################
+           comment
+31/07/2012 15:42:51.34 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:42:51.37 -       finished   init to device [0]
+31/07/2012 15:42:51.39 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:42:51.40 -       finished   init to device [1]
+31/07/2012 15:42:54.04 - START#############################################
+           comment
+31/07/2012 15:42:54.06 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 15:42:54.09 -       finished  start to device [0]
+31/07/2012 15:42:54.10 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 15:42:54.11 -       finished  start to device [1]
+31/07/2012 15:42:54.13 - Func# 1 ON ... by AutoRetrig 
+31/07/2012 15:42:54.16 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:42:54.19 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:42:55.87 - STOP#############################################
+31/07/2012 15:42:55.89 - 1.083 seconds length to this point 
+31/07/2012 15:42:55.90 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:42:55.93 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:42:55.94 -    finished  stop to device [0]
+31/07/2012 15:42:56.03 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; ; >
+31/07/2012 15:42:56.04 -       NOT SUCCESFULL !!!!!!!!!!!!!!
+31/07/2012 15:44:21.71 - QUIT#############################################
+31/07/2012 15:44:21.72 - q  #############################################
+31/07/2012 15:44:21.76 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:44:21.78 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:44:25.16 - INIT#############################################
+           comment
+31/07/2012 15:44:25.19 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:44:25.21 -       finished   init to device [0]
+31/07/2012 15:44:25.24 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:44:25.25 -       finished   init to device [1]
+31/07/2012 15:44:27.02 - Func# 1 ON < sendTXT>
+31/07/2012 15:44:27.07 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:44:27.09 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:44:28.89 - STOP#############################################
+31/07/2012 15:44:28.90 - 3.073 seconds length to this point 
+31/07/2012 15:44:28.92 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:44:28.94 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:44:28.95 -    finished  stop to device [0]
+31/07/2012 15:44:29.07 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 25239 25241 25293; >
+31/07/2012 15:44:29.08 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:44:29.08 -    finished  stop to device [1]
+31/07/2012 15:44:29.09 - STOPPED##########################################
+31/07/2012 15:44:29.09 - 3.992 seconds length
+31/07/2012 15:44:29.11 - Func# 1 OFF ... was found in off state... 2.913 sec.
+31/07/2012 15:45:08.89 - START#############################################
+           comment
+31/07/2012 15:45:08.92 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 15:45:08.95 -       finished  start to device [0]
+31/07/2012 15:45:08.97 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 15:45:09.00 -       finished  start to device [1]
+31/07/2012 15:45:09.03 - Func# 1 ON ... by AutoRetrig 
+31/07/2012 15:45:09.05 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:45:09.07 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:45:15.25 - STOP#############################################
+31/07/2012 15:45:15.26 - 6.936 seconds length to this point 
+31/07/2012 15:45:15.28 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:45:15.31 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:45:15.33 -    finished  stop to device [0]
+31/07/2012 15:45:15.47 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 27181 27183 27463; >
+31/07/2012 15:45:15.48 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:45:15.48 -    finished  stop to device [1]
+31/07/2012 15:45:15.49 - STOPPED##########################################
+31/07/2012 15:45:15.49 - 6.959 seconds length
+31/07/2012 15:45:15.51 - Func# 1 OFF ... was found in off state... 6.048 sec.
+31/07/2012 15:45:22.44 - START#############################################
+           comment
+31/07/2012 15:45:22.47 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 15:45:22.49 -       finished  start to device [0]
+31/07/2012 15:45:22.52 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 15:45:22.54 -       finished  start to device [1]
+31/07/2012 15:45:22.57 - Func# 1 ON ... by AutoRetrig 
+31/07/2012 15:45:22.60 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:45:22.63 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:45:26.48 - STOP#############################################
+31/07/2012 15:45:26.50 - 4.004 seconds length to this point 
+31/07/2012 15:45:26.51 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:45:26.54 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:45:26.56 -    finished  stop to device [0]
+31/07/2012 15:45:26.70 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 27911 27913 28137; >
+31/07/2012 15:45:26.71 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:45:26.71 -    finished  stop to device [1]
+31/07/2012 15:45:26.72 - STOPPED##########################################
+31/07/2012 15:45:26.73 - 4.027 seconds length
+31/07/2012 15:45:26.74 - Func# 1 OFF ... was found in off state... 4.017 sec.
+31/07/2012 15:45:28.63 - INIT#############################################
+           comment
+31/07/2012 15:45:28.66 -    issuing   init to device [0]: < echo TEST: RUN==4 >
+31/07/2012 15:45:28.68 -       finished   init to device [0]
+31/07/2012 15:45:28.71 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:45:28.74 -       finished   init to device [1]
+31/07/2012 15:45:30.24 - START#############################################
+           comment
+31/07/2012 15:45:30.27 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 15:45:30.29 -       finished  start to device [0]
+31/07/2012 15:45:30.32 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 15:45:30.34 -       finished  start to device [1]
+31/07/2012 15:45:30.38 - Func# 1 ON ... by AutoRetrig 
+31/07/2012 15:45:30.43 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:45:30.45 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:45:33.77 - STOP#############################################
+31/07/2012 15:45:33.77 - 3.053 seconds length to this point 
+31/07/2012 15:45:33.78 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:45:33.79 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:45:33.80 -    finished  stop to device [0]
+31/07/2012 15:45:33.92 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 28406 28409 28550; >
+31/07/2012 15:45:33.93 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:45:33.93 -    finished  stop to device [1]
+31/07/2012 15:45:33.93 - STOPPED##########################################
+31/07/2012 15:45:33.94 - 3.069 seconds length
+31/07/2012 15:45:33.95 - Func# 1 OFF ... was found in off state... 3.059 sec.
+31/07/2012 15:45:50.52 - START#############################################
+           comment
+31/07/2012 15:45:50.55 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 15:45:50.57 -       finished  start to device [0]
+31/07/2012 15:45:50.60 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 15:45:50.61 -       finished  start to device [1]
+31/07/2012 15:45:50.62 - Func# 1 ON ... by AutoRetrig 
+31/07/2012 15:45:50.66 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:45:50.69 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:45:54.54 - STOP#############################################
+31/07/2012 15:45:54.56 - 4.002 seconds length to this point 
+31/07/2012 15:45:54.57 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:45:54.60 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:45:54.62 -    finished  stop to device [0]
+31/07/2012 15:45:54.77 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 29485 29487 29721; >
+31/07/2012 15:45:54.78 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:45:54.78 -    finished  stop to device [1]
+31/07/2012 15:45:54.79 - STOPPED##########################################
+31/07/2012 15:45:54.80 - 4.026 seconds length
+31/07/2012 15:45:54.81 - Func# 1 OFF ... was found in off state... 4.019 sec.
+31/07/2012 15:45:58.67 - Func# 1 ON < sendTXT>
+31/07/2012 15:45:58.70 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:45:58.72 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:46:02.05 -    #killing  grandchild  29945 and  29945 29947 30088 now
+31/07/2012 15:46:02.07 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:46:02.07 - Func# 1 OFF                              ... 3.944 sec.
+31/07/2012 15:46:06.63 - Func# 1 ON < sendTXT>
+31/07/2012 15:46:06.69 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:46:06.71 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:46:08.91 -    #killing  grandchild  30350 and  30350 30352 30447 now
+31/07/2012 15:46:08.93 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:46:08.93 - Func# 1 OFF                              ... 2.032 sec.
+31/07/2012 15:46:11.18 - INIT#############################################
+           comment
+31/07/2012 15:46:11.20 -    issuing   init to device [0]: < echo TEST: RUN==6 >
+31/07/2012 15:46:11.22 -       finished   init to device [0]
+31/07/2012 15:46:11.25 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:46:11.28 -       finished   init to device [1]
+31/07/2012 15:46:27.11 - START#############################################
+           comment
+31/07/2012 15:46:27.14 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 15:46:27.16 -       finished  start to device [0]
+31/07/2012 15:46:27.19 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 15:46:27.21 -       finished  start to device [1]
+31/07/2012 15:46:31.50 - STOP#############################################
+31/07/2012 15:46:31.52 - 4.039 seconds length to this point 
+31/07/2012 15:46:31.53 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:46:31.56 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:46:31.58 -    finished  stop to device [0]
+31/07/2012 15:46:31.68 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; ; >
+31/07/2012 15:46:31.69 -       NOT SUCCESFULL !!!!!!!!!!!!!!
+31/07/2012 15:47:52.65 - QUIT#############################################
+31/07/2012 15:47:52.66 - q  #############################################
+31/07/2012 15:47:52.69 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:47:52.73 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:48:26.50 - INIT#############################################
+           comment
+31/07/2012 15:48:26.53 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:48:26.55 -       finished   init to device [0]
+31/07/2012 15:48:26.56 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:48:26.58 -       finished   init to device [1]
+31/07/2012 15:48:40.81 - START#############################################
+           comment
+31/07/2012 15:48:40.84 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 15:48:40.87 -       finished  start to device [0]
+31/07/2012 15:48:40.90 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 15:48:40.91 -       finished  start to device [1]
+31/07/2012 15:48:40.93 - Func# 1 ON ... by AutoRetrig 
+31/07/2012 15:48:41.00 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:48:41.20 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:48:46.74 - STOP#############################################
+31/07/2012 15:48:46.76 - 5.993 seconds length to this point 
+31/07/2012 15:48:46.77 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:48:46.80 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:48:46.81 -    finished  stop to device [0]
+31/07/2012 15:48:46.94 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 3932 3935 4191; >
+31/07/2012 15:48:46.95 -    finished  stop to device [1]
+31/07/2012 15:48:46.95 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:48:46.96 - STOPPED##########################################
+31/07/2012 15:48:46.96 - 6.014 seconds length
+31/07/2012 15:48:46.98 - Func# 1 OFF ... was found in off state... 6.006 sec.
+31/07/2012 15:49:04.00 - STOP#############################################
+31/07/2012 15:49:04.02 - 23.919 seconds length to this point 
+31/07/2012 15:49:04.03 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:49:04.06 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:49:04.08 -    finished  stop to device [0]
+31/07/2012 15:49:04.16 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; >
+31/07/2012 15:49:04.17 -    finished  stop to device [1]
+31/07/2012 15:49:04.18 - STOPPED##########################################
+31/07/2012 15:49:04.19 - 23.936 seconds length
+31/07/2012 15:49:05.28 - START#############################################
+           comment
+31/07/2012 15:49:05.31 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 15:49:05.33 -       finished  start to device [0]
+31/07/2012 15:49:05.34 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 15:49:05.35 -       finished  start to device [1]
+31/07/2012 15:49:06.52 - STOP#############################################
+31/07/2012 15:49:06.53 - 1.024 seconds length to this point 
+31/07/2012 15:49:06.54 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:49:06.57 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:49:06.58 -    finished  stop to device [0]
+31/07/2012 15:49:06.67 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; >
+31/07/2012 15:49:06.68 -    finished  stop to device [1]
+31/07/2012 15:49:06.69 - STOPPED##########################################
+31/07/2012 15:49:06.69 - 1.040 seconds length
+31/07/2012 15:51:58.79 - QUIT#############################################
+31/07/2012 15:51:58.80 - q  #############################################
+31/07/2012 15:51:58.83 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:51:58.86 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:52:02.81 - QUIT#############################################
+31/07/2012 15:52:02.82 - q  #############################################
+31/07/2012 15:52:02.85 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:52:02.87 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:53:01.24 - QUIT#############################################
+31/07/2012 15:53:01.25 - q  #############################################
+31/07/2012 15:53:01.28 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:53:01.31 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:54:30.61 - QUIT#############################################
+31/07/2012 15:54:30.62 - q  #############################################
+31/07/2012 15:54:30.65 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:54:30.67 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:54:43.65 - QUIT#############################################
+31/07/2012 15:54:43.67 - q  #############################################
+31/07/2012 15:54:43.70 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:54:43.72 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:55:13.18 - QUIT#############################################
+31/07/2012 15:55:13.20 - q  #############################################
+31/07/2012 15:55:13.22 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:55:13.24 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:55:29.71 - QUIT#############################################
+31/07/2012 15:55:29.73 - q  #############################################
+31/07/2012 15:55:29.75 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:55:29.77 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:56:39.33 - QUIT#############################################
+31/07/2012 15:56:39.34 - q  #############################################
+31/07/2012 15:56:39.37 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:56:39.38 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:56:44.25 - INIT#############################################
+           comment
+31/07/2012 15:56:44.28 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 15:56:44.30 -       finished   init to device [0]
+31/07/2012 15:56:44.33 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 15:56:44.35 -       finished   init to device [1]
+31/07/2012 15:56:51.97 - START#############################################
+           comment
+31/07/2012 15:56:52.00 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 15:56:52.01 -       finished  start to device [0]
+31/07/2012 15:56:52.03 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 15:56:52.04 -       finished  start to device [1]
+31/07/2012 15:56:52.05 - Func# 0 ON <Listen_test>
+31/07/2012 15:56:52.07 - Func# 1 ON < sendTXT>
+31/07/2012 15:56:52.08 -    #ActiveThread :     #Starting client 0           
+31/07/2012 15:56:52.10 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_155652; date; sleep 1; date; sleep 1; >
+31/07/2012 15:56:52.17 -    #ActiveThread :     #Starting client 1           
+31/07/2012 15:56:52.20 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 15:56:54.12 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:56:54.20 - Func# 0 OFF ... was found in off state... 2.014 sec.
+31/07/2012 15:56:57.01 - STOP#############################################
+31/07/2012 15:56:57.02 - 5.904 seconds length to this point 
+31/07/2012 15:56:57.04 - waiting to finish kills, sleep 0 seconds
+31/07/2012 15:56:57.07 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 15:56:57.08 -    finished  stop to device [0]
+31/07/2012 15:56:57.20 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 21299 21301 21501; >
+31/07/2012 15:56:57.21 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 15:56:57.21 -    finished  stop to device [1]
+31/07/2012 15:56:57.21 - STOPPED##########################################
+31/07/2012 15:56:57.22 - 5.924 seconds length
+31/07/2012 15:56:57.23 - Func# 1 OFF ... was found in off state... 5.018 sec.
+31/07/2012 15:57:35.51 - QUIT#############################################
+31/07/2012 15:57:35.52 - q  #############################################
+31/07/2012 15:57:35.55 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:57:35.58 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:57:52.49 - QUIT#############################################
+31/07/2012 15:57:52.51 - q  #############################################
+31/07/2012 15:57:52.53 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:57:52.55 -    issuing   quit to device [1]: < cat text >
+31/07/2012 15:59:43.76 - QUIT#############################################
+31/07/2012 15:59:43.76 - q  #############################################
+31/07/2012 15:59:43.78 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 15:59:43.80 -    issuing   quit to device [1]: < cat text >
+31/07/2012 16:00:58.66 - QUIT#############################################
+31/07/2012 16:00:58.67 - q  #############################################
+31/07/2012 16:00:58.70 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 16:00:58.72 -    issuing   quit to device [1]: < cat text >
+31/07/2012 16:01:14.19 - INIT#############################################
+           comment
+31/07/2012 16:01:14.22 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 16:01:14.24 -       finished   init to device [0]
+31/07/2012 16:01:14.25 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 16:01:14.27 -       finished   init to device [1]
+31/07/2012 16:01:17.53 - START#############################################
+           comment
+31/07/2012 16:01:17.56 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 16:01:17.58 -       finished  start to device [0]
+31/07/2012 16:01:17.61 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 16:01:17.62 -       finished  start to device [1]
+31/07/2012 16:01:17.64 - Func# 0 ON <Listen_test>
+31/07/2012 16:01:17.65 - Func# 1 ON < sendTXT>
+31/07/2012 16:01:17.67 -    #ActiveThread :     #Starting client 0           
+31/07/2012 16:01:17.68 -    #ActiveThread :     #Starting client 1           
+31/07/2012 16:01:17.70 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_160117; date; sleep 1; date; sleep 1; >
+31/07/2012 16:01:17.70 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:01:19.71 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:01:19.77 - Func# 0 OFF ... was found in off state... 2.014 sec.
+31/07/2012 16:01:32.32 - STOP#############################################
+31/07/2012 16:01:32.33 - 14.979 seconds length to this point 
+31/07/2012 16:01:32.34 - waiting to finish kills, sleep 0 seconds
+31/07/2012 16:01:32.37 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 16:01:32.38 -    finished  stop to device [0]
+31/07/2012 16:01:32.51 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 31764 31766 32447; >
+31/07/2012 16:01:32.52 -    finished  stop to device [1]
+31/07/2012 16:01:32.52 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:01:32.53 - STOPPED##########################################
+31/07/2012 16:01:32.54 - 14.999 seconds length
+31/07/2012 16:01:32.55 - Func# 1 OFF ... was found in off state... 14.990 sec.
+31/07/2012 16:01:40.48 - START#############################################
+           comment
+31/07/2012 16:01:40.51 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 16:01:40.53 -       finished  start to device [0]
+31/07/2012 16:01:40.55 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 16:01:40.56 -       finished  start to device [1]
+31/07/2012 16:01:40.58 - Func# 0 ON <Listen_test>
+31/07/2012 16:01:40.59 - Func# 1 ON < sendTXT>
+31/07/2012 16:01:40.65 -    #ActiveThread :     #Starting client 1           
+31/07/2012 16:01:40.67 -    #ActiveThread :     #Starting client 0           
+31/07/2012 16:01:40.68 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:01:40.68 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_160140; date; sleep 1; date; sleep 1; >
+31/07/2012 16:01:42.70 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:01:42.72 - Func# 0 OFF ... was found in off state... 2.015 sec.
+31/07/2012 16:01:44.75 - STOP#############################################
+31/07/2012 16:01:44.76 - 4.027 seconds length to this point 
+31/07/2012 16:01:44.77 - waiting to finish kills, sleep 0 seconds
+31/07/2012 16:01:44.80 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 16:01:44.81 -    finished  stop to device [0]
+31/07/2012 16:01:44.93 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 499 502 715; >
+31/07/2012 16:01:44.94 -    finished  stop to device [1]
+31/07/2012 16:01:44.94 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:01:44.95 - STOPPED##########################################
+31/07/2012 16:01:44.96 - 4.046 seconds length
+31/07/2012 16:01:44.97 - Func# 1 OFF ... was found in off state... 4.038 sec.
+31/07/2012 16:01:50.63 - START#############################################
+           comment
+31/07/2012 16:01:50.65 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 16:01:50.68 -       finished  start to device [0]
+31/07/2012 16:01:50.71 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 16:01:50.73 -       finished  start to device [1]
+31/07/2012 16:01:50.76 - Func# 0 ON <Listen_test>
+31/07/2012 16:01:50.79 - Func# 1 ON < sendTXT>
+31/07/2012 16:01:50.83 -    #ActiveThread :     #Starting client 0           
+31/07/2012 16:01:50.86 -    #ActiveThread :     #Starting client 1           
+31/07/2012 16:01:50.86 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_160150; date; sleep 1; date; sleep 1; >
+31/07/2012 16:01:50.88 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:01:52.78 - STOP#############################################
+31/07/2012 16:01:52.79 - 2.015 seconds length to this point 
+31/07/2012 16:01:52.81 - waiting to finish kills, sleep 0 seconds
+31/07/2012 16:01:52.84 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 16:01:52.86 -    finished  stop to device [0]
+31/07/2012 16:01:52.88 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:01:53.99 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 1124 1126 1257; >
+31/07/2012 16:01:53.00 -    #ActiveThread :     #Starting client 0           
+31/07/2012 16:01:53.01 -    finished  stop to device [1]
+31/07/2012 16:01:53.01 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:01:53.01 - STOPPED##########################################
+31/07/2012 16:01:53.02 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_160153; date; sleep 1; date; sleep 1; >
+31/07/2012 16:01:53.02 - 2.938 seconds length
+31/07/2012 16:01:53.03 - Func# 0 OFF ... was found in off state... 2.930 sec.
+31/07/2012 16:01:53.04 - Func# 1 OFF ... was found in off state... 2.927 sec.
+31/07/2012 16:01:55.04 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:01:56.25 - START#############################################
+           comment
+31/07/2012 16:01:56.28 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 16:01:56.30 -       finished  start to device [0]
+31/07/2012 16:01:56.33 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 16:01:56.36 -       finished  start to device [1]
+31/07/2012 16:01:56.38 - Func# 0 ON <Listen_test>
+31/07/2012 16:01:56.42 - Func# 1 ON < sendTXT>
+31/07/2012 16:01:56.46 -    #ActiveThread :     #Starting client 0           
+31/07/2012 16:01:56.48 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_160156; date; sleep 1; date; sleep 1; >
+31/07/2012 16:01:56.52 -    #ActiveThread :     #Starting client 1           
+31/07/2012 16:01:56.55 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:01:58.49 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:01:58.56 - Func# 0 OFF ... was found in off state... 2.018 sec.
+31/07/2012 16:01:58.83 - STOP#############################################
+31/07/2012 16:01:58.84 - 2.058 seconds length to this point 
+31/07/2012 16:01:58.85 - waiting to finish kills, sleep 0 seconds
+31/07/2012 16:01:58.88 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 16:01:58.91 -    finished  stop to device [0]
+31/07/2012 16:01:59.05 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 1577 1580 1701; >
+31/07/2012 16:01:59.06 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:01:59.06 -    finished  stop to device [1]
+31/07/2012 16:01:59.06 - STOPPED##########################################
+31/07/2012 16:01:59.07 - 2.981 seconds length
+31/07/2012 16:01:59.08 - Func# 1 OFF ... was found in off state... 2.970 sec.
+31/07/2012 16:02:01.46 - START#############################################
+           comment
+31/07/2012 16:02:01.49 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 16:02:01.51 -       finished  start to device [0]
+31/07/2012 16:02:01.54 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 16:02:01.54 -       finished  start to device [1]
+31/07/2012 16:02:01.56 - Func# 0 ON <Listen_test>
+31/07/2012 16:02:01.58 - Func# 1 ON < sendTXT>
+31/07/2012 16:02:01.62 -    #ActiveThread :     #Starting client 0           
+31/07/2012 16:02:01.64 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_160201; date; sleep 1; date; sleep 1; >
+31/07/2012 16:02:01.67 -    #ActiveThread :     #Starting client 1           
+31/07/2012 16:02:01.70 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:02:02.67 - STOP#############################################
+31/07/2012 16:02:02.69 - 1.021 seconds length to this point 
+31/07/2012 16:02:02.70 - waiting to finish kills, sleep 0 seconds
+31/07/2012 16:02:02.73 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 16:02:02.76 -    finished  stop to device [0]
+31/07/2012 16:02:02.90 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 2047 2049 2108; >
+31/07/2012 16:02:02.91 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:02:02.91 -    finished  stop to device [1]
+31/07/2012 16:02:02.91 - STOPPED##########################################
+31/07/2012 16:02:02.92 - 1.045 seconds length
+31/07/2012 16:02:02.93 - Func# 1 OFF ... was found in off state... 1.037 sec.
+31/07/2012 16:02:03.68 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:02:03.74 - Func# 0 OFF ... was found in off state... 2.019 sec.
+31/07/2012 16:02:14.42 - QUIT#############################################
+31/07/2012 16:02:14.43 - q  #############################################
+31/07/2012 16:02:14.46 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 16:02:14.50 -    issuing   quit to device [1]: < cat text >
+31/07/2012 16:02:58.01 - INIT#############################################
+           comment
+31/07/2012 16:02:58.04 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 16:02:58.07 -       finished   init to device [0]
+31/07/2012 16:02:58.08 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 16:02:58.09 -       finished   init to device [1]
+31/07/2012 16:02:58.70 - START#############################################
+           comment
+31/07/2012 16:02:58.73 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 16:02:58.74 -       finished  start to device [0]
+31/07/2012 16:02:58.76 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 16:02:58.77 -       finished  start to device [1]
+31/07/2012 16:02:58.78 - Func# 0 ON <Listen_test>
+31/07/2012 16:02:58.80 - Func# 1 ON < sendTXT>
+31/07/2012 16:02:58.83 -    #ActiveThread :     #Starting client 0           
+31/07/2012 16:02:58.84 -    #ActiveThread :     #Starting client 1           
+31/07/2012 16:02:58.86 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_160258; date; sleep 1; date; sleep 1; >
+31/07/2012 16:02:58.86 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:03:00.88 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:03:00.93 - Func# 0 OFF ... was found in off state... 2.014 sec.
+31/07/2012 16:03:03.88 - STOP#############################################
+31/07/2012 16:03:03.89 - 5.018 seconds length to this point 
+31/07/2012 16:03:03.90 - waiting to finish kills, sleep 0 seconds
+31/07/2012 16:03:03.92 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 16:03:03.93 -    finished  stop to device [0]
+31/07/2012 16:03:04.06 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 3244 3246 3509; >
+31/07/2012 16:03:04.07 -    finished  stop to device [1]
+31/07/2012 16:03:04.07 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:03:04.08 - STOPPED##########################################
+31/07/2012 16:03:04.09 - 5.937 seconds length
+31/07/2012 16:03:04.10 - Func# 1 OFF ... was found in off state... 5.931 sec.
+31/07/2012 16:03:05.88 - START#############################################
+           comment
+31/07/2012 16:03:05.91 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 16:03:05.93 -       finished  start to device [0]
+31/07/2012 16:03:05.96 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 16:03:05.97 -       finished  start to device [1]
+31/07/2012 16:03:05.98 - Func# 0 ON <Listen_test>
+31/07/2012 16:03:06.00 - Func# 1 ON < sendTXT>
+31/07/2012 16:03:06.00 -    #ActiveThread :     #Starting client 0           
+31/07/2012 16:03:06.02 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_160306; date; sleep 1; date; sleep 1; >
+31/07/2012 16:03:06.09 -    #ActiveThread :     #Starting client 1           
+31/07/2012 16:03:06.11 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:03:07.07 - STOP#############################################
+31/07/2012 16:03:07.08 - 1.919 seconds length to this point 
+31/07/2012 16:03:07.10 - waiting to finish kills, sleep 0 seconds
+31/07/2012 16:03:07.11 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 16:03:07.12 -    finished  stop to device [0]
+31/07/2012 16:03:07.24 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 3740 3742 3826; >
+31/07/2012 16:03:07.25 -    finished  stop to device [1]
+31/07/2012 16:03:07.25 - STOPPED##########################################
+31/07/2012 16:03:07.25 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:03:07.26 - 1.937 seconds length
+31/07/2012 16:03:07.27 - Func# 1 OFF ... was found in off state... 1.929 sec.
+31/07/2012 16:03:08.04 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:03:08.09 - Func# 0 OFF ... was found in off state... 2.910 sec.
+31/07/2012 16:03:09.26 - START#############################################
+           comment
+31/07/2012 16:03:09.29 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 16:03:09.31 -       finished  start to device [0]
+31/07/2012 16:03:09.33 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 16:03:09.35 -       finished  start to device [1]
+31/07/2012 16:03:09.36 - Func# 0 ON <Listen_test>
+31/07/2012 16:03:09.38 - Func# 1 ON < sendTXT>
+31/07/2012 16:03:09.46 -    #ActiveThread :     #Starting client 0           
+31/07/2012 16:03:09.47 -    #ActiveThread :     #Starting client 1           
+31/07/2012 16:03:09.49 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_160309; date; sleep 1; date; sleep 1; >
+31/07/2012 16:03:09.49 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:03:10.38 - STOP#############################################
+31/07/2012 16:03:10.39 - 1.012 seconds length to this point 
+31/07/2012 16:03:10.41 - waiting to finish kills, sleep 0 seconds
+31/07/2012 16:03:10.43 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 16:03:10.44 -    finished  stop to device [0]
+31/07/2012 16:03:10.57 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 4059 4061 4155; >
+31/07/2012 16:03:10.58 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:03:10.58 -    finished  stop to device [1]
+31/07/2012 16:03:10.58 - STOPPED##########################################
+31/07/2012 16:03:10.59 - 1.032 seconds length
+31/07/2012 16:03:10.60 - Func# 1 OFF ... was found in off state... 1.023 sec.
+31/07/2012 16:03:11.51 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:03:11.61 - Func# 0 OFF ... was found in off state... 2.025 sec.
+31/07/2012 16:03:12.39 - QUIT#############################################
+31/07/2012 16:03:12.40 - q  #############################################
+31/07/2012 16:03:12.43 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 16:03:12.45 -    issuing   quit to device [1]: < cat text >
+31/07/2012 16:08:16.81 - INIT#############################################
+           comment
+31/07/2012 16:08:16.84 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 16:08:16.86 -       finished   init to device [0]
+31/07/2012 16:08:16.90 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 16:08:16.91 -       finished   init to device [1]
+31/07/2012 16:08:18.63 - START#############################################
+           comment
+31/07/2012 16:08:18.66 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 16:08:18.68 -       finished  start to device [0]
+31/07/2012 16:08:18.71 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 16:08:18.72 -       finished  start to device [1]
+31/07/2012 16:08:18.74 - Func# 0 ON <Listen_test>
+31/07/2012 16:08:18.75 - Func# 1 ON < sendTXT>
+31/07/2012 16:08:18.79 -    #ActiveThread :     #Starting client 0           
+31/07/2012 16:08:18.80 -    #ActiveThread :     #Starting client 1           
+31/07/2012 16:08:18.83 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_160818; date; sleep 1; date; sleep 1; >
+31/07/2012 16:08:18.83 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:08:19.79 - STOP#############################################
+31/07/2012 16:08:19.79 - 1.016 seconds length to this point 
+31/07/2012 16:08:19.80 - waiting to finish kills, sleep 0 seconds
+31/07/2012 16:08:19.81 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 16:08:19.82 -    finished  stop to device [0]
+31/07/2012 16:08:19.94 -    #sending info on kill             6330 6333 6427
+31/07/2012 16:08:19.96 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 6330 6333 6427; >
+31/07/2012 16:08:19.97 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:08:19.97 -    finished  stop to device [1]
+31/07/2012 16:08:19.98 - STOPPED##########################################
+31/07/2012 16:08:19.98 - 1.034 seconds length
+31/07/2012 16:08:20.99 - Func# 1 OFF ... was found in off state... 1.025 sec.
+31/07/2012 16:08:20.84 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:08:20.91 - Func# 0 OFF ... was found in off state... 2.017 sec.
+31/07/2012 16:08:32.60 - Func# 1 ON < sendTXT>
+31/07/2012 16:08:32.71 -    #ActiveThread :     #Starting client 1           
+31/07/2012 16:08:32.74 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:08:33.78 -    #killing  grandchild  7053 and  7053 7055 7113 now
+31/07/2012 16:08:33.80 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:08:33.80 - Func# 1 OFF                              ... 1.026 sec.
+31/07/2012 16:08:52.76 - Func# 0 ON <Listen_test>
+31/07/2012 16:08:52.80 - Func# 1 ON < sendTXT>
+31/07/2012 16:08:52.82 -    #ActiveThread :     #Starting client 0           
+31/07/2012 16:08:52.83 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_160852; date; sleep 1; date; sleep 1; >
+31/07/2012 16:08:52.85 -    #ActiveThread :     #Starting client 1           
+31/07/2012 16:08:52.86 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:08:54.85 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:08:54.93 - Func# 0 OFF ... was found in off state... 2.022 sec.
+31/07/2012 16:09:01.16 -    #killing  grandchild  8001 and  8001 8003 8389 now
+31/07/2012 16:09:01.18 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:09:01.18 - Func# 1 OFF                              ... 8.940 sec.
+31/07/2012 16:09:03.28 - Func# 0 ON <Listen_test>
+31/07/2012 16:09:03.32 - Func# 1 ON < sendTXT>
+31/07/2012 16:09:03.38 -    #ActiveThread :     #Starting client 0           
+31/07/2012 16:09:03.39 -    #ActiveThread :     #Starting client 1           
+31/07/2012 16:09:03.40 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_160903; date; sleep 1; date; sleep 1; >
+31/07/2012 16:09:03.41 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:09:04.51 -    #killing  grandchild  8568 and  8568 8570 8632 now
+31/07/2012 16:09:04.54 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:09:04.54 - Func# 0 OFF                              ... 1.031 sec.
+31/07/2012 16:09:04.64 -    #ActiveThread :     #Starting client 0           
+31/07/2012 16:09:04.66 -    #killing  grandchild  8577 and  8577 8579 8635 now
+31/07/2012 16:09:04.66 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_160904; date; sleep 1; date; sleep 1; >
+31/07/2012 16:09:04.68 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:09:04.68 - Func# 1 OFF                              ... 1.038 sec.
+31/07/2012 16:09:06.68 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:09:19.06 - Func# 0 ON <Listen_test>
+31/07/2012 16:09:19.10 - Func# 1 ON < sendTXT>
+31/07/2012 16:09:19.12 -    #ActiveThread :     #Starting client 0           
+31/07/2012 16:09:19.12 -    #ActiveThread :     #Starting client 1           
+31/07/2012 16:09:19.13 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_160919; date; sleep 1; date; sleep 1; >
+31/07/2012 16:09:19.15 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:09:21.16 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:09:21.25 - Func# 0 OFF ... was found in off state... 2.020 sec.
+31/07/2012 16:09:22.40 - Func# 0 ON <Listen_test>
+31/07/2012 16:09:22.48 -    #ActiveThread :     #Starting client 0           
+31/07/2012 16:09:22.50 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_160922; date; sleep 1; date; sleep 1; >
+31/07/2012 16:09:22.52 -    #killing  grandchild  9402 and  9402 9404 9566 now
+31/07/2012 16:09:22.54 - Func# 1 OFF                              ... 3.046 sec.
+31/07/2012 16:09:22.54 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:09:22.66 -    #ActiveThread :     #Starting client 1           
+31/07/2012 16:09:22.68 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:09:24.52 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:09:24.57 - Func# 0 OFF ... was found in off state... 2.021 sec.
+31/07/2012 16:09:42.49 - Func# 1 ON < sendTXT>
+31/07/2012 16:09:44.68 - Func# 0 ON <Listen_test>
+31/07/2012 16:09:44.77 -    #ActiveThread :     #Starting client 0           
+31/07/2012 16:09:44.79 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_160944; date; sleep 1; date; sleep 1; >
+31/07/2012 16:09:44.81 -    #killing  grandchild  9656 and  9656 9658 10730 now
+31/07/2012 16:09:44.83 - Func# 1 OFF                              ... 2.040 sec.
+31/07/2012 16:09:44.83 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:09:46.81 -    #Stopping client  #leaving ActiveThread # ...
+31/07/2012 16:09:46.86 - Func# 0 OFF ... was found in off state... 2.023 sec.
+31/07/2012 16:11:49.71 - QUIT#############################################
+31/07/2012 16:11:49.72 - q  #############################################
+31/07/2012 16:11:49.75 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 16:11:49.77 -    issuing   quit to device [1]: < cat text >
+31/07/2012 16:12:00.07 - Func# 1 ON < sendTXT>
+31/07/2012 16:12:00.13 -    #ActiveThread :     #Starting client [1]           
+31/07/2012 16:12:00.16 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:12:01.76 - Func# 0 ON <Listen_test>
+31/07/2012 16:12:01.84 -    #ActiveThread :     #Starting client [0]           
+31/07/2012 16:12:01.86 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_161201; date; sleep 1; date; sleep 1; >
+31/07/2012 16:12:01.88 -    #killing  grandchild  16769 and  16769 16771 16823 now
+31/07/2012 16:12:01.90 -    #Stopping client [1] #leaving ActiveThread # ...
+31/07/2012 16:12:01.90 - Func# 1 OFF                              ... 1.084 sec.
+31/07/2012 16:12:03.88 -    #Stopping client [0] #leaving ActiveThread # ...
+31/07/2012 16:12:03.93 - Func# 0 OFF ... was found in off state... 2.017 sec.
+31/07/2012 16:13:49.86 - QUIT#############################################
+31/07/2012 16:13:49.87 - q  #############################################
+31/07/2012 16:13:49.91 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 16:13:49.93 -    issuing   quit to device [1]: < cat text >
+31/07/2012 16:13:53.65 - Func# 1 ON < sendTXT>
+31/07/2012 16:13:53.72 -    #ActiveThread :     #Starting client [1]           
+31/07/2012 16:13:53.75 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:13:55.12 - Func# 0 ON <Listen_test>
+31/07/2012 16:13:55.22 -    #ActiveThread :     #Starting client [0]           
+31/07/2012 16:13:55.27 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_161355; date; sleep 1; date; sleep 1; >
+31/07/2012 16:13:55.27 -    #killing [1]  grandchild  21914 and  21914 21916 21965 now
+31/07/2012 16:13:55.29 -    #Stopping client [1] #leaving ActiveThread # ...
+31/07/2012 16:13:55.29 - Func# 1 OFF                              ... 1.966 sec.
+31/07/2012 16:13:57.28 -    #Stopping client [0] #leaving ActiveThread # ...
+31/07/2012 16:13:57.32 - Func# 0 OFF ... was found in off state... 2.028 sec.
+31/07/2012 16:16:16.22 - QUIT#############################################
+31/07/2012 16:16:16.23 - q  #############################################
+31/07/2012 16:16:16.25 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 16:16:16.27 -    issuing   quit to device [1]: < cat text >
+31/07/2012 16:16:19.95 - S.Func# 1 ON < sendTXT>
+31/07/2012 16:16:20.01 -    #ActiveThread :     #Starting client [1]           
+31/07/2012 16:16:20.04 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:16:20.78 - S.Func# 0 ON <Listen_test>
+31/07/2012 16:16:20.81 -    #ActiveThread :     #Starting client [0]           
+31/07/2012 16:16:20.84 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_161620; date; sleep 1; date; sleep 1; >
+31/07/2012 16:16:20.92 -    #killing [1]  grandchild  28472 and  28472 28474 28477 now
+31/07/2012 16:16:20.94 -    #Stopping client [1] #leaving ActiveThread # ...
+31/07/2012 16:16:20.94 - S.Func# 1 OFF                              ... 1.002 sec.
+31/07/2012 16:16:22.31 - STOP#############################################
+31/07/2012 16:16:22.32 - 1343744182.031 seconds length to this point 
+31/07/2012 16:16:22.33 - waiting to finish kills, sleep 0 seconds
+31/07/2012 16:16:22.36 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 16:16:22.37 -    finished  stop to device [0]
+31/07/2012 16:16:22.47 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; >
+31/07/2012 16:16:22.48 -    finished  stop to device [1]
+31/07/2012 16:16:22.49 - STOPPED##########################################
+31/07/2012 16:16:22.49 - 1343744182.048 seconds length
+31/07/2012 16:16:22.86 -    #Stopping client [0] #leaving ActiveThread # ...
+31/07/2012 16:16:22.92 - S.Func# [0] OFF ... was found in OFF state... 2.020 sec.
+31/07/2012 16:18:16.64 - QUIT#############################################
+31/07/2012 16:18:16.66 - q  #############################################
+31/07/2012 16:18:16.69 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 16:18:16.71 -    issuing   quit to device [1]: < cat text >
+31/07/2012 16:18:21.24 - INIT#############################################
+           comment
+31/07/2012 16:18:21.27 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 16:18:21.29 -       finished   init to device [0]
+31/07/2012 16:18:21.30 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 16:18:21.31 -       finished   init to device [1]
+31/07/2012 16:18:22.17 - S.Func# 1 ON < sendTXT>
+31/07/2012 16:18:22.24 -    #ActiveThread :     #Starting client [1]           
+31/07/2012 16:18:22.28 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:18:23.02 - S.Func# 0 ON <Listen_test>
+31/07/2012 16:18:23.04 -    #ActiveThread :     #Starting client [0]           
+31/07/2012 16:18:23.07 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_161823; date; sleep 1; date; sleep 1; >
+31/07/2012 16:18:23.16 -    #killing [1]  grandchild  1690 and  1690 1694 1697 now
+31/07/2012 16:18:23.18 -    #Stopping client [1] #leaving ActiveThread # ...
+31/07/2012 16:18:23.18 - S.Func# 1 OFF                              ... 1.004 sec.
+31/07/2012 16:18:23.98 - STOP#############################################
+31/07/2012 16:18:24.99 - 2.074 seconds length to this point 
+31/07/2012 16:18:24.01 - waiting to finish kills, sleep 0 seconds
+31/07/2012 16:18:24.02 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 16:18:24.03 -    finished  stop to device [0]
+31/07/2012 16:18:24.13 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; >
+31/07/2012 16:18:24.14 -    finished  stop to device [1]
+31/07/2012 16:18:24.15 - STOPPED##########################################
+31/07/2012 16:18:24.15 - 2.990 seconds length
+31/07/2012 16:18:25.09 -    #Stopping client [0] #leaving ActiveThread # ...
+31/07/2012 16:18:25.18 - S.Func# [0] OFF ... was found in OFF state... 2.924 sec.
+31/07/2012 16:18:36.48 - STOP#############################################
+31/07/2012 16:18:36.50 - 15.024 seconds length to this point 
+31/07/2012 16:18:36.51 - waiting to finish kills, sleep 0 seconds
+31/07/2012 16:18:36.54 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 16:18:36.55 -    finished  stop to device [0]
+31/07/2012 16:18:36.64 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; >
+31/07/2012 16:18:36.65 -    finished  stop to device [1]
+31/07/2012 16:18:36.65 - STOPPED##########################################
+31/07/2012 16:18:36.66 - 15.041 seconds length
+31/07/2012 16:18:44.69 - STOP#############################################
+31/07/2012 16:18:44.70 - 23.045 seconds length to this point 
+31/07/2012 16:18:44.71 - waiting to finish kills, sleep 0 seconds
+31/07/2012 16:18:44.75 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 16:18:44.76 -    finished  stop to device [0]
+31/07/2012 16:18:44.85 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; >
+31/07/2012 16:18:44.86 -    finished  stop to device [1]
+31/07/2012 16:18:44.87 - STOPPED##########################################
+31/07/2012 16:18:44.87 - 23.062 seconds length
+31/07/2012 16:18:49.71 - QUIT#############################################
+31/07/2012 16:18:49.72 - q  #############################################
+31/07/2012 16:18:49.76 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 16:18:49.77 -    issuing   quit to device [1]: < cat text >
+31/07/2012 16:18:52.00 - STOP#############################################
+31/07/2012 16:18:52.02 - 1343744332.000 seconds length to this point BUT NO START pressed 
+31/07/2012 16:18:52.03 - waiting to finish kills, sleep 0 seconds
+31/07/2012 16:18:52.05 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 16:18:52.06 -    finished  stop to device [0]
+31/07/2012 16:18:52.16 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; >
+31/07/2012 16:18:52.17 -    finished  stop to device [1]
+31/07/2012 16:18:52.18 - STOPPED##########################################
+31/07/2012 16:18:52.18 - 1343744332.017 seconds length
+31/07/2012 16:19:36.26 - QUIT#############################################
+31/07/2012 16:19:36.28 - q  #############################################
+31/07/2012 16:19:36.31 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 16:19:36.32 -    issuing   quit to device [1]: < cat text >
+31/07/2012 16:19:38.45 - STOP#############################################
+31/07/2012 16:19:38.47 - 1343744378.045 seconds length to this point BUT NO START pressed 
+31/07/2012 16:19:38.48 - waiting to finish kills, sleep 0 seconds
+31/07/2012 16:19:38.52 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 16:19:38.53 -    finished  stop to device [0]
+31/07/2012 16:19:38.62 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; >
+31/07/2012 16:19:38.63 -    finished  stop to device [1]
+31/07/2012 16:19:38.64 - STOPPED##########################################
+31/07/2012 16:19:38.64 - 1343744378.063 seconds length BUT NO START pressed 
+31/07/2012 16:19:44.71 - START#############################################
+           comment
+31/07/2012 16:19:44.74 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 16:19:44.77 -       finished  start to device [0]
+31/07/2012 16:19:44.78 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 16:19:44.80 -       finished  start to device [1]
+31/07/2012 16:19:44.81 - S.Func# 0 ON <Listen_test>
+31/07/2012 16:19:44.82 -    #ActiveThread :     #Starting client [0]           
+31/07/2012 16:19:44.83 - S.Func# 1 ON < sendTXT>
+31/07/2012 16:19:44.84 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_161944; date; sleep 1; date; sleep 1; >
+31/07/2012 16:19:44.92 -    #ActiveThread :     #Starting client [1]           
+31/07/2012 16:19:44.96 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:19:46.86 -    #Stopping client [0] #leaving ActiveThread # ...
+31/07/2012 16:19:46.96 - S.Func# [0] OFF ... was found in OFF state... 2.014 sec.
+31/07/2012 16:19:46.98 -    #ActiveThread :     #Starting client [0]           
+31/07/2012 16:19:47.00 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_161946; date; sleep 1; date; sleep 1; >
+31/07/2012 16:19:47.03 - STOP#############################################
+31/07/2012 16:19:47.05 - 2.932 seconds length to this point 
+31/07/2012 16:19:47.05 - waiting to finish kills, sleep 0 seconds
+31/07/2012 16:19:47.07 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 16:19:47.08 -    finished  stop to device [0]
+31/07/2012 16:19:47.19 -    #sending info [1] on kill              5947 5949 6056
+31/07/2012 16:19:47.20 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 5947 5949 6056; >
+31/07/2012 16:19:47.21 -    #Stopping client [1] #leaving ActiveThread # ...
+31/07/2012 16:19:47.21 -    finished  stop to device [1]
+31/07/2012 16:19:47.21 - STOPPED##########################################
+31/07/2012 16:19:47.22 - 2.950 seconds length  
+31/07/2012 16:19:47.23 - S.Func# [1] OFF ... was found in OFF state... 2.942 sec.
+31/07/2012 16:19:49.02 -    #Stopping client [0] #leaving ActiveThread # ...
+31/07/2012 16:19:52.90 - QUIT#############################################
+31/07/2012 16:19:52.92 - q  #############################################
+31/07/2012 16:19:52.95 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 16:19:52.97 -    issuing   quit to device [1]: < cat text >
+31/07/2012 16:19:57.77 - INIT#############################################
+           comment
+31/07/2012 16:19:57.78 -    issuing   init to device [0]: < echo TEST: RUN==1 >
+31/07/2012 16:19:57.79 -       finished   init to device [0]
+31/07/2012 16:19:57.80 -    issuing   init to device [1]: < touch text; rm text >
+31/07/2012 16:19:57.82 -       finished   init to device [1]
+31/07/2012 16:19:58.26 - START#############################################
+           comment
+31/07/2012 16:19:58.28 -    issuing  start to device [0]: < echo TEST START >
+31/07/2012 16:19:58.30 -       finished  start to device [0]
+31/07/2012 16:19:58.31 -    issuing  start to device [1]: < echo START....to generate u must do listen >
+31/07/2012 16:19:58.33 -       finished  start to device [1]
+31/07/2012 16:19:58.34 - S.Func# 0 ON <Listen_test>
+31/07/2012 16:19:58.35 - S.Func# 1 ON < sendTXT>
+31/07/2012 16:19:58.44 -    #ActiveThread :     #Starting client [1]           
+31/07/2012 16:19:58.44 -    #ActiveThread :     #Starting client [0]           
+31/07/2012 16:19:58.46 -    issuing  start to device [0]: < echo TEST 1 PC0_20120731_161958; date; sleep 1; date; sleep 1; >
+31/07/2012 16:19:58.47 -    issuing  start to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done >
+31/07/2012 16:19:59.28 - STOP#############################################
+31/07/2012 16:19:59.29 - 1.002 seconds length to this point 
+31/07/2012 16:19:59.30 - waiting to finish kills, sleep 0 seconds
+31/07/2012 16:19:59.32 -    issuing   stop to device [0]: < echo TEST STOP >
+31/07/2012 16:19:59.33 -    finished  stop to device [0]
+31/07/2012 16:19:59.45 -    #sending info [1] on kill              6683 6685 6688
+31/07/2012 16:19:59.46 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; kill 6683 6685 6688; >
+31/07/2012 16:19:59.48 -    #Stopping client [1] #leaving ActiveThread # ...
+31/07/2012 16:19:59.48 -    finished  stop to device [1]
+31/07/2012 16:19:59.48 - STOPPED##########################################
+31/07/2012 16:19:59.49 - 1.022 seconds length  
+31/07/2012 16:19:59.50 - S.Func# [1] OFF ... was found in OFF state... 1.015 sec.
+31/07/2012 16:20:00.48 -    #Stopping client [0] #leaving ActiveThread # ...
+31/07/2012 16:20:00.51 - S.Func# [0] OFF ... was found in OFF state... 2.017 sec.
+31/07/2012 16:20:31.09 - QUIT#############################################
+31/07/2012 16:20:31.11 - q  #############################################
+31/07/2012 16:20:31.14 -    issuing   quit to device [0]: < echo TEST QUITS >
+31/07/2012 16:20:31.16 -    issuing   quit to device [1]: < cat text >
