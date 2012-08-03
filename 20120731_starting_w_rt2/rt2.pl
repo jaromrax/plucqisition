@@ -62,6 +62,7 @@ my @chk_cam=qw( 0 0 0 0 0 );# maincheckbox !!! Operate the following crates (yes
 my @chk_cam_runs=qw( 0 0 0 0 0 );# started--box !!! info about started (yes/no)
 my @chk_cam_rt=qw( 0 0 0 0 0 );#  checkbox !!! this is chkbox: retrig option on/off
 my $autolisten=1;
+my $autolisten_stop=1;
 
 my @filepid10_onoff=qw(0 0 0 0 0); # listen state (in file 0 or 1 )
 
@@ -90,6 +91,7 @@ my $STOPCMD ="_STOP";
 #######################  cHILren ----###########
 my $maxpids=5;  # 5== camac4 is last
 my @pid_fname01;     #filename with flag  0/1 to activate child
+my $pid_fnameM;     #filename to communicate with Master
 my @chk_pidbox;      #initialy - which camac active
 my @start_listen;    # set to 1 to initiate childs
 my @listenpid;       #--------------these .. all childrens pids
@@ -110,18 +112,26 @@ sub get_xml_data{
   my $parser = XML::LibXML->new();
   my $doc    = $parser->parse_file($filename);
   my $NT=$doc->findvalue('/prescription/threads');
-  my $AL=$doc->findvalue('/prescription/autostart');
+  my $AL=$doc->findvalue('/prescription/SFautostart');
+  my $AQ=$doc->findvalue('/prescription/SFautostop');
   my $DT=$doc->findvalue('/prescription/default_t');
+  my $ST=$doc->findvalue('/prescription/status_text');
+  my $SS=$doc->findvalue('/prescription/status_text_size');
 #  print "NUMBER IS $NT / $AL\n\n";
   if ($what eq "threads"){ return $NT;}
-  if ($what eq "autostart"){ return $AL;}
+  if ($what eq "SFautostart"){ return $AL;}
+  if ($what eq "SFautostop"){ return $AQ;}
   if ($what eq "default_t"){ return $DT;}
+
+  if ($what eq "status_text"){ return $ST;}
+  if ($what eq "status_text_size"){ return $SS;}
 
 foreach my $thread ($doc->findnodes('/prescription/thread') ){
 
     my $num=$thread->findvalue('./number');
     my $nam=$thread->findvalue('./name');
     my $namel=$thread->findvalue('./namel');
+    my $sf_retrig=$thread->findvalue('./spec_function_retrig');
 
 
 # ---------------commands ---------------------
@@ -135,13 +145,65 @@ foreach my $thread ($doc->findnodes('/prescription/thread') ){
 	my $cmd=""; # clear it
 	if ($what eq "name"){  return $nam;}	
 	if ($what eq "namel"){  return $namel;}
+	if ($what eq "spec_function_retrig"){  return $sf_retrig;}
 
 	if ($what eq "init")  { $cmd=$thread->findvalue('./init');}
 	if ($what eq "start") { $cmd=$thread->findvalue('./start');}
 	if ($what eq "stop")  { $cmd=$thread->findvalue('./stop');}
-	if ($what eq "listen"){ $cmd=$thread->findvalue('./listen');}
+	if ($what eq "spec_function"){ $cmd=$thread->findvalue('./spec_function');}
 	if ($what eq "quit")  { $cmd=$thread->findvalue('./quit');}
 	if ( $tra eq "translate" ){
+	    $cmd.=";"; # better to add ; to be prepared to conditions like .+;
+
+	    $cmd=~s/\$runnumber/$runnumber/ge;  # internal translation
+#	    my $rrr="$PCfname[$nn]$online_ext";
+	    my $rrr="$PCfname[$nn]$numberY";    #                     
+	    $cmd=~s/\$outfile/$rrr/ge;          # internal translation
+	    $cmd=~s/\$pidM/$pid_fnameM/ge;            # internal translation
+
+
+
+
+	    $rrr="";###### special command for stop.
+	    if ($cmd=~/\$killgrandchildren/){#############################
+		print "XML:$cmd\n";
+		if ($chk_cam[$nn]==1){
+		print "XML/$nn:$cmd \n";
+	    $rrr.=&KILLpid( $nn, "text" ); # only text-out: space delimited 'kill'
+#NONONO	    `echo 0 > $pid_fname01[$i]`; # after this death I clear all 9999
+	    $rrr.=";";
+	    print "...replacing \$killgrandchildren to $rrr\n";
+	    $cmd=~s/\$killgrandchildren/$rrr/ge;
+		}# if ready to run
+		else{
+	    $cmd=~s/\$killgrandchildren//ge;
+		}
+	    }#contains kill directive######################################
+
+
+
+
+	    ##### active command can go from start/stop/quit only
+	    $rrr=0;my $rr1;
+	    if ($cmd=~/\$setstatustext/){#############################
+		print "XML:$cmd\n";
+		if ($chk_cam[$nn]==1){
+		($rr1,$rrr)=( $cmd=~/\$setstatustext(\ +?)(.+)\n/ );
+		$rrr=~s/;\s*$//;
+		print "XML/$nn:$cmd\nLABEL FOUND=<$rrr>\n";
+		if ($labelT2!=NULL){##when run from 'spec_function' this doesnot exist.
+		$labelT2->configure( -text => $rrr  );
+		}else{
+		    `echo \`date\` $rrr >> QQQQQQQQQQQ`;
+		}
+	    $cmd=~s/\$setstatustext(\ +?)(.+)\n//ge;
+		}# if ready to run
+		else{
+	    $cmd=~s/\$setstatustext(\ +?)(.+)\n//ge;  #remove upto ;
+		}
+	    }#contains text directive######################################
+
+
 	    # I remove all cummulated spaces, may result in tragedy...?
 	    $cmd=~s/\n/ /g;
 	    $cmd=~s/\t/ /g;
@@ -150,30 +212,10 @@ foreach my $thread ($doc->findnodes('/prescription/thread') ){
 	    $cmd=~s/   / /g;
 	    $cmd=~s/  / /g;
 
-	    $cmd=~s/\$runnumber/$runnumber/ge;
-#	    my $rrr="$PCfname[$nn]$online_ext";
-	    my $rrr="$PCfname[$nn]$numberY";
-	    $cmd=~s/\$outfile/$rrr/ge;
-	    $rrr="";
-
-	    if ($cmd=~/\$killgrandchildren/){
-		print "XML:$cmd\n";
-		if ($chk_cam[$nn]==1){
-		print "XML/$nn:$cmd \n";
-	    $rrr.=&KILLpid( $nn, "text" ); # olny text out space delimited
-	    $rrr.=";";
-	    print "...replacing \$killgrandchildren to $rrr\n";
-	    $cmd=~s/\$killgrandchildren/$rrr/ge;
-		}# if ready to run
-		else{
-	    $cmd=~s/\$killgrandchildren//ge;
-		}
-	    }#contains kill directive
-
 	    # when ; ; seen - it makes an error (unexisting kill replace....)
-	    $cmd=~s/;\s+;/;/g;
-	    $cmd=~s/;\s+;/;/g;
-	    $cmd=~s/;\s+;/;/g;
+	    $cmd=~s/;\s*;/;/g;$cmd=~s/;\s*;/;/g;$cmd=~s/;\s*;/;/g;
+	    $cmd=~s/;\s*;/;/g;$cmd=~s/;\s*;/;/g;$cmd=~s/;\s*;/;/g;
+	    $cmd=~s/;\s*;/;/g;$cmd=~s/;\s*;/;/g;$cmd=~s/;\s*;/;/g;
 
 
 	}
@@ -186,7 +228,8 @@ foreach my $thread ($doc->findnodes('/prescription/thread') ){
 #&get_xml_data(1,"name");
 $maxpids2=&get_xml_data(0,"threads");
 if ($maxpids2<=$maxpids){ $maxpids=$maxpids2;}
-$autolisten=&get_xml_data(0,"autostart");
+$autolisten=&get_xml_data(0,"SFautostart");
+$autolisten_stop=&get_xml_data(0,"SFautostop");
 
 ### -  initial (default) pattern for active crates:
 my $pattern=&get_xml_data(0,"default_t");
@@ -194,7 +237,9 @@ for ($i=0;$i<$maxpids;$i++){
     print "$pattern\n";
     $chk_cam[$i]= ($pattern && 1);
     $pattern>>1;
+    if (&get_xml_data($i,"spec_function_retrig")!=0){$chk_cam_rt[$i]=1;}
 }
+
 
 
 
@@ -207,6 +252,7 @@ for ($i=0;$i<$maxpids;$i++){
 #
 my $random;
 $random=int(rand()*1000);
+$pid_fnameM="/tmp/rt2_pid01_".$random."_M";
 for($i=0;$i<$maxpids;$i++){
     $pid_fname01[$i]="/tmp/rt2_pid01_".$random."_$i";
     print $pid_fname01[$i], " -  file-switch\n";
@@ -400,22 +446,25 @@ $menubar[$i]->pack(-side=>"top", -expand=>0,
 $i++;
 #   3.         comment
 #########################################################################
- $menubar[$i]= $main->Frame(-relief=>"raised",  -borderwidth=>2);
+ $menubar[$i]= $main->Frame(-relief=>"flat",  -borderwidth=>2, -background=>'black', -foreground=>'white');
 
 # ---------- entry field
-$entry= $menubar[$i]->Entry(-text => "textEntry", -textvariable => \$comment);
+$entry= $menubar[$i]->Entry(-text => "textEntry", -textvariable => \$comment,
+ -background=>'black', -foreground=>'white' );
 # Set to expand, with padding.
-$entry->pack(-side=>"left", -expand=>1, -ipadx=>120, -padx=>0, -pady=>0);
+$entry->pack(-side=>"left", -expand=>1, -fill=>"x", -ipadx=>0, -padx=>0, -pady=>1);
 
-# ---------- entry field RUN NUM
-$labelRN= $menubar[$i]->Label(-text => "RUN #");
-# 
-$labelRN->pack(-side=>"left", -expand=>0, -ipadx=>10, -padx=>0, -pady=>0);
 
+############# arabic way from right
 # ---------- entry field RUN NUM
-$entryRN= $menubar[$i]->Entry(-text => "textEntry", -textvariable => \$runnumber);
+$entryRN= $menubar[$i]->Entry(-text => "textEntry", -textvariable => \$runnumber, -width=>5, -background=>'black', -foreground=>'white');
 # 
-$entryRN->pack(-side=>"left", -expand=>0, -ipadx=>10, -padx=>0, -pady=>0);
+$entryRN->pack(-side=>"right", -expand=>0, -ipadx=>20, -padx=>0, -pady=>0);
+# ---------- entry field RUN NUM
+$labelRN= $menubar[$i]->Label(-text => "RUN #", -background=>'black', -foreground=>'white');
+# 
+$labelRN->pack(-side=>"right", -expand=>0, -ipadx=>0, -padx=>0, -pady=>0);
+
 
 
 #---------------------------------------------------###### PACK MENUBAR2
@@ -456,6 +505,9 @@ $b_list[$j]->pack(-side=>"left", -expand=>0,    -padx=>0, -pady=>0 );
  $alis = $menubar[$i]->Checkbutton(-text => "Launch On Start",
                         -variable => \$autolisten,);
  $alis->pack(-side=>"left", -expand=>0, -padx=>0, -pady=>0);
+ $alise = $menubar[$i]->Checkbutton(-text => "Kill On Stop",
+                        -variable => \$autolisten_stop,);
+ $alise->pack(-side=>"left", -expand=>0, -padx=>0, -pady=>0);
 
 
  $txt="StartAll S.F.";   
@@ -531,6 +583,26 @@ $menubar[$i]->pack(-side=>"top", -expand=>1,
     -padx=>0, -pady=>0, -fill=>"both");
 
 
+
+my $TEXYT=&get_xml_data(0,"status_text");
+if (&get_xml_data(0,"status_text_size")==0){ $TEXYT="";}
+if ($TEXYT ne ""){
+$i++;
+#   6.            TEXYT
+#########################################################################
+ $menubar[$i]= $main->Frame(-relief=>"raised",   -borderwidth=>2);
+
+my $font = $main->fontCreate(    -size => &get_xml_data(0,"status_text_size"),
+                                 -weight => 'bold');
+
+$labelT1= $menubar[$i]->Label(-text => "    ", -font=> $font );
+$labelT1->pack(-side=>"left", -expand=>0, -ipadx=>10, -padx=>0, -pady=>0 );
+$labelT2= $menubar[$i]->Label(-text => &get_xml_data(0,"status_text"), -font=> $font );
+$labelT2->pack(-side=>"left", -expand=>0, -ipadx=>10, -padx=>0, -pady=>0 );
+#---------------------------------------------------###### PACK MENUBAR2
+$menubar[$i]->pack(-side=>"top", -expand=>1,
+    -padx=>0, -pady=>0, -fill=>"both");
+}
 
 
 
@@ -608,44 +680,71 @@ sub Log{
 
 
 # every 1000 ms
-  ##################################################
-  # ChkState - light green the button if we Listen #
+##################################################
+# ChkState - light green the button if we Listen #
+#
+#   we can use for backward communication.....for status_text
   ##################################################
 sub ChkState{
    &update_time;
 
+# this message system is completely independent on thread, start/stop
+		open IN2,"$pid_fnameM" ; $pidM=<IN2>;chop( $pidM );close IN2;
+		if ( $pidM ne ""){#....if there is a message
+		    `rm $pid_fnameM`;
+		    #print "      getting <$pidM> message to labelT2 from $pid_fnameM\n";
+		    $labelT2->configure( -text => $pidM   );
+		}#there is a message...
+
+
+
+#########just colors############3
 	 $b_list0->configure(-background=>'darkgray',-activebackground =>'darkgray' );
-
   for ($i=0;$i<$maxpids;$i++){
-      open IN,"$pid_fname01[$i]" ;
-      $start_listen=<IN>;chop( $start_listen );
-      close IN;
-      $filepid10_onoff[$i]=$start_listen;
-	if ($start_listen==1){
-	 $b_list[$i]->configure(-background=>'green',-activebackground =>'green' ); 
-	}else{ # means if 0 or even 9999
-
-	    if ( ($start_listen==9999)){ #announce. This is to display an anouncement
-		if ($child_start_time[$i]>0) {
-		my $delta= $seconds-$child_start_time[$i]; $delta=sprintf "%.3f", $delta;
-		$child_start_time[$i]=0;
-         	&Log("S.Func# [$i] OFF ... was found in OFF state... $delta sec.");  
-		}
-#        	&Log( "   #ActiveThread :      #Client was stopped $j        ");
-		`echo 0 > $pid_fname01[$i]`; 
-	    }#announce
-
 	    if ($chk_cam[$i]==1){
 	 $b_list[$i]->configure(-background=>'white',-activebackground =>'white' );
 	 $b_list0->configure(-background=>'white',-activebackground =>'white' );
 	    }else{
 	 $b_list[$i]->configure(-background=>'darkgray',-activebackground =>'darkgray' );
 	    }	 
-	}
 
+  }
+
+  for ($i=0;$i<$maxpids;$i++){
+  	    if ($chk_cam[$i]==1){#global chk_cam.......simplify...deal only when checkbox
+
+    open IN,"$pid_fname01[$i]" ;
+      $start_listen=<IN>;chop( $start_listen );
+      close IN;
+      $filepid10_onoff[$i]=$start_listen;
+	if ($start_listen==1){
+	 $b_list[$i]->configure(-background=>'green',-activebackground =>'green' ); 
+	}else{ # means if 0 or even 9999. 9999== ended by itself
+
+	    if ( ($start_listen==9999)){ #announce. This is to display an anouncement
+		if ($child_start_time[$i]>0) {
+		my $delta= $seconds-$child_start_time[$i]; $delta=sprintf "%.3f", $delta;
+		$child_start_time[$i]=0;
+         	&Log("S.Func# [$i] OFF ... was found in OFF state... $delta sec.");  
+		}# time>0 ### it has 9999 every kill/stop, but time>0 only when stop
+#        	&Log( "   #ActiveThread :      #Client was stopped $j        ");
+		`echo 0 > $pid_fname01[$i]`; 
+	    }#9999 ==> announce it as found in OFF
+
+	}#end of  means if 0 or even 9999
+
+
+
+###########################
+#bordel
+#   autolisten2 --- retrig all
+#   $chk_cam_runs[$i]  --- use only when started (good to keep with launchOnStart)
+#
+##########################
 ### when autolisten2 == 1 : reconnect automaticaly
 ### or when separate checkbutton && allowed.....reconnect automat
-      if ( $chk_cam_runs[$i] != 0 ){###this results in (autolisten) when started only!
+#REMOVED      if ( $chk_cam_runs[$i] != 0 ){###this results in (autolisten) when started only!
+   if (  ($chk_cam_runs[$i]!=0)&&($autolisten==1) ){###this results in (autolisten) when started only!
    if (   ( ($autolisten2==1) && ($chk_cam[$i]==1) ) ||
 	  (($chk_cam_rt[$i]==1)&& ($chk_cam[$i]==1) )
 )  {
@@ -655,9 +754,11 @@ sub ChkState{
 	 &Log("S.Func# $i ON ... by AutoRetrig "); 
        }# retrig only when it is not ON
    }# autolisten2 - auto reconnect
-      }#### $chk_cam_runs[$i] != 0 ### start was pressed before
+#REMOVED      }#### $chk_cam_runs[$i] != 0 ### start was pressed before
+   }
        #### this results in (autolisten) when started only!
 
+	    }#global chk_cam.............simplify...deal only when checkbox
   }#for  i
 }#ChkState
 
@@ -707,8 +808,8 @@ sub ActivateThread(){
 ###################
 # LISTEN TO DATA  #  ALWAYS???
 ###################      
-    my $cmdline=get_xml_data( $j, "listen" , "translate" );
-      &Log( "   issuing  start to device [$j]: <$cmdline>");
+    my $cmdline=get_xml_data( $j, "spec_function" , "translate" );
+      &Log( "   issuing S.F. activate to device [$j]: <$cmdline>");
 
        system("bash -c \"$cmdline\" ");
 ##       print `bash -c \"$cmdline\"`;
@@ -795,6 +896,8 @@ sub STARTbut{
     my $immedstop=0;
     &Log( "START#############################################\n           $comment" );
     $last_seconds=$seconds;  $last_number=$number;
+
+############ $labelT2->configure( -text => ""  );### we can change the status text
 
  for ($j=0;$j<$maxpids;$j++){ 
   if ($chk_cam[$j]==1){
@@ -971,8 +1074,18 @@ sub STOPbut{
   if ($chk_cam[$j]==1){
        my $cmdline=get_xml_data( $j, "stop" , "translate" );
       &Log( "   issuing   stop to device [$j]: <$cmdline>");
+
+       # there could be also killgrandchildren command inside
+       # but preferably I use rather KillOnStop now......
        system("bash -c \"$cmdline\" ");
-#       print `bash -c \"$cmdline\"`;
+       print "KILLING?? BECAUSE autolisten_stop== $autolisten_stop\n";
+       if ($autolisten_stop==1){
+	   print "KILLING BECAUSE autolisten_stop==1\n";
+	   &KILLpid( $j); 
+       }else{
+	   print "NOT KILLING BECAUSE autolisten_stop==0\n";
+       }
+
        if ($?!=0){   
 	   &Log( "      NOT SUCCESFULL !!!!!!!!!!!!!!"); 
 	   $b_gomon->configure(-background=>'yellow',-activebackground =>'yellow');
