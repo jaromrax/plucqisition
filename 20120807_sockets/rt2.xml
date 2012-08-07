@@ -34,7 +34,7 @@ at least echo must be there
 	 sleep 1; 
 	 TT=\`date +%s\`;
 	 echo \$TT \$t \$i \$i  >> text;
-         date +%H:%M:%S > $pidM;
+         echo \$TT \$t \$i \$i  > $pidM;
  done
     </spec_function>
      <quit>
@@ -65,8 +65,8 @@ at least echo must be there
     <spec_function_onstop>1</spec_function_onstop>
      <spec_function_retrig> 0 </spec_function_retrig> 
      <spec_function>   
-
- tail -f text | nc localhost 9302 2>/dev/null ;
+sleep 1;
+    tail -f text | nc localhost 9302 2>/dev/null ;
 
    </spec_function>
      <quit>

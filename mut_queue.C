@@ -280,7 +280,7 @@ void *mut_queue_masterthread(void* arg){
     delete shspe_threads[3]->;
     */
   TTimeStamp t_stop;
-  printf("In the MASTER:\n%s\n%s\n%d\n",
+  printf("In the MASTER:\n  start %s\n  stop  %s\n  seconds = %d\n",
 	 t_start.AsString("l"),  
 	 t_stop.AsString("l"), 
 	 (int)(t_stop.GetSec()-t_start.GetSec() ) );
@@ -365,17 +365,20 @@ int acq(const char * startstop="start")
 
     do{ //while not deads
       not_deads=0;
-    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "broadcasting ALL _threads");
-    printf("%sbreaodcasting to ALL threads\n","");
+    TThread::Ps();
+    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "...broadcasting ALL _threads");
+    printf("%s...broadcasting to ALL threads\n","");
+    MyCond.GetMutex();
     MyCond.Broadcast();
-    usleep(1000*500);
-    //    TThread::Ps();
-    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "3");
-    usleep(1000*500);
+    usleep(1000*100);
+    /*    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "3");
+    MyCond.Broadcast();
+    usleep(1000*100);
     if(XTERM!=NULL)fprintf(XTERM,"%s\n", "2");
-    usleep(1000*500);
+    MyCond.Broadcast();
+    usleep(1000*100);
     if(XTERM!=NULL)fprintf(XTERM,"%s\n", "1");
-
+    */
 
 
     //-----------------------------
@@ -411,31 +414,6 @@ int acq(const char * startstop="start")
    //=================================================================================END
 
 
-   //=================================================================================BEGIN
-   //   if(XTERM!=NULL)fprintf(XTERM,"%s\n", "broadcasting pusher_thread");
-   //    printf("%sbreaodcasting to pusher_thread\n","");
-    /*    MyCond.Broadcast();
-    usleep(1000*500);
-    TThread::Ps();
-    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "3");
-    usleep(1000*500);
-    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "2");
-    usleep(1000*500);
-    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "1");
-    */
-
-   //=================================================================================BEGIN
-   //    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "broadcasting poper_thread");
-   //    printf("%sbreaodcasting to poper_thread\n","");
-    /*    MyCond.Broadcast();
-    usleep(1000*500);
-    TThread::Ps();
-    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "3");
-    usleep(1000*500);
-    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "2");
-    usleep(1000*500);
-    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "1");
-    */
     //----------------this is very fragile thread--------------
     if(XTERM!=NULL)fprintf(XTERM,"%s\n", "checking the existence of the poper_thread");
     t=TThread::GetThread("poper_thread");
@@ -452,33 +430,20 @@ int acq(const char * startstop="start")
    }
    //=================================================================================END
 
-   /*
-    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "killing poper_thread");
-    t=TThread::GetThread("poper_thread");
-    if (t!=NULL){
-      t->Kill();
-      t->Delete();
-    usleep(1000*100);
-    }
-    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "killing pusher_thread");
-    t=TThread::GetThread("pusher_thread");
-    if (t!=NULL){
-      t->Kill();
-      t->Delete();
-    usleep(1000*100);
-    }
-   */
 
 
     TThread::Ps(); 
-    if (kill_retries>2){ break;}
+    if (kill_retries>   0   ){ break;}
     kill_retries++;
     }while (not_deads>0);
 
+    if (not_deads>0){ 	 return 0; } // MUST EXIT HERE, SOME ZOMBIE IS THERE######################
 
-    if (not_deads>0){ 	 return 0; }
 
-    int cdown=10;
+
+
+
+    int cdown=3;
     while(TThread::GetThread("master_thread")!=0){
       printf("--------------------tthreads ended OK, wait for MASTER ... %d\n", cdown-- );
       usleep(1000*200);
@@ -514,10 +479,11 @@ int acq(const char * startstop="start")
 
 
     TTimeStamp t_last;
-    printf("This is in stop section (t_last):\n%s\n%s\n%d\n",
+    /*    printf("This is in stop section (t_last):\n%s\n%s\n%d\n",
 	 t_start.AsString("l"),  
 	 t_last.AsString("l"), 
 	 (int)(t_last.GetSec()-t_start.GetSec() ) );
+    */
     return 0;
     printf("--------------------after the return\n\n%s", "");
   }//=========================== STOP====================================

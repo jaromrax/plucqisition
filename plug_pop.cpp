@@ -65,9 +65,12 @@ extern "C" {
 
     concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
     int i=0;
+    int wait=1;
     while (i<30){
    if(XTERM!=NULL)fprintf(XTERM,"  POP empty: pointer==%d\n", (int)buffer );
-
+   wait=1;
+   wait=MyCond.TimedWaitRelative( 1000  ) ; // wait 500
+   if (wait==0){break;}
    usleep(1* 1000*1000);
    i++;
     }

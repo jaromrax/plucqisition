@@ -18,6 +18,19 @@
 #include "TServerSocket.h"
 #include "TMonitor.h"
 
+//############################################ sockets/ raw c++
+//#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+/* port we're listening on */
+//////#define PORT 2020
+//############################################ sockets/ raw c++
+
 /****
 IF C++ => care about namemangling....
 // because of mixing  c and c++, namemangling.....
@@ -86,7 +99,7 @@ extern "C" {
 
 
   /**********************************************
-   *            PUSH TEXT  
+   *            PUSH TEXT  - 15 lines of numbers
    */
   int* push_txt(int* par){//TEST ... pushes text with 4 numbers in one line
 
@@ -367,6 +380,155 @@ extern "C" {
  }//=====================================================================END FUNCTION 2
 
  
+
+
+
+
+
+
+
+
+  //     tail -f text | nc localhost 9302
+  int* push_net_txtserv3(int* par){ // SERVER FOR TEXT FILE ... we try ->select
+                                    //  PADA TO NA PRVNI,2. ZMACKNUTI ENTER
+     concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
+     if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-remote (network,txt2)  par==%d; pointer==%d\n", par,(int)buffer );
+
+   long long int cnt=0;
+   char ipaddress[100];
+   int PORT;
+      TSmallish_xml xml(    acqxml   );
+      xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","ip" );
+      sprintf( ipaddress,"%s", xml.output  ); // 127.0.0.1, else not possible
+      xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","port" );
+      PORT=atoi(xml.output  );
+
+
+      fd_set master;  fd_set read_fds; //mnoziny
+struct sockaddr_in serveraddr;
+struct sockaddr_in clientaddr;
+int fdmax;
+int listener;
+int newfd;
+char buf[1024];
+int nbytes; int yes = 1; int addrlen;  int i, j,  ia;
+ struct timeval tv,tv1; // My try to timeout
+tv.tv_sec = 1;  tv.tv_usec = 0;   int wait=1;
+/* clear the master and temp sets */
+FD_ZERO(&master);
+FD_ZERO(&read_fds);
+ 
+/* get the listener */
+if((listener = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+{
+perror("Server-socket() error lol!");exit(1);
+}
+printf("Server-socket() is OK...\n");
+/*"address already in use" error message   SO_REUSEADDR */
+if(setsockopt(listener, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1)
+{
+perror("Server-setsockopt() error lol!");
+exit(1);
+}
+printf("Server-setsockopt() is OK...\n");
+ 
+/* bind */
+serveraddr.sin_family = AF_INET;
+serveraddr.sin_addr.s_addr = INADDR_ANY;
+serveraddr.sin_port = htons(PORT);
+memset(&(serveraddr.sin_zero), '\0', 8);
+ 
+if(bind(listener, (struct sockaddr *)&serveraddr, sizeof(serveraddr)) == -1)
+{    perror("Server-bind() error lol!");    exit(1); }
+printf("Server-bind() is OK...\n");
+ /* listen */
+if(listen(listener, 10) == -1)
+{     perror("Server-listen() error lol!");     exit(1);  }
+printf("Server-listen() is OK...\n");
+ 
+/* add the listener to the master set */        FD_SET(listener, &master);
+/* keep track of the biggest file descriptor */ fdmax = listener; /* so far, it's this one*/
+ 
+/* loop */
+for(;;)
+{/* copy it */ read_fds = master;
+  //  printf("%s","SSS going to select\n");
+  memcpy(&tv1, &tv, sizeof(tv));
+  //if(select(fdmax+1, &read_fds, NULL, NULL, NULL) == -1)
+if(select(fdmax+1, &read_fds, NULL, NULL, &tv1) == -1)
+{    perror("Server-select() error lol!");    exit(1);}
+printf("Server-select() is OK...\n");
+ 
+/*run through the existing connections looking for data to be read*/
+for(i = 0; i <= fdmax; i++)
+{
+    if(FD_ISSET(i, &read_fds))
+    { /* we got one... */
+    if(i == listener)
+     {
+         /* handle new connections */
+        addrlen = sizeof(clientaddr);
+	if((newfd = accept(listener, (struct sockaddr *)&clientaddr, (socklen_t*)&addrlen)) == -1)
+{    perror("Server-accept() error lol!");}else{//  accept OK
+    printf("Server-accept() is OK...\n");
+ FD_SET(newfd, &master); /* add to master set */
+if(newfd > fdmax){ /* keep track of the maximum */    fdmax = newfd;}
+printf("SSS New connection from %s on socket %d\n",  inet_ntoa(clientaddr.sin_addr), newfd);
+	}//  accept OK
+     }//i == listener
+else
+{
+/* handle data from a client */
+if((nbytes = recv(i, buf, sizeof(buf), 0)) <= 0)
+{
+/* got error or connection closed by client */
+if(nbytes == 0)
+ /* connection closed */
+ printf("SSS socket %d hung up\n",  i); else  perror("recv() error lol!");
+ /* close it... */close(i);/* remove from master set */FD_CLR(i, &master);
+ }else{
+/* we got some data from a client*/
+  for ( ia=0;ia<nbytes-1;ia++){ // I remove last \n
+    printf( "%c", buf[ia] );
+  }
+  printf("%s","\n");  // I add the last \n
+for(j = 0; j <= fdmax; j++)  {/* send to everyone! */if(FD_ISSET(j, &master))
+{       /* except the listener and ourselves */
+       if(j != listener && j != i)
+       {
+              if(send(j, buf, nbytes, 0) == -1) perror("send() error lol!");
+       }
+ }// for j < fdmax ::: if 
+ }//  for j < fdmax
+
+ }//else we got some data from a client ... after this there is a HUNG UP
+// printf("SSS socket %d hung up aftermath\n",  i); 
+ }//handle data from a client
+    }//we got one... 
+    // printf("%s"," fdmax\n");
+ }// for i   i< fdmax
+// printf("%s","FOR\n");
+ wait=1;
+  wait=MyCond.TimedWaitRelative( 1000  ) ; // wait 500
+  if (wait==0){break;}
+ }//  FOR LOOP .... copy it 
+/* clear the master and temp sets */
+// FD_CLR(listener, &master);
+ close(listener);
+//for(i = 0; i <= fdmax; i++){   FD_CLR(i, &master); }
+ FD_ZERO(&master);
+FD_ZERO(&read_fds);
+ 
+return 0;
+
+
+ }//=====================================================================END FUNCTION 3
+
+ 
+
+
+
+
 
 
 

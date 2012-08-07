@@ -53,6 +53,7 @@ my $seconds=0;
 my $number="xxx";
 my $numberY="xxx";
 my $last_seconds=0;
+my $last_comment="";
 my $last_number="_";
 
 
@@ -465,7 +466,7 @@ $menubar[$i]->pack(-side=>"top", -expand=>0,
 
 
 
-
+#####sub changed{    print "$_[0] changed\n";}
 $i++;
 #   3.         comment
 #########################################################################
@@ -473,10 +474,16 @@ $i++;
 
 # ---------- entry field
 $entry= $menubar[$i]->Entry(-text => "textEntry", -textvariable => \$comment,
- -background=>'black', -foreground=>'white' );
+ -background=>'black', -foreground=>'white',
+ -validate         => 'key',
+ -validatecommand  => sub{&update_time;$last_comment=$date;} );
 # Set to expand, with padding.
 $entry->pack(-side=>"left", -expand=>1, -fill=>"x", -ipadx=>0, -padx=>0, -pady=>1);
+##$entry->bind('<<Modified>>',sub{print shift," COMMENT changed\n"});
 
+#$entry->bind('<Modified>'=>sub {
+#        if($entry->editModified() ) {$entry->editModified(0) }
+#    });
 
 ############# arabic way from right
 # ---------- entry field RUN NUM
@@ -815,7 +822,7 @@ sub ChkState{
 		if ($child_start_time[$i]>0) {
 		my $delta= $seconds-$child_start_time[$i]; $delta=sprintf "%.3f", $delta;
 		$child_start_time[$i]=0;
-         	&Log("S.Func# [$i] OFF ... was found in OFF state... $delta sec.");  
+         	&Log("S.Func# [$i] OFF ... was found OFF ... $delta sec.");  
 		}# time>0 ### it has 9999 every kill/stop, but time>0 only when stop
 #        	&Log( "   #ActiveThread :      #Client was stopped $j        ");
 		`echo 0 > $pid_fname01[$i]`; 
@@ -950,7 +957,8 @@ sub INITbut{
 
 sub STARTbut{
     my $immedstop=0;
-    &Log( "START#############################################\n           $comment" );
+    &Log( "START#############################################\n$last_comment  $comment" );
+    #SPECIAL TIME FOR LAST CHANGE IN COMMENT!  $last_comment
     $last_seconds=$seconds;  $last_number=$number;
 
 ############ $labelT2->configure( -text => ""  );### we can change the status text
@@ -1073,7 +1081,7 @@ sub KILLpid{
 #		print "KILL:Only text is output:  <kill @listkill>\n";
 		return "kill @listkill";
 	    }else{
-            &Log( "   #killing [$i]  grandchild  $grandchild and  @listkill now");
+            &Log( "   #killing[$i] $grandchild and @listkill");
 	    kill 15, (`pstree -p $grandchild` =~ m/\((\d+)\)/sg); 
 #	    kill( 15, $grandchild ); 
 	    }
