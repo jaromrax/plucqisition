@@ -6627,3 +6627,326 @@
 03/08/2012 18:09:57.16 - q  #############################################
 03/08/2012 18:09:57.19 -    issuing   quit to device [0]: < echo TEST QUITS ;>
 03/08/2012 18:09:57.21 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:17:24.45 - QUIT#############################################
+07/08/2012 10:17:24.50 - q  #############################################
+07/08/2012 10:17:24.53 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:17:24.58 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:19:54.35 - QUIT#############################################
+07/08/2012 10:19:54.36 - q  #############################################
+07/08/2012 10:19:54.39 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:19:54.43 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:20:00.04 - QUIT#############################################
+07/08/2012 10:20:00.06 - q  #############################################
+07/08/2012 10:20:00.08 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:20:00.10 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:22:52.55 - QUIT#############################################
+07/08/2012 10:22:52.57 - q  #############################################
+07/08/2012 10:22:52.59 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:22:52.62 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:23:11.03 - QUIT#############################################
+07/08/2012 10:23:11.04 - q  #############################################
+07/08/2012 10:23:11.06 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:23:11.08 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:23:22.31 - QUIT#############################################
+07/08/2012 10:23:22.32 - q  #############################################
+07/08/2012 10:23:22.33 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:23:22.35 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:23:38.36 - QUIT#############################################
+07/08/2012 10:23:38.37 - q  #############################################
+07/08/2012 10:23:38.38 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:23:38.40 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:23:51.30 - QUIT#############################################
+07/08/2012 10:23:51.31 - q  #############################################
+07/08/2012 10:23:51.34 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:23:51.36 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:24:06.32 - QUIT#############################################
+07/08/2012 10:24:06.34 - q  #############################################
+07/08/2012 10:24:06.37 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:24:06.40 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:24:33.45 - QUIT#############################################
+07/08/2012 10:24:33.47 - q  #############################################
+07/08/2012 10:24:33.50 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:24:33.52 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:24:59.12 - INIT#############################################
+           comment
+07/08/2012 10:24:59.13 -    issuing   init to device [0]: < echo TEST: RUN==1 ;>
+07/08/2012 10:24:59.14 -       finished   init to device [0]
+07/08/2012 10:24:59.31 -    issuing   init to device [1]: < touch text; rm text ;>
+07/08/2012 10:24:59.37 -       finished   init to device [1]
+07/08/2012 10:25:00.81 - START#############################################
+           comment
+07/08/2012 10:25:00.82 -    issuing  start to device [0]: < echo TEST START;>
+07/08/2012 10:25:00.83 -       finished  start to device [0]
+07/08/2012 10:25:00.84 -    issuing  start to device [1]: < echo START....to generate u must do listen ;>
+07/08/2012 10:25:00.85 -       finished  start to device [1]
+07/08/2012 10:25:00.86 - S.Func# 0 ON < time>
+07/08/2012 10:25:00.88 -    #ActiveThread :     #Starting client [0]           
+07/08/2012 10:25:00.88 - S.Func# 1 ON < sendTXT>
+07/08/2012 10:25:00.90 -    issuing S.F. activate to device [0]: < for ((i=0;i < 10000;i++)); do sleep 1; date +%H:%M:%S > /tmp/rt2_pid01_942_M; done ;>
+07/08/2012 10:25:00.98 -    #ActiveThread :     #Starting client [1]           
+07/08/2012 10:25:01.02 -    issuing S.F. activate to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done ;>
+07/08/2012 10:25:06.01 - STOP#############################################
+07/08/2012 10:25:06.03 - 5.920 seconds length to this point 
+07/08/2012 10:25:06.04 - waiting to finish kills, sleep 0 seconds
+07/08/2012 10:25:06.06 -    issuing   stop to device [0]: < echo TEST STOP; echo STOPPED > /tmp/rt2_pid01_942_M;>
+07/08/2012 10:25:06.25 -    #killing [0]  grandchild  18093 and  18093 18094 18366 now
+07/08/2012 10:25:06.29 -    #Stopping client [0] #leaving ActiveThread # ...
+07/08/2012 10:25:06.29 -    finished  stop to device [0]
+07/08/2012 10:25:06.32 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; echo STOPPED > /tmp/rt2_pid01_942_M;>
+07/08/2012 10:25:06.39 -    #ActiveThread :     #Starting client [0]           
+07/08/2012 10:25:06.41 -    issuing S.F. activate to device [0]: < for ((i=0;i < 10000;i++)); do sleep 1; date +%H:%M:%S > /tmp/rt2_pid01_942_M; done ;>
+07/08/2012 10:25:06.44 -    #killing [1]  grandchild  18112 and  18112 18114 18380 now
+07/08/2012 10:25:06.46 -    #Stopping client [1] #leaving ActiveThread # ...
+07/08/2012 10:25:06.46 -    finished  stop to device [1]
+07/08/2012 10:25:06.47 - STOPPED##########################################
+07/08/2012 10:25:06.47 - 5.965 seconds length  
+07/08/2012 10:25:06.49 - S.Func# [0] OFF ... was found in OFF state... 5.963 sec.
+07/08/2012 10:25:06.49 - S.Func# [1] OFF ... was found in OFF state... 5.963 sec.
+07/08/2012 10:25:07.16 - QUIT#############################################
+07/08/2012 10:25:07.17 - q  #############################################
+07/08/2012 10:25:07.20 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:25:07.22 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:31:59.50 - QUIT#############################################
+07/08/2012 10:31:59.51 - q  #############################################
+07/08/2012 10:31:59.54 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:31:59.56 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:33:24.47 - QUIT#############################################
+07/08/2012 10:33:24.48 - q  #############################################
+07/08/2012 10:33:24.49 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:33:24.51 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:33:52.34 - INIT#############################################
+           comment
+07/08/2012 10:33:52.35 -    issuing   init to device [0]: < echo TEST: RUN==1 ;>
+07/08/2012 10:33:52.36 -       finished   init to device [0]
+07/08/2012 10:33:52.39 -    issuing   init to device [1]: < touch text; rm text ;>
+07/08/2012 10:33:52.40 -       finished   init to device [1]
+07/08/2012 10:33:54.33 - QUIT#############################################
+07/08/2012 10:33:54.34 - q  #############################################
+07/08/2012 10:33:54.35 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:33:54.37 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:38:57.48 - QUIT#############################################
+07/08/2012 10:38:57.49 - q  #############################################
+07/08/2012 10:38:57.50 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:38:57.53 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:39:05.22 - QUIT#############################################
+07/08/2012 10:39:05.23 - q  #############################################
+07/08/2012 10:39:05.25 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:39:05.27 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:39:11.64 - QUIT#############################################
+07/08/2012 10:39:11.65 - q  #############################################
+07/08/2012 10:39:11.66 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:39:11.69 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:39:25.28 - INIT#############################################
+           comment
+07/08/2012 10:39:25.29 -    issuing   init to device [0]: < echo TEST: RUN==1 ;>
+07/08/2012 10:39:25.30 -       finished   init to device [0]
+07/08/2012 10:39:25.34 -    issuing   init to device [1]: < touch text; rm text ;>
+07/08/2012 10:39:25.36 -       finished   init to device [1]
+07/08/2012 10:39:26.82 - START#############################################
+           comment
+07/08/2012 10:39:26.85 -    issuing  start to device [0]: < echo TEST START;>
+07/08/2012 10:39:26.87 -       finished  start to device [0]
+07/08/2012 10:39:26.89 -    issuing  start to device [1]: < echo START....to generate u must do listen ;>
+07/08/2012 10:39:26.90 -       finished  start to device [1]
+07/08/2012 10:39:26.92 - S.Func# 0 ON ... by AutoRetrig 
+07/08/2012 10:39:27.01 -    #ActiveThread :     #Starting client [0]           
+07/08/2012 10:39:27.04 -    issuing S.F. activate to device [0]: < for ((i=0;i < 10000;i++)); do sleep 1; date +%H:%M:%S > /tmp/rt2_pid01_407_M; done ;>
+07/08/2012 10:39:41.04 - STOP#############################################
+07/08/2012 10:39:41.04 - 14.922 seconds length to this point 
+07/08/2012 10:39:41.05 - waiting to finish kills, sleep 0 seconds
+07/08/2012 10:39:41.06 -    issuing   stop to device [0]: < echo TEST STOP; echo STOPPED > /tmp/rt2_pid01_407_M;>
+07/08/2012 10:39:41.24 -    #killing [0]  grandchild  25065 and  25065 25066 25740 now
+07/08/2012 10:39:41.27 -    finished  stop to device [0]
+07/08/2012 10:39:41.27 -    #Stopping client [0] #leaving ActiveThread # ...
+07/08/2012 10:39:41.30 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; echo STOPPED > /tmp/rt2_pid01_407_M;>
+07/08/2012 10:39:41.31 -    finished  stop to device [1]
+07/08/2012 10:39:41.32 - STOPPED##########################################
+07/08/2012 10:39:41.34 - 14.949 seconds length  
+07/08/2012 10:39:41.35 - S.Func# [0] OFF ... was found in OFF state... 14.943 sec.
+07/08/2012 10:39:46.04 - START#############################################
+           comment
+07/08/2012 10:39:46.05 -    issuing  start to device [0]: < echo TEST START;>
+07/08/2012 10:39:46.06 -       finished  start to device [0]
+07/08/2012 10:39:46.09 -    issuing  start to device [1]: < echo START....to generate u must do listen ;>
+07/08/2012 10:39:46.10 -       finished  start to device [1]
+07/08/2012 10:39:46.11 - S.Func# 0 ON ... by AutoRetrig 
+07/08/2012 10:39:46.20 -    #ActiveThread :     #Starting client [0]           
+07/08/2012 10:39:46.22 -    issuing S.F. activate to device [0]: < for ((i=0;i < 10000;i++)); do sleep 1; date +%H:%M:%S > /tmp/rt2_pid01_407_M; done ;>
+07/08/2012 10:41:23.69 - STOP#############################################
+07/08/2012 10:41:23.70 - 97.065 seconds length to this point 
+07/08/2012 10:41:23.72 - waiting to finish kills, sleep 0 seconds
+07/08/2012 10:41:23.74 -    issuing   stop to device [0]: < echo TEST STOP; echo STOPPED > /tmp/rt2_pid01_407_M;>
+07/08/2012 10:41:23.85 -    #killing [0]  grandchild  26046 and  26046 26047 30615 now
+07/08/2012 10:41:23.87 -    finished  stop to device [0]
+07/08/2012 10:41:23.87 -    #Stopping client [0] #leaving ActiveThread # ...
+07/08/2012 10:41:23.88 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; echo STOPPED > /tmp/rt2_pid01_407_M;>
+07/08/2012 10:41:23.89 -    finished  stop to device [1]
+07/08/2012 10:41:23.90 - STOPPED##########################################
+07/08/2012 10:41:23.91 - 97.085 seconds length  
+07/08/2012 10:41:23.92 - S.Func# [0] OFF ... was found in OFF state... 97.081 sec.
+07/08/2012 10:41:24.63 - QUIT#############################################
+07/08/2012 10:41:24.64 - q  #############################################
+07/08/2012 10:41:24.67 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:41:24.70 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:41:31.91 - QUIT#############################################
+07/08/2012 10:41:31.93 - q  #############################################
+07/08/2012 10:41:31.95 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:41:31.98 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:41:52.74 - QUIT#############################################
+07/08/2012 10:41:52.75 - q  #############################################
+07/08/2012 10:41:52.77 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:41:52.79 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:42:07.39 - QUIT#############################################
+07/08/2012 10:42:07.41 - q  #############################################
+07/08/2012 10:42:07.44 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:43:24.60 - QUIT#############################################
+07/08/2012 10:43:24.62 - q  #############################################
+07/08/2012 10:43:24.65 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:44:36.69 - QUIT#############################################
+07/08/2012 10:44:36.71 - q  #############################################
+07/08/2012 10:44:36.73 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:46:22.22 - QUIT#############################################
+07/08/2012 10:46:22.23 - q  #############################################
+07/08/2012 10:46:22.24 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:48:59.16 - INIT#############################################
+           comment
+07/08/2012 10:48:59.19 -    issuing   init to device [0]: < echo TEST: RUN==1 ;>
+07/08/2012 10:48:59.21 -       finished   init to device [0]
+07/08/2012 10:49:02.24 - START#############################################
+           comment
+07/08/2012 10:49:02.29 -    issuing  start to device [0]: < echo TEST START;>
+07/08/2012 10:49:02.30 -       finished  start to device [0]
+07/08/2012 10:49:02.31 - S.Func# 0 ON ... by AutoRetrig 
+07/08/2012 10:49:02.40 -    #ActiveThread :     #Starting client [0]           
+07/08/2012 10:49:02.43 -    issuing S.F. activate to device [0]: < for ((i=0;i < 10000;i++)); do sleep 1; date +%H:%M:%S > /tmp/rt2_pid01_354_M; done ;>
+07/08/2012 10:49:12.97 - STOP#############################################
+07/08/2012 10:49:13.99 - 10.073 seconds length to this point 
+07/08/2012 10:49:13.00 - waiting to finish kills, sleep 0 seconds
+07/08/2012 10:49:13.03 -    issuing   stop to device [0]: < echo TEST STOP; echo STOPPED > /tmp/rt2_pid01_354_M;>
+07/08/2012 10:49:13.15 -    #killing [0]  grandchild  2169 and  2169 2170 2659 now
+07/08/2012 10:49:13.17 -    #Stopping client [0] #leaving ActiveThread # ...
+07/08/2012 10:49:13.17 -    finished  stop to device [0]
+07/08/2012 10:49:13.18 - STOPPED##########################################
+07/08/2012 10:49:13.18 - 10.993 seconds length  
+07/08/2012 10:49:13.20 - S.Func# [0] OFF ... was found in OFF state... 10.988 sec.
+07/08/2012 10:49:16.64 - START#############################################
+           comment
+07/08/2012 10:49:16.66 -    issuing  start to device [0]: < echo TEST START;>
+07/08/2012 10:49:16.68 -       finished  start to device [0]
+07/08/2012 10:49:16.71 - S.Func# 0 ON ... by AutoRetrig 
+07/08/2012 10:49:16.79 -    #ActiveThread :     #Starting client [0]           
+07/08/2012 10:49:16.82 -    issuing S.F. activate to device [0]: < for ((i=0;i < 10000;i++)); do sleep 1; date +%H:%M:%S > /tmp/rt2_pid01_354_M; done ;>
+07/08/2012 10:49:18.76 - STOP#############################################
+07/08/2012 10:49:18.77 - 2.012 seconds length to this point 
+07/08/2012 10:49:18.78 - waiting to finish kills, sleep 0 seconds
+07/08/2012 10:49:18.79 -    issuing   stop to device [0]: < echo TEST STOP; echo STOPPED > /tmp/rt2_pid01_354_M;>
+07/08/2012 10:49:18.80 -    finished  stop to device [0]
+07/08/2012 10:49:18.81 - STOPPED##########################################
+07/08/2012 10:49:18.81 - 2.016 seconds length  
+07/08/2012 10:49:19.95 -    #killing [0]  grandchild  3061 and  3061 3062 3276 now
+07/08/2012 10:49:19.97 - S.Func# 0 OFF                              ... 3.025 sec.
+07/08/2012 10:49:19.97 -    #Stopping client [0] #leaving ActiveThread # ...
+07/08/2012 10:49:26.72 - START#############################################
+           comment
+07/08/2012 10:49:26.74 -    issuing  start to device [0]: < echo TEST START;>
+07/08/2012 10:49:26.76 -       finished  start to device [0]
+07/08/2012 10:49:26.78 -    issuing  start to device [1]: < echo START....to generate u must do listen ;>
+07/08/2012 10:49:26.79 -       finished  start to device [1]
+07/08/2012 10:49:32.56 - STOP#############################################
+07/08/2012 10:49:32.57 - 5.984 seconds length to this point 
+07/08/2012 10:49:32.58 - waiting to finish kills, sleep 0 seconds
+07/08/2012 10:49:32.61 -    issuing   stop to device [0]: < echo TEST STOP; echo STOPPED > /tmp/rt2_pid01_354_M;>
+07/08/2012 10:49:32.71 -    finished  stop to device [0]
+07/08/2012 10:49:32.72 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; echo STOPPED > /tmp/rt2_pid01_354_M;>
+07/08/2012 10:49:32.81 -    finished  stop to device [1]
+07/08/2012 10:49:32.81 - STOPPED##########################################
+07/08/2012 10:49:32.82 - 6.009 seconds length  
+07/08/2012 10:49:42.32 - START#############################################
+           comment
+07/08/2012 10:49:42.35 -    issuing  start to device [0]: < echo TEST START;>
+07/08/2012 10:49:42.37 -       finished  start to device [0]
+07/08/2012 10:49:42.38 -    issuing  start to device [1]: < echo START....to generate u must do listen ;>
+07/08/2012 10:49:42.39 -       finished  start to device [1]
+07/08/2012 10:53:39.15 - QUIT#############################################
+07/08/2012 10:53:39.16 - q  #############################################
+07/08/2012 10:53:39.18 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:53:39.19 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:53:56.10 - INIT#############################################
+           comment
+07/08/2012 10:53:56.13 -    issuing   init to device [0]: < echo TEST: RUN==1 ;>
+07/08/2012 10:53:56.15 -       finished   init to device [0]
+07/08/2012 10:53:56.18 -    issuing   init to device [1]: < touch text; rm text ;>
+07/08/2012 10:53:56.19 -       finished   init to device [1]
+07/08/2012 10:54:01.12 - START#############################################
+           comment
+07/08/2012 10:54:01.13 -    issuing  start to device [0]: < echo TEST START;>
+07/08/2012 10:54:01.14 -       finished  start to device [0]
+07/08/2012 10:54:01.16 - S.Func# 0 ON < time>
+07/08/2012 10:54:01.17 -    issuing  start to device [1]: < echo START....use Spec Func to generate data ;>
+07/08/2012 10:54:01.18 -       finished  start to device [1]
+07/08/2012 10:54:01.20 - S.Func# 1 ON < sendTXT>
+07/08/2012 10:54:01.25 -    #ActiveThread :     #Starting client [1]           
+07/08/2012 10:54:01.26 -    #ActiveThread :     #Starting client [0]           
+07/08/2012 10:54:01.29 -    issuing S.F. activate to device [0]: < for ((i=0;i < 10000;i++)); do sleep 1; date +%H:%M:%S > /tmp/rt2_pid01_191_M; done ;>
+07/08/2012 10:54:01.29 -    issuing S.F. activate to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done ;>
+07/08/2012 10:54:04.60 - STOP#############################################
+07/08/2012 10:54:04.62 - 3.048 seconds length to this point 
+07/08/2012 10:54:04.63 - waiting to finish kills, sleep 0 seconds
+07/08/2012 10:54:04.66 -    issuing   stop to device [0]: < echo TEST STOP; echo STOPPED > /tmp/rt2_pid01_191_M;>
+07/08/2012 10:54:04.77 -    #killing [0]  grandchild  15577 and  15577 15578 15737 now
+07/08/2012 10:54:04.79 -    #Stopping client [0] #leaving ActiveThread # ...
+07/08/2012 10:54:04.79 -    finished  stop to device [0]
+07/08/2012 10:54:04.80 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; echo STOPPED > /tmp/rt2_pid01_191_M;>
+07/08/2012 10:54:04.90 -    #ActiveThread :     #Starting client [0]           
+07/08/2012 10:54:04.91 -    issuing S.F. activate to device [0]: < for ((i=0;i < 10000;i++)); do sleep 1; date +%H:%M:%S > /tmp/rt2_pid01_191_M; done ;>
+07/08/2012 10:54:04.91 -    #killing [1]  grandchild  15579 and  15579 15581 15735 now
+07/08/2012 10:54:04.93 -    #Stopping client [1] #leaving ActiveThread # ...
+07/08/2012 10:54:04.93 -    finished  stop to device [1]
+07/08/2012 10:54:04.94 - STOPPED##########################################
+07/08/2012 10:54:04.95 - 3.081 seconds length  
+07/08/2012 10:54:04.96 - S.Func# [0] OFF ... was found in OFF state... 3.082 sec.
+07/08/2012 10:54:04.97 - S.Func# [1] OFF ... was found in OFF state... 3.078 sec.
+07/08/2012 10:54:06.59 - QUIT#############################################
+07/08/2012 10:54:06.60 - q  #############################################
+07/08/2012 10:54:06.63 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:54:06.65 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:54:23.19 - INIT#############################################
+           comment
+07/08/2012 10:54:23.22 -    issuing   init to device [0]: < echo TEST: RUN==1 ;>
+07/08/2012 10:54:23.24 -       finished   init to device [0]
+07/08/2012 10:54:28.46 - START#############################################
+           comment
+07/08/2012 10:54:28.50 -    issuing  start to device [0]: < echo TEST START;>
+07/08/2012 10:54:28.51 -       finished  start to device [0]
+07/08/2012 10:54:28.52 - S.Func# 0 ON < time>
+07/08/2012 10:54:28.54 -    issuing  start to device [1]: < echo START....use Spec Func to generate data ;>
+07/08/2012 10:54:28.55 -       finished  start to device [1]
+07/08/2012 10:54:28.57 - S.Func# 1 ON < sendTXT>
+07/08/2012 10:54:28.63 -    #ActiveThread :     #Starting client [0]           
+07/08/2012 10:54:28.64 -    #ActiveThread :     #Starting client [1]           
+07/08/2012 10:54:28.67 -    issuing S.F. activate to device [1]: < for ((i=0;i < 10000;i++)); do t=`date +%s`; echo \$t \$i \$i >> text; echo \$t \$i \$i | nc localhost 9302 2>/dev/null & sleep 1; done ;>
+07/08/2012 10:54:28.67 -    issuing S.F. activate to device [0]: < for ((i=0;i < 10000;i++)); do sleep 1; date +%H:%M:%S > /tmp/rt2_pid01_941_M; done ;>
+07/08/2012 10:54:32.81 - STOP#############################################
+07/08/2012 10:54:32.82 - 4.035 seconds length to this point 
+07/08/2012 10:54:32.84 - waiting to finish kills, sleep 0 seconds
+07/08/2012 10:54:32.87 -    issuing   stop to device [0]: < echo TEST STOP; echo STOPPED > /tmp/rt2_pid01_941_M;>
+07/08/2012 10:54:32.97 -    #killing [0]  grandchild  16639 and  16639 16641 16852 now
+07/08/2012 10:54:33.99 -    #Stopping client [0] #leaving ActiveThread # ...
+07/08/2012 10:54:33.99 -    finished  stop to device [0]
+07/08/2012 10:54:33.01 -    issuing   stop to device [1]: < echo Stop ... No action....or... killall children; echo STOPPED > /tmp/rt2_pid01_941_M;>
+07/08/2012 10:54:33.10 -    #ActiveThread :     #Starting client [0]           
+07/08/2012 10:54:33.13 -    #killing [1]  grandchild  16638 and  16638 16642 16846 now
+07/08/2012 10:54:33.13 -    issuing S.F. activate to device [0]: < for ((i=0;i < 10000;i++)); do sleep 1; date +%H:%M:%S > /tmp/rt2_pid01_941_M; done ;>
+07/08/2012 10:54:33.15 -    finished  stop to device [1]
+07/08/2012 10:54:33.15 - STOPPED##########################################
+07/08/2012 10:54:33.15 -    #Stopping client [1] #leaving ActiveThread # ...
+07/08/2012 10:54:33.16 - 4.969 seconds length  
+07/08/2012 10:54:33.17 - S.Func# [0] OFF ... was found in OFF state... 4.965 sec.
+07/08/2012 10:54:33.19 - S.Func# [1] OFF ... was found in OFF state... 4.962 sec.
+07/08/2012 10:54:41.36 - QUIT#############################################
+07/08/2012 10:54:41.37 - q  #############################################
+07/08/2012 10:54:41.40 -    issuing   quit to device [0]: < echo TEST QUITS ;>
+07/08/2012 10:54:41.42 -    issuing   quit to device [1]: < cat text ;>
+07/08/2012 10:54:49.83 - QUIT#############################################
+07/08/2012 10:54:49.84 - q  #############################################
+07/08/2012 10:54:49.87 -    issuing   quit to device [0]: < echo TEST QUITS ;>

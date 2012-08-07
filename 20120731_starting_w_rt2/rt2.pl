@@ -58,11 +58,13 @@ my $last_number="_";
 
 ##################### Tk stuff - states of buttons etc..
 
-my @chk_cam=qw( 0 0 0 0 0 );# maincheckbox !!! Operate the following crates (yes/no)
+my @chk_cam=     qw( 0 0 0 0 0 );# maincheckbox !!! Active threads (yes/no)
 my @chk_cam_runs=qw( 0 0 0 0 0 );# started--box !!! info about started (yes/no)
-my @chk_cam_rt=qw( 0 0 0 0 0 );#  checkbox !!! this is chkbox: retrig option on/off
-my $autolisten=1;
-my $autolisten_stop=1;
+my @chk_cam_rt=  qw( 0 0 0 0 0 );#  checkbox !!! this is chkbox: retrig option on/off
+my @chk_cam_onstart=qw( 0 0 0 0 0 );#  checkbox !!! : retrig option on/off
+my @chk_cam_onstop= qw( 0 0 0 0 0 );#  checkbox !!! : retrig option on/off
+#my $autolisten=1;              chk_cam_onstart
+#my $autolisten_stop=1;         chk_cam_onstop
 
 my @filepid10_onoff=qw(0 0 0 0 0); # listen state (in file 0 or 1 )
 
@@ -112,28 +114,31 @@ sub get_xml_data{
   my $parser = XML::LibXML->new();
   my $doc    = $parser->parse_file($filename);
   my $NT=$doc->findvalue('/prescription/threads');
-  my $AL=$doc->findvalue('/prescription/SFautostart');
-  my $AQ=$doc->findvalue('/prescription/SFautostop');
+#  my $AL=$doc->findvalue('/prescription/SFautostart');
+#  my $AQ=$doc->findvalue('/prescription/SFautostop');
   my $DT=$doc->findvalue('/prescription/default_t');
   my $ST=$doc->findvalue('/prescription/status_text');
   my $SS=$doc->findvalue('/prescription/status_text_size');
+
 #  print "NUMBER IS $NT / $AL\n\n";
+###############  FIRST LEVEL RETURNS ##########################
   if ($what eq "threads"){ return $NT;}
-  if ($what eq "SFautostart"){ return $AL;}
-  if ($what eq "SFautostop"){ return $AQ;}
+#  if ($what eq "SFautostart"){ return $AL;}
+#  if ($what eq "SFautostop"){ return $AQ;}
   if ($what eq "default_t"){ return $DT;}
 
   if ($what eq "status_text"){ return $ST;}
   if ($what eq "status_text_size"){ return $SS;}
 
+
+
 foreach my $thread ($doc->findnodes('/prescription/thread') ){
 
+    #number is important..........
     my $num=$thread->findvalue('./number');
-    my $nam=$thread->findvalue('./name');
-    my $namel=$thread->findvalue('./namel');
-    my $sf_retrig=$thread->findvalue('./spec_function_retrig');
-
-
+#    my $nam=$thread->findvalue('./name');
+#    my $namel=$thread->findvalue('./namel');
+#    my $sf_retrig=$thread->findvalue('./spec_function_retrig');
 # ---------------commands ---------------------
 #    my $lis=$thread->findvalue('./listen');
 #    my $cmd=$thread->findvalue('./command');
@@ -141,12 +146,21 @@ foreach my $thread ($doc->findnodes('/prescription/thread') ){
 #    my $cmdb=$thread->findvalue('./start');
 #    my $cmde=$thread->findvalue('./stop');
 #    print "   $num. $nam/$lis..... $cmd END\n";
+
     if ($nn eq $num){
 	my $cmd=""; # clear it
-	if ($what eq "name"){  return $nam;}	
-	if ($what eq "namel"){  return $namel;}
-	if ($what eq "spec_function_retrig"){  return $sf_retrig;}
 
+	print "DEBUG($nn): $what==".$thread->findvalue($what)."\n";
+
+	if ($what eq "name"){  return $thread->findvalue('./name');}	
+	if ($what eq "default_on"){ return $thread->findvalue('./default_on');}	
+	if ($what eq "namel"){  return $thread->findvalue('./namel');}
+	if ($what eq "spec_function_retrig"){  return $thread->findvalue('./spec_function_retrig');}
+	if ($what eq "spec_function_onstart"){  return $thread->findvalue('./spec_function_onstart');}
+	if ($what eq "spec_function_onstop"){  return $thread->findvalue('./spec_function_onstop');}
+
+
+#########COMMANDS ##############
 	if ($what eq "init")  { $cmd=$thread->findvalue('./init');}
 	if ($what eq "start") { $cmd=$thread->findvalue('./start');}
 	if ($what eq "stop")  { $cmd=$thread->findvalue('./stop');}
@@ -228,16 +242,20 @@ foreach my $thread ($doc->findnodes('/prescription/thread') ){
 #&get_xml_data(1,"name");
 $maxpids2=&get_xml_data(0,"threads");
 if ($maxpids2<=$maxpids){ $maxpids=$maxpids2;}
-$autolisten=&get_xml_data(0,"SFautostart");
-$autolisten_stop=&get_xml_data(0,"SFautostop");
+#I removed these two:
+#$autolisten=&get_xml_data(0,"SFautostart");
+#$autolisten_stop=&get_xml_data(0,"SFautostop");
 
 ### -  initial (default) pattern for active crates:
-my $pattern=&get_xml_data(0,"default_t");
 for ($i=0;$i<$maxpids;$i++){
-    print "$pattern\n";
-    $chk_cam[$i]= ($pattern && 1);
-    $pattern>>1;
+    #individual on   ----  you must check for 0, not to accept the value.....:(
+    if (&get_xml_data($i,"default_on")!=0){$chk_cam[$i]=1}
+    #individual retrigs
     if (&get_xml_data($i,"spec_function_retrig")!=0){$chk_cam_rt[$i]=1;}
+    #individual onstart onstop
+    if (&get_xml_data($i,"spec_function_onstart")!=0){$chk_cam_onstart[$i]=1;}
+    if (&get_xml_data($i,"spec_function_onstop")!=0){$chk_cam_onstop[$i]=1;}
+    print "DEBUG/$i/:  $chk_cam[$i],$chk_cam_rt,$chk_cam_onstart[$i],$chk_cam_onstop[$i]\n";
 }
 
 
@@ -502,12 +520,12 @@ $b_list[$j]->pack(-side=>"left", -expand=>0,    -padx=>0, -pady=>0 );
 
 
 
- $alis = $menubar[$i]->Checkbutton(-text => "Launch On Start",
-                        -variable => \$autolisten,);
- $alis->pack(-side=>"left", -expand=>0, -padx=>0, -pady=>0);
- $alise = $menubar[$i]->Checkbutton(-text => "Kill On Stop",
-                        -variable => \$autolisten_stop,);
- $alise->pack(-side=>"left", -expand=>0, -padx=>0, -pady=>0);
+# $alis = $menubar[$i]->Checkbutton(-text => "Launch On Start",
+#                        -variable => \$autolisten,);
+# $alis->pack(-side=>"left", -expand=>0, -padx=>0, -pady=>0);
+# $alise = $menubar[$i]->Checkbutton(-text => "Kill On Stop",
+#                        -variable => \$autolisten_stop,);
+# $alise->pack(-side=>"left", -expand=>0, -padx=>0, -pady=>0);
 
 
  $txt="StartAll S.F.";   
@@ -532,13 +550,73 @@ $menubar[$i]->pack(-side=>"top", -expand=>0,
 
 
 
+
+
+$i++;
+#   1b.      checkboxes
+#########################################################################
+ $menubar[$i]= $main->Frame(-relief=>"raised",  -borderwidth=>2);
+
+# ---------- entry field RUN NUM
+$labelOnStart= $menubar[$i]->Label(-text => "LaunchOnStart : ");
+$labelOnStart->pack(-side=>"left", -expand=>0, -ipadx=>10, -padx=>0, -pady=>0);
+
+
+for ($j=0; $j<$maxpids;$j++){
+ $txt="Thread$j";   
+ $txt=&get_xml_data($j,"namel");
+# $txt="$txt";   
+ $x_cam_onstart[$j] = $menubar[$i]->Checkbutton(-text => "$txt",
+                        -variable => \$chk_cam_onstart[$j],);
+ $x_cam_onstart[$j]->pack(-side=>"left", -expand=>0, -padx=>0, -pady=>0);
+}#for
+
+#---------------------------------------------------###### PACK MENUBAR2
+$menubar[$i]->pack(-side=>"top", -expand=>0,
+    -padx=>0, -pady=>0, -fill=>"both");
+#########################################################################
+
+
+
+
+
+$i++;
+#   1b.      checkboxes
+#########################################################################
+ $menubar[$i]= $main->Frame(-relief=>"raised",  -borderwidth=>2);
+
+# ---------- entry field RUN NUM
+$labelOnStop= $menubar[$i]->Label(-text => "     Kill   On Stop : ");
+$labelOnStop->pack(-side=>"left", -expand=>0, -ipadx=>10, -padx=>0, -pady=>0);
+
+
+for ($j=0; $j<$maxpids;$j++){
+ $txt="Thread$j";   
+ $txt=&get_xml_data($j,"namel");
+# $txt="$txt";   
+ $x_cam_onstop[$j] = $menubar[$i]->Checkbutton(-text => "$txt",
+                        -variable => \$chk_cam_onstop[$j],);
+ $x_cam_onstop[$j]->pack(-side=>"left", -expand=>0, -padx=>0, -pady=>0);
+}#for
+
+#---------------------------------------------------###### PACK MENUBAR2
+$menubar[$i]->pack(-side=>"top", -expand=>0,
+    -padx=>0, -pady=>0, -fill=>"both");
+#########################################################################
+
+
+
+
+
+
+
 $i++;
 #   1b.      checkboxes - retrig each channel extra 
 #########################################################################
  $menubar[$i]= $main->Frame(-relief=>"raised",  -borderwidth=>2);
 
 # ---------- entry field RUN NUM
-$labelRTline= $menubar[$i]->Label(-text => "AutoReTrig  S.F. : ");
+$labelRTline= $menubar[$i]->Label(-text => "AutoReTrig S.F. : ");
 $labelRTline->pack(-side=>"left", -expand=>0, -ipadx=>10, -padx=>0, -pady=>0);
 
 
@@ -551,14 +629,15 @@ for ($j=0; $j<$maxpids;$j++){
  $x_cam_rt[$j]->pack(-side=>"left", -expand=>0, -padx=>0, -pady=>0);
 }#for
 
-  $alis2 = $menubar[$i]->Checkbutton(-text => "AutoRetrig_ALL",
-                        -variable => \$autolisten2,);
- $alis2->pack(-side=>"left", -expand=>0, -padx=>0, -pady=>0);
+#  $alis2 = $menubar[$i]->Checkbutton(-text => "AutoRetrig_ALL",
+#                        -variable => \$autolisten2,);
+# $alis2->pack(-side=>"left", -expand=>0, -padx=>0, -pady=>0);
 
 #---------------------------------------------------###### PACK MENUBAR2
 $menubar[$i]->pack(-side=>"top", -expand=>0,
     -padx=>0, -pady=>0, -fill=>"both");
 #########################################################################
+
 
 
 
@@ -584,11 +663,15 @@ $menubar[$i]->pack(-side=>"top", -expand=>1,
 
 
 
+
+
+
+
 my $TEXYT=&get_xml_data(0,"status_text");
 if (&get_xml_data(0,"status_text_size")==0){ $TEXYT="";}
 if ($TEXYT ne ""){
 $i++;
-#   6.            TEXYT
+#   6.            TEXYT   status text   line
 #########################################################################
  $menubar[$i]= $main->Frame(-relief=>"raised",   -borderwidth=>2);
 
@@ -737,15 +820,15 @@ sub ChkState{
 
 ###########################
 #bordel
-#   autolisten2 --- retrig all
+#   autolisten2 --- retrig all REPLACED BY chk_cam_onstart
 #   $chk_cam_runs[$i]  --- use only when started (good to keep with launchOnStart)
 #
 ##########################
 ### when autolisten2 == 1 : reconnect automaticaly
 ### or when separate checkbutton && allowed.....reconnect automat
 #REMOVED      if ( $chk_cam_runs[$i] != 0 ){###this results in (autolisten) when started only!
-   if (  ($chk_cam_runs[$i]!=0)&&($autolisten==1) ){###this results in (autolisten) when started only!
-   if (   ( ($autolisten2==1) && ($chk_cam[$i]==1) ) ||
+   if (  ($chk_cam_runs[$i]!=0)&&($chk_cam_onstart[$i]==1) ){###this results in (autolisten) when started only!
+   if (  
 	  (($chk_cam_rt[$i]==1)&& ($chk_cam[$i]==1) )
 )  {
        if ($start_listen!=1){
@@ -753,7 +836,7 @@ sub ChkState{
 	$child_start_time[$i]=$seconds ;
 	 &Log("S.Func# $i ON ... by AutoRetrig "); 
        }# retrig only when it is not ON
-   }# autolisten2 - auto reconnect
+   }# autolisten2 - auto reconnect.....>????????
 #REMOVED      }#### $chk_cam_runs[$i] != 0 ### start was pressed before
    }
        #### this results in (autolisten) when started only!
@@ -916,10 +999,12 @@ sub STARTbut{
        }
        $chk_cam_runs[$j]=1; #it runs (yes)
       &Log( "      finished  start to device [$j]");
-  }#$chk_cam[$j]==1
- }#all pids
 
-    if ($autolisten==1){    &Listenbut(-1);}
+    if ($chk_cam_onstart[$j]==1){    &Listenbut( $j );}
+
+  }#$chk_cam[$j]==1 .....  this thread was active
+ }#all pids  ...... one by one
+
 
     $b_gomon->configure(-background=>'green',-activebackground =>'green' );
 #    $b_stop->configure(-background=>'red',-activebackground =>'red');
@@ -1078,12 +1163,12 @@ sub STOPbut{
        # there could be also killgrandchildren command inside
        # but preferably I use rather KillOnStop now......
        system("bash -c \"$cmdline\" ");
-       print "KILLING?? BECAUSE autolisten_stop== $autolisten_stop\n";
-       if ($autolisten_stop==1){
-	   print "KILLING BECAUSE autolisten_stop==1\n";
+       print "KILLING?? BECAUSE chk_cam_onstop==($chk_cam_onstop[$j] \n";
+       if ($chk_cam_onstop[$j]==1){
+	   print "KILLING BECAUSE (chk_cam_onstop[j]==1\n";
 	   &KILLpid( $j); 
        }else{
-	   print "NOT KILLING BECAUSE autolisten_stop==0\n";
+	   print "NOT KILLING BECAUSE chk_cam_onstop[j]==0\n";
        }
 
        if ($?!=0){   

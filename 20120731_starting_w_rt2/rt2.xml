@@ -2,10 +2,10 @@
    <!-- threads> number of thread section/ devices controled  </threads -->
    <threads> 2  </threads>
    <!-- autostart> startup SpecFunc option on/off    values  0/1 </autolisten -->
-   <SFautostart>1</SFautostart>
-   <SFautostop>1</SFautostop>
+   <!-- SFautostart>1</SFautostart -->
+   <!-- SFautostop>1</SFautostop -->
    <!-- default_t> bit pattern for default thread/device on eg 0,1,3,7  </default_t -->
-   <default_t> 3  </default_t>
+   <!-- default_t> 3  </default_t-->
    <status_text>  Experiment #1  </status_text>
    <status_text_size> 10 </status_text_size>
 <!-- begin begin begin begin begin begin begin begin begin  -->
@@ -14,6 +14,7 @@
  -->
    <thread>
      <number>0</number>
+     <default_on>1 </default_on>
      <name> Time  </name>
      <namel> time</namel>
      <init>
@@ -28,6 +29,8 @@
         $setstatustext  STOPped;
 	echo STOPPED > $pidM;
     </stop>
+    <spec_function_onstart>1</spec_function_onstart>
+    <spec_function_onstop>1</spec_function_onstop>
      <spec_function_retrig> 1 </spec_function_retrig> 
      <spec_function> 
  for ((i=0;i &lt; 10000;i++)); do 
@@ -46,19 +49,23 @@ done
    <thread>
      <number>1</number>
      <name> GeneTXT  </name>
+     <default_on>0 </default_on>
      <namel> sendTXT</namel>
      <init>
        touch text;
        rm text
      </init>
      <start>
- echo START....to generate u must do listen
+ echo START....use Spec Func to generate data
      </start>
      <stop>
        echo Stop ... No action....or... killall children;
 	echo STOPPED > $pidM;
      </stop>
 <!-- SPECIAL CHARACTERS:    < and &   &lt; and &amp; -->
+    <spec_function_onstart>1</spec_function_onstart>
+    <spec_function_onstop>1</spec_function_onstop>
+     <spec_function_retrig> 0 </spec_function_retrig> 
      <spec_function>   
  for ((i=0;i &lt; 10000;i++)); do 
  t=`date +%s`;
