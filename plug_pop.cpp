@@ -62,22 +62,33 @@ extern "C" {
    *            SIMPLE PRINTOUT  int
    */
   int* pop_empty(int* par){// SIMPLE PRINTOUT ....
-
+    char chL[500];
     concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
     int i=0;
     int wait=1;
     while (i<30){
-   if(XTERM!=NULL)fprintf(XTERM,"  POP empty: pointer==%d\n", (int)buffer );
+      sprintf(chL,"POP: empty i==%d" ,  i );table_log(1,chL);
+      //   if(XTERM!=NULL)fprintf(XTERM,"  POP empty: pointer==%d\n", (int)buffer );
    wait=1;
    wait=MyCond.TimedWaitRelative( 1000  ) ; // wait 500
    if (wait==0){break;}
-   usleep(1* 1000*1000);
+   //   usleep(1* 1000*1000);
    i++;
     }
+   sprintf(chL,"POP: empty EXITed i==%d" ,  i );table_log(1,chL);
 
-   if(XTERM!=NULL)fprintf(XTERM,"  POP empty: EXIT buf==%d\n", (int)buffer );
+   //   if(XTERM!=NULL)fprintf(XTERM,"  POP empty: EXIT buf==%d\n", (int)buffer );
 
   }//-----------------------------------------------
+
+
+
+
+
+
+
+
+
 
 
 
@@ -85,7 +96,7 @@ extern "C" {
    *            SIMPLE PRINTOUT  int
    */
   int* pop_logint(int* par){// SIMPLE PRINTOUT ....
-
+    char chL[500];
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    if(XTERM!=NULL)fprintf(XTERM,"  POP log: pointer==%d\n", (int)buffer );
    int datum=0;// (int datum  ***)
@@ -101,19 +112,26 @@ extern "C" {
    //      sprintf( fname ,"%s", xml.output  );
    //----------------- LOOP ----------------
      while( !buffer->empty() ){
-       buffer->wait_and_pop(datum); //( datum ***)
-          if(XTERM!=NULL)fprintf(XTERM,"W #%3d. <%d> <%d>\n",
-				 cnt,datum,&datum); //(&datum ***)
+       buffer->wait_and_pop(datum); //( datum ***)   
+       sprintf(chL,"POP:W #%3d. <%d> <%d>" , cnt,datum,&datum  );table_log(1,chL);
+
+       //          if(XTERM!=NULL)fprintf(XTERM,"W #%3d. <%d> <%d>\n",
+       //				 cnt,datum,&datum); //(&datum ***)
           cnt++; 
   	TThread::CancelPoint(); // When CancelOn()...
     }
      //useless here...............but 
     wait=MyCond.TimedWaitRelative( 300  );
    if (wait==0){ 
-      if(XTERM!=NULL)fprintf(XTERM,"POP got BROADCAST SIGNAL... %s\n","");
+     sprintf(chL,"POP:got BROADCAST SIGNAL...%s " ,  "" );table_log(1,chL);
+      //if(XTERM!=NULL)fprintf(XTERM,"POP got BROADCAST SIGNAL... %s\n","");
     }
-   if(XTERM!=NULL)fprintf(XTERM,"  POP log: EXIT buf==%d\n", (int)buffer );
+     sprintf(chL,"POP:  EXIT... buf==%d " ,  (int)buffer );table_log(1,chL);
+     // if(XTERM!=NULL)fprintf(XTERM,"  POP log: EXIT buf==%d\n", (int)buffer );
  }// ****************************end of function **********
+
+
+
 
 
 
@@ -129,9 +147,11 @@ extern "C" {
    *            SIMPLE PRINTOUT  txt
    */
   int* pop_logtxt(int* par){// I DONT KNOW .... just printout??? NOt useful, ends very fasst.
-
+    char chL[500];
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   if(XTERM!=NULL)fprintf(XTERM,"  POP logtxt v.2 : %d\n", (int)buffer );
+   //   if(XTERM!=NULL)fprintf(XTERM,"  POP logtxt v.2 : %d\n", (int)buffer );
+   sprintf(chL,"POP: logtxt : %d" , (int)buffer  );table_log(1,chL);
+
    int datum=0;// (int datum  ***)
    int runempty=0; int wait=1;
    usleep(1000*1000);
@@ -147,6 +167,7 @@ extern "C" {
    char ch[1024]=""; // 1kB text line
    // I AM COMPLETELY LOST WITH THERE CONVERSIONS &...
    char cc;
+   while(1==1){
    while( !buffer->empty() ){
      buffer->wait_and_pop(datum); //( datum ***)
      //unsigned short int si=(int)datum;//short int si=(int)datum; !!!
@@ -157,18 +178,24 @@ extern "C" {
        sprintf( ch, "%s%c", ch, cc  );
        //       if(XTERM!=NULL)fprintf(XTERM,"RUNNI:%s\n",ch);
      }else{//  \n found
-       if(XTERM!=NULL)fprintf(XTERM,"FINAL:%s\n",ch);
-       sprintf( ch , "%s", ""); // reset
+       //       if(XTERM!=NULL)fprintf(XTERM,"FINAL:%s\n",ch);
+        sprintf(chL,"POP: FINAL:%s" , ch  );table_log(1,chL);
+      sprintf( ch , "%s", ""); // reset
      }//--------------------------- EOL/not EOL------------
       cnt++; 
-      TThread::CancelPoint(); // When CancelOn()...
-   }
+      // TThread::CancelPoint(); // When CancelOn()...
+   }// buffer empty 
+   wait=MyCond.TimedWaitRelative( 1000  );
+   if (wait==0){ break;}
+  }
    //useless here...............but 
-   wait=MyCond.TimedWaitRelative( 300  );
+   if (wait!=0){wait=MyCond.TimedWaitRelative( 300  );}
    if (wait==0){ 
-     if(XTERM!=NULL)fprintf(XTERM,"POP got BROADCAST SIGNAL... %s\n","");
+        sprintf(chL,"POP:  got BROADCAST SIGNAL...:%s" , ""  );table_log(1,chL);
+	//     if(XTERM!=NULL)fprintf(XTERM,"POP got BROADCAST SIGNAL... %s\n","");
    }
-   if(XTERM!=NULL)fprintf(XTERM,"POP logtxt v.2.: EXIT %d\n",(int)buffer);
+        sprintf(chL,"POP: EXIT  %d" ,  (int)buffer );table_log(1,chL);
+	//   if(XTERM!=NULL)fprintf(XTERM,"POP logtxt v.2.: EXIT %d\n",(int)buffer);
  }// ****************************end of function **********
 
 
@@ -192,16 +219,19 @@ extern "C" {
   // prepare TTree===========================================
   // tell number of values on the line
   int pop_get_npar( const char* ch ){
+    char chL[500];
     TString oneline=ch, token; int j=0; double bu; 
       TObjArray *tar; 
-        if(XTERM!=NULL)fprintf(XTERM,"Analyzing string:%s\n",ch);
+       sprintf(chL,"POP: Analyzing string:%s" , ch  );table_log(1,chL);
+       //       if(XTERM!=NULL)fprintf(XTERM,"Analyzing string:%s\n",ch);
         tar= oneline.Tokenize(" ");
 
 
         while (j<tar->GetEntries()){
          token= ((TObjString*)(tar->At(j)))->GetString();
          bu= token.Atof(); 
-	 if(XTERM!=NULL)fprintf(XTERM,"  token %d/  <%f>\n", j, bu);
+         sprintf(chL,"POP:   token %d/  <%f>" , j,bu  );table_log(1,chL);
+	 //	 if(XTERM!=NULL)fprintf(XTERM,"  token %d/  <%f>\n", j, bu);
 	 j++;
 	}
 	return (j); // j-1? not... here 0->  names are 1->
@@ -215,6 +245,11 @@ extern "C" {
 
 
 
+  /***************************************************
+   *
+   *  PLACE FOR TTREE      and   TH1 also
+   *
+   */
   int pop_txt_record( const char* chse ){
     TString oneline=chse, token; int j=0; double bu; 
       TObjArray *tar; 
@@ -244,7 +279,16 @@ extern "C" {
 	 j++;
 	}
 	t_event.n++;
-	txt_ttree->Fill();
+	txt_ttree->Fill();    
+
+	//I assume at least 2 numbers
+	TH1F *texto_h1;     texto_h1=(TH1F*)gDirectory->Get("texto_h1");
+	if (texto_h1==NULL){texto_h1=new TH1F("texto_h1","texto_h1",5000,0,5000); }
+	TH1F *texto_h2;     texto_h2=(TH1F*)gDirectory->Get("texto_h2");
+	if (texto_h2==NULL){texto_h2=new TH1F("texto_h2","texto_h2",5000,0,5000); }
+	texto_h1->Fill(t_event.t[0]);
+	texto_h2->Fill(t_event.t[1]);
+
     return j;
   }
 
@@ -252,6 +296,7 @@ extern "C" {
 
 
   int conv_t_init( int npar ){; // similar to conv_u_init; t[0]...t[n]
+    char chL[500];
    char brname[100];  // main branch in texto......
    int  CIRCULAR=100000;
    char ttree_name[50];
@@ -262,17 +307,18 @@ extern "C" {
     sprintf( brname, "%s",  "main" );  // main,  not mainV
     if ( gDirectory->Get( ttree_name ) != NULL){
 
-      if(XTERM!=NULL)fprintf(XTERM,
-	    "taking previously existing ttree %x !!!!\n", (int)txt_ttree);
-      //     txt_ttree->SetBranchAddress( brname , &t_event.t[0] );
+      //      if(XTERM!=NULL)fprintf(XTERM,  "taking previously existing ttree %x !!!!\n", (int)txt_ttree);
+     sprintf(chL,"POP: taking previously existing ttree %x !!!!" , (int)txt_ttree  );table_log(1,chL);
+     //     txt_ttree->SetBranchAddress( brname , &t_event.t[0] );
      txt_ttree->SetBranchAddress( brname , &t_event.n );
 
     }else{// texto already exists  
 
       gROOT->cd(); // go memory resident ttree like in "" and nano_conv.
       txt_ttree = new TTree( ttree_name , "ttree_from_textline");
-       if(XTERM!=NULL)fprintf(XTERM,"NEW TTREE %x\n", (int)txt_ttree );
-      if (CIRCULAR!=0){ txt_ttree->SetCircular(CIRCULAR);}
+      //       if(XTERM!=NULL)fprintf(XTERM,"NEW TTREE %x\n", (int)txt_ttree );
+      sprintf(chL,"POP: NEW TTREE    %x" , (int)txt_ttree  );table_log(1,chL);
+     if (CIRCULAR!=0){ txt_ttree->SetCircular(CIRCULAR);}
       //  /s  is short.  
       sprintf(ch ,"%s/i", "n" );              // n    UInt_t : ordered
       sprintf(ch ,"%s:%s%03d/D", ch, "T",  1 );  //T001  double
@@ -280,20 +326,30 @@ extern "C" {
       sprintf(ch ,"%s:%s%03d/D", ch,  "T",  i );  
 
     }// all channels branch
-     if(XTERM!=NULL)fprintf(XTERM,
-	"This row defines the  Branch  main :\n%s\n", ch );  
+    //     if(XTERM!=NULL)fprintf(XTERM,"This row defines the  Branch  main :\n%s\n", ch );  
+     sprintf(chL,"POP: Branch(main):%s" , ch  );table_log(1,chL);
      //    txt_ttree->Branch(brname , &t_event.t[0], ch );// 
     txt_ttree->Branch(brname , &t_event.n, ch );// 
-     if(XTERM!=NULL)fprintf(XTERM,
-	     " ttree initialized ok    %x\n" , (int)txt_ttree );
+    //     if(XTERM!=NULL)fprintf(XTERM,    " ttree initialized ok    %x\n" , (int)txt_ttree );
+     sprintf(chL,"POP: tree initialized OK  %x" , (int)txt_ttree  );table_log(1,chL);
+
     txt_ttree->ls();
-      if(XTERM!=NULL)fprintf(XTERM,
-	      "      ttree initialized ok see ls Print()   %x  n== %lld\n" , (int)txt_ttree ,txt_ttree->GetEntries());
+      if(XTERM!=NULL)fprintf(XTERM, "      ttree initialized ok see ls Print()   %x  n== %lld\n" , (int)txt_ttree ,txt_ttree->GetEntries());
+      sprintf(chL,"POP: tree initialized ok,see ls Print() %x n==%lld" , (int)txt_ttree ,txt_ttree->GetEntries() );
+      table_log(1,chL);
+
+      //      if(XTERM!=NULL)fprintf(XTERM, "      ttree initialized ok see ls Print()   %x  n== %lld\n" , (int)txt_ttree ,txt_ttree->GetEntries());
 
     }//-------------------------------------TTree 
     //    TTree 
     //->SetBranch("MAIN", &t_event.t[0] );
   }
+
+
+
+
+
+
 
 
 
@@ -311,8 +367,11 @@ extern "C" {
    */
   int* pop_txttree(int* par){// THIS WORKS - IT takes 1st line and defines the tree - and accumulates
 
+    char chL[500];
+    int lines_received=0;
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   if(XTERM!=NULL)fprintf(XTERM,"  POP logtxt v.2 : %d\n", (int)buffer );
+   sprintf(chL,"POP: txttree : %d" , (int)buffer  );table_log(1,chL);
+   //   if(XTERM!=NULL)fprintf(XTERM,"  POP logtxt v.2 : %d\n", (int)buffer );
    int datum=0;// (int datum  ***)
    int runempty=0; int wait=1;
    int ttree_inited=0;// initialized?-NOT yet
@@ -343,13 +402,16 @@ extern "C" {
        //   if(XTERM!=NULL)fprintf(XTERM,"TEXT=%s\n",ch);
 
        if (ttree_inited==0){
-       if(XTERM!=NULL)fprintf(XTERM,"%s\n","creating the tree.....");
+	 //       if(XTERM!=NULL)fprintf(XTERM,"%s\n","creating the tree.....");
+       sprintf(chL,"POP: creating the tree... %s" , ""  );table_log(1,chL);
        nparams=pop_get_npar( ch );
-       if(XTERM!=NULL)fprintf(XTERM,"       nparams==%d\n",nparams);
+       sprintf(chL,"POP:  nparams==%d" , nparams  );table_log(1,chL);
+       //       if(XTERM!=NULL)fprintf(XTERM,"       nparams==%d\n",nparams);
        conv_t_init( nparams ); // similar to conv_u_init; t[0]...t[n]
        ttree_inited=1;// no more try to init
        }// ---ttree was not initied.........
        pop_txt_record( ch );
+       sprintf(chL,"POP:  lines==%d" , lines_received  );table_log(1,chL);lines_received++;
        sprintf( ch , "%s", ""); //reset
      }//--------------------------- EOL/not EOL------------
       cnt++; 
@@ -358,11 +420,13 @@ extern "C" {
    //useless here...............but 
    wait=MyCond.TimedWaitRelative( 300  );
    if (wait==0){ 
-     if(XTERM!=NULL)fprintf(XTERM,"POP got BROADCAST SIGNAL... %s\n","");
+       sprintf(chL,"POP: got BROADCAST SIGNAL...%s" , ""  );table_log(1,chL);
+       //     if(XTERM!=NULL)fprintf(XTERM,"POP got BROADCAST SIGNAL... %s\n","");
    }
    wait=MyCond.TimedWaitRelative( 500  );
  }while(wait!=0);// ON BROADCAST
-   if(XTERM!=NULL)fprintf(XTERM,"POP logtxt v.2.: EXIT %d\n",(int)buffer);
+   //   if(XTERM!=NULL)fprintf(XTERM,"POP logtxt v.2.: EXIT %d\n",(int)buffer);
+        sprintf(chL,"POP: EXIT  %d" ,  (int)buffer );table_log(1,chL);
  }// ****************************end of function **********
 
 
@@ -377,9 +441,10 @@ extern "C" {
    *            TO FILE OR JUST  POP     
    */
   int* pop_file(int* par){// POP TO FILE ...
-
+    char chL[500];
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   if(XTERM!=NULL)fprintf(XTERM,"  POP pop-remote  par==%d; pointer==%d\n", par,(int)buffer );
+   //   if(XTERM!=NULL)fprintf(XTERM,"  POP pop-remote  par==%d; pointer==%d\n", par,(int)buffer );
+        sprintf(chL,"POP: file  par==%d; pointer==%d " , par,(int)buffer  );table_log(1,chL);
    int datum=0;
    int runempty=0;
 
@@ -395,20 +460,25 @@ extern "C" {
       if ( strlen(fname)>0){
 	//----------------OPEN FILE append and write
       outfile=fopen( fname,"ab"  );
-      if(XTERM!=NULL)
-	fprintf(XTERM,"  POP opened %s for WRITE - appending\n", fname);
+      //      if(XTERM!=NULL)	fprintf(XTERM,"  POP opened %s for WRITE - appending\n", fname);
+        sprintf(chL,"POP: opened %s for WRITE - appending" , fname  );table_log(1,chL);
+
       if (outfile!=NULL){
 	while( !buffer->empty() ){
 	  buffer->wait_and_pop(datum);
-          if ((cnt%250000)==0){if(XTERM!=NULL)
-	      fprintf(XTERM,"W     %7lld kB\n",4*cnt/1000);} cnt++; 
+          if ((cnt%250000)==0){
+	    //	    if(XTERM!=NULL) fprintf(XTERM,"W     %7lld kB\n",4*cnt/1000);
+	    sprintf(chL,"POP:W     %7lld kB " , 4*cnt/1000  );table_log(1,chL);
+	  } 
+	  cnt++; 
 	  fwrite ( &datum , 1 , 4  , outfile );
 	}
 	fclose(outfile);
   	TThread::CancelPoint(); // When CancelOn(), 
       }else{// outfile not NULL
-	if(XTERM!=NULL)
-	  fprintf(XTERM,"  POP outfile %s == NULL\n%s", fname );
+	//	if(XTERM!=NULL)fprintf(XTERM,"  POP outfile %s == NULL\n%s", fname );
+	sprintf(chL,"POP:   outfile %s == NULL " , fname  );table_log(1,chL);
+
 	runempty=1;
       }//      outfile not NULL
       }//strlen fname > 0   NOT ""
@@ -419,7 +489,11 @@ extern "C" {
 	//-----------run empty--------
 	while( !buffer->empty() ){
 	  buffer->wait_and_pop(datum);
-          if ((cnt%250000)==0){if(XTERM!=NULL)fprintf(XTERM,"-   %7lld kB\n",4*cnt/1000);} cnt++; 
+          if ((cnt%250000)==0){
+	    //  if(XTERM!=NULL)fprintf(XTERM,"-   %7lld kB\n",4*cnt/1000);
+	    sprintf(chL,"POP: -   %7lld kB  " ,  4*cnt/1000 );table_log(1,chL);
+	  } 
+	  cnt++; 
   	TThread::CancelPoint(); // When CancelOn(), here the thread can be interrupted.
 	}//while,  no writeout	
       }//runempty
@@ -435,14 +509,20 @@ extern "C" {
 
 
 
+
+
+
   /*****************************************************************
    *            TEST TO SORT THE EVENTS ...........  CREATE TTREE
+   *
    */
   int* pop_sort(int* par){// POP ... nanot ZD data 4*int system; CONVERSION
+    char chL[500];
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   if(XTERM!=NULL)fprintf(XTERM,"  POP pop SORT *******%s\n", "" );
-   if(XTERM!=NULL)fprintf(XTERM,"  POP pop SORT *******%s\n", "" );
-   if(XTERM!=NULL)fprintf(XTERM,"  POP pop SORT *******%s\n", "" );
+//   if(XTERM!=NULL)fprintf(XTERM,"  POP pop SORT *******%s\n", "" );
+//   if(XTERM!=NULL)fprintf(XTERM,"  POP pop SORT *******%s\n", "" );
+//   if(XTERM!=NULL)fprintf(XTERM,"  POP pop SORT *******%s\n", "" );
+   sprintf(chL,"POP: SORT int .... starting  %d" ,  (int)buffer );table_log(1,chL);
 
       double downtime; int downtimef, downtimei,  wait=1;
 
@@ -530,18 +610,23 @@ extern "C" {
 	   circular);
  
 
-  if(XTERM!=NULL)fprintf(XTERM,"  POP PQ%s\n\n",initline);
+  //  if(XTERM!=NULL)fprintf(XTERM,"  POP PQ%s\n\n",initline);
+        sprintf(chL,"POP: %s" , initline  );table_log(1,chL);
   conv_u_init("", initline ); // file-name makes a problem for analyze-
 
 
-  if(XTERM!=NULL)fprintf(XTERM,"  POP PQPrepared to runempty......\n","");
+  //  if(XTERM!=NULL)fprintf(XTERM,"  POP PQPrepared to runempty......\n","");
+        sprintf(chL,"POP: to enter (runempty==1)%s" , ""  );table_log(1,chL);
+
       if (runempty==1){
 	//-----------run empty--------
 	int pointer; verbose=0;// from nano_acquis_pureconvert
 
-	if(XTERM!=NULL)fprintf(XTERM,
-			       "POP PQ....bufsize==%10d empty==%d \n", 
-			       buffer->size(), buffer->empty() );	
+	//	if(XTERM!=NULL)fprintf(XTERM,
+	//			       "POP PQ....bufsize==%10d empty==%d \n", 
+	//			       buffer->size(), buffer->empty() );	
+        sprintf(chL,"POP: bufsize==%10d empty==%d" ,buffer->size(), buffer->empty()  );table_log(1,chL);
+
 	  int status=0;
 	  while(1==1){// INFINITE--------------------------------
 
@@ -561,15 +646,18 @@ extern "C" {
 	  //one_buffer_process( (void*)buffer,  int(nminibuffer/4) , int(startup/4) ); //
 	  one_buffer_process( (void*)&oneeventbuf, pointer , 0 ); //
 	  if (cnt_evt%50000 ==0){
-	  if(XTERM!=NULL)fprintf(XTERM,"PQ OBP %lld\n",cnt_evt );fflush(XTERM);
+	    //  if(XTERM!=NULL)fprintf(XTERM,"PQ OBP %lld\n",cnt_evt );fflush(XTERM);
+           sprintf(chL,"POP: evt#= %lld" , cnt_evt  );table_log(1,chL);
 	  }
 	}//WHILE --- next event
 	if (status==0){
-      if(XTERM!=NULL)fprintf(XTERM,
-		 "POP PQ (int)cnt=== %lld,  events=%lld --leaving poper\n",
-			     cnt,  cnt_evt);
+           sprintf(chL,"POP: cnt==%lld, evts= %lld --leaving" ,cnt, cnt_evt  );table_log(1,chL);
+	   //      if(XTERM!=NULL)fprintf(XTERM,
+	   //		 "POP PQ (int)cnt=== %lld,  events=%lld --leaving poper\n",
+	   //			     cnt,  cnt_evt);
 	}//status==0
-	if(XTERM!=NULL)fprintf(XTERM,"PQ %lld\n",cnt_evt );fflush(XTERM);
+	//	if(XTERM!=NULL)fprintf(XTERM,"PQ %lld\n",cnt_evt );fflush(XTERM);
+        sprintf(chL,"POP:  evt#= %lld (@status++)" , cnt_evt );table_log(1,chL);
 	//	usleep(1000*300);//buffer empty:100ms wait before next try
 	status++;
 
@@ -583,19 +671,23 @@ extern "C" {
        downtime=downtime+2.5;   // 0.5 sec was NOT ENOUGH !!!
        downtimei=(int)downtime;
        downtimef=(int)( 1e+9*(downtime-1.0*downtimei) );
-       if(XTERM!=NULL)fprintf(XTERM,"P%s","" );
-       wait=MyCond.TimedWait(  downtimei , downtimef  ) ;
+       //       if(XTERM!=NULL)fprintf(XTERM,"P%s","" );
+         sprintf(chL,"POP:  wait-> %s" , "" );table_log(1,chL);
+      wait=MyCond.TimedWait(  downtimei , downtimef  ) ;
        //       if(XTERM!=NULL)fprintf(XTERM,"\n\n  FTREE  wait %d ! %d.%d\n", wait, downtimei,downtimef);
        if (wait==0)break;
        //       usleep(1000*300);
-       if(XTERM!=NULL)fprintf(XTERM,"Q%s","" );
+       //       if(XTERM!=NULL)fprintf(XTERM,"Q%s","" );
+         sprintf(chL,"POP:   -> wait %s" , "" );table_log(1,chL);
 
        //	TThread::CancelPoint(); // When CancelOn(), here the thread can be interrupted.
 	}//---------------------------------------------INFINITE
 
       }//runempty
       //this neve happenes
-      if(XTERM!=NULL)fprintf(XTERM,"  POPER SORT END  cnt=== %lld,  events=%lld -------leaving poper\n",cnt,  cnt_evt);
+      //if(XTERM!=NULL)fprintf(XTERM,"  POPER SORT END  cnt=== %lld,  events=%lld -------leaving poper\n",cnt,  cnt_evt);       
+      sprintf(chL,"POP:  SORT END  cnt=== %lld,  events=%lld----leaving " , cnt,  cnt_evt );table_log(1,chL);
+
 
 }/**********************end of function ************/
 

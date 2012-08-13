@@ -48,13 +48,21 @@ extern "C" {
   //====================================
   //==        empty 
  int* evt_analyze_empty(int* par){
+   char ch[500];
    int wait=1;
+   int i;
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   if(XTERM!=NULL)fprintf(XTERM,"evt_analyze EMPTY...........%s\n","");
-    wait=MyCond.TimedWaitRelative( 300+700+2000  );
-   if (wait==0){ 
-      if(XTERM!=NULL)fprintf(XTERM,"POP got BROADCAST SIGNAL... %s\n", "" );
-    }
+
+   for (i=0;i<30;i++){
+   sprintf(ch,"ANA:evt_analyze EMPTY.......%d" ,  i );table_log(2,ch);
+    wait=MyCond.TimedWaitRelative( 1000  );
+   }
+   //   if(XTERM!=NULL)fprintf(XTERM,"evt_analyze EMPTY...........%s\n","");
+   //   if (wait==0){ 
+   //      if(XTERM!=NULL)fprintf(XTERM,"POP got BROADCAST SIGNAL... %s\n", "" );
+   //    }
+   sprintf(ch,"ANA:evt_analyze EMPTY..EXITed \n" ,  i );table_log(2,ch);
+
 
  }// ********************* end  of  function  ***********
 

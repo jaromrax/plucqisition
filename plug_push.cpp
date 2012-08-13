@@ -78,11 +78,13 @@ extern "C" {
    *            PUSH only integers 1.....200
    */
   int* push_int(int* par){// TEST....just integers into the queue
-
+    char ch[400];
       concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    //   concurrent_queue *buffer=(concurrent_queue*)par;
-      if(XTERM!=NULL)fprintf(XTERM,
-		  "PUSH (integers) START buffer=%d\n",(int)buffer );
+
+      sprintf(ch,"PUSH (integers) START buffer=%d\n",(int)buffer );table_log(0,ch);
+      //      if(XTERM!=NULL)fprintf(XTERM,
+      //		  "PUSH (integers) START buffer=%d\n",(int)buffer );
       //   for (int i=1;i<1000*1000*1;i++){  //........4*300M = 1200MB
    for (int i=1;i<200;i++){  //........4*300M = 1200MB
      //    buffer.push ( i );
@@ -391,8 +393,12 @@ extern "C" {
   //     tail -f text | nc localhost 9302
   int* push_net_txtserv3(int* par){ // SERVER FOR TEXT FILE ... we try ->select
                                     //  PADA TO NA PRVNI,2. ZMACKNUTI ENTER
+    char ch[500];
+    int lines_pushed=0;
      concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-     if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-remote (network,txt2)  par==%d; pointer==%d\n", par,(int)buffer );
+     //if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-remote (network,txt2)  par==%d; pointer==%d\n",par,(int)buffer);
+     sprintf(ch,"PUSH push-remote (network,txt2)  par==%d; pointer==%d", par,(int)buffer );
+     table_log(0,ch);
 
    long long int cnt=0;
    char ipaddress[100];
@@ -421,17 +427,20 @@ FD_ZERO(&read_fds);
 /* get the listener */
 if((listener = socket(AF_INET, SOCK_STREAM, 0)) == -1)
 {
-perror("Server-socket() error lol!");exit(1);
-}
-printf("Server-socket() is OK...\n");
+  perror(" socket() error lol!");return NULL;//exit(1);
+}     
+ sprintf(ch,"PUSH: socket() is OK,lines==%5d",lines_pushed );table_log(0,ch);
+
+//printf(" socket() is OK...\n");
 /*"address already in use" error message   SO_REUSEADDR */
 if(setsockopt(listener, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1)
 {
-perror("Server-setsockopt() error lol!");
+perror(" setsockopt() error lol!");
 exit(1);
 }
-printf("Server-setsockopt() is OK...\n");
- 
+//printf(" setsockopt() is OK...\n");
+ sprintf(ch,"%s","PUSH: socketopt() is OK... " );table_log(0,ch);
+
 /* bind */
 serveraddr.sin_family = AF_INET;
 serveraddr.sin_addr.s_addr = INADDR_ANY;
@@ -439,13 +448,17 @@ serveraddr.sin_port = htons(PORT);
 memset(&(serveraddr.sin_zero), '\0', 8);
  
 if(bind(listener, (struct sockaddr *)&serveraddr, sizeof(serveraddr)) == -1)
-{    perror("Server-bind() error lol!");    exit(1); }
-printf("Server-bind() is OK...\n");
+{    perror(" bind() error lol!");    exit(1); }
+//printf(" bind() is OK...\n");
+sprintf(ch,"%s","PUSH:  bind() is OK..." );table_log(0,ch);
+
  /* listen */
 if(listen(listener, 10) == -1)
-{     perror("Server-listen() error lol!");     exit(1);  }
-printf("Server-listen() is OK...\n");
- 
+{     perror(" listen() error lol!"); return NULL;//    exit(1); 
+ }
+//printf(" listen() is OK...\n");
+ sprintf(ch,"%s","PUSH:  listen() is OK..." );table_log(0,ch);
+
 /* add the listener to the master set */        FD_SET(listener, &master);
 /* keep track of the biggest file descriptor */ fdmax = listener; /* so far, it's this one*/
  
@@ -456,9 +469,14 @@ for(;;)
   memcpy(&tv1, &tv, sizeof(tv));
   //if(select(fdmax+1, &read_fds, NULL, NULL, NULL) == -1)
 if(select(fdmax+1, &read_fds, NULL, NULL, &tv1) == -1)
-{    perror("Server-select() error lol!");    exit(1);}
-printf("Server-select() is OK...\n");
- 
+{    perror(" select() error lol!");  return NULL;//  exit(1);
+}
+//printf(" select() is OK...\n");
+ sprintf(ch,"PUSH:  select() is OK...,lines==%5d",lines_pushed );table_log(0,ch);
+  wait=1;
+  wait=MyCond.TimedWaitRelative( 100  ) ; // wait 500
+  if (wait==0){break;}
+
 /*run through the existing connections looking for data to be read*/
 for(i = 0; i <= fdmax; i++)
 {
@@ -469,11 +487,17 @@ for(i = 0; i <= fdmax; i++)
          /* handle new connections */
         addrlen = sizeof(clientaddr);
 	if((newfd = accept(listener, (struct sockaddr *)&clientaddr, (socklen_t*)&addrlen)) == -1)
-{    perror("Server-accept() error lol!");}else{//  accept OK
-    printf("Server-accept() is OK...\n");
+{    perror(" accept() error lol!");}else{//  accept OK
+	  //    printf(" accept() is OK...\n");
+sprintf(ch,"%s","PUSH:  accept() is OK..." );table_log(0,ch);
+
  FD_SET(newfd, &master); /* add to master set */
 if(newfd > fdmax){ /* keep track of the maximum */    fdmax = newfd;}
-printf("SSS New connection from %s on socket %d\n",  inet_ntoa(clientaddr.sin_addr), newfd);
+
+ sprintf(ch,"PUSH: New connection from %s on socket %d", inet_ntoa(clientaddr.sin_addr), newfd );
+ table_log(0,ch);
+
+ //printf("SSS New connection from %s on socket %d\n",  inet_ntoa(clientaddr.sin_addr), newfd);
 	}//  accept OK
      }//i == listener
 else
@@ -482,24 +506,41 @@ else
 if((nbytes = recv(i, buf, sizeof(buf), 0)) <= 0)
 {
 /* got error or connection closed by client */
-if(nbytes == 0)
+  if(nbytes == 0){
  /* connection closed */
- printf("SSS socket %d hung up\n",  i); else  perror("recv() error lol!");
+sprintf(ch,"PUSH:  socket %d hung up" ,  i );table_log(0,ch);
+    //printf("SSS socket %d hung up\n",  i);
+  } else  perror("recv() error lol!");
  /* close it... */close(i);/* remove from master set */FD_CLR(i, &master);
  }else{
 /* we got some data from a client*/
-  for ( ia=0;ia<nbytes-1;ia++){ // I remove last \n
-    printf( "%c", buf[ia] );
-  }
-  printf("%s","\n");  // I add the last \n
-for(j = 0; j <= fdmax; j++)  {/* send to everyone! */if(FD_ISSET(j, &master))
-{       /* except the listener and ourselves */
+
+// DO SOMETHING WITH THE DATA HERE ==================================
+//  for ( ia=0;ia<nbytes-1;ia++){ // I remove last \n
+//    printf( "%c", buf[ia] );
+//  }
+//  printf("%s","\n");  // I add the last \n
+
+ for (int ia=0;ia<nbytes;ia++){  
+   buffer->push( buf[ ia ] );
+   if ( buf[ ia ]=='\n' ){lines_pushed++; }
+ }
+ // lines_pushed++;
+
+// DO SOMETHING WITH THE DATA HERE ==================================
+
+/*
+for(j = 0; j <= fdmax; j++)  {// send to everyone!
+ if(FD_ISSET(j, &master))
+   {       // except the listener and ourselves 
        if(j != listener && j != i)
        {
               if(send(j, buf, nbytes, 0) == -1) perror("send() error lol!");
        }
  }// for j < fdmax ::: if 
  }//  for j < fdmax
+*/
+
 
  }//else we got some data from a client ... after this there is a HUNG UP
 // printf("SSS socket %d hung up aftermath\n",  i); 

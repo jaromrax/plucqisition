@@ -30,7 +30,7 @@ at least echo must be there
     <spec_function_onstop>  1</spec_function_onstop>
     <spec_function_retrig>  0</spec_function_retrig> 
     <spec_function> 
- for ((i=0;i &lt; 10000;i++)); do 
+ for ((i=0;i &lt; 8640001;i++)); do 
 	 sleep 1; 
 	 TT=\`date +%s\`;
 	 echo \$TT \$t \$i \$i  >> text;

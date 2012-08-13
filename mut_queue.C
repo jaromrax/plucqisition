@@ -382,10 +382,10 @@ int acq(const char * startstop="start")
 
 
     //-----------------------------
-    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "checking the existence of the pusher_thread");
+    //    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "checking the existence of the pusher_thread");
     t=TThread::GetThread("pusher_thread");
     if (t!=NULL){
-      if (t->GetState()==6){if(XTERM!=NULL)fprintf(XTERM,"%s\n","Thread state==canceled=>DELETIN'");t->Delete();}
+      if (t->GetState()==6){if(XTERM!=NULL)fprintf(XTERM,"%s\n","pusher_thread==canceled=>DELETIN'");t->Delete();}
       usleep(1000*100);
     }
     t=TThread::GetThread("pusher_thread");
@@ -398,10 +398,10 @@ int acq(const char * startstop="start")
 
 
     //----------------this is very fragile thread------------------------------------------------------
-    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "checking the existence of the analyze_thread");
+   //    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "checking the existence of the analyze_thread");
     t=TThread::GetThread("analyze_thread");
     if (t!=NULL){
-      if (t->GetState()==6){if(XTERM!=NULL)fprintf(XTERM,"%s\n","Thread state==canceled=>DELETIN'");t->Delete();}
+      if (t->GetState()==6){if(XTERM!=NULL)fprintf(XTERM,"%s\n","analyze_thread==canceled=>DELETIN'");t->Delete();}
       usleep(1000*100);
     }
     t=TThread::GetThread("analyze_thread");
@@ -415,10 +415,10 @@ int acq(const char * startstop="start")
 
 
     //----------------this is very fragile thread--------------
-    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "checking the existence of the poper_thread");
+   //    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "checking the existence of the poper_thread");
     t=TThread::GetThread("poper_thread");
     if (t!=NULL){
-      if (t->GetState()==6){if(XTERM!=NULL)fprintf(XTERM,"%s\n","Thread state==canceled=>DELETIN'");t->Delete();}
+      if (t->GetState()==6){if(XTERM!=NULL)fprintf(XTERM,"%s\n","poper_thread==canceled=>DELETIN'");t->Delete();}
       usleep(1000*100);
     }
     t=TThread::GetThread("poper_thread");
@@ -550,7 +550,7 @@ void *evt_pusher( void *arg )  // loads the queue
  int nt=tinfo->thread_num;
      evt_pusher_remote( (int*)&buffer ); //#########EVENT#########
   tinfo->running=0;// say stop
- printf("%s","evt_pusher - stop \n");
+ printf("%s","pusher function is stoped \n");
   return NULL;
 }//--------void *evt_pusher( void *arg )  // loads the queue 
 
@@ -571,7 +571,7 @@ void *evt_poper( void *arg )  // reads the queue (pop)
  // printf("starting thread %d poper for the %dth time\n", nt, call );
  //     printf("removing ........bufsize==%10d   empty==%d \n", buffer.size(), buffer.empty() );
      evt_poper_remote(  (int*)&buffer  );
- printf("%s","evt_remote - stop \n");
+     printf("%s","poper function is stoped\n");
   tinfo->running=0;// say stop
      return NULL;
 //jak to budu analyzovat? konec eventu je kde????
@@ -600,7 +600,7 @@ void *evt_analyze( void *arg )  //
  int nt=tinfo->thread_num;
  int call=tinfo->callnumber; tinfo->callnumber++;// to keep track opened file
    evt_analyze_remote(  (int*)&buffer  ); //#########EVENT#########
- printf("%s","evt_analyze - stop \n");
+ printf("%s","analyze function is stoped \n");
   tinfo->running=0;// say stop
      return NULL;
 }

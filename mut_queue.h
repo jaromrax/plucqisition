@@ -161,6 +161,16 @@ public:
 
 FILE* XTERM;
 
+// The idea is to run this to have some nice table/like Log
+//   maybe, saving the input for later (accum.)output....?
+//   what is needed :   sprintf(ch, "", i )
+void table_log(int plugin, const char* text){ // 0,1,2=Push,Pop,Ana
+  if(XTERM!=NULL){
+    //  5x  #   and then  29x " "
+    fprintf(XTERM,  "%*s%*s%s\n", 5,"#",   plugin*29," " , text ); // number of spaces
+    fflush(XTERM);
+  }//XTERM
+}//table_log
 
 //http://www.go4expert.com/forums/showthread.php?t=871
 void xprintf(const char * lpOutputString, ... )
@@ -365,6 +375,7 @@ void logterm(){
     }else{
       //      printf("The %s doesnot exist\n", devpts);
       system("xterm -T mut_terminal_log  cat&");
+      usleep(1000*1000*3 );
       usleep(1000*1000);
       XTERM=fopen(devpts,"a");
       fprintf(XTERM,"AHOJAHOJ\n\n%s","");
