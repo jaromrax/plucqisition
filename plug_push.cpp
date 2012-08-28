@@ -605,6 +605,7 @@ return 0;
   TSocket *socket;
 
   double downtime; int downtimef, downtimei,  wait=1;  // WAIT
+  int trials=10; //10 seconds of timeouts
 
   while (0==0){// ----- - -- READ ALL REPEATING CONNECTIONS --- -  -- -- - --   - - -
 
@@ -616,8 +617,14 @@ return 0;
   //    printf("after the socket%s\n","");
  
   while ( (socket)&&(1==1) ){// ----- - -- READ ONE CONNECTION --- -  -- -- - --   - - -
+    //DANGER THAT I MISS 3/10 of EVENTS..... MAYBE THIS IS TO TUNE:
+    //3000:50 ==1.6%
+    // i==0 => TIMEOUT...... ??
+    //  FINALY  2sec timeout, 10x repeat, 50ms wait (TO BE TESTED)
+    trials=10;
+    i=(int)socket->Select(TSocket::kRead, 2000);//timeout 1sec, repeat 5x 
 
-    i=(int)socket->Select(TSocket::kRead, 1000);//timeout 1sec, repeat 5x 
+
 
     if (i>0) {//####CASE i>0 ####
       d=(int)socket->RecvRaw(strbuf, maxtrans, kDontBlock  ); // read small buffer
@@ -631,9 +638,9 @@ return 0;
       //      if(XTERM!=NULL)fprintf(XTERM,"PUSH push-netw wait 100ms....%s; iii*4==%d, d=%d\n", ipaddress,ii*4,d );
     }//####CASE i>0 ####  socket select was DONE;   i >0
 
-    if(XTERM!=NULL)fprintf(XTERM,"%s","^");fflush(XTERM);
+    //    if(XTERM!=NULL)fprintf(XTERM,"%s","^");fflush(XTERM);
     //    usleep(1000*300); //wait
-    wait=MyCond.TimedWaitRelative( 300  ) ; //
+    wait=MyCond.TimedWaitRelative( 50  ) ; //
     if (wait==0){ 
       if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw got BROADCAST SIGNAL... %s\n", "" );
       socket->Close(); 
@@ -647,14 +654,22 @@ return 0;
     }//####CASE i<0 #### 
 
     if (i==0){ //####CASE i==0  ####
+      trials--;
+      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw(ZERO)..%s;d=%d (%d)\n",ipaddress,d, trials);
+      if (trials<=0){
        if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw I RELEASE SOCKET(ZERO)..%s; iii*4==%d, d=%d\n",
 			                                                            ipaddress,ii*4,d);
       socket->Close(); break; 
+      }
     }//####CASE i==0  ####
     
   }// 1==1---- ---- --    --WHILE read all the time - ONE CONNECTION --------
   socket->Delete();
+  if (wait!=0){
+     wait=MyCond.TimedWaitRelative( 5000  ) ;
+  }
 
+  /*
       //      double downtime; int downtimef, downtimei,  wait=1;
          TTimeStamp t_wait;
        downtime=t_wait.GetSec()+t_wait.GetNanoSec()*1e-9;
@@ -665,9 +680,10 @@ return 0;
        if(XTERM!=NULL)fprintf(XTERM,"R%s","" );
        wait=MyCond.TimedWait(  downtimei , downtimef  ) ;
        //       if(XTERM!=NULL)fprintf(XTERM,"\n\n  FTREE  wait %d ! %d.%d\n", wait, downtimei,downtimef);
+       */
        if (wait==0)break;
        //       usleep(1000*300);
-       if(XTERM!=NULL)fprintf(XTERM,"S%s","" );
+       //if(XTERM!=NULL)fprintf(XTERM,"S%s","" );
 
   }// 0==0----- - -- READ ALL REPEATING CONNECTIONS --- -  -- -- - --   - - -
 

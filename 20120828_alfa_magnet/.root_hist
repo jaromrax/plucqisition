@@ -1,0 +1,56 @@
+.L ../mut_queue.C+
+acq()
+q
+.qqqqqqqqqqqqqqqqq
+.L ../mut_queue.C+
+acq()
+.qqqqqqqqqqqqqq
+.L ../mut_queue.C+
+acq()
+.ls
+nanot->Draw("O001")
+.q
+.L ../mut_queue.C+
+acq()
+nanot->Draw("O001")
+nanot->Draw("O001")
+TCanvas c
+nanot->Draw("O001")
+.qqqqqqqqqqqqqqq
+.L ../mut_queue.C+
+acq()
+.qqqqqqqqqqqqq
+.L ../mut_queue.C+
+.q
+.L ../mut_queue.C+
+.q
+.L ../mut_queue.C+
+.q
+.L ../mut_queue.C+
+.L ../mut_queue.C++
+acq()
+nanot->Show()
+nanot->Scan(n()
+.qqqqqqqqq
+nanot->Scan()
+.L ../mut_queue.C++
+acq()
+nanot->Scan()
+nanot->Scan()
+nanot->Scan()
+nanot->Scan()
+.qqqqqqqqqqq
+.L ../mut_queue.C++
+acq()
+nanot->Scan()
+.ls
+chan001->Draw()
+shspe()
+.qqqqqqqqqqqqqqqqqqqqqqqq
+.L ../mut_queue.C++
+acq()
+shspe()
+.qqqqqqqqqqqq
+.L ../mut_queue.C+
+acq()
+shspe()
