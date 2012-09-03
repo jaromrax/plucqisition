@@ -371,7 +371,7 @@ void logterm(){
     sprintf(devpts,"/dev/pts/%d", i);
     //    printf( "file = %d\n", file_exists(devpts) );
     if ( fexists(devpts)!=0 ){
-      //      printf("The %s exists\n", devpts);
+            printf("The XTERM DEVICE %s ALREADY exists. NOT creating NEW\n", devpts);
     }else{
       //      printf("The %s doesnot exist\n", devpts);
       system("xterm -T mut_terminal_log  cat&");

@@ -17,7 +17,7 @@ all: mut plugins
 	echo "            coppies the .so file to MACRO path";
 
 mut:mut_queue.h mut_queue.C cuts_manip.h nano_acquis_pureconvert.C xml_attr.c xml_attr.h logterm.C
-	root -n -b -q  compile.C  ; echo ECHO $?
+	root -n -b -q  compile.C  ; ls -ltrh mut_* ; echo ECHO $?
 
 
 install: mut_queue_C.so
@@ -58,7 +58,7 @@ plug_pop.so: plug_pop.cpp mut_queue.h cuts_manip.h nano_acquis_pureconvert.C xml
 
 
 clean:
-	  rm plug_pop.so plug_push.so
+	  rm plug_pop.so plug_push.so mut_queue_C.so  nano_acquis_pureconvert_C.so  plug_analyze.so  plug_pop.so  plug_push.so  plug_queue.so
 
 ##	g++ -fPIC -c plug_queue.cpp `root-config --libs --cflags --glibs`  &&  gcc -shared -o plug_queue.so plug_queue.o
 ##	g++ -fPIC -c plug_analyze.cpp `root-config --libs --cflags --glibs`  &&  gcc -shared -o plug_analyze.so plug_analyze.o

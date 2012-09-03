@@ -54,3 +54,83 @@ shspe()
 .L ../mut_queue.C+
 acq()
 shspe()
+.!  lpr      canvas_1.ps
+.q
+shspe()
+TH1F*nicka
+nicka->S.qqqqqqqqqqqqqqqqq
+TH1F*nicka=new TH1F("a","a",1000,0,1000)
+nicka
+nicka->Show
+TH1F*nicka=new TH1F("a","a",1000,0,1000)
+.L ../mut_queue.C+
+.L ../mut_queue.C++
+.q
+.L ../mut_queue.C++
+.q
+.L ../mut_queue.C++
+.q
+.L ../mut_queue.C++
+.q
+.q.q
+acq()
+.q
+.q
+.L ../mut_queue.C+
+.L ../mut_queue.C++
+.q
+.q
+.q
+.q
+acq()
+shspe()
+.q
+.qqqqqqqqqqqqqqq
+.q
+.q
+.q
+.q
+.q
+,q
+.q
+.q
+shspe()
+acq()
+system("xterm -T mut_terminal_log  cat&")
+.q
+acq()
+shspe()
+acq("stop")
+acq("stop")
+acq()
+acq("stop")
+acq()
+acq()
+TTimer *tt=new TTimer(5000)
+RefreshAll()
+MyMainFrame::RefreshAll()
+mmframe->RefreshAl
+acq()
+shspe()
+mmframe->RefreshAll()
+mmframe->RefreshAll()
+mmframe->RefreshAll()
+mmframe->RefreshAll()
+mmframe->RefreshAll()
+mmframe->RefreshAll()
+mmframe->RefreshAll()
+mmframe->RefreshAll()
+mmframe->RefreshAll()
+TTimer *tt=new TTimer(5000)
+tt->Connect("Timeout()", "InfoControl", this, "mmframe->RefreshAll()" )
+tt->Connect("Timeout()", "InfoControl", NULL, "mmframe->RefreshAll()" )
+tt->Connect("Timeout()", "", NULL, "mmframe->RefreshAll()" )
+TTimer *t2=new TTimer(5000)
+TTimer *t3=new TTimer("mmframe->RefreshAll()",5000)
+t3->TurnOnOn)
+acq()
+shspe*(
+@
+shspe()
+TTimer *t3=new TTimer("mmframe->RefreshAll()",5000)
+t3->TurnOn()
