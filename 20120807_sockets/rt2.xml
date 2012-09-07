@@ -66,7 +66,7 @@ at least echo must be there
      <spec_function_retrig> 0 </spec_function_retrig> 
      <spec_function>   
 sleep 1;
-    tail -f text | nc localhost 9302 2>/dev/null ;
+    tail -f text | nc localhost 9302  2>/dev/null ;
 
    </spec_function>
      <quit>

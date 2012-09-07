@@ -250,6 +250,8 @@ extern "C" {
    *  PLACE FOR TTREE      and   TH1 also
    *
    */
+   int ttree_inited_npars=0;
+
   int pop_txt_record( const char* chse ){
     TString oneline=chse, token; int j=0; double bu; 
       TObjArray *tar; 
@@ -282,12 +284,21 @@ extern "C" {
 	txt_ttree->Fill();    
 
 	//I assume at least 2 numbers
+	for (int i=0;i<ttree_inited_npars;i++){
+	  char txname[100];
+	  sprintf( txname, "textoH%02d", i);
+	  TH1F *texto_h1;     texto_h1=(TH1F*)gDirectory->Get( txname );
+	  if (texto_h1==NULL){texto_h1=new TH1F(txname, txname,2000,-1000,1000); }
+	  texto_h1->Fill(t_event.t[i]);
+	}
+	/*
 	TH1F *texto_h1;     texto_h1=(TH1F*)gDirectory->Get("texto_h1");
 	if (texto_h1==NULL){texto_h1=new TH1F("texto_h1","texto_h1",5000,0,5000); }
 	TH1F *texto_h2;     texto_h2=(TH1F*)gDirectory->Get("texto_h2");
 	if (texto_h2==NULL){texto_h2=new TH1F("texto_h2","texto_h2",5000,0,5000); }
 	texto_h1->Fill(t_event.t[0]);
 	texto_h2->Fill(t_event.t[1]);
+	*/
 
     return j;
   }
@@ -375,6 +386,7 @@ extern "C" {
    int datum=0;// (int datum  ***)
    int runempty=0; int wait=1;
    int ttree_inited=0;// initialized?-NOT yet
+
    int nparams=0;
 
    usleep(1000*1000);
@@ -405,6 +417,7 @@ extern "C" {
 	 //       if(XTERM!=NULL)fprintf(XTERM,"%s\n","creating the tree.....");
        sprintf(chL,"POP: creating the tree... %s" , ""  );table_log(1,chL);
        nparams=pop_get_npar( ch );
+       ttree_inited_npars=nparams;
        sprintf(chL,"POP:  nparams==%d" , nparams  );table_log(1,chL);
        //       if(XTERM!=NULL)fprintf(XTERM,"       nparams==%d\n",nparams);
        conv_t_init( nparams ); // similar to conv_u_init; t[0]...t[n]

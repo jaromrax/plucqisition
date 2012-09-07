@@ -313,7 +313,7 @@ int fexists (char * fileName)
 
 
 //ps -ef |grep xterm | grep mut_terminal_log | awk '{print "/dev/"$6}'
-
+//NEWER TRICK           xterm -e 'echo `tty`>/tmp/MYTTY;sleep 5;cat'&
 
 // RUNS XTERM TO LOG
 void logterm(){
@@ -371,7 +371,7 @@ void logterm(){
     sprintf(devpts,"/dev/pts/%d", i);
     //    printf( "file = %d\n", file_exists(devpts) );
     if ( fexists(devpts)!=0 ){
-            printf("The XTERM DEVICE %s ALREADY exists. NOT creating NEW\n", devpts);
+      //      printf("The %s exists\n", devpts);
     }else{
       //      printf("The %s doesnot exist\n", devpts);
       system("xterm -T mut_terminal_log  cat&");
