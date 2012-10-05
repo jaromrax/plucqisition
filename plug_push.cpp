@@ -77,6 +77,19 @@ extern "C" {
   /**********************************************
    *            PUSH only integers 1.....200
    */
+  int* push_empty(int* par){// TEST....just integers into the queue
+    char ch[400];
+      concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
+   for (int i=1;i<20000;i++){  //........4*300M = 1200MB
+     usleep(1000); // wait 10 ms every push
+   }//for
+ }/*****************************end of function *********************/
+
+
+
+  /**********************************************
+   *            PUSH only integers 1.....200
+   */
   int* push_int(int* par){// TEST....just integers into the queue
     char ch[400];
       concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
@@ -584,7 +597,11 @@ return 0;
    */
  int* push_net(int* par){
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-remote (network)  par==%d; pointer==%d\n", par,(int)buffer );
+
+   char ch[200];
+   //   if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-remote (network)  par==%d; pointer==%d\n", par,(int)buffer );
+   sprintf(ch,"%s","PUSHNET:  entered..." );table_log(0,ch);
+
       long long int cnt=0;
 
    char ipaddress[100];
@@ -616,24 +633,29 @@ return 0;
   socket=new TSocket( ipaddress, port);
   //    printf("after the socket%s\n","");
  
-  while ( (socket)&&(1==1) ){// ----- - -- READ ONE CONNECTION --- -  -- -- - --   - - -
+  trials=10; //GOODF TO BE DEFINED IN XML  as also select timeout
+    while ( (socket)&&(1==1) ){// ----- - -- READ ONE CONNECTION --- -  -- -- - --   - - -
     //DANGER THAT I MISS 3/10 of EVENTS..... MAYBE THIS IS TO TUNE:
     //3000:50 ==1.6%
     // i==0 => TIMEOUT...... ??
     //  FINALY  2sec timeout, 10x repeat, 50ms wait (TO BE TESTED)
-    trials=10;
+
     i=(int)socket->Select(TSocket::kRead, 2000);//timeout 1sec, repeat 5x 
 
 
 
     if (i>0) {//####CASE i>0 ####
       d=(int)socket->RecvRaw(strbuf, maxtrans, kDontBlock  ); // read small buffer
-      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw socket got %d bytes \n", d );
+      //      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw socket got %d bytes \n", d );
+      sprintf(ch,"PUSH-netw socket got %d bytes \n", d ); table_log(0,ch);
      ii=0;
       while(ii*4<d){
 	buffer->push( buffer4p[ii]  );
 	ii++;
-	if ((cnt%25000)==0){if(XTERM!=NULL)fprintf(XTERM,"P %7lld kB\n",4*cnt/1000);} cnt++;
+	if ((cnt%25000)==0){
+	  //	  if(XTERM!=NULL)fprintf(XTERM,"P %7lld kB\n",4*cnt/1000);
+	  sprintf(ch,"P %7lld kB\n",4*cnt/1000); table_log(0,ch);
+	} cnt++;
       }//while - push
       //      if(XTERM!=NULL)fprintf(XTERM,"PUSH push-netw wait 100ms....%s; iii*4==%d, d=%d\n", ipaddress,ii*4,d );
     }//####CASE i>0 ####  socket select was DONE;   i >0
@@ -642,23 +664,27 @@ return 0;
     //    usleep(1000*300); //wait
     wait=MyCond.TimedWaitRelative( 50  ) ; //
     if (wait==0){ 
-      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw got BROADCAST SIGNAL... %s\n", "" );
+      //      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw got BROADCAST SIGNAL... %s\n", "" );
+      sprintf(ch,"PUSH got BROADCAST SIGNAL... %s\n", "" );table_log(0,ch);
       socket->Close(); 
       break; 
     }
     //cannot be here    TThread::CancelPoint(); // When CancelOn(), here the thread can be interrupted.
 
     if (i<0){ //####CASE i<0 ####
-       if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw SOCKET LOST....%s; iii*4==%d, d=%d\n", ipaddress,ii*4,d );
+      //if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw SOCKET LOST....%s; iii*4==%d, d=%d\n", ipaddress,ii*4,d );
+      sprintf(ch,"PUSH SOCKET LOST....%s; iii*4==%d, d=%d\n", ipaddress,ii*4,d );table_log(0,ch);
       socket->Close(); break; 
     }//####CASE i<0 #### 
 
     if (i==0){ //####CASE i==0  ####
       trials--;
-      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw(ZERO)..%s;d=%d (%d)\n",ipaddress,d, trials);
+      //      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw(ZERO)..%s;d=%d (%d)\n",ipaddress,d, trials);
+      sprintf(ch,"PUSH (ZERO)..%s;d=%d (%d)\n",ipaddress,d, trials);table_log(0,ch);
       if (trials<=0){
-       if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw I RELEASE SOCKET(ZERO)..%s; iii*4==%d, d=%d\n",
-			                                                            ipaddress,ii*4,d);
+	//       if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw I RELEASE SOCKET(ZERO)..%s; iii*4==%d, d=%d\n",
+	//			                                                            ipaddress,ii*4,d);
+	sprintf(ch,"PUSH I RELEASE SOCKET(ZERO)..%s; iii*4==%d, d=%d\n",ipaddress,ii*4,d);table_log(0,ch);
       socket->Close(); break; 
       }
     }//####CASE i==0  ####
@@ -690,7 +716,8 @@ return 0;
 
 
   // socket must be already closed here....socket->Close();
-      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-file call finished....%s: PUSHER FINISHED\n", ipaddress );
+  //      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-file call finished....%s: PUSHER FINISHED\n", ipaddress );
+  sprintf(ch,"PUSH call finished....%s:%d\n", ipaddress,port );table_log(0,ch);
  }/*****************************end of function ***********************/
 
 

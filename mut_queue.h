@@ -1,4 +1,4 @@
-
+#include <unistd.h>   //  stat (fexists) file size
 #include <stdio.h>  // printf
 #include <iostream>
 /* stdio = printf
@@ -7,7 +7,7 @@
 #include <stdlib.h>
 //#include <pthread.h> //  THIS COMPILES WITH g++
 #include "TThread.h"   //  CINT?   //  -lThread
-#include<sys/stat.h>  // struct stat
+//#include<sys/stat.h>  // struct stat
 
 
 
@@ -287,16 +287,22 @@ int xxxprintf( const char* Format, ... ){
 }
 
 
+//#include <unistd.h>
 
 int fexists (char * fileName)
 {
-   struct stat buf;
-   int i = stat ( fileName, &buf );
-     /* File found */
+   struct stat filestatus;
+   int i = stat ( fileName, &filestatus );
+   //   printf("file name <%s>\n", fileName);
+   //    printf("file size %d\n", (int)filestatus.st_size);
+   //    cout << filestatus.st_size << " bytes\n";
+   /* File found */
      if ( i == 0 )
      {
+       //       printf("i==0, ret 1, found\n");
        return 1;
      }
+     //       printf("i!=0, ret 0, NOTfound\n");
      return 0;
        
 }
