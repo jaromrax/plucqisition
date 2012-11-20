@@ -404,12 +404,13 @@ extern "C" {
    char cc;
    t_event.n=0; // reset the number to 0 .... 
    do{//-------------------
+     int line=0;
    sprintf( ch , "%s", ""); //reset
    while( !buffer->empty() ){
      buffer->wait_and_pop(datum); //( datum ***)
      cc=char( datum ); 
      if ( (int)cc!=10){//  10== \n -------------- EOL ----
-       sprintf( ch, "%s%c", ch, cc  );
+       sprintf( ch, "%s%c", ch, cc  );//accumulate line
      }else{//  \n found
        //   if(XTERM!=NULL)fprintf(XTERM,"TEXT=%s\n",ch);
 
@@ -423,20 +424,26 @@ extern "C" {
        conv_t_init( nparams ); // similar to conv_u_init; t[0]...t[n]
        ttree_inited=1;// no more try to init
        }// ---ttree was not initied.........
-       pop_txt_record( ch );
-       sprintf(chL,"POP:  lines==%d" , lines_received  );table_log(1,chL);lines_received++;
+
+       pop_txt_record( ch ); line++;
+       if (line>10000){
+         sprintf(chL,"POP:  lines==%d" , lines_received  );table_log(1,chL);
+	 line=0;
+       }
+       lines_received++;
        sprintf( ch , "%s", ""); //reset
      }//--------------------------- EOL/not EOL------------
       cnt++; 
       TThread::CancelPoint(); // When CancelOn()...
    }// while ! buffer empty
+
    //useless here...............but 
-   wait=MyCond.TimedWaitRelative( 300  );
+   wait=MyCond.TimedWaitRelative( 1000  );
    if (wait==0){ 
        sprintf(chL,"POP: got BROADCAST SIGNAL...%s" , ""  );table_log(1,chL);
        //     if(XTERM!=NULL)fprintf(XTERM,"POP got BROADCAST SIGNAL... %s\n","");
    }
-   wait=MyCond.TimedWaitRelative( 500  );
+  sprintf(chL,"POP: onWait lines==%d" , lines_received  );table_log(1,chL);
  }while(wait!=0);// ON BROADCAST
    //   if(XTERM!=NULL)fprintf(XTERM,"POP logtxt v.2.: EXIT %d\n",(int)buffer);
         sprintf(chL,"POP: EXIT  %d" ,  (int)buffer );table_log(1,chL);

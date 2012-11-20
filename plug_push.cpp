@@ -146,9 +146,10 @@ extern "C" {
    */
  int* push_txtfile(int* par){
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   if(XTERM!=NULL)fprintf(XTERM,
-		  "PUSH (textFILE) START buffer=%d\n",(int)buffer );
    char ch[180];
+   sprintf(ch,"PUSH (textFIILE) START buffer=%d\n",(int)buffer );table_log(0,ch);
+
+
       FILE *infile;  char fname[400];
 
       int c;// character ... as in tutorial
@@ -161,18 +162,28 @@ extern "C" {
       sprintf( fname,"%s", xml.output  );
 
       do{ // MAIN WHILE
-
+	int line=0;
       infile=fopen( fname,"r"  );
 
-      if(XTERM!=NULL)fprintf(XTERM,"opened %s in TEXT MODE\n", fname);
+ 
+     sprintf(ch,"opened %s in TEXT", fname);table_log(0,ch);
+
       if (infile!=NULL){
 	if (first_timer==1){//set pos
 	  first_timer=0;}else{
 	  fsetpos (infile, &position);}// restore the last position
        while (!feof(infile)) {
+<<<<<<< variant A
 	 
+>>>>>>> variant B
+======= end
 	c = fgetc ( infile );
-	buffer->push( c ); 
+	buffer->push( c ); //one character in
+	 line++;
+	 if (line>1000000){ 
+	   sprintf(ch,"PUSH (intxt) %.3f MB",1.0*buffer->size()*4./1024./1024. );table_log(0,ch);
+	   line=0;
+	 }
 	
 	//	if(XTERM!=NULL)fprintf(XTERM,"P <%s>\n", ch );
 
@@ -181,15 +192,15 @@ extern "C" {
       fgetpos (infile, &position);
       fclose(infile); 
 
-      if(XTERM!=NULL)fprintf(XTERM,
-		  "push (textFILE) closed file. %d\n",(int)buffer );
+      sprintf(ch,"push (textFILE) closed file. %.3f MB",1.0*buffer->size()*4./1024./1024. );table_log(0,ch);
+
 
      wait=MyCond.TimedWaitRelative( 1000  ) ; // wait 500 
 
       }while(wait != 0);
 
-   if(XTERM!=NULL)fprintf(XTERM,
-		  "push (textFILE)  EXIT buffer=%d\n",(int)buffer );
+      sprintf(ch,"push (textFILE) EXIT buffer=%d\n",(int)buffer );table_log(0,ch);
+
  }/*****************************end of function *********************/
 
 
