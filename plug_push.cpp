@@ -173,10 +173,7 @@ extern "C" {
 	  first_timer=0;}else{
 	  fsetpos (infile, &position);}// restore the last position
        while (!feof(infile)) {
-<<<<<<< variant A
-	 
->>>>>>> variant B
-======= end
+
 	c = fgetc ( infile );
 	buffer->push( c ); //one character in
 	 line++;
