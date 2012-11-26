@@ -114,8 +114,8 @@ struct {
    double ran=gRandom->Uniform(4000.);
 
 
-      //-----------------typpical creation of TGraphErrors--------------
-   //  gt6G  generators in t6 matrix  cut  m6_g
+      //-----------------typical creation of TGraphErrors--------------
+   //  gt6G  generators in t6 matrix  cut  cutm6_g
    //  gG    generators
    //  gQ    charge * 10 -10 C
    TGraphErrors *gt6G;
@@ -575,18 +575,22 @@ struct {
 	   if (	 remove_counter1!=1 ){
 	   int ima;
 	   ima=gQ->GetN();
+	   gQ->Expand(ima+1);
 	   gQ->SetPoint(      ima, MyEvent.time, cnt[1]/60.0 );
 	   gQ->SetPointError( ima, 0.0,  0.03*cnt[1]/60.0   );  // integrator error is typical 0.3% @ 50nA
 
 	   ima=gt6G->GetN();//generator in the matrix t6 cut m6_g
+	   gt6G->Expand(ima+1);
 	   gt6G->SetPoint(      ima, MyEvent.time, t6G/60.0 );
 	   gt6G->SetPointError( ima, 0.0, 1.0/60.0 );
 
 	   ima=gt6GG->GetN();//generator in the matrix t6 cut m6_g / generator in counter
+	   gt6GG->Expand(ima+1);
 	   gt6GG->SetPoint(      ima, MyEvent.time, t6G/cnt[4] );
 	   gt6GG->SetPointError( ima, 0.0, 1.0/74.1 );
 
 	   ima=gG->GetN();//  74.1 counter generators
+	   gG->Expand(ima+1);
 	   gG->SetPoint(      ima, MyEvent.time, cnt[4]/60.0 );
 	   gG->SetPointError( ima, 0.0, 1.0/60.0 );
 
@@ -596,14 +600,17 @@ struct {
 	   gt1q->SetPointError( ima, 0.0, sqrt(t1q)/cnt[1] );
 
 	   ima=gt6q->GetN();
+	   gt6q->Expand(ima+1);
 	   gt6q->SetPoint(      ima, MyEvent.time, t6q/cnt[1] );
 	   gt6q->SetPointError( ima, 0.0, sqrt(t6q)/cnt[1] );
 
 	   ima=gt7q->GetN();
+	   gt7q->Expand(ima+1);
 	   gt7q->SetPoint(      ima, MyEvent.time, t7q/cnt[1] );
 	   gt7q->SetPointError( ima, 0.0, sqrt(t7q)/cnt[1] );
 
 	   ima=gt6t1->GetN();
+	   gt6t1->Expand(ima+1);
 	   gt6t1->SetPoint(      ima, t6q,  t1q );
 	   gt6t1->SetPointError( ima, sqrt(t6q), sqrt(t1q) );
 

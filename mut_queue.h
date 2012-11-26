@@ -170,7 +170,20 @@ void table_log(int plugin, const char* text){ // 0,1,2=Push,Pop,Ana
     fprintf(XTERM,  "%*s%*s%s\n", 5,"#",   plugin*29," " , text ); // number of spaces
     fflush(XTERM);
   }//XTERM
+
+ FILE *fp;
+ char str[] = "test";     
+
+ fp = fopen("acq.log","a");
+ fseek(fp,0, SEEK_END);                
+ fprintf(fp, "%*s%*s%s\n", 5,"#",   plugin*29," " , text ); // number of spaces
+ fclose(fp);     
+
 }//table_log
+
+
+
+
 
 //http://www.go4expert.com/forums/showthread.php?t=871
 void xprintf(const char * lpOutputString, ... )
