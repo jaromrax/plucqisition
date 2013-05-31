@@ -478,9 +478,9 @@ $b_q2->pack(-side=>"right", -expand=>0,    -padx=>0, -pady=>0 );
 $ball->attach($b_gomoni, 
   -balloonmsg => "INIT button: it runs initial scripts - if necessary - defined in  rt2.xml");
 $ball->attach($b_gomon, 
-  -balloonmsg => "START: send a command to START the process");
+  -balloonmsg => "START: send a command to START the process; if green == run is running");
 $ball->attach($b_stop, 
-  -balloonmsg => "STOP: send a command to STOP the process");
+  -balloonmsg => "STOP: send a command to STOP the process; if red == run is stopped");
 $ball->attach($b_q2, 
   -balloonmsg => "QUIT: the same as above - use these buttons to QUIT");
 

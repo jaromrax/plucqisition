@@ -20,12 +20,10 @@ at least echo must be there
      <namel> CAMAC3 </namel>
      <on_init>    </on_init>
      <on_start>
-       echo _GOMON | nc camac3 9100;
-       $setstatustext running RUN $runnumber ....
+       echo _GOMON |  nc6 --send-only camac3 9100 
      </on_start>
      <on_stop>
-        echo _STOP  | nc camac3 9100;
-        $setstatustext  STOPPED;
+        echo _STOP  | nc6 --send-only camac3 9100
     </on_stop>
     <spec_function_onstart> 0</spec_function_onstart>
     <spec_function_onstop>  0</spec_function_onstop>
