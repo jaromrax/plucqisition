@@ -1,0 +1,19 @@
+[Desktop Entry]
+Comment=
+Comment[en_US]=
+Exec[$e]=gnome-terminal --geometry 110x25 --window-with-profile camac3 -e '/home/zdenek/bin/screenCAMAC6'
+GenericName=
+GenericName[en_US]=
+Icon=exec
+MimeType=
+Name=camac6
+Name[en_US]=camac6 SCREEN
+Path[$e]=
+StartupNotify=true
+Terminal=false
+TerminalOptions=\s--noclose
+Type=Application
+X-DCOP-ServiceType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=
+X-SuSE-translate=true
