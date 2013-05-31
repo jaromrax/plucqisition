@@ -655,7 +655,7 @@ return 0;
     if (i>0) {//####CASE i>0 ####
       d=(int)socket->RecvRaw(strbuf, maxtrans, kDontBlock  ); // read small buffer
       //      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw socket got %d bytes \n", d );
-      sprintf(ch,"PUSH-netw socket got %d bytes \n", d ); table_log(0,ch);
+      sprintf(ch,"PUSH-netw socket got %d bytes ", d ); table_log(0,ch);
      ii=0;
       while(ii*4<d){
 	buffer->push( buffer4p[ii]  );
