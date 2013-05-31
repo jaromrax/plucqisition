@@ -17,19 +17,26 @@ at least echo must be there
      <number>0</number>
      <default_on>1 </default_on>
      <name> StartStopCAMAC3  </name>
-     <namel> CAMAC3 </namel>
+     <namel> Backup CAMAC3 </namel>
      <on_init>    </on_init>
      <on_start>
-       echo _GOMON |  nc6 --send-only camac3 9100 
+       echo _GOMON |  nc6 --send-only camac3 9100;
+       $setstatustext RUNNING RUN $runnumber
      </on_start>
      <on_stop>
-        echo _STOP  | nc6 --send-only camac3 9100
+        echo _STOP  | nc6 --send-only camac3 9100;
+	$setstatustext STOPPED after RUN $runnumber
     </on_stop>
-    <spec_function_onstart> 0</spec_function_onstart>
+    <spec_function_onstart> 1</spec_function_onstart>
     <spec_function_onstop>  0</spec_function_onstop>
-    <spec_function_retrig>  0</spec_function_retrig> 
+    <spec_function_retrig>  1</spec_function_retrig> 
     <spec_function> 
-      echo .
+      echo 5;sleep 1;
+      echo 4;sleep 1;
+      echo 3;sleep 1;
+      echo 2;sleep 1;
+      echo 1;sleep 1;
+       rsync -av --progress --bwlimit=300  /mnt/camac3/tmp/NASTRO/20130621_o17_dp/  /home/zdenek/tmp/camac3-ortec/NASTRO/20130621_o17_dp/
     </spec_function>
      <quit>
      </quit>

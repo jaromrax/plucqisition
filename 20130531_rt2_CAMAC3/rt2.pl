@@ -900,8 +900,11 @@ sub ChkState{
 ### or when separate checkbutton && allowed.....reconnect automat
 #REMOVED      if ( $chk_cam_runs[$i] != 0 ){###this results in (autolisten) when started only!
    if (  ($chk_cam_runs[$i]!=0)&&($chk_cam_onstart[$i]==1) ){###this results in (autolisten) when started only!
+
+###########  20130531-vidim, ze se Log nesmyslne opakuje, musim dat jeste jednu podminku: zkusim pid==0
+   open IN,"$pid_fname01[$i]"; my $tstX=<IN>;chop( $tstX );close IN;
    if (  
-	  (($chk_cam_rt[$i]==1)&& ($chk_cam[$i]==1) )
+	  (($chk_cam_rt[$i]==1)&& ($chk_cam[$i]==1) && ($tstX==0) )
 )  {
 #?       if ($start_listen!=1){
         `echo 1 > $pid_fname01[$i]`; 
