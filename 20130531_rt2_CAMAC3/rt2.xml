@@ -31,12 +31,12 @@ at least echo must be there
     <spec_function_onstop>  0</spec_function_onstop>
     <spec_function_retrig>  1</spec_function_retrig> 
     <spec_function> 
-      echo 5;sleep 1;
+      echo 5 seconds to backup at 50kB/s;sleep 1;
       echo 4;sleep 1;
       echo 3;sleep 1;
       echo 2;sleep 1;
       echo 1;sleep 1;
-       rsync -av --progress --bwlimit=300  /mnt/camac3/tmp/NASTRO/20130621_o17_dp/  /home/zdenek/tmp/camac3-ortec/NASTRO/20130621_o17_dp/
+       rsync -av --progress --bwlimit=50 --exclude 'datafile.list' --exclude 'nwcamac.log'  /mnt/camac3/tmp/NASTRO/20130621_o17_dp/  /home/zdenek/tmp/camac3-ortec/NASTRO/20130621_o17_dp/
     </spec_function>
      <quit>
      </quit>
