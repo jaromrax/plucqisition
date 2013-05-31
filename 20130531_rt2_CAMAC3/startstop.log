@@ -1,0 +1,281 @@
+31/05/2013 14:56:59.72 - QUIT#############################################
+31/05/2013 14:56:59.74 - q  #############################################
+31/05/2013 14:56:59.77 -    issuing   quit to device [0]: <sleep 0;>
+31/05/2013 14:56:59.80 -    issuing   quit to device [1]: <sleep 0;>
+31/05/2013 14:57:59.27 - QUIT#############################################
+31/05/2013 14:57:59.28 - q  #############################################
+31/05/2013 14:57:59.31 -    issuing   quit to device [0]: <sleep 0;>
+31/05/2013 14:57:59.34 -    issuing   quit to device [1]: <sleep 0;>
+31/05/2013 14:58:27.04 - INIT#############################################
+           comment
+31/05/2013 14:58:27.07 -    issuing   init to device [0]: <sleep 0;>
+31/05/2013 14:58:27.10 -       finished   init to device [0]
+31/05/2013 14:58:36.23 - START#############################################
+31/05/2013 14:58:00.74  comment
+31/05/2013 14:58:36.26 -    issuing  start to device [0]: <sleep 0;>
+31/05/2013 14:58:36.28 -       finished  start to device [0]
+31/05/2013 14:58:36.29 - S.Func# 0 ON < Gen_TEXT >
+31/05/2013 14:58:36.38 -    #ActiveThread :     #Starting client [0]           
+31/05/2013 14:58:36.41 -    issuing S.F. activate to device [0]: <sleep 0; for ((i=0;i < 8640001;i++)); do sleep 1; TT=\`date +%s\`; echo \$TT \$t \$i \$i >> text; echo \$TT \$t \$i \$i > /tmp/rt2_pid01_93_M; done ;>
+31/05/2013 14:59:52.40 - STOP#############################################
+31/05/2013 14:59:52.41 - 76.017 seconds length to this point 
+31/05/2013 14:59:52.43 - waiting to finish kills, sleep 0 seconds
+31/05/2013 14:59:52.45 -    issuing   stop to device [0]: <sleep 0;>
+31/05/2013 14:59:52.54 -    #killing[0] 3502 and 3502 3506 6837
+31/05/2013 14:59:52.56 -    #Stopping client [0] #leaving ActiveThread # ...
+31/05/2013 14:59:52.57 -    finished  stop to device [0]
+31/05/2013 14:59:52.57 - STOPPED##########################################
+31/05/2013 14:59:52.58 - 76.034 seconds length  
+31/05/2013 14:59:52.60 - S.Func# [0] OFF ... was found OFF ... 76.031 sec.
+31/05/2013 15:00:44.59 - START#############################################
+31/05/2013 14:58:00.74  comment
+31/05/2013 15:00:44.62 -    issuing  start to device [0]: <sleep 0;>
+31/05/2013 15:00:44.64 -       finished  start to device [0]
+31/05/2013 15:00:44.66 - S.Func# 0 ON < Gen_TEXT >
+31/05/2013 15:00:44.70 -    #ActiveThread :     #Starting client [0]           
+31/05/2013 15:00:44.72 -    issuing S.F. activate to device [0]: <sleep 0; for ((i=0;i < 8640001;i++)); do sleep 1; TT=\`date +%s\`; echo \$TT \$t \$i \$i >> text; echo \$TT \$t \$i \$i > /tmp/rt2_pid01_93_M; done ;>
+31/05/2013 15:01:51.33 - STOP#############################################
+31/05/2013 15:01:51.34 - 66.974 seconds length to this point 
+31/05/2013 15:01:51.34 - waiting to finish kills, sleep 0 seconds
+31/05/2013 15:01:51.36 -    issuing   stop to device [0]: <sleep 0;>
+31/05/2013 15:01:51.45 -    #killing[0] 9081 and 9081 9082 11999
+31/05/2013 15:01:51.48 -    #Stopping client [0] #leaving ActiveThread # ...
+31/05/2013 15:01:51.48 -    finished  stop to device [0]
+31/05/2013 15:01:51.49 - STOPPED##########################################
+31/05/2013 15:01:51.50 - 66.989 seconds length  
+31/05/2013 15:01:51.52 - S.Func# [0] OFF ... was found OFF ... 66.987 sec.
+31/05/2013 15:38:18.19 - QUIT#############################################
+31/05/2013 15:38:18.20 - q  #############################################
+31/05/2013 15:38:18.23 -    issuing   quit to device [0]: <sleep 0;>
+31/05/2013 15:41:32.01 - INIT#############################################
+           comment
+31/05/2013 15:41:32.04 -    issuing   init to device [0]: <sleep 0;>
+31/05/2013 15:41:32.07 -       finished   init to device [0]
+31/05/2013 15:41:39.47 - START#############################################
+31/05/2013 15:41:26.03  comment
+31/05/2013 15:41:39.50 -    issuing  start to device [0]: <sleep 0;>
+31/05/2013 15:41:39.53 -       finished  start to device [0]
+31/05/2013 15:41:39.55 - S.Func# 0 ON < CAMAC3 >
+31/05/2013 15:41:39.60 -    #ActiveThread :     #Starting client [0]           
+31/05/2013 15:41:39.65 -    issuing S.F. activate to device [0]: <sleep 0; echo . ;>
+31/05/2013 15:41:39.67 -    #Stopping client [0] #leaving ActiveThread # ...
+31/05/2013 15:41:39.79 - S.Func# [0] OFF ... was found OFF ... 0.024 sec.
+31/05/2013 15:41:45.97 - STOP#############################################
+31/05/2013 15:41:45.98 - 6.050 seconds length to this point 
+31/05/2013 15:41:46.99 - waiting to finish kills, sleep 0 seconds
+31/05/2013 15:41:46.01 -    issuing   stop to device [0]: <sleep 0;>
+31/05/2013 15:41:46.09 -    finished  stop to device [0]
+31/05/2013 15:41:46.11 - STOPPED##########################################
+31/05/2013 15:41:46.12 - 6.962 seconds length  
+31/05/2013 15:41:49.26 - QUIT#############################################
+31/05/2013 15:41:49.27 - q  #############################################
+31/05/2013 15:41:49.30 -    issuing   quit to device [0]: <sleep 0;>
+31/05/2013 15:42:48.43 - INIT#############################################
+           comment
+31/05/2013 15:42:48.46 -    issuing   init to device [0]: <sleep 0;>
+31/05/2013 15:42:48.48 -       finished   init to device [0]
+31/05/2013 15:42:50.49 - START#############################################
+31/05/2013 15:42:46.99  comment
+31/05/2013 15:42:50.51 -    issuing  start to device [0]: <sleep 0;>
+31/05/2013 15:42:50.53 -       finished  start to device [0]
+31/05/2013 15:42:50.55 - S.Func# 0 ON < CAMAC3 >
+31/05/2013 15:42:50.65 -    #ActiveThread :     #Starting client [0]           
+31/05/2013 15:42:50.70 -    issuing S.F. activate to device [0]: <sleep 0; echo . ;>
+31/05/2013 15:42:50.71 -    #Stopping client [0] #leaving ActiveThread # ...
+31/05/2013 15:42:50.78 - S.Func# [0] OFF ... was found OFF ... 0.023 sec.
+31/05/2013 15:43:43.99 - STOP#############################################
+31/05/2013 15:43:43.00 - 52.050 seconds length to this point 
+31/05/2013 15:43:43.02 - waiting to finish kills, sleep 0 seconds
+31/05/2013 15:43:43.04 -    issuing   stop to device [0]: <sleep 0;>
+31/05/2013 15:43:43.12 -    finished  stop to device [0]
+31/05/2013 15:43:43.13 - STOPPED##########################################
+31/05/2013 15:43:43.14 - 52.963 seconds length  
+31/05/2013 15:43:43.73 - QUIT#############################################
+31/05/2013 15:43:43.75 - q  #############################################
+31/05/2013 15:43:43.78 -    issuing   quit to device [0]: <sleep 0;>
+31/05/2013 15:43:47.75 - INIT#############################################
+           comment
+31/05/2013 15:43:47.78 -    issuing   init to device [0]: <sleep 0;>
+31/05/2013 15:43:47.80 -       finished   init to device [0]
+31/05/2013 15:43:48.69 - START#############################################
+31/05/2013 15:43:46.42  comment
+31/05/2013 15:43:48.72 -    issuing  start to device [0]: <sleep 0;>
+31/05/2013 15:43:48.73 -       finished  start to device [0]
+31/05/2013 15:43:48.74 - S.Func# 0 ON < CAMAC3 >
+31/05/2013 15:43:48.83 -    #ActiveThread :     #Starting client [0]           
+31/05/2013 15:43:48.86 -    issuing S.F. activate to device [0]: <sleep 0; echo . ;>
+31/05/2013 15:43:48.87 -    #Stopping client [0] #leaving ActiveThread # ...
+31/05/2013 15:43:48.96 - S.Func# [0] OFF ... was found OFF ... 0.022 sec.
+31/05/2013 15:43:50.94 - STOP#############################################
+31/05/2013 15:43:50.94 - 2.025 seconds length to this point 
+31/05/2013 15:43:50.96 - waiting to finish kills, sleep 0 seconds
+31/05/2013 15:43:50.98 -    issuing   stop to device [0]: <sleep 0;>
+31/05/2013 15:43:51.07 -    finished  stop to device [0]
+31/05/2013 15:43:51.09 - STOPPED##########################################
+31/05/2013 15:43:51.10 - 2.938 seconds length  
+31/05/2013 15:43:51.91 - QUIT#############################################
+31/05/2013 15:43:51.92 - q  #############################################
+31/05/2013 15:43:51.96 -    issuing   quit to device [0]: <sleep 0;>
+31/05/2013 15:44:35.21 - INIT#############################################
+           comment
+31/05/2013 15:44:35.24 -    issuing   init to device [0]: <sleep 0;>
+31/05/2013 15:44:35.27 -       finished   init to device [0]
+31/05/2013 15:44:35.60 - START#############################################
+31/05/2013 15:44:33.64  comment
+31/05/2013 15:44:35.63 -    issuing  start to device [0]: <sleep 0;>
+31/05/2013 15:44:35.65 -       finished  start to device [0]
+31/05/2013 15:44:35.68 - S.Func# 0 ON < CAMAC3 >
+31/05/2013 15:44:35.70 -    #ActiveThread :     #Starting client [0]           
+31/05/2013 15:44:35.75 -    issuing S.F. activate to device [0]: <sleep 0; echo . ;>
+31/05/2013 15:44:35.76 -    #Stopping client [0] #leaving ActiveThread # ...
+31/05/2013 15:44:35.81 - S.Func# [0] OFF ... was found OFF ... 0.015 sec.
+31/05/2013 15:44:37.42 - STOP#############################################
+31/05/2013 15:44:37.43 - 1.982 seconds length to this point 
+31/05/2013 15:44:37.45 - waiting to finish kills, sleep 0 seconds
+31/05/2013 15:44:37.47 -    issuing   stop to device [0]: <sleep 0;>
+31/05/2013 15:44:37.57 -    finished  stop to device [0]
+31/05/2013 15:44:37.58 - STOPPED##########################################
+31/05/2013 15:44:37.59 - 1.997 seconds length  
+31/05/2013 15:44:38.15 - QUIT#############################################
+31/05/2013 15:44:38.16 - q  #############################################
+31/05/2013 15:44:38.19 -    issuing   quit to device [0]: <sleep 0;>
+31/05/2013 15:46:06.70 - INIT#############################################
+           comment
+31/05/2013 15:46:06.71 -    issuing   init to device [0]: <sleep 0;>
+31/05/2013 15:46:06.72 -       finished   init to device [0]
+31/05/2013 15:46:36.02 - STOP#############################################
+31/05/2013 15:46:36.04 - 29.932 seconds length to this point 
+31/05/2013 15:46:36.05 - waiting to finish kills, sleep 0 seconds
+31/05/2013 15:46:36.08 -    issuing   stop to device [0]: <sleep 0;>
+31/05/2013 15:46:36.14 -    finished  stop to device [0]
+31/05/2013 15:46:36.15 - STOPPED##########################################
+31/05/2013 15:46:36.17 - 29.944 seconds length  
+31/05/2013 15:46:51.31 - STOP#############################################
+31/05/2013 15:46:51.33 - 44.961 seconds length to this point 
+31/05/2013 15:46:51.34 - waiting to finish kills, sleep 0 seconds
+31/05/2013 15:46:51.37 -    issuing   stop to device [0]: <sleep 0;>
+31/05/2013 15:46:51.45 -    finished  stop to device [0]
+31/05/2013 15:46:51.46 - STOPPED##########################################
+31/05/2013 15:46:51.47 - 44.975 seconds length  
+31/05/2013 15:46:53.47 - STOP#############################################
+31/05/2013 15:46:53.49 - 46.977 seconds length to this point 
+31/05/2013 15:46:53.50 - waiting to finish kills, sleep 0 seconds
+31/05/2013 15:46:53.53 -    issuing   stop to device [0]: <sleep 0;>
+31/05/2013 15:46:53.61 -    finished  stop to device [0]
+31/05/2013 15:46:53.62 - STOPPED##########################################
+31/05/2013 15:46:53.63 - 46.991 seconds length  
+31/05/2013 15:46:54.19 - QUIT#############################################
+31/05/2013 15:46:54.21 - q  #############################################
+31/05/2013 15:46:54.24 -    issuing   quit to device [0]: <sleep 0;>
+31/05/2013 15:47:01.66 - INIT#############################################
+           comment
+31/05/2013 15:47:01.69 -    issuing   init to device [0]: <sleep 0;>
+31/05/2013 15:47:01.72 -       finished   init to device [0]
+31/05/2013 15:47:03.50 - START#############################################
+31/05/2013 15:46:58.66  comment
+31/05/2013 15:47:03.53 -    issuing  start to device [0]: <sleep 0;>
+31/05/2013 15:47:03.54 -       finished  start to device [0]
+31/05/2013 15:47:03.57 - S.Func# 0 ON < CAMAC3 >
+31/05/2013 15:47:03.64 -    #ActiveThread :     #Starting client [0]           
+31/05/2013 15:47:03.69 -    issuing S.F. activate to device [0]: <sleep 0; echo . ;>
+31/05/2013 15:47:03.70 -    #Stopping client [0] #leaving ActiveThread # ...
+31/05/2013 15:47:03.79 - S.Func# [0] OFF ... was found OFF ... 0.024 sec.
+31/05/2013 15:48:21.23 - STOP#############################################
+31/05/2013 15:48:21.25 - 77.973 seconds length to this point 
+31/05/2013 15:48:21.26 - waiting to finish kills, sleep 0 seconds
+31/05/2013 15:48:21.29 -    issuing   stop to device [0]: <sleep 0;>
+31/05/2013 15:48:21.38 -    finished  stop to device [0]
+31/05/2013 15:48:21.39 - STOPPED##########################################
+31/05/2013 15:48:21.40 - 77.988 seconds length  
+31/05/2013 15:48:22.13 - QUIT#############################################
+31/05/2013 15:48:22.15 - q  #############################################
+31/05/2013 15:48:22.18 -    issuing   quit to device [0]: <sleep 0;>
+31/05/2013 15:48:26.28 - INIT#############################################
+           comment
+31/05/2013 15:48:26.32 -    issuing   init to device [0]: <sleep 0;>
+31/05/2013 15:48:26.34 -       finished   init to device [0]
+31/05/2013 15:48:28.24 - START#############################################
+31/05/2013 15:48:24.21  comment
+31/05/2013 15:48:28.26 -    issuing  start to device [0]: <sleep 0;>
+31/05/2013 15:48:28.28 -       finished  start to device [0]
+31/05/2013 15:48:28.29 - S.Func# 0 ON < CAMAC3 >
+31/05/2013 15:48:28.38 -    #ActiveThread :     #Starting client [0]           
+31/05/2013 15:48:28.44 -    issuing S.F. activate to device [0]: <sleep 0; echo . ;>
+31/05/2013 15:48:28.46 -    #Stopping client [0] #leaving ActiveThread # ...
+31/05/2013 15:48:28.52 - S.Func# [0] OFF ... was found OFF ... 0.023 sec.
+31/05/2013 15:51:45.33 - QUIT#############################################
+31/05/2013 15:51:45.34 - q  #############################################
+31/05/2013 15:51:45.37 -    issuing   quit to device [0]: <sleep 0;>
+31/05/2013 15:51:49.85 - INIT#############################################
+           comment
+31/05/2013 15:51:49.89 -    issuing   init to device [0]: <sleep 0;>
+31/05/2013 15:51:49.90 -       finished   init to device [0]
+31/05/2013 15:51:52.45 - START#############################################
+31/05/2013 15:51:47.63  comment
+31/05/2013 15:51:52.47 -    issuing  start to device [0]: <sleep 0;>
+31/05/2013 15:51:52.48 -       finished  start to device [0]
+31/05/2013 15:51:52.51 - S.Func# 0 ON < CAMAC3 >
+31/05/2013 15:51:52.62 -    #ActiveThread :     #Starting client [0]           
+31/05/2013 15:51:52.66 -    issuing S.F. activate to device [0]: <sleep 0; echo . ;>
+31/05/2013 15:51:52.67 -    #Stopping client [0] #leaving ActiveThread # ...
+31/05/2013 15:51:52.73 - S.Func# [0] OFF ... was found OFF ... 0.024 sec.
+31/05/2013 15:52:50.13 - QUIT#############################################
+31/05/2013 15:52:50.13 - q  #############################################
+31/05/2013 15:52:50.15 -    issuing   quit to device [0]: <sleep 0;>
+31/05/2013 15:52:54.13 - INIT#############################################
+           comment
+31/05/2013 15:52:54.16 -    issuing   init to device [0]: <sleep 0;>
+31/05/2013 15:52:54.17 -       finished   init to device [0]
+31/05/2013 15:52:55.61 - START#############################################
+31/05/2013 15:52:52.33  comment
+31/05/2013 15:52:55.63 -    issuing  start to device [0]: <sleep 0;>
+31/05/2013 15:52:55.64 -       finished  start to device [0]
+31/05/2013 15:52:55.67 - S.Func# 0 ON < CAMAC3 >
+31/05/2013 15:52:55.69 -    #ActiveThread :     #Starting client [0]           
+31/05/2013 15:52:55.73 -    issuing S.F. activate to device [0]: <sleep 0; echo . ;>
+31/05/2013 15:52:55.75 -    #Stopping client [0] #leaving ActiveThread # ...
+31/05/2013 15:52:55.81 - S.Func# [0] OFF ... was found OFF ... 0.016 sec.
+31/05/2013 15:53:14.43 - STOP#############################################
+31/05/2013 15:53:14.44 - 18.982 seconds length to this point 
+31/05/2013 15:53:14.46 - waiting to finish kills, sleep 0 seconds
+31/05/2013 15:53:14.49 -    issuing   stop to device [0]: <sleep 0;>
+31/05/2013 15:53:14.58 -    finished  stop to device [0]
+31/05/2013 15:53:14.59 - STOPPED##########################################
+31/05/2013 15:53:14.60 - 18.997 seconds length  
+31/05/2013 15:53:15.18 - QUIT#############################################
+31/05/2013 15:53:15.20 - q  #############################################
+31/05/2013 15:53:15.21 -    issuing   quit to device [0]: <sleep 0;>
+31/05/2013 15:53:18.74 - INIT#############################################
+           comment
+31/05/2013 15:53:18.76 -    issuing   init to device [0]: <sleep 0;>
+31/05/2013 15:53:18.77 -       finished   init to device [0]
+31/05/2013 15:53:20.36 - START#############################################
+31/05/2013 15:53:17.31  comment
+31/05/2013 15:53:20.38 -    issuing  start to device [0]: <sleep 0;>
+31/05/2013 15:53:20.39 -       finished  start to device [0]
+31/05/2013 15:53:55.26 - STOP#############################################
+31/05/2013 15:53:55.28 - 34.990 seconds length to this point 
+31/05/2013 15:53:55.29 - waiting to finish kills, sleep 0 seconds
+31/05/2013 15:53:55.30 -    issuing   stop to device [0]: <sleep 0;>
+31/05/2013 15:53:55.32 -    finished  stop to device [0]
+31/05/2013 15:53:55.33 - STOPPED##########################################
+31/05/2013 15:53:55.34 - 34.996 seconds length  
+31/05/2013 16:02:11.01 - QUIT#############################################
+31/05/2013 16:02:11.04 - q  #############################################
+31/05/2013 16:02:11.10 -    issuing   quit to device [0]: <sleep 0;>
+31/05/2013 16:02:16.18 - INIT#############################################
+           comment
+31/05/2013 16:02:16.21 -    issuing   init to device [0]: <sleep 0;>
+31/05/2013 16:02:16.23 -       finished   init to device [0]
+31/05/2013 16:02:19.80 - START#############################################
+31/05/2013 16:02:14.31  comment
+31/05/2013 16:02:19.82 -    issuing  start to device [0]: <sleep 0; echo _GOMON | nc camac3 9100;>
+31/05/2013 16:02:19.92 -       NOT SUCCESFULL !!!!!!!!!!!!!!
+31/05/2013 16:02:37.86 - STOP#############################################
+31/05/2013 16:02:37.88 - 18.006 seconds length to this point 
+31/05/2013 16:02:37.89 - waiting to finish kills, sleep 0 seconds
+31/05/2013 16:02:37.91 -    issuing   stop to device [0]: <sleep 0; echo _STOP | nc camac3 9100;>
+31/05/2013 16:02:37.94 -       NOT SUCCESFULL !!!!!!!!!!!!!!
+31/05/2013 16:02:41.28 - QUIT#############################################
+31/05/2013 16:02:41.29 - q  #############################################
+31/05/2013 16:02:41.30 -    issuing   quit to device [0]: <sleep 0;>
