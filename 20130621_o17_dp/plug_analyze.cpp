@@ -398,10 +398,10 @@ void TCounterMulti::GetRate(){
     for (i=0;i<N;i++){
       //   printf("%d/%d - \n", i , N );
       //     if ((i>=0)&&(i<N) ) {
-       printf("%9.2f ",mcounter[i]->GetRate( ) );
+      //HERE     printf("%9.2f ",mcounter[i]->GetRate( ) );
        //     }   
     }
-    printf("%s","\n");
+    //  printf("%s","\n");
 }//---------------------------
 
 void TCounterMulti::Register(int counter, double weight){
@@ -428,7 +428,7 @@ void TCounterMulti::Display(){
     cc->Draw();
   }else{
     TPad *pp=(TPad*)MPadGetByName( "COUNTERS" );cc=pp->GetCanvas();
-  }
+  }// I HAVE cc CANVAS now...
   //---------------------------------------------
 
   // ===   IT CAN SEEM STOPPED === NO WAY TO SEE THE notcomming COUNTS ?????==
@@ -440,7 +440,8 @@ void TCounterMulti::Display(){
       MPadPrintInP("COUNTERS", i+1,  c );
        //     }   
     }
-    printf("%s","\n");
+    //    printf("%s","\n");
+    cc->Modified();cc->Update();
 }//---------------------------
 
 
