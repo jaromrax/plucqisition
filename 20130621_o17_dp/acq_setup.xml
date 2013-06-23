@@ -8,7 +8,7 @@ t3->TurnOff();
 
 <plugins>
 <!--    VME is on    1.6    -->
-  <pusher  so="../plug_push.so" func="push_net"  ip="192.168.1.6"  port="9302"> </pusher>
+  <pusher  so="../plug_push.so" func="push_net"  ip="192.168.1.5"  port="9302"> </pusher>
   <!--pusher  so="../plug_push.so" func="evt_pusher_file"  file="/home/mrazek/DATA/20120608_ne22_3He/RUN1016_V"> </pusher-->
   <poper   so="../plug_pop.so" func="pop_sort"> </poper>
   <!--analyze so="./plug_analyze.so" func="evt_analyze_empty"> </analyze-->
