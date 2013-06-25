@@ -242,18 +242,18 @@ MAPadGetByName( LABEL )->Update();
 
 
 //-------------------------- class definition ----------------- 1
-class TCounter{
+class TACounter{
 
  public:
 // protected:
   // int is limited to  4e6 !
   int DEBUGo;
   double markVO,  markV; // Value (integer)
-  double markTO, markT;  // time
+  double markTO, markT;  // time 
   double currT, currV;   // currents , waiting to 
  
-  TCounter();
-  ~TCounter();
+  TACounter();
+  ~TACounter();
   void Register(double weight=1.0);
   double GetRate();
   double GetTime();
@@ -262,7 +262,7 @@ class TCounter{
 
 
 
-TCounter::TCounter(  )
+TACounter::TACounter(  )
 { 
   printf("...creating counter%s\n","");
   DEBUGo=1;
@@ -275,13 +275,13 @@ TCounter::TCounter(  )
   currV=0.;
 }
 
-TCounter::~TCounter() { printf("...destroing counter%s\n","");}
+TACounter::~TACounter() { printf("...destroing counter%s\n","");}
 
 
 
 // This makes it   in   seconds.............good for high rates
 //              large error at low rates
-double TCounter::GetTime(){
+double TACounter::GetTime(){
 
   //  TString sla;
   TDatime *dt=new TDatime();  // kTRUE previously...mess
@@ -294,11 +294,11 @@ double TCounter::GetTime(){
 }// GetTime
 
 
-double TCounter::GetRate(){
+double TACounter::GetRate(){
   return (markV-markVO)/(markT-markTO);
 }
 
-void TCounter::Register(double weight){
+void TACounter::Register(double weight){
   double now=GetTime();
   currV=currV+weight;
   currT=now;
@@ -313,16 +313,16 @@ void TCounter::Register(double weight){
 }
 
 
-void TCounter::SetDebug(int deb){
+void TACounter::SetDebug(int deb){
   DEBUGo=deb;
 }
 
 
 void test(){
   int i,imax=2;
-  TCounter *c[2];
+  TACounter *c[2];
   for (i=0;i<imax;i++){
-   c[i]=new TCounter;
+   c[i]=new TACounter;
   }
 
 
@@ -337,7 +337,7 @@ void test(){
 
 
 //-------------------------- class definition ----------------- 2
-class TCounterMulti{
+class TACounterMulti{
 
  public:
 // protected:
@@ -347,12 +347,12 @@ class TCounterMulti{
 
   static const int max=10;
   int N;
-  TCounter *mcounter[max];
+  TACounter *mcounter[max];
   int i;
 
 
-  TCounterMulti( int counters );
-  ~TCounterMulti();
+  TACounterMulti( int counters );
+  ~TACounterMulti();
   void Register(int counter, double weight=1.0);
   void GetRate();
   double GetTime(); // same
@@ -361,14 +361,14 @@ class TCounterMulti{
 
 
 
-double TCounterMulti::GetTime(){
+double TACounterMulti::GetTime(){
 
   TDatime *dt=new TDatime();  // kTRUE previously...mess
   return   1.0* dt->Get();
 }// GetTime
 
 
-TCounterMulti::TCounterMulti( int counters  ){ 
+TACounterMulti::TACounterMulti( int counters  ){ 
   markT=GetTime();
   markTO=markT-1;
   currT=markT;
@@ -379,14 +379,14 @@ TCounterMulti::TCounterMulti( int counters  ){
   
   for (i=0;i<N;i++){
     printf(" %d)", i );
-    mcounter[i]=new TCounter();
+    mcounter[i]=new TACounter();
     //    mcounter[i]->SetDebug(0);
   }
   MAPadCreate("COUNTERS",1,N);
 }//------------------constructor
 
 
-TCounterMulti::~TCounterMulti() { 
+TACounterMulti::~TACounterMulti() { 
   printf("...destroing multicounter%s\n","");
     for (i=0;i<N;i++){
       delete mcounter;
@@ -394,7 +394,7 @@ TCounterMulti::~TCounterMulti() {
 }//-------------------------destructor
 
 
-void TCounterMulti::GetRate(){
+void TACounterMulti::GetRate(){
     for (i=0;i<N;i++){
       //   printf("%d/%d - \n", i , N );
       //     if ((i>=0)&&(i<N) ) {
@@ -404,7 +404,7 @@ void TCounterMulti::GetRate(){
     //  printf("%s","\n");
 }//---------------------------
 
-void TCounterMulti::Register(int counter, double weight){
+void TACounterMulti::Register(int counter, double weight){
   if ((counter>=0)&&(counter<N) ) {
     mcounter[counter]->Register( weight );
   }else{
@@ -417,7 +417,7 @@ void TCounterMulti::Register(int counter, double weight){
 
 
 
-void TCounterMulti::Display(){
+void TACounterMulti::Display(){
   char c[40]; 
   //---taken from MySql  multipads2-----------
   TCanvas *cc;
@@ -503,7 +503,7 @@ struct {
 
    //  counters   INIT
 
-   TCounterMulti *mc=new TCounterMulti(8);
+   TACounterMulti *mc=new TACounterMulti(8);
 
       //-----------------typical creation of TGraphErrors--------------
    //  gt6G  generators in t6 matrix  cut  cutm6_g
