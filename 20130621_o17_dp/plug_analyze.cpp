@@ -1,12 +1,7 @@
 /*  ################################################################# 
-
 PLUNG_ANALYZE 
-
 plugin  for analysis of a tree 
-
-
 circular buffer seems safe. but how to get right number?
-
  */
 //#include <iostream>  //#include <math.h>
 #include <stdio.h>
@@ -22,21 +17,19 @@ circular buffer seems safe. but how to get right number?
 #include "xml_attr.h"    // bude xml
 #include "nano_acquis_pureconvert.C"
 #include "cuts_manip.h"  //loadcuts,savecut,rmcut,cpcut.......
-
 #include "TSocket.h"   //net thread
-
 #include <math.h>   //net thread
-
 #include "TGraphErrors.h"   //net thread
 
 //---------------------------- with mpad and tcounter comes::::::
 #include "TText.h"
+//----------------------------with   mmap ------------------------
+#include <err.h>
+#include <sys/mman.h>
 
 /**********compile command:
 g++ -fPIC -c plug_queue.cpp `root-config --libs --cflags --glibs`  &&  gcc -shared -o plug_queue.so plug_queue.o 
-
 IF C++ => care about namemangling....
-
  */
 
 // because of mixing  c and c++, namemangling.....
@@ -68,173 +61,6 @@ extern "C" {
 
 
 
-
-
-  //===================================================================================
-  //===================================================================================
-
-
-
-
-
-
-
-
-
-  //===================================================================================
-  //===================================================================================
-  //===================================================================================
-  //===================================================================================
-
-
-
-
-
-
-//==================================================================MPad
-//==================================================================MPad
-//==================================================================MPad
-//==================================================================MPad
-/***********************************************************************
- *  GetPadByName      returns  pointer to pad   OR  NULL -------general func
- *
- */
-//===================================TPad* GetPadByName(const char* name){
-TPad*  MAPadGetByName(const char* name){
-   TPad *MyGPad=NULL;
-
-  if (gROOT->GetListOfCanvases()->GetEntries()==0){
-    /*
-    new TCanvas();
-    gPad->SetTitle( name );
-    gPad->SetName( name );
-    MyGPad=gPad;
-    printf("(GetPadByName) %s was defined %d\n" , name, MyGPad  );
-    */
-    printf("(MAPadGetByName) %s NOT found \n" , name  );
-    return NULL;
-
-  }else{
-    for (int i=0;i<gROOT->GetListOfCanvases()->GetEntries();i++){
-      TPad *cpad=(TPad*)(gROOT->GetListOfCanvases()->At(i));
-      //      printf("canvas %d/%d\n" , i, gROOT->GetListOfCanvases()->GetEntries() );
-      //1st Just tpad0.....
-
-	  if (strcmp(cpad->GetName(),name)==0){
-	    MyGPad=(TPad*)cpad;
-	    //	    printf("%s was found here in (ROOT): %d\n" , name,  MyGPad  );
-	  }//if name is good
-
-      
-      for (int j=0;j<cpad->GetListOfPrimitives()->GetEntries();j++){
-	if ( strcmp(cpad->GetListOfPrimitives()->At(j)->ClassName(),"TPad")==0){
-	  //	  printf("TPad %s looked j classname  %d/%d\n" ,  cpad->GetListOfPrimitives()->At(j)->GetName() , j, cpad->GetListOfPrimitives()->GetEntries());
-
-	  if (strcmp(cpad->GetListOfPrimitives()->At(j)->GetName(),name)==0){
-	    MyGPad=(TPad*)cpad->GetListOfPrimitives()->At(j);
-	    //	    printf("%s was found here in j==%d: %d\n" , name, j, MyGPad  );
-	  }//if name is good
-
-	}// is TPad
-      }// for j
-    }//for i
-  }//else-there were pads....
-  if (MyGPad==NULL){
-
-    printf("(MAPadGetByName) %s NOT found\n" , name  );
-    return NULL;
-    /*     new TCanvas();
-    gPad->SetTitle( name );
-    gPad->SetName( name );
-    MyGPad=(TPad*)gPad;   
-    printf("%s was NOT found anywhere in pads, we define new %d\n" , name, (int)MyGPad  );
-    */
-  }//
-  return MyGPad;
-}// GetPadName ===============================================================
-
-
-
-
-
-
-/****************************************************************
- *             Prints a text into PAD         -------general func
- *
- *
- */
-//==========void PrintInPad(const char* label, const char* value){
-
-void MAPadPrintIn(const char* label, const char* value){
-   TPad *orig=NULL;
-   if (gROOT->GetListOfCanvases()->GetEntries()>0){orig=(TPad*)gPad;}
-   TPad *cpad=MAPadGetByName( label );
-
- if (cpad!=NULL){
-   cpad->Clear();
-   TText *t1=new TText(0.5 ,0.5,     value );   // position 0.5,0.5; size 0.5
-   t1->SetTextFont(43);  // 42 was helvetica prec 2,   3 is precision 3!!!!pixels!!!
-   int w=cpad->GetWw();
-   //       w=cpad->GetWindowWidth();
-   int h=cpad->GetWh();
-   t1->SetTextAlign(22);//  CENTER === 2*10 +2
-   //   t1->SetY(0.1)
-   // EMPIRICAL FORMULA FOR HELVETICA FONT //   
-   double size=0.4*w/h/strlen(value)*7;
-   // OK    size=0.4*w/strlen(value)/15;//  this is quite reasonable....
-   size=0.4*w/strlen(value)/15;//  this is quite reasonable....
-   if (size>1.26){ size=1.26;} // from empirical test of height (350 pix)
-
-   // HACK 43 PIXELS ======================
-   //   t1->SetTextSize( size ); 
-   if (  w/strlen(value)/1.1 < h/1.2 ){
-     t1->SetTextSize( w/strlen(value)/1.1  ); 
-   }else{
-     t1->SetTextSize( h/1.2  ); 
-   }
-   //   printf("bounding box  %d:%d  :%f\n", w ,h,  size);
-   t1->Draw(); 
-   if (orig!=NULL){orig->cd();}
- }//cpad not NULL
-}//DisplayInPad==================================================================
-
-
-  
-void MAPadPrintInP(const char* label, int slot, const char* value){
-  char ch[100];
-  sprintf(ch, "%s_%d", label, slot);
-  MAPadPrintIn( ch, value );
-}
-
-
-void MAPadCreate(const char* LABEL, int columns, int rows){
-
-  /*
-   *  HERE I (CONDITIONALY) CREATE SET OF PADS ..............................
-   */
-  TCanvas *cc;
-  if (MAPadGetByName( LABEL )==NULL){
-    cc=new TCanvas( LABEL,LABEL);
-    cc->Divide(columns , rows, 0.002,0.002 );
-    cc->GetCanvas()->SetFillColor(9);cc->GetCanvas()->SetFillStyle(1);
-    cc->Draw();
-  }else{
-    TPad *pp=(TPad*)MAPadGetByName( LABEL );cc=pp->GetCanvas();
-  }
-
-for (int j=0;j<columns;j++){
-for (int i=0;i<rows;i++){
-  char aa[15];  sprintf(aa,"%s_%d",LABEL,i+1);
- char bb[15]; 
- sprintf(bb, "kuku %03d", i  );
- // sprintf(bb, "0.%d%d%d bar", i, (int)gRandom->Uniform(9),(int)gRandom->Uniform(9)  );
- MAPadPrintIn( aa,bb );
- }
- }//for loop -----------------
-  
-MAPadGetByName( LABEL )->Update();
-
-}//MAPadCreate(==================================================================
 
 //=====================================================================COUNTERS OBJECTS
 //=====================================================================COUNTERS OBJECTS
@@ -277,12 +103,9 @@ TACounter::TACounter(  )
 
 TACounter::~TACounter() { printf("...destroing counter%s\n","");}
 
-
-
 // This makes it   in   seconds.............good for high rates
-//              large error at low rates
+//                                     large error at low rates
 double TACounter::GetTime(){
-
   //  TString sla;
   TDatime *dt=new TDatime();  // kTRUE previously...mess
   // sla.Append( dt->AsString() );//append date
@@ -312,11 +135,9 @@ void TACounter::Register(double weight){
   return;
 }
 
-
 void TACounter::SetDebug(int deb){
   DEBUGo=deb;
 }
-
 
 void test(){
   int i,imax=2;
@@ -324,7 +145,6 @@ void test(){
   for (i=0;i<imax;i++){
    c[i]=new TACounter;
   }
-
 
   for (i=0;i<imax;i++){
     delete c[i];
@@ -349,6 +169,8 @@ class TACounterMulti{
   int N;
   TACounter *mcounter[max];
   int i;
+  int fd;  //  =-1       file handle for mmap
+  char *cnt_file; // pointer to     mmap
 
 
   TACounterMulti( int counters );
@@ -382,7 +204,20 @@ TACounterMulti::TACounterMulti( int counters  ){
     mcounter[i]=new TACounter();
     //    mcounter[i]->SetDebug(0);
   }
-  MAPadCreate("COUNTERS",1,N);
+  //  MAPadCreate("COUNTERS",1,N);
+  // HERE I MUST CREATE     mmap  <<<  ========------------------------MMAP 
+  //  int fd = -1;
+  const char str1[] = "          \n";
+  //  char  *cnt_file;  //pointer
+  system("dd if=/dev/zero of=counters.dat  bs=4096  count=1");
+  if ((fd = open("counters.dat", O_RDWR, 0)) == -1) err(1, "open");
+  cnt_file=(char*)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, fd, 0);
+  if (cnt_file == MAP_FAILED) errx(1, "either mmap");
+  strcpy(cnt_file, str1); 
+  munmap(cnt_file, 4096);        
+  close(fd);
+
+  //==================-------------------------------------------------MMAP
 }//------------------constructor
 
 
@@ -391,6 +226,8 @@ TACounterMulti::~TACounterMulti() {
     for (i=0;i<N;i++){
       delete mcounter;
   }
+ munmap( cnt_file , 4096);
+ close(  fd );
 }//-------------------------destructor
 
 
@@ -419,16 +256,18 @@ void TACounterMulti::Register(int counter, double weight){
 
 void TACounterMulti::Display(){
   char c[40]; 
-  //---taken from MySql  multipads2-----------
-  TCanvas *cc;
-  if (MAPadGetByName( "COUNTERS" )==NULL){
-    cc=new TCanvas( "COUNTERS","COUNTERS" );
-    cc->Divide(1 ,N, 0.002,0.002 );
-    cc->GetCanvas()->SetFillColor(9);cc->GetCanvas()->SetFillStyle(1);
-    cc->Draw();
-  }else{
-    TPad *pp=(TPad*)MAPadGetByName( "COUNTERS" );cc=pp->GetCanvas();
-  }// I HAVE cc CANVAS now...
+  TString s="";
+  // //---taken from MySql  multipads2-----------
+  // TCanvas *cc;
+  // if (MAPadGetByName( "COUNTERS" )==NULL){
+  //   cc=new TCanvas( "COUNTERS","COUNTERS" );
+  //   cc->Divide(1 ,N, 0.002,0.002 );
+  //   cc->GetCanvas()->SetFillColor(9);cc->GetCanvas()->SetFillStyle(1);
+  //   cc->Draw();
+  // }else{
+  //   TPad *pp=(TPad*)MAPadGetByName( "COUNTERS" );cc=pp->GetCanvas();
+  // }// I HAVE cc CANVAS now...
+
   //---------------------------------------------
 
   // ===   IT CAN SEEM STOPPED === NO WAY TO SEE THE notcomming COUNTS ?????==
@@ -436,12 +275,14 @@ void TACounterMulti::Display(){
     for (i=0;i<N;i++){
       //   printf("%d/%d - \n", i , N );
       //     if ((i>=0)&&(i<N) ) {
-      sprintf(c, "%09.1f",mcounter[i]->GetRate( ) );
-      MAPadPrintInP("COUNTERS", i+1,  c );
+      sprintf(c, "%09.1f\n",mcounter[i]->GetRate( ) );
+      s.Append( c );
+      //      MAPadPrintInP("COUNTERS", i+1,  c );
        //     }   
     }
     //    printf("%s","\n");
-    cc->Modified();cc->Update();
+    //    cc->Modified();cc->Update();
+    strcpy( cnt_file , s );   // preklop do filu (mmap) obsah citacu...
 }//---------------------------
 
 
@@ -501,9 +342,10 @@ struct {
 
    double ran=gRandom->Uniform(4000.);
 
-   //  counters   INIT
 
+   //  counters   INIT 
    TACounterMulti *mc=new TACounterMulti(8);
+
 
       //-----------------typical creation of TGraphErrors--------------
    //  gt6G  generators in t6 matrix  cut  cutm6_g
