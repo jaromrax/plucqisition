@@ -7,7 +7,9 @@
 #include <stdlib.h>
 //#include <pthread.h> //  THIS COMPILES WITH g++
 #include "TThread.h"   //  CINT?   //  -lThread
-//#include<sys/stat.h>  // struct stat
+//  2013/06/25 - 15:51 I had to uncoment this line on ubuntu 1204!!!
+//       while mojzis was ok
+#include<sys/stat.h>  // struct stat
 
 
 

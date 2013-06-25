@@ -263,3 +263,25 @@ shspe()
 .!rm canvas_7.*
 .!ls ca*
 .qacq("stop")
+acq()
+acq()
+shspe()
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+.qqqqqqqqq
+acq()
+acq()
+..qqqqqqqqqqqqqqq
+.qqqqqqqqqqqq
+acq()
+.qqqqqqqqqqqqq
+acq()
+.qqqqqqqqqqqq
+acq()
+.qqqqqqqqqqq
+acq()
+shspe()
