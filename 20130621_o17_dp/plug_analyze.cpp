@@ -74,6 +74,7 @@ class TACounter{
 // protected:
   // int is limited to  4e6 !
   int DEBUGo;
+  double delta;
   double markVO,  markV; // Value (integer)
   double markTO, markT;  // time 
   double currT, currV;   // currents , waiting to 
@@ -92,9 +93,10 @@ TACounter::TACounter(  )
 { 
   printf("...creating counter%s\n","");
   DEBUGo=1;
+  delta=10.0; //   10 second dT is fine for 2sec. netwrk fetch
   double now=GetTime();
   markVO=0.0;
-  markTO=now - 1.0;
+  markTO=now - delta;
   markV=0.0;
   markT=now;  
   currT=now;
@@ -125,7 +127,7 @@ void TACounter::Register(double weight){
   double now=GetTime();
   currV=currV+weight;
   currT=now;
-  if (currT - markT >= 1.0 ){
+  if (currT - markT >= delta ){
     markVO=markV;
     markTO=markT;
     markV=currV;
@@ -165,7 +167,7 @@ class TACounterMulti{
   double markTO, markT;  // time
   double currT, currV;   // currents , waiting to 
 
-  static const int max=10;
+  static const int max=64;  // MAXIMUM   32  COUNTERS?
   int N;
   TACounter *mcounter[max];
   int i;
@@ -278,7 +280,7 @@ void TACounterMulti::Display(){
     for (i=0;i<N;i++){
       //   printf("%d/%d - \n", i , N );
       //     if ((i>=0)&&(i<N) ) {
-      sprintf(c, "%10.1f\n",mcounter[i]->GetRate( ) );
+      sprintf(c, "%3d.  %10.1f\n",i, mcounter[i]->GetRate( ) );
       s.Append( c );
       //      MAPadPrintInP("COUNTERS", i+1,  c );
        //     }   
@@ -350,7 +352,7 @@ struct {
    //  counters   INIT 
    TACounterMulti *mc;
    if (mc==NULL){
-     mc=new TACounterMulti(8);
+     mc=new TACounterMulti(12);
    }
 
 
@@ -853,6 +855,12 @@ struct {
 	   gt6t1->Expand(ima+1);
 	   gt6t1->SetPoint(      ima, t6q,  t1q );
 	   gt6t1->SetPointError( ima, sqrt(t6q), sqrt(t1q) );
+
+	   //-------------Q, OR, x , gene?
+	   mc->Register( 8, cnt[1] );
+	   mc->Register( 9, cnt[2] );
+	   mc->Register( 10, cnt[3] );	   
+	   mc->Register( 11, cnt[4] );
 
 	   }else{ remove_counter1=0; } //do not use 1st point
 	   t6G=0.0;

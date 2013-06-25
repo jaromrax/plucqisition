@@ -285,3 +285,13 @@ acq()
 .qqqqqqqqqqq
 acq()
 shspe()
+gQ
+gQ-
+acq()
+.qqqqqqqqqqqq
+acq()
+acq("stop")
+acq("stop")
+.qqqqqqqqqqqq
+acq()
+shspe()
