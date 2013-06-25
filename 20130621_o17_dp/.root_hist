@@ -262,3 +262,4 @@ acq()
 shspe()
 .!rm canvas_7.*
 .!ls ca*
+.qacq("stop")
