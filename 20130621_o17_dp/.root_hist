@@ -92,3 +92,173 @@ acq("stop")
 .qqqqqqqqqqq
 acq()
 shspe()
+acq()
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+.qqqqqqqqqq
+acq()
+.qqqqqqqqqqqqqqqqqqqqqq
+acq()
+..qqqqqqqqq
+.qqqqqqqqqqqq
+acq()
+.q
+.qqqqqqqqqq
+acq()
+.qqqqqqq
+acq()
+.qqqqqqqqqqqq
+acq()
+.qqqqqqqqqqqq
+acq()
+.qqqqq
+acq()
+shspe()
+.!ls
+.!ls -l
+.L cut_manip.h
+.L cuts_manip.h
+cpcut("Cut00_mtx1","cutm1_d")
+cpcut("Cut00_mtx1","cutm1_d")
+.ls
+savecut("Cut00_mtx1")
+savecut(Cut00_mtx1, "cutm1_d")
+.ls
+gFile->Close()
+.ls
+savecut(Cut00_mtx1, "cutm1_d")
+savecut(Cut00_mtx1, "cutm1_d")
+.ls
+savecut(Cut01_mtx1, "cutm1_p")
+savecut(Cut00_mtx8, "cutm8_p")
+savecut(Cut00_mtx2, "cutm2_p")
+savecut(Cut00_mtx3, "cutm3_p")
+savecut(Cut00_mtx4, "cutm4_p")
+savecut(Cut00_mtx5, "cutm5_p")
+savecut(Cut00_mtx6, "cutm6_p")
+savecut(Cut00_mtx7, "cutm7_p")
+savecut(Cut02_mtx1, "cutm1_mon")
+savecut(Cut01_mtx6, "cutm6_mon")
+savecut(Cut01_mtx7, "cutm7_mon")
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+acq()
+acq("stop")
+.qqqqqqq
+acq()
+shspe()
+.!ls
+      TH2F *mtx5;
+      mtx5=(TH2F*)gDirectory->Get("mtx5");
+      if (mtx5==NULL){
+mtx5=new TH2F("mtx5","V021:V021+V005",1024,0,5000,1024,0,5000);
+      }
+      TH2F *mtx6;
+      mtx6=(TH2F*)gDirectory->Get("mtx6");
+      if (mtx6==NULL){
+mtx6=new TH2F("mtx6","V022:V022+V006",1024,0,5000,1024,0,5000);
+      }
+      TH2F *mtx7;
+      mtx7=(TH2F*)gDirectory->Get("mtx7");
+      if (mtx7==NULL){
+mtx7=new TH2F("mtx7","V023:V023+V007",1024,0,5000,1024,0,5000);
+      }
+      TH2F *mtx8;
+      mtx8=(TH2F*)gDirectory->Get("mtx8");
+      if (mtx8==NULL){
+mtx8=new TH2F("mtx8","V024:V024+V008",1024,0,5000,1024,0,5000);
+      }
+      //-------------------------- typical load of cuts -----------------
+      loadcuts();//  from cuts_manip.h             ONLY WHEN acq("start")
+      //-------------------------- typical load of Gcuts -----------------
+      // EXTRA CUTS - to compare Q /T1  or Q/T6
+      TCutG *m1_monitor;
+      m1_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_mon");      TH2F *mtx5;
+      mtx5=(TH2F*)gDirectory->Get("mtx5");
+      if (mtx5==NULL){
+mtx5=new TH2F("mtx5","V021:V021+V005",1024,0,5000,1024,0,5000);
+      }
+      TH2F *mtx6;
+      mtx6=(TH2F*)gDirectory->Get("mtx6");
+      if (mtx6==NULL){
+mtx6=new TH2F("mtx6","V022:V022+V006",1024,0,5000,1024,0,5000);
+      }
+      TH2F *mtx7;
+      mtx7=(TH2F*)gDirectory->Get("mtx7");
+      if (mtx7==NULL){
+mtx7=new TH2F("mtx7","V023:V023+V007",1024,0,5000,1024,0,5000);
+      }
+      TH2F *mtx8;
+      mtx8=(TH2F*)gDirectory->Get("mtx8");
+      if (mtx8==NULL){
+mtx8=new TH2F("mtx8","V024:V024+V008",1024,0,5000,1024,0,5000);
+      }
+      //-------------------------- typical load of cuts -----------------
+      loadcuts();//  from cuts_manip.h             ONLY WHEN acq("start")
+      //-------------------------- typical load of Gcuts -----------------
+      // EXTRA CUTS - to compare Q /T1  or Q/T6
+      TCutG *m1_monitor;
+      m1_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_mon");      TH2F *mtx5;
+      mtx5=(TH2F*)gDirectory->Get("mtx5");
+      if (mtx5==NULL){
+mtx5=new TH2F("mtx5","V021:V021+V005",1024,0,5000,1024,0,5000);
+      }
+      TH2F *mtx6;
+      mtx6=(TH2F*)gDirectory->Get("mtx6");
+      if (mtx6==NULL){
+mtx6=new TH2F("mtx6","V022:V022+V006",1024,0,5000,1024,0,5000);
+      }
+      TH2F *mtx7;
+      mtx7=(TH2F*)gDirectory->Get("mtx7");
+      if (mtx7==NULL){
+mtx7=new TH2F("mtx7","V023:V023+V007",1024,0,5000,1024,0,5000);
+      }
+      TH2F *mtx8;
+      mtx8=(TH2F*)gDirectory->Get("mtx8");
+      if (mtx8==NULL){
+mtx8=new TH2F("mtx8","V024:V024+V008",1024,0,5000,1024,0,5000);
+      }
+      //-------------------------- typical load of cuts -----------------
+      loadcuts();//  from cuts_manip.h             ONLY WHEN acq("start")
+      //-------------------------- typical load of Gcuts -----------------
+      // EXTRA CUTS - to compare Q /T1  or Q/T6
+      TCutG *m1_monitor;
+      m1_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_mon");      TH2F *mtx5;
+      mtx5=(TH2F*)gDirectory->Get("mtx5");
+      if (mtx5==NULL){
+mtx5=new TH2F("mtx5","V021:V021+V005",1024,0,5000,1024,0,5000);
+      }
+      TH2F *mtx6;
+      mtx6=(TH2F*)gDirectory->Get("mtx6");
+      if (mtx6==NULL){
+mtx6=new TH2F("mtx6","V022:V022+V006",1024,0,5000,1024,0,5000);
+      }
+      TH2F *mtx7;
+      mtx7=(TH2F*)gDirectory->Get("mtx7");
+      if (mtx7==NULL){
+mtx7=new TH2F("mtx7","V023:V023+V007",1024,0,5000,1024,0,5000);
+      }
+      TH2F *mtx8;
+      mtx8=(TH2F*)gDirectory->Get("mtx8");
+      if (mtx8==NULL){
+mtx8=new TH2F("mtx8","V024:V024+V008",1024,0,5000,1024,0,5000);
+      }
+      //-------------------------- typical load of cuts -----------------
+      loadcuts();//  from cuts_manip.h             ONLY WHEN acq("start")
+      //-------------------------- typical load of Gcuts -----------------
+      // EXTRA CUTS - to compare Q /T1  or Q/T6
+      TCutG *m1_monitor;
+      m1_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_mon");
+mtx1_p
+mtx1_p->Draw()
+mtx1_p->Draw()
+mtx1_p->Draw()
+.qqqqqqqq
+acq()
+shspe()
+.!rm canvas_7.*
+.!ls ca*

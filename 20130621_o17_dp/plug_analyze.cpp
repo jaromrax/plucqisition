@@ -308,7 +308,7 @@ void TCounter::Register(double weight){
     markV=currV;
     markT=currT;
   }//if 1 sec
-  if (DEBUG>0){ printf( "%09.3f ... %f/%f\n", GetRate() , currT, currV );}
+  //  if (DEBUGo>0){ printf( "%09.3f ... %f/%f\n", GetRate() , currT, currV );}
   return;
 }
 
@@ -380,7 +380,7 @@ TCounterMulti::TCounterMulti( int counters  ){
   for (i=0;i<N;i++){
     printf(" %d)", i );
     mcounter[i]=new TCounter();
-    //    mcounter[i]->SetDebug(0);
+    mcounter[i]->SetDebug(0);
   }
   MPadCreate("COUNTERS",1,N);
 }//------------------constructor
@@ -503,7 +503,7 @@ struct {
 
    //  counters   INIT
 
-   TCounterMulti *mc=new TCounterMulti(8);
+   //   TCounterMulti *mc=new TCounterMulti(8);
 
       //-----------------typical creation of TGraphErrors--------------
    //  gt6G  generators in t6 matrix  cut  cutm6_g
@@ -1019,14 +1019,23 @@ struct {
 	 // not used  now  if ((cha[17]>0)&&(cha[22]>0)) mtx1_6full->Fill( cha[1]+cha[17],cha[6]+cha[22]  ); 
 	 // not used now   if ((cha[17]>0)&&(cha[22]>0)) mtx1_6de->Fill( cha[17], cha[22]  ); 
 
-	 if (cha[17]>0) {mtx1->Fill( cha[1]+cha[17], cha[17] ); mc->Register(0,1 ); }
-	 if (cha[18]>0) {mtx2->Fill( cha[2]+cha[18], cha[18] ); mc->Register(1,1 ); }
-	 if (cha[19]>0) {mtx3->Fill( cha[3]+cha[19], cha[19] ); mc->Register(2,1 );  } 
-	 if (cha[20]>0) {mtx4->Fill( cha[4]+cha[20], cha[20] ); mc->Register(3,1 ); }
-	 if (cha[21]>0) {mtx5->Fill( cha[5]+cha[21], cha[21] ); mc->Register(4,1 );  }
-	 if (cha[22]>0) {mtx6->Fill( cha[6]+cha[22], cha[22] ); mc->Register(5,1 );  }
-	 if (cha[23]>0) {mtx7->Fill( cha[7]+cha[23], cha[23] ); mc->Register(6,1 );  }
-	 if (cha[24]>0) {mtx8->Fill( cha[8]+cha[24], cha[24] ); mc->Register(7,1 );  }
+	 if (cha[17]>0) {mtx1->Fill( cha[1]+cha[17], cha[17] );   }
+	 if (cha[18]>0) {mtx2->Fill( cha[2]+cha[18], cha[18] );   }
+	 if (cha[19]>0) {mtx3->Fill( cha[3]+cha[19], cha[19] );   } 
+	 if (cha[20]>0) {mtx4->Fill( cha[4]+cha[20], cha[20] );   }
+	 if (cha[21]>0) {mtx5->Fill( cha[5]+cha[21], cha[21] );   }
+	 if (cha[22]>0) {mtx6->Fill( cha[6]+cha[22], cha[22] );   }
+	 if (cha[23]>0) {mtx7->Fill( cha[7]+cha[23], cha[23] );   }
+	 if (cha[24]>0) {mtx8->Fill( cha[8]+cha[24], cha[24] );   }
+
+// // // mc->Register(0,1 );
+// // // mc->Register(1,1 );
+// // // mc->Register(2,1 );
+// // // mc->Register(3,1 );
+// // // mc->Register(4,1 );
+// // // mc->Register(5,1 );
+// // // mc->Register(6,1 );
+// // // mc->Register(7,1 );
 
 	 /*
 	 if ( (mtx1_cut_ela!=NULL)&&(mtx1_cut_ela->IsInside( cha[1]+cha[17], cha[17] ) ) ){
