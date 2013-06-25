@@ -100,7 +100,7 @@ extern "C" {
  *
  */
 //===================================TPad* GetPadByName(const char* name){
-TPad* MPadGetByName(const char* name){
+TPad*  MAPadGetByName(const char* name){
    TPad *MyGPad=NULL;
 
   if (gROOT->GetListOfCanvases()->GetEntries()==0){
@@ -111,7 +111,7 @@ TPad* MPadGetByName(const char* name){
     MyGPad=gPad;
     printf("(GetPadByName) %s was defined %d\n" , name, MyGPad  );
     */
-    printf("(MPadGetByName) %s NOT found \n" , name  );
+    printf("(MAPadGetByName) %s NOT found \n" , name  );
     return NULL;
 
   }else{
@@ -141,7 +141,7 @@ TPad* MPadGetByName(const char* name){
   }//else-there were pads....
   if (MyGPad==NULL){
 
-    printf("(MPadGetByName) %s NOT found\n" , name  );
+    printf("(MAPadGetByName) %s NOT found\n" , name  );
     return NULL;
     /*     new TCanvas();
     gPad->SetTitle( name );
@@ -165,10 +165,10 @@ TPad* MPadGetByName(const char* name){
  */
 //==========void PrintInPad(const char* label, const char* value){
 
-void MPadPrintIn(const char* label, const char* value){
+void MAPadPrintIn(const char* label, const char* value){
    TPad *orig=NULL;
    if (gROOT->GetListOfCanvases()->GetEntries()>0){orig=(TPad*)gPad;}
-   TPad *cpad=MPadGetByName( label );
+   TPad *cpad=MAPadGetByName( label );
 
  if (cpad!=NULL){
    cpad->Clear();
@@ -200,26 +200,26 @@ void MPadPrintIn(const char* label, const char* value){
 
 
   
-void MPadPrintInP(const char* label, int slot, const char* value){
+void MAPadPrintInP(const char* label, int slot, const char* value){
   char ch[100];
   sprintf(ch, "%s_%d", label, slot);
-  MPadPrintIn( ch, value );
+  MAPadPrintIn( ch, value );
 }
 
 
-void MPadCreate(const char* LABEL, int columns, int rows){
+void MAPadCreate(const char* LABEL, int columns, int rows){
 
   /*
    *  HERE I (CONDITIONALY) CREATE SET OF PADS ..............................
    */
   TCanvas *cc;
-  if (MPadGetByName( LABEL )==NULL){
+  if (MAPadGetByName( LABEL )==NULL){
     cc=new TCanvas( LABEL,LABEL);
     cc->Divide(columns , rows, 0.002,0.002 );
     cc->GetCanvas()->SetFillColor(9);cc->GetCanvas()->SetFillStyle(1);
     cc->Draw();
   }else{
-    TPad *pp=(TPad*)MPadGetByName( LABEL );cc=pp->GetCanvas();
+    TPad *pp=(TPad*)MAPadGetByName( LABEL );cc=pp->GetCanvas();
   }
 
 for (int j=0;j<columns;j++){
@@ -228,13 +228,13 @@ for (int i=0;i<rows;i++){
  char bb[15]; 
  sprintf(bb, "kuku %03d", i  );
  // sprintf(bb, "0.%d%d%d bar", i, (int)gRandom->Uniform(9),(int)gRandom->Uniform(9)  );
- MPadPrintIn( aa,bb );
+ MAPadPrintIn( aa,bb );
  }
  }//for loop -----------------
   
-MPadGetByName( LABEL )->Update();
+MAPadGetByName( LABEL )->Update();
 
-}//MPadCreate(==================================================================
+}//MAPadCreate(==================================================================
 
 //=====================================================================COUNTERS OBJECTS
 //=====================================================================COUNTERS OBJECTS
@@ -382,7 +382,7 @@ TCounterMulti::TCounterMulti( int counters  ){
     mcounter[i]=new TCounter();
     //    mcounter[i]->SetDebug(0);
   }
-  MPadCreate("COUNTERS",1,N);
+  MAPadCreate("COUNTERS",1,N);
 }//------------------constructor
 
 
@@ -421,13 +421,13 @@ void TCounterMulti::Display(){
   char c[40]; 
   //---taken from MySql  multipads2-----------
   TCanvas *cc;
-  if (MPadGetByName( "COUNTERS" )==NULL){
+  if (MAPadGetByName( "COUNTERS" )==NULL){
     cc=new TCanvas( "COUNTERS","COUNTERS" );
     cc->Divide(1 ,N, 0.002,0.002 );
     cc->GetCanvas()->SetFillColor(9);cc->GetCanvas()->SetFillStyle(1);
     cc->Draw();
   }else{
-    TPad *pp=(TPad*)MPadGetByName( "COUNTERS" );cc=pp->GetCanvas();
+    TPad *pp=(TPad*)MAPadGetByName( "COUNTERS" );cc=pp->GetCanvas();
   }// I HAVE cc CANVAS now...
   //---------------------------------------------
 
@@ -437,7 +437,7 @@ void TCounterMulti::Display(){
       //   printf("%d/%d - \n", i , N );
       //     if ((i>=0)&&(i<N) ) {
       sprintf(c, "%09.1f",mcounter[i]->GetRate( ) );
-      MPadPrintInP("COUNTERS", i+1,  c );
+      MAPadPrintInP("COUNTERS", i+1,  c );
        //     }   
     }
     //    printf("%s","\n");
