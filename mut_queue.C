@@ -72,6 +72,10 @@ TTimeStamp t_start;
 *********************************************************************
 *********************************************************************
   */
+
+    int mmapfd;  //  =-1       file handle for mmap
+    char *mmap_file; // pointer to     mmap
+
   /*****************************
    *  I start dlopen rather here....................... PUSHER PART
    */
@@ -127,6 +131,23 @@ void *mut_queue_masterthread(void* arg){
    if ( (strlen(file_push)>0)&&(fexists(file_push)!=1) ){printf("File %s DOESNOT exist,  STOPPING\n",file_push);return NULL;}
 
 
+
+
+   //--------------------------- before starting with  lib dl 
+   // -------  I  do   mmap --------------- 
+   const char str1[] = "111111111111\n";    // this means "running"
+ 
+    //  char  *cnt_file;  //pointer
+    system("dd if=/dev/zero of=control.mmap  bs=4096  count=1");
+    if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
+    mmap_file=(char*)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, mmapfd, 0);
+    if (mmap_file == MAP_FAILED) errx(1, "either mmap");
+    strcpy(mmap_file, str1); 
+  //  munmap(mmap_file, 4096);        
+  //  close(mmapfd);
+    //I WILL NEVER  DEALOCATE THIS ..... CAN IT BE A PROBLEM?
+
+   //------------------------------------dl------------------
   const char *dlsym_error;
 
 
@@ -364,6 +385,9 @@ int acq(const char * startstop="start")
 
 
     do{ //while not deads
+
+      mmap_file[0]='0';
+
       not_deads=0;
     TThread::Ps();
     if(XTERM!=NULL)fprintf(XTERM,"%s\n", "...broadcasting ALL _threads");
@@ -511,7 +535,8 @@ int acq(const char * startstop="start")
   usleep(1000);
   if (TThread::GetThread("master_thread")==0){
 
-
+    //======START======
+    mmap_file[0]=='1';
 
 
     tinfo = (thread_info*)calloc( 5, sizeof(struct thread_info));// 5threads

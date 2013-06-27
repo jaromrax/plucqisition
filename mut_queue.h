@@ -11,6 +11,9 @@
 //       while mojzis was ok
 #include<sys/stat.h>  // struct stat
 
+//----------------------------with   mmap ------------------------
+#include <err.h>
+#include <sys/mman.h>
 
 
 // this is from mk_plugin_man.C------evidently, with CINT we dont use dlfcn.h

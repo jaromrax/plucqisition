@@ -31,6 +31,12 @@
 //////#define PORT 2020
 //############################################ sockets/ raw c++
 
+//----------------------------with   mmap ------------------------
+#include <err.h>
+#include <sys/mman.h>
+
+
+
 /****
 IF C++ => care about namemangling....
 // because of mixing  c and c++, namemangling.....
@@ -39,6 +45,11 @@ IF C++ => care about namemangling....
 #ifdef  __cplusplus
 extern "C" {
 #endif
+
+
+  // ========= Here I have something for   mmap
+    int mmapfd;  //  =-1       file handle for mmap
+    char *mmap_file; // pointer to     mmap
 
 
   //=================== EXPORTED FUNCTIONS  START =========
@@ -600,6 +611,7 @@ return 0;
 
 
   /**********************************************
+   * client to                  ZDENEK HONS SERVER
    *              cat runx.dat |  nc -l -p 9302
    *                         this is a client that connects to a server...
    */
@@ -619,6 +631,12 @@ return 0;
       sprintf( ipaddress,"%s", xml.output  );
       xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","port" );
       port=atoi(xml.output  );
+
+      //-------- here I will control with    control.mmap    file------   
+    if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
+    mmap_file=(char*)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, mmapfd, 0);
+    if (mmap_file == MAP_FAILED) errx(1, "either mmap");
+      //-------- here I will control with    control.mmap    file------   
 
 
 
@@ -671,6 +689,7 @@ return 0;
     //    if(XTERM!=NULL)fprintf(XTERM,"%s","^");fflush(XTERM);
     //    usleep(1000*300); //wait
     wait=MyCond.TimedWaitRelative( 50  ) ; //
+    if (mmap_file[0]=='0'){ wait=0;} // ONE EXTRA LINE
     if (wait==0){ 
       //      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw got BROADCAST SIGNAL... %s\n", "" );
       sprintf(ch,"PUSH got BROADCAST SIGNAL... %s\n", "" );table_log(0,ch);

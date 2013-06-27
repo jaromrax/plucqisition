@@ -22,7 +22,7 @@ circular buffer seems safe. but how to get right number?
 #include "TGraphErrors.h"   //net thread
 
 //---------------------------- with mpad and tcounter comes::::::
-#include "TText.h"
+//#include "TText.h"
 //----------------------------with   mmap ------------------------
 #include <err.h>
 #include <sys/mman.h>
