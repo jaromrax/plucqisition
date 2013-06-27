@@ -430,7 +430,15 @@ struct {
      gt7q->SetName("gt7q");
      gROOT->GetListOfSpecials()->Add(gt7q);
    }
- 
+    TGraphErrors *gt8q;
+   gt8q=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gt8q");
+   if (gt8q==NULL){
+     printf("creating new gt8q%s\n","");
+     gt8q=new TGraphErrors; 
+     gt8q->SetName("gt8q");
+     gROOT->GetListOfSpecials()->Add(gt8q);
+   }
+
       //-----------------typpical creation of 2D matrix-------------y,x-
    /*
       //--------------------------- special things - angular coincidences kinematics-----------
@@ -500,6 +508,8 @@ struct {
       m6_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm6_mon");
       TCutG *m7_monitor;
       m7_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm7_mon");
+      TCutG *m8_monitor;
+      m8_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm8_mon");
 
       
       //deuterons
@@ -681,6 +691,7 @@ struct {
       double t1q=0.0;
       double t6q=0.0;
       double t7q=0.0;
+      double t8q=0.0;
 
 
       long long int last_event_n=0;
@@ -851,6 +862,11 @@ struct {
 	   gt7q->SetPoint(      ima, MyEvent.time, t7q/cnt[1] );
 	   gt7q->SetPointError( ima, 0.0, sqrt(t7q)/cnt[1] );
 
+	   ima=gt8q->GetN();
+	   gt8q->Expand(ima+1);
+	   gt8q->SetPoint(      ima, MyEvent.time, t8q/cnt[1] );
+	   gt8q->SetPointError( ima, 0.0, sqrt(t8q)/cnt[1] );
+
 	   ima=gt6t1->GetN();
 	   gt6t1->Expand(ima+1);
 	   gt6t1->SetPoint(      ima, t6q,  t1q );
@@ -867,6 +883,7 @@ struct {
 	   t1q=0.0;
 	   t6q=0.0;
 	   t7q=0.0;
+	   t8q=0.0;
 	 }// cnt[1] >0 == Q>0
 
 
@@ -908,6 +925,9 @@ struct {
 	 }
 	 if ( (m7_monitor!=NULL)&&(m7_monitor->IsInside( cha[7]+cha[23], cha[23] ) ) ){
 	   t7q=t7q+1.0;
+	 }
+	 if ( (m8_monitor!=NULL)&&(m8_monitor->IsInside( cha[8]+cha[24], cha[24] ) ) ){
+	   t8q=t8q+1.0;
 	 }
 
 

@@ -295,3 +295,36 @@ acq("stop")
 .qqqqqqqqqqqq
 acq()
 shspe()
+shspe()
+.q
+acq()
+shspe()
+acq("stop")
+acq("stop")
+.qqqqqqqqqq
+acq()
+.ls
+.ls
+shspe()
+acq("stop")
+acq("stop")
+acq()
+.L cut_manip.h
+.L cuts_manip.h
+savecut(Cut00_mtx8, "cutm8_mon")
+acq("stop")
+acq("stop")
+acq("stop")
+acq()
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+acq()
