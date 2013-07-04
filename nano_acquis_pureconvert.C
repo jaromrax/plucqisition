@@ -325,17 +325,13 @@ double GetTokenDouble(const char *what, const char *token, double err){
 
 
 
-
-
-
-
-
 /*
  *   GLOBAL - EVENTNUM ==0
  *
  */
 
-  int res , channels=0,channel_n=0, headfoot=0;
+int resq; //  this cannot SHADOW THE MAIN PARAMETER???
+int channels=0,channel_n=0, headfoot=0;
 
 UInt_t eventnum=0;
 UInt_t eventnum_fill=0;
@@ -423,14 +419,14 @@ int  conv_u_init(const char* filename, const char* options){
   printf("       gdirectory is to be got   %s\n" , "" );
   usleep(1000*500);
   printf("       gdirectory is to be got   %s\n" , "" );
-  printf("       gdirectory is to be got  #== %d\n" , (int)gDirectory );
+  printf("       gdirectory is to be got  #== %ld\n" , (int64_t)gDirectory );
   printf("       gdirectory is to be got   %s\n" , "" );
   counting=(TH1F*)gDirectory->Get("counting");
   printf("       gdirectory is got   %s\n" , "" );
   if (counting==NULL){
     printf("       counting ==NULL, we create it   %s\n" , "" );
     counting=new TH1F("counting","counting statistics",255,0,255);// 255 possible channels
-    printf("NEW TH COUNTING %x\n", (int)counting );
+    printf("NEW TH COUNTING %lx\n", (int64_t)counting );
   }
   startstop=0;   time_mylast=0;   time_myfirst=0;    time_my=0;
   startstop=0;   btime_mylast=0;  btime_myfirst=0;   btime_my=0;
@@ -484,7 +480,7 @@ for (int i=CODING_CHANNELS_LOW;i<=CODING_CHANNELS_HIGH;i++){
   //NEW IDEA _ IF IT ALREADY EXISTS _ JUST CONTINUE ____________________
   if ( gDirectory->Get("nanot") != NULL){
      ttree= (TTree*) gDirectory->Get("nanot");
-     printf("taking previously existing ttree %x !!!!!!!!! skipping the rest\n", (int)ttree);
+     printf("taking previously existing ttree %lx !!!!!!!!! skipping the rest\n", (int64_t)ttree);
 
      ttree->SetBranchAddress( "time" , &event.time );
      sprintf( brname, "%s%s",  "main", PARNAM  );
@@ -512,7 +508,7 @@ for (int i=CODING_CHANNELS_LOW;i<=CODING_CHANNELS_HIGH;i++){
   if (ftree->IsOpen()) {fileopen=1;}else{return 1;}
   }//if there is a filename...............
 
-  else{  printf("going memory resident ftree==%x\n",(int)ftree); gROOT->cd();   }// make it memory resident
+  else{  printf("going memory resident ftree==%lx\n",(int64_t)ftree); gROOT->cd();   }// make it memory resident
   
 
   // ok, all is names _O _L
@@ -524,7 +520,7 @@ for (int i=CODING_CHANNELS_LOW;i<=CODING_CHANNELS_HIGH;i++){
   if ( (fileopen==1) || (strlen(filename)==0)  ) {//file exists OR nofile :""
 
     ttree = new TTree( ttree_name , "ttree_from_zdenek_hons_unidata");
-    printf("NEW TTREE %x\n", (int)ttree );
+    printf("NEW TTREE %lx\n", (int64_t)ttree );
     if (CIRCULAR!=0){ ttree->SetCircular(CIRCULAR);}
     //    printf("ttree - captured in fileopen==1\n", ttree ); //ttree->Print();
     /*
@@ -607,10 +603,10 @@ for (int i=CODING_CHANNELS_LOW;i<=CODING_CHANNELS_HIGH;i++){
   }//--------_>>>> now, whole bunch of definitions-------------
 
 
-  printf("      ttree initialized ok    %x\n" , (int)ttree );
-  printf("      ttree initialized ok see ls Print()   %x\n" , (int)ttree );
+  printf("      ttree initialized ok    %lx\n" , (int64_t)ttree );
+  printf("      ttree initialized ok see ls Print()   %lx\n" , (int64_t)ttree );
   ttree->ls();
-  printf("      ttree initialized ok see ls Print()   %x  n== %lld\n" , (int)ttree ,ttree->GetEntries());
+  printf("      ttree initialized ok see ls Print()   %lx  n== %lld\n" , (int64_t)ttree ,ttree->GetEntries());
   
   //  ttree->Print();
   printf("#######################################################%s\n","");
@@ -633,7 +629,7 @@ return 0;
  * 201105 - res is in BYTES/4 !!!  I didnt touch anything but the call after res=load_buffer
  *
  */
-void one_buffer_process(void *readbuf_ptr, int res,  int startup){
+void one_buffer_process(void *readbuf_ptr, int resff,  int startup){
   /*  how is this done?????
    *
    *   I always    set   buf_ptr  to  startup value or 0
@@ -663,9 +659,9 @@ void one_buffer_process(void *readbuf_ptr, int res,  int startup){
       //LOOP parsing the buffer
  // headfoot=0; // initial value.....
  if (verbose>0){
- printf("buf_ptr <  res + startup:   %d <  %d + %d\n ",  buf_ptr, res, startup);
+ printf("buf_ptr <  res + startup:   %d <  %d + %d\n ",  buf_ptr, resff, startup);
  }
-      while ( (buf_ptr<res+startup)&&(res>0) ){
+      while ( (buf_ptr<resff+startup)&&(resff>0) ){
 	loop_passes++;
 	//MAIN_DEBUG_PRINT
 	//	printf(" %08X \n", readbufQ[ buf_ptr ]  ); 
@@ -767,7 +763,7 @@ void one_buffer_process(void *readbuf_ptr, int res,  int startup){
 	      event.n=eventnum_fill; // THIS IS without ltime 
 	      if (eventnum_fill<=10){ printf("########### ENUMFILL==%d\n", eventnum_fill);}
  	      ttree->Fill();
-	      if (eventnum<10)printf("ttree == %d filled\n", (int)ttree );
+	      if (eventnum<10)printf("ttree == %ld filled\n", (int64_t)ttree );
 	    } // STORE ONLY WHEN OTHER DATA THEN LINUX_TIME
 
 
@@ -1145,7 +1141,7 @@ void one_buffer_process(void *readbuf_ptr, int res,  int startup){
 
       printf("EVENTS: total(headers)     = %lld\n", events_total );
       printf("        this loop(headers) = %d\n", events_this_loop );
-      printf("        start/res/loop_passes=(%d,%d,%d)\n", startup,res,loop_passes );
+      printf("        start/res/loop_passes=(%d,%d,%d)\n", startup,resff,loop_passes );
       }
       /*
  printf("new buffer processing ENDED. 4x %d / %d\n", buf_ptr ,  res );
@@ -1193,13 +1189,13 @@ int resinit= conv_u_init(filename, options);
 
 
   //printf("-------------------------------------------------------%s\n","");
-  res=load_buffer( filename );   // THIS IS IN BYTES !!!!!!!!!!!!!!!!
-  printf("buffer loaded saizeread==%d bytes\n", res );
-  if (res!=0){  
+  resq=load_buffer( filename );   // THIS IS IN BYTES !!!!!!!!!!!!!!!!
+  printf("buffer loaded saizeread==%d bytes\n", resq );
+  if (resq!=0){  
 
     printf (" ...buff size = %9d %s\n",        BUFSIZE/print_bytes_div, units  );
     printf (" ...file size = %9lld %s\n",        file_max/print_bytes_div, units   );
-    printf (" ...read size = %9d %s  (res)\n", res/print_bytes_div, units   );
+    printf (" ...read size = %9d %s  (res)\n", resq/print_bytes_div, units   );
     printf (" ...parsing only channels from %d to %d\n", CODING_CHANNELS_LOW, CODING_CHANNELS_HIGH );
   printf("-------------------------------------------------------%s\n","");
 
@@ -1210,14 +1206,14 @@ int resinit= conv_u_init(filename, options);
 
   buf_ptr=0;  // reset anyway in every  ????
     // LOOP if data from file are in buffer
-    while (res>0){
-      printf("one buffer process starts (res==sizeread==%d)\n", res );
-      one_buffer_process( (void*)&readbuf,  int(res/4.0) ,  0 );   // NEEDS NOT BYTES BUT BYTES/4 !!!!!!!!!
+    while (resq>0){
+      printf("one buffer process starts (res==sizeread==%d)\n", resq );
+      one_buffer_process( (void*)&readbuf,  int(resq/4.0) ,  0 );   // NEEDS NOT BYTES BUT BYTES/4 !!!!!!!!!
       printf("ttree entries after obp = %lld \n", ttree->GetEntries() );
 
       // next read
       //      if (headfoot==1){printf("broken event (no footer)\n%s","");}
-      res=load_buffer( filename ); 
+      resq=load_buffer( filename ); 
       buf_ptr=0;  // HERE - ALL THE BUFFER - FROM 0
       //  buf_ptr reset inside one_buffer_process  anyway ??
 

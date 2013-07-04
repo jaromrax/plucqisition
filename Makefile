@@ -16,11 +16,11 @@ all: mut plugins
 	echo "make install";\
 	echo "            coppies the .so file to MACRO path";
 
-mut:mut_queue.h mut_queue.C cuts_manip.h nano_acquis_pureconvert.C xml_attr.c xml_attr.h logterm.C
+mut:mut_queue.h mut_queue.C cuts_manip.h  xml_attr.c xml_attr.h logterm.C
 	root -n -b -q  compile.C  ; echo ECHO $?
 
 
-install: mut_queue_C.so nano_acquis_pureconvert_C.so
+install: mut_queue_C.so 
 	@echo I TRY TO FIND ROOTSYS AND MACRO;\
 	echo MACRO AT  $(mpath2);\
 	for i in $(mpath2); do \
@@ -34,8 +34,8 @@ install: mut_queue_C.so nano_acquis_pureconvert_C.so
 	done;\
 	echo "TESTING <$$TARG>";\
 	if [ "$$TARG" != "" ];then \
-		echo cp mut_queue_C.so nano_acquis_pureconvert_C.so $$TARG/ ;\
-		cp mut_queue_C.so nano_acquis_pureconvert_C.so $$TARG/ ;\
+		echo cp mut_queue_C.so  $$TARG/ ;\
+		cp mut_queue_C.so  $$TARG/ ;\
 		ls -l $$TARG/*.so;\
 	else\
 		echo ERROR; echo "  " NO PATH FOR MACRO. CREATE SOME IN ~/.rootrc;\
@@ -45,11 +45,11 @@ install: mut_queue_C.so nano_acquis_pureconvert_C.so
 plugins: plug_push.so plug_pop.so 
 
 
-plug_push.so: plug_push.cpp mut_queue.h cuts_manip.h nano_acquis_pureconvert.C xml_attr.c xml_attr.h logterm.C
+plug_push.so: plug_push.cpp mut_queue.h cuts_manip.h  xml_attr.c xml_attr.h logterm.C
 	`root-config --cxx --cflags` -fPIC -shared -o plug_push.so plug_push.cpp     -lHist -lNet -lCore -lRIO -lGpad -lMathCore -lPhysics -lTree -lThread -lXMLIO `root-config --glibs`
 
 
-plug_pop.so: plug_pop.cpp mut_queue.h cuts_manip.h nano_acquis_pureconvert.C xml_attr.c xml_attr.h logterm.C
+plug_pop.so: plug_pop.cpp mut_queue.h cuts_manip.h  xml_attr.c xml_attr.h logterm.C
 	`root-config --cxx --cflags` -fPIC -shared -o plug_pop.so plug_pop.cpp     -lHist -lNet -lCore -lRIO -lGpad -lMathCore -lPhysics -lTree -lThread -lXMLIO `root-config --glibs`
 
 
@@ -58,7 +58,7 @@ plug_pop.so: plug_pop.cpp mut_queue.h cuts_manip.h nano_acquis_pureconvert.C xml
 
 
 clean:
-	  rm plug_pop.so plug_push.so
+	  rm plug_pop.so plug_push.so mut_queue_C.so
 
 ##	g++ -fPIC -c plug_queue.cpp `root-config --libs --cflags --glibs`  &&  gcc -shared -o plug_queue.so plug_queue.o
 ##	g++ -fPIC -c plug_analyze.cpp `root-config --libs --cflags --glibs`  &&  gcc -shared -o plug_analyze.so plug_analyze.o

@@ -266,7 +266,7 @@ void TSmallish_xml::DisplayTele( XMLNodePointer_t node, Int_t level, const char*
 	}//while display attributeswhile (attr!=0) {.................
       }else{ // level not reached attrlevel.............  getattrlevel<=level
 
-      XMLNodePointer_t child = xml->GetChild(node);// goes back up to root
+       child = xml->GetChild(node);// goes back up to root
       while (child!=0) {
 		if (DEBUG)printf("%*c searching in children: %s.  (act.node=%s)\n", 
 		       level+1,' ',

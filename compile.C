@@ -5,10 +5,23 @@
   //gROOT->ProcessLine(".L mut_queue.C++g");
 
 
+#if __x86_64__
+/* 64-bit */
+  gROOT->ProcessLine("cout<<\" -------------------------------------------------- 64 BIT SYSTEM \"<<endl");
+gSystem->Load(" /lib/x86_64-linux-gnu/libdl.so.2");
+
+#else
+ gROOT->ProcessLine("cout<<\"-------------------------------------------------- 32 BIT SYSTEM \"<<endl");
 gSystem->Load("/usr/lib/libdl.so");
 
+#endif
+
+//gSystem->Load("/usr/lib/libdl.so");
+
+
+
 //gROOT->ProcessLine(".L nano_acquis_pureconvert.C++g");
-gROOT->ProcessLine(".L nano_acquis_pureconvert.C++");
+//gROOT->ProcessLine(".L nano_acquis_pureconvert.C++");
 
 //gROOT->ProcessLine(".L mut_queue.C++g");
 gROOT->ProcessLine(".L mut_queue.C++");

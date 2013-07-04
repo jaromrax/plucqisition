@@ -10,7 +10,7 @@
 #include "mut_queue.h"
 //#include <pthread.h>
 #include "xml_attr.h"    // bude xml
-#include "nano_acquis_pureconvert.C" 
+//#include "nano_acquis_pureconvert.C" 
 #include "cuts_manip.h"  //loadcuts,savecut,rmcut,cpcut.......
 
 #include "TSocket.h"   //net thread
@@ -88,7 +88,7 @@ extern "C" {
   /**********************************************
    *            PUSH only integers 1.....200
    */
-  int* push_empty(int* par){// TEST....just integers into the queue
+  int* push_empty(int64_t* par){// TEST....just integers into the queue
     char ch[400];
       concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    for (int i=1;i<20000;i++){  //........4*300M = 1200MB
@@ -98,15 +98,18 @@ extern "C" {
 
 
 
+
+
+
   /**********************************************
    *            PUSH only integers 1.....200
    */
-  int* push_int(int* par){// TEST....just integers into the queue
+  int* push_int(int64_t* par){// TEST....just integers into the queue
     char ch[400];
       concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    //   concurrent_queue *buffer=(concurrent_queue*)par;
 
-      sprintf(ch,"PUSH (integers) START buffer=%d\n",(int)buffer );table_log(0,ch);
+      sprintf(ch,"PUSH (integers) START buffer=%ld\n",(int64_t)buffer );table_log(0,ch);
       //      if(XTERM!=NULL)fprintf(XTERM,
       //		  "PUSH (integers) START buffer=%d\n",(int)buffer );
       //   for (int i=1;i<1000*1000*1;i++){  //........4*300M = 1200MB
@@ -118,7 +121,7 @@ extern "C" {
      buffer->push( i );
    }//for
       if(XTERM!=NULL)fprintf(XTERM,
-		  "push (integers)  EXIT buffer=%d\n",(int)buffer );
+		  "push (integers)  EXIT buffer=%ld\n",(int64_t)buffer );
  }/*****************************end of function *********************/
 
 
@@ -127,11 +130,11 @@ extern "C" {
   /**********************************************
    *            PUSH TEXT  - 15 lines of numbers
    */
-  int* push_txt(int* par){//TEST ... pushes text with 4 numbers in one line
+  int* push_txt(int64_t* par){//TEST ... pushes text with 4 numbers in one line
 
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    if(XTERM!=NULL)fprintf(XTERM,
-		  "PUSH (text) START buffer=%d\n",(int)buffer );
+		  "PUSH (text) START buffer=%ld\n",(int64_t)buffer );
    char ch[180];
    for (int i=1;i<15;i++){  //........4*300M = 1200MB
      sprintf(ch, "%d %d %d %d\n", i, i+1, i+2, i+3 );
@@ -142,7 +145,7 @@ extern "C" {
      }
    }//for
    if(XTERM!=NULL)fprintf(XTERM,
-		  "push (text)  EXIT buffer=%d\n",(int)buffer );
+		  "push (text)  EXIT buffer=%ld\n",(int64_t)buffer );
  }/*****************************end of function *********************/
 
 
@@ -155,10 +158,10 @@ extern "C" {
   /**********************************************
    *            PUSH TEXT  FILE
    */
- int* push_txtfile(int* par){
+ int* push_txtfile(int64_t* par){
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    char ch[180];
-   sprintf(ch,"PUSH (textFIILE) START buffer=%d\n",(int)buffer );table_log(0,ch);
+   sprintf(ch,"PUSH (textFIILE) START buffer=%ld\n",(int64_t)buffer );table_log(0,ch);
 
 
       FILE *infile;  char fname[400];
@@ -207,7 +210,7 @@ extern "C" {
 
       }while(wait != 0);
 
-      sprintf(ch,"push (textFILE) EXIT buffer=%d\n",(int)buffer );table_log(0,ch);
+      sprintf(ch,"push (textFILE) EXIT buffer=%ld\n",(int64_t)buffer );table_log(0,ch);
 
  }/*****************************end of function *********************/
 
@@ -224,10 +227,10 @@ extern "C" {
   /**********************************************
    *            PUSH binary (nanot) DATA FROM A FILE ......
    */
-  int* push_file(int* par){// BINARY FILE .....
+  int* push_file(int64_t* par){// BINARY FILE .....
 
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   if(XTERM!=NULL)fprintf(XTERM,"push-remote (file)  par==%d; pointer==%d\n", par,(int)buffer );
+   if(XTERM!=NULL)fprintf(XTERM,"push-remote (file)  par==%ld; pointer==%ld\n", (int64_t)par,(int64_t)buffer );
 
       FILE *infile;  char fname[400];
       int buffer4;
@@ -247,7 +250,7 @@ extern "C" {
        if(XTERM!=NULL)fprintf(XTERM,"push-file closed....%s\n", fname );
 	fclose(infile);
       }else{
-	if(XTERM!=NULL)fprintf(XTERM,"infile %s == NULL\n%s", fname );
+	if(XTERM!=NULL)fprintf(XTERM,"infile %s == NULL\n", fname );
       }
       if(XTERM!=NULL)fprintf(XTERM,"push-file call finished....%s: PUSHER FINISHED\n", fname );
  }/*****************************end of function ***********************/
@@ -261,10 +264,10 @@ extern "C" {
 
   // TServerSocket *ss=new TServerSocket(i,kTRUE);
   //     tail -f text | nc localhost 9302
-  int* push_net_txtserv(int* par){ // SERVER FOR TEXT FILE ... cannot be stopped, ->select crashes
+  int* push_net_txtserv(int64_t* par){ // SERVER FOR TEXT FILE ... cannot be stopped, ->select crashes
 
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-remote (network,txt)  par==%d; pointer==%d\n", par,(int)buffer );
+   if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-remote (network,txt)  par==%d; pointer==%ld\n", (int64_t)par,(int64_t)buffer );
       long long int cnt=0;
 
    char ipaddress[100];
@@ -340,7 +343,7 @@ extern "C" {
 
 
   //     tail -f text | nc localhost 9302
-  int* push_net_txtserv2(int* par){ // SERVER FOR TEXT FILE ... we try ->select
+  int* push_net_txtserv2(int64_t* par){ // SERVER FOR TEXT FILE ... we try ->select
                                     //  PADA TO NA PRVNI,2. ZMACKNUTI ENTER
 
     //   concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
@@ -368,7 +371,7 @@ extern "C" {
    int wait=1; //EXTRA
    while (1) {
       TSocket  *s;
-     do{ s = mon->Select( 1000 ); printf("%s",".\n" );}while(  (int)s==-1 );
+     do{ s = mon->Select( 1000 ); printf("%s",".\n" );}while(  (int64_t)s==-1 );
 
       if (s->IsA() == TServerSocket::Class()) {
          if (!s0) {
@@ -423,13 +426,13 @@ extern "C" {
 
 
   //     tail -f text | nc localhost 9302
-  int* push_net_txtserv3(int* par){ // SERVER FOR TEXT FILE ... we try ->select
+  int* push_net_txtserv3(int64_t* par){ // SERVER FOR TEXT FILE ... we try ->select
                                     //  PADA TO NA PRVNI,2. ZMACKNUTI ENTER
     char ch[500];
     int lines_pushed=0;
      concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
      //if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-remote (network,txt2)  par==%d; pointer==%d\n",par,(int)buffer);
-     sprintf(ch,"PUSH push-remote (network,txt2)  par==%d; pointer==%d", par,(int)buffer );
+     sprintf(ch,"PUSH push-remote (network,txt2)  par==%d; pointer==%ld", (int64_t)par,(int64_t)buffer );
      table_log(0,ch);
 
    long long int cnt=0;
@@ -615,7 +618,7 @@ return 0;
    *              cat runx.dat |  nc -l -p 9302
    *                         this is a client that connects to a server...
    */
- int* push_net(int* par){
+ int* push_net(int64_t* par){
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
 
    char ch[200];

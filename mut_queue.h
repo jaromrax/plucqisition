@@ -121,9 +121,9 @@ public:
     int size() const
     {
       //       pthread_mutex_lock( &mutex_queue );
-       int size=the_queue.size();
+       int ssize=the_queue.size();
        //       pthread_mutex_unlock( &mutex_queue );
-        return size;
+        return ssize;
     }
 
     /*    bool try_pop(Data& popped_value)
@@ -177,7 +177,7 @@ void table_log(int plugin, const char* text){ // 0,1,2=Push,Pop,Ana
   }//XTERM
 
  FILE *fp;
- char str[] = "test";     
+ // char str[] = "test";     
 
  fp = fopen("acq.log","a");
  fseek(fp,0, SEEK_END);                
@@ -265,12 +265,12 @@ void xprintf(const char * lpOutputString, ... )
 
 
 
-int xxxprintf( const char* Format, ... ){
+void xxxprintf( const char* Format, ... ){
       va_list Arguments;
       va_start(Arguments, Format);
-      double FArg;
-      int IArg;
-      char adva;
+      //   double FArg;
+      //  int IArg;
+      // char adva;
 	printf("formati==<%s>\n",Format );
       for(int i = 0; Format[i] != '\0'; ++i )
       {
@@ -286,8 +286,8 @@ int xxxprintf( const char* Format, ... ){
             }
             else if (Format[i+1] == 'd')
             {
-	      int i=(int)va_arg(Arguments, int);
-                  printf("Caught an integer : %d\n", i);
+	      int ii=(int)va_arg(Arguments, int);
+                  printf("Caught an integer : %d\n", ii);
             }
             else if (Format[i+1] == 'c')
             {
