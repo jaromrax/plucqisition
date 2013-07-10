@@ -119,7 +119,7 @@ extern "C" {
 
 
   /**************************************************
-   *            SIMPLE PRINTOUT  int
+   *            SIMPLE PRINTOUT  int with TERM 
    */
   int* pop_logint(int* par){// SIMPLE PRINTOUT ....
     char chL[500];
@@ -133,27 +133,21 @@ extern "C" {
    int buffer4;
    long long int cnt=0;
    size_t result;
-   //      TSmallish_xml xml(    acqxml   );
-   //      xml.DisplayTele( xml.mainnode, 0, "files","poper","file" );
-   //      sprintf( fname ,"%s", xml.output  );
+
    //----------------- LOOP ----------------
      while( !buffer->empty() ){
        buffer->wait_and_pop(datum); //( datum ***)   
        sprintf(chL,"POP:W #%3d. <%ld> <%ld>" , cnt,(int64_t)datum,(int64_t)&datum  );table_log(1,chL);
 
-       //          if(XTERM!=NULL)fprintf(XTERM,"W #%3d. <%d> <%d>\n",
-       //				 cnt,datum,&datum); //(&datum ***)
-          cnt++; 
+           cnt++; 
   	TThread::CancelPoint(); // When CancelOn()...
     }
-     //useless here...............but 
     wait=MyCond.TimedWaitRelative( 300  );
    if (wait==0){ 
      sprintf(chL,"POP:got BROADCAST SIGNAL...%s " ,  "" );table_log(1,chL);
-      //if(XTERM!=NULL)fprintf(XTERM,"POP got BROADCAST SIGNAL... %s\n","");
     }
      sprintf(chL,"POP:  EXIT... buf==%ld " ,  (int64_t)buffer );table_log(1,chL);
-     // if(XTERM!=NULL)fprintf(XTERM,"  POP log: EXIT buf==%d\n", (int)buffer );
+     return 0;
  }// ****************************end of function **********
 
 
@@ -186,9 +180,6 @@ extern "C" {
    int buffer4;
    long long int cnt=0;
    size_t result;
-   //      TSmallish_xml xml(    acqxml   );
-   //      xml.DisplayTele( xml.mainnode, 0, "files","poper","file" );
-   //      sprintf( fname ,"%s", xml.output  );
    //----------------- LOOP ----------------
    char ch[1024]=""; // 1kB text line
    // I AM COMPLETELY LOST WITH THERE CONVERSIONS &...
@@ -198,18 +189,13 @@ extern "C" {
      buffer->wait_and_pop(datum); //( datum ***)
      //unsigned short int si=(int)datum;//short int si=(int)datum; !!!
      cc=char( datum ); 
-     //     if(XTERM!=NULL)fprintf(XTERM,"W #%3d. <%d> <%d> si=%s\n",
-     //			    cnt,datum,&datum,si); //(&datum ***)
      if ( (int)cc!=10){//  10== \n -------------- EOL ----
        sprintf( ch, "%s%c", ch, cc  );
-       //       if(XTERM!=NULL)fprintf(XTERM,"RUNNI:%s\n",ch);
      }else{//  \n found
-       //       if(XTERM!=NULL)fprintf(XTERM,"FINAL:%s\n",ch);
         sprintf(chL,"POP: FINAL:%s" , ch  );table_log(1,chL);
       sprintf( ch , "%s", ""); // reset
      }//--------------------------- EOL/not EOL------------
       cnt++; 
-      // TThread::CancelPoint(); // When CancelOn()...
    }// buffer empty 
    wait=MyCond.TimedWaitRelative( 1000  );
    if (wait==0){ break;}
@@ -218,262 +204,10 @@ extern "C" {
    if (wait!=0){wait=MyCond.TimedWaitRelative( 300  );}
    if (wait==0){ 
         sprintf(chL,"POP:  got BROADCAST SIGNAL...:%s" , ""  );table_log(1,chL);
-	//     if(XTERM!=NULL)fprintf(XTERM,"POP got BROADCAST SIGNAL... %s\n","");
    }
         sprintf(chL,"POP: EXIT  %ld" ,  (int64_t)buffer );table_log(1,chL);
-	//   if(XTERM!=NULL)fprintf(XTERM,"POP logtxt v.2.: EXIT %d\n",(int)buffer);
  }// ****************************end of function **********
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  //===================== SHOULD BE IN SEPARATE FILE ==========
-  TTree *txt_ttree;  // similar to global def in nano_acquis_pureconvert
-
-  // prepare TTree===========================================
-  // tell number of values on the line
-  int pop_get_npar( const char* ch ){
-    char chL[500];
-    TString oneline=ch, token; int j=0; double bu; 
-      TObjArray *tar; 
-       sprintf(chL,"POP: Analyzing string:%s" , ch  );table_log(1,chL);
-       //       if(XTERM!=NULL)fprintf(XTERM,"Analyzing string:%s\n",ch);
-        tar= oneline.Tokenize(" ");
-
-
-        while (j<tar->GetEntries()){
-         token= ((TObjString*)(tar->At(j)))->GetString();
-         bu= token.Atof(); 
-         sprintf(chL,"POP:   token %d/  <%f>" , j,bu  );table_log(1,chL);
-	 //	 if(XTERM!=NULL)fprintf(XTERM,"  token %d/  <%f>\n", j, bu);
-	 j++;
-	}
-	return (j); // j-1? not... here 0->  names are 1->
-  }
-
-
-  struct{    
-    UInt_t n;// 4 bytr integer.... is enough for one run (same as nano_acquis)
-    double t[1024]; // structre to address by ttree.
-  } t_event;      //text event------------------------------
-
-
-
-  /***************************************************
-   *
-   *  PLACE FOR TTREE      and   TH1 also
-   *
-   */
-   int ttree_inited_npars=0;
-
-  int pop_txt_record( const char* chse ){
-    TString oneline=chse, token; int j=0; double bu; 
-      TObjArray *tar; 
-
-   char brname[100];  // main branch in texto......
-   int  CIRCULAR=100000;
-   char ttree_name[50];
-   char ch[1000];
-
-    sprintf( ttree_name, "%s",  "texto"  ); 
-    sprintf( brname, "%s",  "main" );  // main,  not mainV
-    if ( gDirectory->Get( ttree_name ) != NULL){
-
-      //printf("taking prev. existing ttree %x !!!!!!!!!\n", (int)ttree);
-      //     txt_ttree->SetBranchAddress( brname , &t_event.t[0] );
-     txt_ttree->SetBranchAddress( brname , &t_event.n );
-
-    }
-
-    //        if(XTERM!=NULL)fprintf(XTERM,"Analyzing string:%s\n",ch);
-        tar= oneline.Tokenize(" ");
-	j=0; 
-        while (j<tar->GetEntries()){
-         token= ((TObjString*)(tar->At(j)))->GetString();
-         t_event.t[j]= token.Atof(); 
-	 // printf("  token %d/  <%f>\n", j, t_event.t[j] );
-	 j++;
-	}
-	t_event.n++;
-	txt_ttree->Fill();    
-
-	//I assume at least 2 numbers
-	for (int i=0;i<ttree_inited_npars;i++){
-	  char txname[100];
-	  sprintf( txname, "textoH%02d", i);
-	  TH1F *texto_h1;     texto_h1=(TH1F*)gDirectory->Get( txname );
-	  if (texto_h1==NULL){texto_h1=new TH1F(txname, txname,2000,-1000,1000); }
-	  texto_h1->Fill(t_event.t[i]);
-	}
-	/*
-	TH1F *texto_h1;     texto_h1=(TH1F*)gDirectory->Get("texto_h1");
-	if (texto_h1==NULL){texto_h1=new TH1F("texto_h1","texto_h1",5000,0,5000); }
-	TH1F *texto_h2;     texto_h2=(TH1F*)gDirectory->Get("texto_h2");
-	if (texto_h2==NULL){texto_h2=new TH1F("texto_h2","texto_h2",5000,0,5000); }
-	texto_h1->Fill(t_event.t[0]);
-	texto_h2->Fill(t_event.t[1]);
-	*/
-
-    return j;
-  }
-
-
-
-
-  int conv_t_init( int npar ){; // similar to conv_u_init; t[0]...t[n]
-    char chL[500];
-   char brname[100];  // main branch in texto......
-   int  CIRCULAR=100000;
-   char ttree_name[50];
-   char ch[1000];
-   
-
-    sprintf( ttree_name, "%s",  "texto"  ); 
-    sprintf( brname, "%s",  "main" );  // main,  not mainV
-    if ( gDirectory->Get( ttree_name ) != NULL){
-
-      //      if(XTERM!=NULL)fprintf(XTERM,  "taking previously existing ttree %x !!!!\n", (int)txt_ttree);
-     sprintf(chL,"POP: taking previously existing ttree %lx !!!!" , (int64_t)txt_ttree  );table_log(1,chL);
-     //     txt_ttree->SetBranchAddress( brname , &t_event.t[0] );
-     txt_ttree->SetBranchAddress( brname , &t_event.n );
-
-    }else{// texto already exists  
-
-      gROOT->cd(); // go memory resident ttree like in "" and nano_conv.
-      txt_ttree = new TTree( ttree_name , "ttree_from_textline");
-      //       if(XTERM!=NULL)fprintf(XTERM,"NEW TTREE %x\n", (int)txt_ttree );
-      sprintf(chL,"POP: NEW TTREE    %lx" , (int64_t)txt_ttree  );table_log(1,chL);
-     if (CIRCULAR!=0){ txt_ttree->SetCircular(CIRCULAR);}
-      //  /s  is short.  
-      sprintf(ch ,"%s/i", "n" );              // n    UInt_t : ordered
-      sprintf(ch ,"%s:%s%03d/D", ch, "T",  1 );  //T001  double
-    for (int i=2;i<=npar;i++){
-      sprintf(ch ,"%s:%s%03d/D", ch,  "T",  i );  
-
-    }// all channels branch
-    //     if(XTERM!=NULL)fprintf(XTERM,"This row defines the  Branch  main :\n%s\n", ch );  
-     sprintf(chL,"POP: Branch(main):%s" , ch  );table_log(1,chL);
-     //    txt_ttree->Branch(brname , &t_event.t[0], ch );// 
-    txt_ttree->Branch(brname , &t_event.n, ch );// 
-    //     if(XTERM!=NULL)fprintf(XTERM,    " ttree initialized ok    %x\n" , (int)txt_ttree );
-     sprintf(chL,"POP: tree initialized OK  %lx" , (int64_t)txt_ttree  );table_log(1,chL);
-
-    txt_ttree->ls();
-      if(XTERM!=NULL)fprintf(XTERM, "      ttree initialized ok see ls Print()   %lx  n== %lld\n" , (int64_t)txt_ttree ,txt_ttree->GetEntries());
-      sprintf(chL,"POP: tree initialized ok,see ls Print() %lx n==%lld" , (int64_t)txt_ttree ,txt_ttree->GetEntries() );
-      table_log(1,chL);
-
-      //      if(XTERM!=NULL)fprintf(XTERM, "      ttree initialized ok see ls Print()   %x  n== %lld\n" , (int)txt_ttree ,txt_ttree->GetEntries());
-
-    }//-------------------------------------TTree 
-    //    TTree 
-    //->SetBranch("MAIN", &t_event.t[0] );
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  //  ted bych chtel takovy plugin, ktery by tvoril TTree z txt.
-  /**************************************************
-   *            TXT TO TTREE
-   */
-  int* pop_txttree(int* par){// THIS WORKS - IT takes 1st line and defines the tree - and accumulates
-
-    char chL[500];
-    int lines_received=0;
-   concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   sprintf(chL,"POP: txttree : %ld" , (int64_t)buffer  );table_log(1,chL);
-   //   if(XTERM!=NULL)fprintf(XTERM,"  POP logtxt v.2 : %d\n", (int)buffer );
-   int datum=0;// (int datum  ***)
-   int runempty=0; int wait=1;
-   int ttree_inited=0;// initialized?-NOT yet
-
-   int nparams=0;
-
-   usleep(1000*1000);
-   //STANDARD  XML  READ-------------
-   FILE *outfile;  char fname[400];
-   int buffer4;
-   long long int cnt=0;
-   size_t result;
-   //      TSmallish_xml xml(    acqxml   );
-   //      xml.DisplayTele( xml.mainnode, 0, "files","poper","file" );
-   //      sprintf( fname ,"%s", xml.output  );
-   //----------------- LOOP ----------------
-   char ch[1024]=""; // 1kB text line
-   // I AM COMPLETELY LOST WITH THERE CONVERSIONS &...
-   char cc;
-   t_event.n=0; // reset the number to 0 .... 
-   do{//-------------------
-     int line=0;
-   sprintf( ch , "%s", ""); //reset
-   while( !buffer->empty() ){
-     buffer->wait_and_pop(datum); //( datum ***)
-     cc=char( datum ); 
-     if ( (int)cc!=10){//  10== \n -------------- EOL ----
-       sprintf( ch, "%s%c", ch, cc  );//accumulate line
-     }else{//  \n found
-       //   if(XTERM!=NULL)fprintf(XTERM,"TEXT=%s\n",ch);
-
-       if (ttree_inited==0){
-	 //       if(XTERM!=NULL)fprintf(XTERM,"%s\n","creating the tree.....");
-       sprintf(chL,"POP: creating the tree... %s" , ""  );table_log(1,chL);
-       nparams=pop_get_npar( ch );
-       ttree_inited_npars=nparams;
-       sprintf(chL,"POP:  nparams==%d" , nparams  );table_log(1,chL);
-       //       if(XTERM!=NULL)fprintf(XTERM,"       nparams==%d\n",nparams);
-       conv_t_init( nparams ); // similar to conv_u_init; t[0]...t[n]
-       ttree_inited=1;// no more try to init
-       }// ---ttree was not initied.........
-
-       pop_txt_record( ch ); line++;
-       if (line>10000){
-         sprintf(chL,"POP:  lines==%d" , lines_received  );table_log(1,chL);
-	 line=0;
-       }
-       lines_received++;
-       sprintf( ch , "%s", ""); //reset
-     }//--------------------------- EOL/not EOL------------
-      cnt++; 
-      TThread::CancelPoint(); // When CancelOn()...
-   }// while ! buffer empty
-
-   //useless here...............but 
-   wait=MyCond.TimedWaitRelative( 1000  );
-   if (wait==0){ 
-       sprintf(chL,"POP: got BROADCAST SIGNAL...%s" , ""  );table_log(1,chL);
-       //     if(XTERM!=NULL)fprintf(XTERM,"POP got BROADCAST SIGNAL... %s\n","");
-   }
-  sprintf(chL,"POP: onWait lines==%d" , lines_received  );table_log(1,chL);
- }while(wait!=0);// ON BROADCAST
-   //   if(XTERM!=NULL)fprintf(XTERM,"POP logtxt v.2.: EXIT %d\n",(int)buffer);
-        sprintf(chL,"POP: EXIT  %ld" ,  (int64_t)buffer );table_log(1,chL);
- }// ****************************end of function **********
 
 
 
@@ -556,7 +290,277 @@ extern "C" {
   	TThread::CancelPoint(); // When CancelOn(), here the thread can be interrupted.
 	}//while,  no writeout	
       }//runempty
-}/**********************end of function ************/
+}/**********************end of function *********POP2FILE***/
+
+
+
+
+
+
+
+
+
+
+
+  /******************************************************************
+###################################################################
+###################################################################
+###################################################################
+   *      THIS PART CONCERNS THE 
+   *    UNIFIED DATA  of 
+   *                           ZDENEK HONS
+   *
+   */
+
+
+
+
+
+
+
+  // prepare TTree===========================================
+  //===================== SHOULD BE IN SEPARATE FILE ==========
+
+
+  TTree *txt_ttree;  // similar to global def in nano_acquis_pureconvert
+
+  struct{    
+    UInt_t n;// 4 bytr integer.... is enough for one run (same as nano_acquis)
+    double t[1024]; // structre to address by ttree.
+  } t_event;      //text event------------------------ simple array of doubles
+
+
+
+
+
+  // returns    number   of values on the line (space separated)
+  //                        serves for  TXT TREEpop_txt_record
+  //                                                              SERVICE...4...pop_txttree
+  int pop_get_npar( const char* ch ){
+    char chL[500];
+    TString oneline=ch, token; int j=0; double bu; 
+      TObjArray *tar; 
+       sprintf(chL,"POP: Analyzing string:%s" , ch  );table_log(1,chL);
+        tar= oneline.Tokenize(" ");
+
+        while (j<tar->GetEntries()){
+         token= ((TObjString*)(tar->At(j)))->GetString();
+         bu= token.Atof(); 
+         sprintf(chL,"POP:   token %d/  <%f>" , j,bu  );table_log(1,chL);
+	 j++;
+	}
+	return (j); // j-1? not... here 0->  names are 1->
+  }
+
+
+
+
+
+  /***************************************************TTREE    TXT
+   *
+   *  PLACE FOR TTREE      and   TH1 also
+   */
+
+   int ttree_inited_npars=0;
+  //                                                              SERVICE...4...pop_txttree
+  int pop_txt_record( const char* chse ){//.......SERVICE FUNCTION 
+    TString oneline=chse, token; int j=0; double bu; 
+      TObjArray *tar; 
+
+   char brname[100];  // main branch in texto......
+   int  CIRCULAR=100000;
+   char ttree_name[50];
+   char ch[1000];
+
+    sprintf( ttree_name, "%s",  "texto"  ); 
+    sprintf( brname, "%s",  "main" );  // main,  not mainV
+    if ( gDirectory->Get( ttree_name ) != NULL){
+      //printf("taking prev. existing ttree %x !!!!!!!!!\n", (int)ttree);
+      //     txt_ttree->SetBranchAddress( brname , &t_event.t[0] );
+     txt_ttree->SetBranchAddress( brname , &t_event.n );
+    }
+    //        if(XTERM!=NULL)fprintf(XTERM,"Analyzing string:%s\n",ch);
+        tar= oneline.Tokenize(" ");
+	j=0; 
+        while (j<tar->GetEntries()){
+         token= ((TObjString*)(tar->At(j)))->GetString();
+         t_event.t[j]= token.Atof(); 
+	 // printf("  token %d/  <%f>\n", j, t_event.t[j] );
+	 j++;
+	}
+	t_event.n++;
+	txt_ttree->Fill();    
+
+	//I assume at least 2 numbers
+	for (int i=0;i<ttree_inited_npars;i++){
+	  char txname[100];
+	  sprintf( txname, "textoH%02d", i);
+	  TH1F *texto_h1;     texto_h1=(TH1F*)gDirectory->Get( txname );
+	  if (texto_h1==NULL){texto_h1=new TH1F(txname, txname,2000,-1000,1000); }
+	  texto_h1->Fill(t_event.t[i]);
+	}
+	/*
+	TH1F *texto_h1;     texto_h1=(TH1F*)gDirectory->Get("texto_h1");
+	if (texto_h1==NULL){texto_h1=new TH1F("texto_h1","texto_h1",5000,0,5000); }
+	TH1F *texto_h2;     texto_h2=(TH1F*)gDirectory->Get("texto_h2");
+	if (texto_h2==NULL){texto_h2=new TH1F("texto_h2","texto_h2",5000,0,5000); }
+	texto_h1->Fill(t_event.t[0]);
+	texto_h2->Fill(t_event.t[1]);
+	*/
+
+    return j;
+  }
+  //--------------------------------------end of txt_record (TTree) --- SERVICE FUNCTION
+
+
+
+
+
+
+
+  //                                                              SERVICE...4...pop_txttree
+  int conv_t_init( int npar ){; // similar to conv_u_init; t[0]...t[n]
+    char chL[500];
+   char brname[100];  // main branch in texto......
+   int  CIRCULAR=100000;
+   char ttree_name[50];
+   char ch[1000];
+   
+
+    sprintf( ttree_name, "%s",  "texto"  ); 
+    sprintf( brname, "%s",  "main" );  // main,  not mainV
+    if ( gDirectory->Get( ttree_name ) != NULL){
+
+      //      if(XTERM!=NULL)fprintf(XTERM,  "taking previously existing ttree %x !!!!\n", (int)txt_ttree);
+     sprintf(chL,"POP: taking previously existing ttree %lx !!!!" , (int64_t)txt_ttree  );table_log(1,chL);
+     //     txt_ttree->SetBranchAddress( brname , &t_event.t[0] );
+     txt_ttree->SetBranchAddress( brname , &t_event.n );
+
+    }else{// texto already exists  
+
+      gROOT->cd(); // go memory resident ttree like in "" and nano_conv.
+      txt_ttree = new TTree( ttree_name , "ttree_from_textline");
+      //       if(XTERM!=NULL)fprintf(XTERM,"NEW TTREE %x\n", (int)txt_ttree );
+      sprintf(chL,"POP: NEW TTREE    %lx" , (int64_t)txt_ttree  );table_log(1,chL);
+     if (CIRCULAR!=0){ txt_ttree->SetCircular(CIRCULAR);}
+      //  /s  is short.  
+      sprintf(ch ,"%s/i", "n" );              // n    UInt_t : ordered
+      sprintf(ch ,"%s:%s%03d/D", ch, "T",  1 );  //T001  double
+    for (int i=2;i<=npar;i++){
+      sprintf(ch ,"%s:%s%03d/D", ch,  "T",  i );  
+
+    }// all channels branch
+    //     if(XTERM!=NULL)fprintf(XTERM,"This row defines the  Branch  main :\n%s\n", ch );  
+     sprintf(chL,"POP: Branch(main):%s" , ch  );table_log(1,chL);
+     //    txt_ttree->Branch(brname , &t_event.t[0], ch );// 
+    txt_ttree->Branch(brname , &t_event.n, ch );// 
+    //     if(XTERM!=NULL)fprintf(XTERM,    " ttree initialized ok    %x\n" , (int)txt_ttree );
+     sprintf(chL,"POP: tree initialized OK  %lx" , (int64_t)txt_ttree  );table_log(1,chL);
+
+    txt_ttree->ls();
+      if(XTERM!=NULL)fprintf(XTERM, "      ttree initialized ok see ls Print()   %lx  n== %lld\n" , (int64_t)txt_ttree ,txt_ttree->GetEntries());
+      sprintf(chL,"POP: tree initialized ok,see ls Print() %lx n==%lld" , (int64_t)txt_ttree ,txt_ttree->GetEntries() );
+      table_log(1,chL);
+
+      //      if(XTERM!=NULL)fprintf(XTERM, "      ttree initialized ok see ls Print()   %x  n== %lld\n" , (int)txt_ttree ,txt_ttree->GetEntries());
+
+    }//-------------------------------------TTree 
+    //    TTree 
+    //->SetBranch("MAIN", &t_event.t[0] );
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /**************************************************..................pop_txttree
+   *            TXT TO TTREE
+   */
+  int* pop_txttree(int* par){// THIS WORKS - IT takes 1st line and defines the tree - and accumulates
+
+    char chL[500];
+    int lines_received=0;
+   concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
+   sprintf(chL,"POP: txttree : %ld" , (int64_t)buffer  );table_log(1,chL);
+
+   int datum=0;// (int datum  ***)
+   //int runempty=0; 
+   int wait=1;
+   int ttree_inited=0;// initialized?-NOT yet
+
+   int nparams=0;
+
+   usleep(1000*1000);
+   //STANDARD  XML  READ-------------
+   FILE *outfile;  char fname[400];
+   int buffer4;
+   long long int cnt=0;
+   size_t result;
+   //      TSmallish_xml xml(    acqxml   );
+   //      xml.DisplayTele( xml.mainnode, 0, "files","poper","file" );
+   //      sprintf( fname ,"%s", xml.output  );
+   //----------------- LOOP ----------------
+   char ch[1024]=""; // 1kB text line
+   // I AM COMPLETELY LOST WITH THERE CONVERSIONS &...
+   char cc;
+   t_event.n=0; // reset the number to 0 .... 
+   do{//-------------------
+     int line=0;
+   sprintf( ch , "%s", ""); //reset
+   while( !buffer->empty() ){
+     buffer->wait_and_pop(datum); //( datum ***)
+     cc=char( datum ); 
+     if ( (int)cc!=10){//  10== \n -------------- EOL ----
+       sprintf( ch, "%s%c", ch, cc  );//accumulate line
+     }else{//  \n found
+
+       if (ttree_inited==0){// ---ttree was not initied.........
+       sprintf(chL,"POP: creating the tree... %s" , ""  );table_log(1,chL);
+       nparams=pop_get_npar( ch );
+       ttree_inited_npars=nparams;
+       sprintf(chL,"POP:  nparams==%d" , nparams  );table_log(1,chL);
+       //       if(XTERM!=NULL)fprintf(XTERM,"       nparams==%d\n",nparams);
+       conv_t_init( nparams ); // similar to conv_u_init; t[0]...t[n]
+       ttree_inited=1;// no more try to init
+       }// ---ttree was not initied.........
+
+       pop_txt_record( ch ); line++;
+       if (line>10000){
+         sprintf(chL,"POP:  lines==%d" , lines_received  );table_log(1,chL);
+	 line=0;
+       }
+       lines_received++;
+       sprintf( ch , "%s", ""); //reset
+     }//--------------------------- EOL/not EOL------------
+      cnt++; 
+      TThread::CancelPoint(); // When CancelOn()...
+   }// while ! buffer empty
+
+   //useless here...............but 
+   wait=MyCond.TimedWaitRelative( 1000  );
+   if (wait==0){ 
+       sprintf(chL,"POP: got BROADCAST SIGNAL...%s" , ""  );table_log(1,chL);
+       //     if(XTERM!=NULL)fprintf(XTERM,"POP got BROADCAST SIGNAL... %s\n","");
+   }
+  sprintf(chL,"POP: onWait lines==%d" , lines_received  );table_log(1,chL);
+ }while(wait!=0);// ON BROADCAST
+   //   if(XTERM!=NULL)fprintf(XTERM,"POP logtxt v.2.: EXIT %d\n",(int)buffer);
+        sprintf(chL,"POP: EXIT  %ld" ,  (int64_t)buffer );table_log(1,chL);
+ }// ****************************end of function **********.................TXT 2  TTREE
+
+
+
+
+
+
 
 
 
@@ -573,21 +577,19 @@ extern "C" {
 
   /*****************************************************************
    *            TEST TO SORT THE EVENTS ...........  CREATE TTREE
-   *
+   *        ZDENEK HONS 
+   *  rebuild 20130610 
    */
-  int* pop_sort(int* par){// POP ... nanot ZD data 4*int system; CONVERSION
+  int* pop_sort(int* par){// POP ... nanot ZD data 4*int system;...CONVERSION
     char chL[500];
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-//   if(XTERM!=NULL)fprintf(XTERM,"  POP pop SORT *******%s\n", "" );
-//   if(XTERM!=NULL)fprintf(XTERM,"  POP pop SORT *******%s\n", "" );
-//   if(XTERM!=NULL)fprintf(XTERM,"  POP pop SORT *******%s\n", "" );
    sprintf(chL,"POP: SORT int .... starting  %ld" ,  (int64_t)buffer );table_log(1,chL);
 
-      double downtime; int downtimef, downtimei,  wait=1;
-
+   double downtime; int downtimef, downtimei,  wait=1;
    int datum=0;
-   int runempty=1;
    int oneeventbuf[1000]; //usualy 1header,one footer,4 channels=>12 integers
+   int64_t cnt_evt=0;
+   int64_t cnt_int=0; 
  /* 
   * data from:
   * . 
@@ -620,7 +622,6 @@ extern "C" {
    //STANDARD  XML  READ-------------
       char initline[400];
       int buffer4;
-      long long int cnt=0;  long long int cnt_evt=0;
       size_t result;
 
    //-------- here I will control with    control.mmap    file------   
@@ -681,57 +682,52 @@ extern "C" {
 	   circular);
  
 
-  //  if(XTERM!=NULL)fprintf(XTERM,"  POP PQ%s\n\n",initline);
         sprintf(chL,"POP: %s" , initline  );table_log(1,chL);
 	//  conv_u_init("", initline ); // file-name makes a problem for analyze- // FROM NANOCONVERT
 
 
-  //  if(XTERM!=NULL)fprintf(XTERM,"  POP PQPrepared to runempty......\n","");
-        sprintf(chL,"POP: to enter (runempty==1)%s" , ""  );table_log(1,chL);
 
-      if (runempty==1){
 	//-----------run empty--------
 	int pointer; //verbose=0;// from nano_acquis_pureconvert // FROM NANOCONVERT
 
-	//	if(XTERM!=NULL)fprintf(XTERM,
-	//			       "POP PQ....bufsize==%10d empty==%d \n", 
-	//			       buffer->size(), buffer->empty() );	
         sprintf(chL,"POP: bufsize==%10d empty==%d" ,buffer->size(), buffer->empty()  );table_log(1,chL);
 
 	  int status=0;
-	  while(1==1){// INFINITE--------------------------------
+	  while(1==1){// INFINITE--------------------------------LOOP-------------------BEGIN
 
 	while( !buffer->empty() ){// NEXT EVENT
 	  pointer=0; status=0;
-	  while( !buffer->empty() ){ //ONE-EVENT -CONSTRUCT
-	  buffer->wait_and_pop(datum);
-	  oneeventbuf[pointer] = datum; pointer++; // integer array
+
+
+	  // ffff efff   run start
+	  // ffff ffff   run stop
+	  while( !buffer->empty() ){ //ONE-EVENT -CONSTRUCT ....... put One Event Into  "oneeventbuf"
+	    buffer->wait_and_pop(datum);
+	    cnt_int++;
+	    oneeventbuf[pointer] = datum; pointer++; // integer array
 	  //          if ((cnt%25000)==0){if(XTERM!=NULL)fprintf(XTERM,"S        %7lld kB\n",4*cnt/1000);} cnt++;//1MB
-	  if (datum==0xf0000000){ break;} // event footer.....  BREAKOUT
-	  //	  if (cnt<18){
+	    if (datum==0xf0000000){ break;} // event footer..... BREAKOUT
+	  //	  if (cnt_evt<18){
 	  //	    printf( "%10d:  %04X  %04X    -  %10d\n", datum, datum&0xffff,  (datum>>16)&0xffff, 0xf0000000 );
 	  //	  }
 	  }//while buffer not empty------------------collect 
-	  //do something with event HERE
 	  cnt_evt++;
+
+
+
+
+
+
+
 	  //one_buffer_process( (void*)buffer,  int(nminibuffer/4) , int(startup/4) ); //
 
 	  //	  one_buffer_process( (void*)&oneeventbuf, pointer , 0 ); // FROM NANOCONVERT
 
-	  if (cnt_evt%50000 ==0){
-	    //  if(XTERM!=NULL)fprintf(XTERM,"PQ OBP %lld\n",cnt_evt );fflush(XTERM);
-           sprintf(chL,"POP: evt#= %lld" , cnt_evt  );table_log(1,chL);
-	  }
+	  if (cnt_evt%50000 ==0){sprintf(chL,"POP: evt#= %lld" , cnt_evt  );table_log(1,chL);}
 	}//WHILE --- next event
-	if (status==0){
-           sprintf(chL,"POP: cnt==%lld, evts= %lld --leaving" ,cnt, cnt_evt  );table_log(1,chL);
-	   //      if(XTERM!=NULL)fprintf(XTERM,
-	   //		 "POP PQ (int)cnt=== %lld,  events=%lld --leaving poper\n",
-	   //			     cnt,  cnt_evt);
-	}//status==0
-	//	if(XTERM!=NULL)fprintf(XTERM,"PQ %lld\n",cnt_evt );fflush(XTERM);
+
+	if (status==0){sprintf(chL,"POP: cnt==%lld, evts= %lld --leaving" ,cnt,cnt_evt);table_log(1,chL);}
         sprintf(chL,"POP:  evt#= %lld (@status++)" , cnt_evt );table_log(1,chL);
-	//	usleep(1000*300);//buffer empty:100ms wait before next try
 	status++;
 
 
@@ -740,29 +736,22 @@ extern "C" {
 	//
        TTimeStamp t_wait;
        downtime=t_wait.GetSec()+t_wait.GetNanoSec()*1e-9;
-       //       if(XTERM!=NULL)fprintf(XTERM,"\n\n  FTREE  wait %d , %f \n", wait, downtime );
        downtime=downtime+2.5;   // 0.5 sec was NOT ENOUGH !!!
        downtimei=(int)downtime;
        downtimef=(int)( 1e+9*(downtime-1.0*downtimei) );
-       //       if(XTERM!=NULL)fprintf(XTERM,"P%s","" );
          sprintf(chL,"POP:  wait-> %s" , "" );table_log(1,chL);
       wait=MyCond.TimedWait(  downtimei , downtimef  ) ;
-       //       if(XTERM!=NULL)fprintf(XTERM,"\n\n  FTREE  wait %d ! %d.%d\n", wait, downtimei,downtimef);
        if (wait==0)break;
-       //       usleep(1000*300);
-       //       if(XTERM!=NULL)fprintf(XTERM,"Q%s","" );
          sprintf(chL,"POP:   -> wait %s" , "" );table_log(1,chL);
+	}//---------- INFINITE--------------------------------LOOP-------------------END
 
-       //	TThread::CancelPoint(); // When CancelOn(), here the thread can be interrupted.
-	}//---------------------------------------------INFINITE
-
-      }//runempty
-      //this neve happenes
-      //if(XTERM!=NULL)fprintf(XTERM,"  POPER SORT END  cnt=== %lld,  events=%lld -------leaving poper\n",cnt,  cnt_evt);       
       sprintf(chL,"POP:  SORT END  cnt=== %lld,  events=%lld----leaving " , cnt,  cnt_evt );table_log(1,chL);
-
-
+      return 0;
 }/**********************end of function ************/
+
+
+
+
 
 
 
