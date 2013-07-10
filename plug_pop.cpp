@@ -1,3 +1,13 @@
+#include "xml_attr.h"    // bude xml
+#include "log_term.h"    // bude xml
+#include "mut_queue.h"
+#include "acq_core.h"
+#include "cuts_manip.h"  //loadcuts,savecut,rmcut,cpcut.......
+
+
+#include <stdlib.h>     /* atof */
+
+
 //#include <iostream>  //#include <math.h>
 #include <stdio.h>
 #include "TROOT.h"    // Main INCLUDE !!!!
@@ -7,16 +17,20 @@
 #include "TCanvas.h"  //i cannot draw in standalone???
 #include "TRandom.h"
 #include "TVector3.h"
-#include "mut_queue.h"
 //#include <pthread.h>
-#include "xml_attr.h"    // bude xml
 // I DONT WANT THIS ANYMORE   #include "nano_acquis_pureconvert.C" 
-#include "cuts_manip.h"  //loadcuts,savecut,rmcut,cpcut.......
 
 #include "TSocket.h"   //net thread
 //---------------------------try server (for a client with txt...)
 #include "TServerSocket.h"
 #include "TMonitor.h"
+
+//----------------------------with   mmap ------------------------
+#include <err.h>
+#include <sys/mman.h>
+
+
+
 
 /****
 IF C++ => care about namemangling....
@@ -26,6 +40,18 @@ IF C++ => care about namemangling....
 #ifdef  __cplusplus
 extern "C" {
 #endif
+
+
+
+
+//                                                                         ===
+// ========= Here I have something for   mmap=============================MMAP
+//                                                                         ===
+
+    int mmapfd;      //  =-1       file handle for mmap
+    char *mmap_file; // pointer to     mmap
+
+
 
 
   //=================== EXPORTED FUNCTIONS  START =========
@@ -472,8 +498,21 @@ extern "C" {
       FILE *outfile;  char fname[400];
       int buffer4;
       long long int cnt=0;
-      size_t result;
-      TSmallish_xml xml(    acqxml   );
+      size_t result;   
+
+
+//-------- here I will control with    control.mmap    file------   
+    if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
+    mmap_file=(char*)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, mmapfd, 0);
+    if (mmap_file == MAP_FAILED) errx(1, "either mmap");
+    char mmap_result[100];
+   //-------- here I will control with    control.mmap    file------   
+  char  acqxml2[100];
+
+
+  TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
+
+      TSmallish_xml xml(    acqxml2   );
       xml.DisplayTele( xml.mainnode, 0, "plugins","poper","file" );
       sprintf( fname ,"%s", xml.output  );
 
@@ -583,7 +622,19 @@ extern "C" {
       int buffer4;
       long long int cnt=0;  long long int cnt_evt=0;
       size_t result;
-      TSmallish_xml xml(    acqxml   );
+
+   //-------- here I will control with    control.mmap    file------   
+    if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
+    mmap_file=(char*)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, mmapfd, 0);
+    if (mmap_file == MAP_FAILED) errx(1, "either mmap");
+    char mmap_result[100];
+   //-------- here I will control with    control.mmap    file------   
+  char  acqxml2[100];
+  TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
+
+
+
+      TSmallish_xml xml(    acqxml2   );
       xml.DisplayTele( xml.mainnode, 0, "acq_channels","data","chanlo" );
       chanlo=atoi(xml.output);
       xml.DisplayTele( xml.mainnode, 0, "acq_channels","data","chanhi" );

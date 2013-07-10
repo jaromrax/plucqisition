@@ -1,3 +1,22 @@
+ifneq (,)
+    This makefile requires GNU Make.
+    endif
+
+PROGRAM = acq_rez
+C_FILES_LIBS = xml_attr.C log_term.C mut_queue.C 
+C_FILES =      xml_attr.C log_term.C mut_queue.C acq_core.C
+OBJS_LIBS := $(C_FILES_LIBS:.C=.o)
+OBJS := $(C_FILES:.C=.o)
+###OBJS := $(patsubst $(C_FILES))
+CC = echo
+CFLAGS = -Wall 
+LDFLAGS =	
+ROOTCC=`root-config --cxx --cflags` -fPIC 
+LDFLAGS= -lHist -lNet -lCore -lRIO -lGpad -lMathCore -lPhysics -lTree -lThread -lXMLIO `root-config --glibs`
+DICT = my_dict.cxx
+
+
+
 #  root -n -b -q  compile.C
 rs   := $(shell echo $$ROOTSYS)
 date := $(shell date +%Y%m%d_%H%M%S)
@@ -5,60 +24,56 @@ mpath := $(shell cat ~/.rootrc | grep -v -e "^\#" | grep Unix | grep MacroPath |
 mpath2 := $(shell echo  $(mpath) | sed  's/:/ /g')
 
 
+all: $(PROGRAM) $(DICT)
 
-all: mut plugins
-	@echo "make:";\
-	echo "      this help";\
-	echo "make plugins:";\
-	echo "            compiles plugins";\
-	echo "make mut";\
-	echo "            compiles main code using root -n batch";\
-	echo "make install";\
-	echo "            coppies the .so file to MACRO path";
-
-mut:mut_queue.h mut_queue.C cuts_manip.h  xml_attr.c xml_attr.h logterm.C
-	root -n -b -q  compile.C  ; echo ECHO $?
+$(PROGRAM): $(OBJS)
+	@echo USAGE:;\
+	echo make ...      makes   \*.o  files;\
+	echo make plug ... makes \*.so plugins;\
+	echo make root ... compilation under root
+#	echo ROOTCC_pg == $(ROOTCC);\
+#$(ROOTCC)  $(OBJS) $(LDFLAGS) -o $(PROGRAM)
 
 
-install: mut_queue_C.so 
-	@echo I TRY TO FIND ROOTSYS AND MACRO;\
-	echo MACRO AT  $(mpath2);\
-	for i in $(mpath2); do \
-	if [ -d $$i ]; then \
-	 	if [ $$i = "." ]; then echo "  ";else \
-		TARG=$$i;\
-	 	echo $$i "  " IS OK; \
-	 	break;\
-	 	fi \
-	fi; \
-	done;\
-	echo "TESTING <$$TARG>";\
-	if [ "$$TARG" != "" ];then \
-		echo cp mut_queue_C.so  $$TARG/ ;\
-		cp mut_queue_C.so  $$TARG/ ;\
-		ls -l $$TARG/*.so;\
-	else\
-		echo ERROR; echo "  " NO PATH FOR MACRO. CREATE SOME IN ~/.rootrc;\
-	fi;
+%.o: %.C
+	echo ROOTCC_opc == $(ROOTCC);\
+	$(ROOTCC) $(CFLAGS) -c $< -o $@
 
-
-plugins: plug_push.so plug_pop.so 
-
-
-plug_push.so: plug_push.cpp mut_queue.h cuts_manip.h  xml_attr.c xml_attr.h logterm.C
-	`root-config --cxx --cflags` -fPIC -shared -o plug_push.so plug_push.cpp     -lHist -lNet -lCore -lRIO -lGpad -lMathCore -lPhysics -lTree -lThread -lXMLIO `root-config --glibs`
-
-
-plug_pop.so: plug_pop.cpp mut_queue.h cuts_manip.h  xml_attr.c xml_attr.h logterm.C
-	`root-config --cxx --cflags` -fPIC -shared -o plug_pop.so plug_pop.cpp     -lHist -lNet -lCore -lRIO -lGpad -lMathCore -lPhysics -lTree -lThread -lXMLIO `root-config --glibs`
-
-
-###not here in main;analyze is always down  plug_analyze.so: plug_analyze.cpp mut_queue.h cuts_manip.h nano_acquis_pureconvert.C xml_attr.c xml_attr.h logterm.C
-####	`root-config --cxx --cflags` -fPIC -shared -o plug_analyze.so plug_analyze.cpp -lHist -lNet -lCore -lRIO -lGpad -lMathCore -lPhysics -lTree -lThread -lXMLIO `root-config --glibs`
-
+%: %.C
+	echo ROOTCC_pc == $(ROOTCC);\
+	$(ROOTCC) $(CFLAGS) -o $@ $<
 
 clean:
-	  rm plug_pop.so plug_push.so mut_queue_C.so
+	rm -f  *.o  *.pcm *.d  *.so 
 
-##	g++ -fPIC -c plug_queue.cpp `root-config --libs --cflags --glibs`  &&  gcc -shared -o plug_queue.so plug_queue.o
-##	g++ -fPIC -c plug_analyze.cpp `root-config --libs --cflags --glibs`  &&  gcc -shared -o plug_analyze.so plug_analyze.o
+test: 
+	echo AHOJ---------------------------;\
+	echo rootcc== $(ROOTCC) ;\
+	echo OBJS=$(OBJS);\
+	echo C_FILES=$(C_FILES);\
+	echo KONEC----------------------------
+
+root:
+	@echo Ahoj, zkuime root;\
+	echo ./compile_root  xml_attr.C ;\
+	echo  ./compile_root LogTerm.C;\
+	echo   ./compile_root mut_queue.C;\
+	echo  ./compile_root acq_core.C;\
+	./compile_root $(C_FILES)
+
+
+plug: plugins
+plugins:  plug_push.so plug_pop.so
+
+plug_push.so: plug_push.cpp $(C_FILES_LIBS) $(DICT)
+	$(ROOTCC)  $(OBJS_LIBS) -fPIC -shared -o plug_push.so plug_push.cpp  $(LDFLAGS)
+
+plug_pop.so: plug_pop.cpp $(C_FILES_LIBS)
+	$(ROOTCC)  $(OBJS_LIBS) -fPIC -shared -o plug_pop.so plug_pop.cpp    $(LDFLAGS)
+
+
+
+#  DICT I need for plug_push.cpp 
+
+$(DICT): $(C_FILES_LIBS) plug_push.cpp
+	rootcint -f $(DICT) -c $(C_FILES_LIBS) plug_push.cpp  LinkDef.h

@@ -1,330 +1,417 @@
+TokenReplace("mas","delas",aa)
+TokenReplace("mas","delas",aa)
+aa
+TokenReplace("se","se",aa)
+aa
+TokenReplace("se","se",aa)
+TokenReplace("se","se",aa)
+TokenReplace("se","se",aa)
+TokenReplace("se","se",aa)
+aa
+TokenReplace("se","sS",aa)
+aa
+TokenReplace("se","sS",aa)
+TokenReplace("sS","sS",aa)
+TokenReplace("sS","sS",aa)
+TokenReplace("sS","sS",aa)
+aa
+.qqqqqqq
+.L ../mut_queue.C+
+TokenGet("tak", aa )
+char aa[4000]="ahoj jak se mas takovy stabilni"
+TokenGet("tak", aa )
+TokenGet("tak", aa )
+TokenGet("tak", aa )
+aa
+.qqq
+char aa[4000]="ahoj jak se mas takovy stabilni"
+TokenGet("tak", aa )
+.L ../mut_queue.C+
+TokenGet("tak", aa )
+aa
+char aa[4000]="ahoj jak se mas takovy stabilni"
+.q
+char aa[4000]="ahoj jak se mas takovy stabilni"
+aa
+aa
+.q
+.L ../mut_queue.C+
+.L ../mut_queue.C+
+.L ../mut_queue.C+
+.L ../mut_queue.C+
+char aa[4000]="ahoj jak se mas takovy stabilni"
+TokenGet("tak", aa )
+.q
+.L ../mut_queue.C+
+char aa[4000]="ahoj jak se mas takovy stabilni"
+TokenGet("tak", aa )
+aa[16]
+.qq
+.L ../mut_queue.C+
+char aa[4000]="ahoj jak se mas takovy stabilni"
+char bb[4000]="ahoj jak se mas takovy stabilni"
+TokenGet("tak", aa, bb )
+bb
+bb[6]=' '
+bb
+for (int i=0;i<1000000;i++){ TokenGet("dataPULL=", "file=acq_setup.xml\nrun=1\ndataPUSH=0\ndataPULL=0\0",bb);}
+bb
+aa
+bb
+aa
+char a[30]="jelen=1234"
+a
+char b[30]="jelen="
+b
+a
+a-b
+b-a
+strcmp(a,b)
+strstr(a,b)
+strstr(b,a)
+strstr(a,b)
+strstr(a,b)-b
+strlen(a)-strlen(b)
+a
+a+1
+a+(strlen(a)-strlen(b)
+a+(strlen(a)-strlen(b))
+a+(strlen(a)-strlen(a)+strlen(b))
+a+(strlen(b))
+a+strlen(b)
+a+strlen(b)
+.q
+.L ../mut_queue.C+
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=1\ndataPUSH=0\ndataPULL=0\0",bb)
+char bb[4000]="ahoj jak se mas takovy stabilni"
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=1\ndataPUSH=0\ndataPULL=0\0",bb)
+TokenGet("run=", "file=acq_setup.xml\nrun=1\ndataPUSH=0\ndataPULL=0\0",bb)
+TokenGet("file=", "file=acq_setup.xml\nrun=1\ndataPUSH=0\ndataPULL=0\0",bb)
+TokenGet("file=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\0",bb)
+TokenGet("file=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\0",bb)
+TokenGet("run=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\0",bb)
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\0",bb)
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\0",bb)
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\0",bb)
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
+bb
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
+.q
+.L ../mut_queue.C+
+char bb[4000]="ahoj jak se mas takovy stabilni"
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
+.q
+.L ../mut_queue.C+
+char bb[4000]="ahoj jak se mas takovy stabilni"
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
+TokenGet("dataPUSH=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
+TokenGet("dataPUSH=", "file=acq_setup.xml\nrun=14251\ndataPUSH=10\ndataPULL=0.0012\n",bb)
+TokenGet("dataPUSH=", "file=acq_setup.xml\nrun=14251\ndataPUSH=10\ndataPULL=0.0012\n",bb)
+TokenGet("dataPUSH=", "file=acq_setup.xml\nrun=14251\ndataPUSH=10\ndataPULL=0.0012\n",bb)
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=00012\n",bb)
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
+bb
+.q
+.L ../mut_queue.C+
+char bb[4000]="ahoj jak se mas takovy stabilni"
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
+atof("012")
+atof("0.12")
+.q
+.L ../mut_queue.C+
+char bb[4000]="ahoj jak se mas takovy stabilni"
+TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
+TokenReplace("dataPULL=", "dataFULL=", bb) 
+bb
+bb
+.q
+.L ../mut_queue.C+
+char bb[4000]="file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n"
+bb
+bb
+TokenReplace("dataPUSH=", "dataXXX=12", bb) 
+bb
+TokenReplace("dataPUSH=", "dataXXX=12", bb) 
+bb
+.q
+.L ../mut_queue.C+
+char bb[4000]="file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n"
+TokenReplace("dataPUSH=", "dataXXX=12", bb) 
+bb
+TokenReplace("dataXXX=", "dataXXX=112312332", bb) 
+bb
+.q
+.L ../mut_queue.C+
+.L ../mut_queue.C+
+.q
+.L ../mut_queue.C+
+char bb[4000]="file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n"
 acq()
-shspe()
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
+.L ../mut_queue.C+
+.q
+.L ../mut_queue.C+
+acq()
+.L ../mut_queue.C+
+acq()
+.L ../mut_queue.C+
+char bb[4000]="file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n"
+char cc[100]
+TokenGet("file=", bb , cc )
+cc
+.q
+.L ../mut_queue.C+
+char bb[4000]="file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n"
+char cc[100]
+TokenGet("file=", bb , cc )
+cc
+acq()
 acq("stop")
 .qqqqqqqq
+.L ../mut_queue.C+
 acq()
-shspe()
-mmframe->
-.qqqqqqqqqqqqqqqqqq
-mmframe()
-mmframe->RefreshAll().qqqqqqqqqqq
-.qqqqqqqqqq
-acq()
-acq()
-shspe()
-TTimer *t3=new TTimer("mmframe->RefreshAll()",5000);
-t3->TurnOn();
 acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
+.qqqqqqqq
+.L ../mut_queue.C+
 acq()
 acq("stop")
 acq("stop")
-acq()
-.!mv canvas_4.root canvas_2.root
-.!rm canvas_3*
-.!rm canvas_4*
-.!ls
-.!pwd
 acq("stop")
 .qqqqqq
+.L ../mut_queue.C+
 acq()
-shspe()
-TCounterMulti *mc=new TCounterMulti(2)
-mc->Display()
-mc->Display()
-mc->Display()
-mc->Display()
-mc->Display()
-mc->Display()
-mc->Display()
-mc->Display()
-mc->Display()
-mc->Display()
-mc->Display()
-mc->Display()
-mc->Display()
-mc->Display()
-mc->Display()
-mc->Display()
-mc->Display()
-mc->Display()
-.q
+.qqqqqqqqqqqqqqqqqq
+.L ../mut_queue.C+
 acq()
 acq("stop")
+acq("stop")
 acq()
-shspe()
 acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-.q
-.qqqqqqqqqqqqqqq
-shspe()
-.q
+TThread::Ps()
 acq()
-a
-.ls
-.ls
 acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-.q
-.qqqqqqqqqqqq
-.qqqqqqqqqqq
-acq()
-shspe()
 acq()
 acq("stop")
 acq("stop")
 acq("stop")
 acq("stop")
 .qqqqqqqqqq
+.L ../mut_queue.C+
 acq()
-.qqqqqqqqqqqqqqqqqqqqqq
+acq("stop")
+acq("stop")
+acq("stop")
+system( "ls" )
+printf( " %d\n ", system( "ls" ) )
+printf( " %d\n", system( "ls" ) )
+printf( " %d\n", system( "ls" ) )
+printf( " %d\n", system( "ls" ) )
+printf( " %d\n", system( "nc" ) )
+printf( " %d\n", system( "nc 2>/dev/null" ) )
+printf( " %d\n", system( "nc 2>/dev/null" ) )
+printf( " %d\n", system( "nc 192.168.0.1  2>/dev/null" ) )
+.qqqqqqqqqq
+.L ../mut_queue.C+
 acq()
-..qqqqqqqqq
+acq("stop"))
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+acq()
+acq("stop")
+acq("stop")
+.qqqq
+.qqqqqq
+.L ../mut_queue.C+
+acq()
+.L ../mut_queue.C+
+acq()
+TSocket::IsValid()
+TSocket(127.0.0.1, 22)::IsValid()
+TSocket("127.0.0.1", 22)::IsValid()
+TSocket("127.0.0.1", 22)::fIsValid()
+TSocket("127.0.0.1", 22)::IsValid()
+TSocket::IsValid()
+TSocket::IsValid("127.0.0.1", 22)
+.qqqqqqqqqqqqqq
+.L ../mut_queue.C+
+acq()
+acq("stop")
 .qqqqqqqqqqqq
+.L ../mut_queue.C+
 acq()
-.q
+acq("stop")
+.qqqqqqqqqqqq
+.L ../mut_queue.C+
+acq("stop")
+acq()
+acq("stop")
+acq("stop")
+.qqqqqqq
+.L ../mut_queue.C+
+acq()
+acq("stop")
 .qqqqqqqqqq
 acq()
-.qqqqqqq
+.L ../mut_queue.C+
 acq()
-.qqqqqqqqqqqq
+.qqqqqqqqqqqqqqqq
+.L ../mut_queue.C+
 acq()
-.qqqqqqqqqqqq
+.qqqqqq
+TTimer  alarm(0, kFALSE);
+TTimer alarm;
+.q
+TTimer alarm(0, kFALSE)
+q
+.q
+TTimer qalarm(0, kFALSE)
+ qalarm->SetInterruptSyscalls();
+ qalarm.SetInterruptSyscalls();
+ qalarm.Connect("Timeout()","",NULL,"")
+ qalarm.Connect("Timeout()","",NULL,"Ahoj()")
+ qalarm.Connect("Timeout()","TObject",NULL,"Ahoj()")
+ qalarm.Connect("Timeout()","TObject",NULL,"ls()")
+qalarm->Start(1000,kTRUE)
+qalarm.Start(1000,kTRUE)
+.L ../mut_queue.C+
 acq()
-.qqqqq
+.qqqqqqqqqqqqqqqqqq
+.L ../mut_queue.C+
 acq()
-shspe()
-.!ls
-.!ls -l
-.L cut_manip.h
-.L cuts_manip.h
-cpcut("Cut00_mtx1","cutm1_d")
-cpcut("Cut00_mtx1","cutm1_d")
-.ls
-savecut("Cut00_mtx1")
-savecut(Cut00_mtx1, "cutm1_d")
-.ls
-gFile->Close()
-.ls
-savecut(Cut00_mtx1, "cutm1_d")
-savecut(Cut00_mtx1, "cutm1_d")
-.ls
-savecut(Cut01_mtx1, "cutm1_p")
-savecut(Cut00_mtx8, "cutm8_p")
-savecut(Cut00_mtx2, "cutm2_p")
-savecut(Cut00_mtx3, "cutm3_p")
-savecut(Cut00_mtx4, "cutm4_p")
-savecut(Cut00_mtx5, "cutm5_p")
-savecut(Cut00_mtx6, "cutm6_p")
-savecut(Cut00_mtx7, "cutm7_p")
-savecut(Cut02_mtx1, "cutm1_mon")
-savecut(Cut01_mtx6, "cutm6_mon")
-savecut(Cut01_mtx7, "cutm7_mon")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq()
-acq("stop")
-.qqqqqqq
-acq()
-shspe()
-.!ls
-      TH2F *mtx5;
-      mtx5=(TH2F*)gDirectory->Get("mtx5");
-      if (mtx5==NULL){
-mtx5=new TH2F("mtx5","V021:V021+V005",1024,0,5000,1024,0,5000);
-      }
-      TH2F *mtx6;
-      mtx6=(TH2F*)gDirectory->Get("mtx6");
-      if (mtx6==NULL){
-mtx6=new TH2F("mtx6","V022:V022+V006",1024,0,5000,1024,0,5000);
-      }
-      TH2F *mtx7;
-      mtx7=(TH2F*)gDirectory->Get("mtx7");
-      if (mtx7==NULL){
-mtx7=new TH2F("mtx7","V023:V023+V007",1024,0,5000,1024,0,5000);
-      }
-      TH2F *mtx8;
-      mtx8=(TH2F*)gDirectory->Get("mtx8");
-      if (mtx8==NULL){
-mtx8=new TH2F("mtx8","V024:V024+V008",1024,0,5000,1024,0,5000);
-      }
-      //-------------------------- typical load of cuts -----------------
-      loadcuts();//  from cuts_manip.h             ONLY WHEN acq("start")
-      //-------------------------- typical load of Gcuts -----------------
-      // EXTRA CUTS - to compare Q /T1  or Q/T6
-      TCutG *m1_monitor;
-      m1_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_mon");      TH2F *mtx5;
-      mtx5=(TH2F*)gDirectory->Get("mtx5");
-      if (mtx5==NULL){
-mtx5=new TH2F("mtx5","V021:V021+V005",1024,0,5000,1024,0,5000);
-      }
-      TH2F *mtx6;
-      mtx6=(TH2F*)gDirectory->Get("mtx6");
-      if (mtx6==NULL){
-mtx6=new TH2F("mtx6","V022:V022+V006",1024,0,5000,1024,0,5000);
-      }
-      TH2F *mtx7;
-      mtx7=(TH2F*)gDirectory->Get("mtx7");
-      if (mtx7==NULL){
-mtx7=new TH2F("mtx7","V023:V023+V007",1024,0,5000,1024,0,5000);
-      }
-      TH2F *mtx8;
-      mtx8=(TH2F*)gDirectory->Get("mtx8");
-      if (mtx8==NULL){
-mtx8=new TH2F("mtx8","V024:V024+V008",1024,0,5000,1024,0,5000);
-      }
-      //-------------------------- typical load of cuts -----------------
-      loadcuts();//  from cuts_manip.h             ONLY WHEN acq("start")
-      //-------------------------- typical load of Gcuts -----------------
-      // EXTRA CUTS - to compare Q /T1  or Q/T6
-      TCutG *m1_monitor;
-      m1_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_mon");      TH2F *mtx5;
-      mtx5=(TH2F*)gDirectory->Get("mtx5");
-      if (mtx5==NULL){
-mtx5=new TH2F("mtx5","V021:V021+V005",1024,0,5000,1024,0,5000);
-      }
-      TH2F *mtx6;
-      mtx6=(TH2F*)gDirectory->Get("mtx6");
-      if (mtx6==NULL){
-mtx6=new TH2F("mtx6","V022:V022+V006",1024,0,5000,1024,0,5000);
-      }
-      TH2F *mtx7;
-      mtx7=(TH2F*)gDirectory->Get("mtx7");
-      if (mtx7==NULL){
-mtx7=new TH2F("mtx7","V023:V023+V007",1024,0,5000,1024,0,5000);
-      }
-      TH2F *mtx8;
-      mtx8=(TH2F*)gDirectory->Get("mtx8");
-      if (mtx8==NULL){
-mtx8=new TH2F("mtx8","V024:V024+V008",1024,0,5000,1024,0,5000);
-      }
-      //-------------------------- typical load of cuts -----------------
-      loadcuts();//  from cuts_manip.h             ONLY WHEN acq("start")
-      //-------------------------- typical load of Gcuts -----------------
-      // EXTRA CUTS - to compare Q /T1  or Q/T6
-      TCutG *m1_monitor;
-      m1_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_mon");      TH2F *mtx5;
-      mtx5=(TH2F*)gDirectory->Get("mtx5");
-      if (mtx5==NULL){
-mtx5=new TH2F("mtx5","V021:V021+V005",1024,0,5000,1024,0,5000);
-      }
-      TH2F *mtx6;
-      mtx6=(TH2F*)gDirectory->Get("mtx6");
-      if (mtx6==NULL){
-mtx6=new TH2F("mtx6","V022:V022+V006",1024,0,5000,1024,0,5000);
-      }
-      TH2F *mtx7;
-      mtx7=(TH2F*)gDirectory->Get("mtx7");
-      if (mtx7==NULL){
-mtx7=new TH2F("mtx7","V023:V023+V007",1024,0,5000,1024,0,5000);
-      }
-      TH2F *mtx8;
-      mtx8=(TH2F*)gDirectory->Get("mtx8");
-      if (mtx8==NULL){
-mtx8=new TH2F("mtx8","V024:V024+V008",1024,0,5000,1024,0,5000);
-      }
-      //-------------------------- typical load of cuts -----------------
-      loadcuts();//  from cuts_manip.h             ONLY WHEN acq("start")
-      //-------------------------- typical load of Gcuts -----------------
-      // EXTRA CUTS - to compare Q /T1  or Q/T6
-      TCutG *m1_monitor;
-      m1_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_mon");
-mtx1_p
-mtx1_p->Draw()
-mtx1_p->Draw()
-mtx1_p->Draw()
-.qqqqqqqq
-acq()
-shspe()
-.!rm canvas_7.*
-.!ls ca*
-.qacq("stop")
-acq()
-acq()
-shspe()
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
+.q
+q.qqqqq.q
+.qq
+.q
 .qqqqqqqqq
+.L ../mut_queue.C+
 acq()
-acq()
-..qqqqqqqqqqqqqqq
 .qqqqqqqqqqqq
+.L TimedSock.C 
+.L TimedSock.C 
+.x TimedSock.C
+.L TimedSock.C 
+.L TimedSock.C 
+.L TimedSock.C 
+.L TimedSock.C 
+main()
+.L TimedSock.C 
+.qqqqqqqq
+.L TimedSock.C 
+.L TimedSock.C 
+.qq
+.L TimedSock.C 
+.qqqqqqqqqq
+.L TimedSock.C 
+.q
+.L TimedSock.C 
+.q
+.L TimedSock.C 
+.q
+.L TimedSock.C 
+main()
+.q
+.L TimedSock.C 
+.q
+.L TimedSock.C 
+main()
+.q
+.L ../mut_queue.C+
 acq()
 .qqqqqqqqqqqqq
-acq()
-.qqqqqqqqqqqq
-acq()
-.qqqqqqqqqqq
-acq()
-shspe()
-gQ
-gQ-
-acq()
-.qqqqqqqqqqqq
-acq()
-acq("stop")
-acq("stop")
-.qqqqqqqqqqqq
-acq()
-shspe()
-shspe()
+.L ../mut_queue.C+
 .q
+.L ../mut_queue.C+
 acq()
-shspe()
-acq("stop")
+.qqqqqqqqqqqq
+.L ../mut_queue.C+
+acq()
+.L TimedSock.C
+main()
+.qqqqqqqq
+.L TimedSock.C
+main()
+.qqqqq
+.L ../mut_queue.C+
+acq()
+.qqqqqqqqqqqqqq
+.L ../mut_queue.C+
+acq()
+.qqqqqqqqqqqqq"stop"q
+.L ../mut_queue.C+
+acq()
 acq("stop")
 .qqqqqqqqqq
+.L TimedSock.C
+main()
+.q
+.L TimedSock.C
+main()
+.U TimedSock.C
+.L TimedSock.C
+.q
+.U TimedSock.C
+.L TimedSock.C
+main()
+.q
+.L TimedSock.C
+main()
+.q
+.L TimedSock.C
+main()
+.q
+.L TimedSock_main.C
+main()
+.L TimedSock.C
+main()
+.q
+.L TimedSock.C
+.L TimedSock_main.C
+main()
+.q
+.L TimedSock.C+
+.q
 acq()
-.ls
-.ls
-shspe()
-acq("stop")
-acq("stop")
+.L ../mut_queue.C+
 acq()
-.L cut_manip.h
-.L cuts_manip.h
-savecut(Cut00_mtx8, "cutm8_mon")
-acq("stop")
-acq("stop")
-acq("stop")
+a_one()
+acq()
+.q
+.L ../mut_queue.C+
+acq()
+acq("start.xml")
+acq("start")
+.q
+.L ../acq_core.C+
+.q
+.L ../acq_core.C+
+.q
+.L ../acq_core.C+
+.q
+.L ../acq_core.C+
+.q
+.L ../acq_core.C+
+.q
+.L ../acq_core.C+
+.L ../xml_attr.C+
+.L ../mut_queue.C+
+.L ../log_term.C+
+.L ../acq_core.C+
+acq()
+.q
+.x load_libs.C
+.q
+.x load_libs.C
+acq()
+.q
+.x load_libs.C
 acq()
 acq("stop")
 acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq()
+.qqqqqqqqqqqqq

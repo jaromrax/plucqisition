@@ -1,3 +1,7 @@
+#ifndef cuts_manip_H
+#define cuts_manip_H
+
+
 /**********************************************
  *  THIS IS USEFUL WHEN USING like  savecut( cutname, "tele1_deuter" )
  *    I do not compile, but may be possible
@@ -129,3 +133,4 @@ void lscuts(){
 
 
 
+#endif

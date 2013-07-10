@@ -3,20 +3,31 @@ PLUNG_ANALYZE
 plugin  for analysis of a tree 
 circular buffer seems safe. but how to get right number?
  */
+//======== this is a correct way to include headers and define VARS
+#include "xml_attr.h"    // bude xml
+#include "log_term.h"    // bude xml
+#include "mut_queue.h"
+//#include "acq_core.h"  // WHY HERE????
+#include "cuts_manip.h"  //loadcuts,savecut,rmcut,cpcut.......
+
+  // I should define the variables that are declared (extern) in header
+ TCondition MyCond(0);
+// FILE* XTERM; When it is declared in logtermh, defined in log_term.C, no prob. here
+//------------------------------------------ My sources finished-----
+
+#include <stdio.h>      /* printf */
+#include <stdlib.h>     /* system, NULL, EXIT_FAILURE */
+
 //#include <iostream>  //#include <math.h>
-#include <stdio.h>
 #include "TROOT.h"    // Main INCLUDE !!!!
 #include "TSystem.h"
 #include "TFile.h"
 #include "TH1F.h"
+#include "TH2F.h"
 #include "TCanvas.h"  //i cannot draw in standalone???
 #include "TRandom.h"
 #include "TVector3.h"
-#include "mut_queue.h"
 //#include <pthread.h>
-#include "xml_attr.h"    // bude xml
-#include "nano_acquis_pureconvert.C"
-#include "cuts_manip.h"  //loadcuts,savecut,rmcut,cpcut.......
 #include "TSocket.h"   //net thread
 #include <math.h>   //net thread
 #include "TGraphErrors.h"   //net thread

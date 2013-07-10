@@ -1,0 +1,48 @@
+#!/bin/bash
+
+TMP_FILE="/tmp/compile_root_tmp.C"
+
+if [ "$#" == 0 ]; then
+ echo  usage:  ./$0  file.C
+ exit 
+fi
+
+
+
+
+
+echo "{
+#if __x86_64__
+  gROOT->ProcessLine(\"cout<<\\\" ------------------ 64 BIT SYSTEM \\\"<<endl\");
+  gSystem->Load(\"/lib/x86_64-linux-gnu/libdl.so.2\");
+#else
+ gROOT->ProcessLine(\"cout<<\\\"-------------------- 32 BIT SYSTEM \\\"<<endl\");
+ gSystem->Load(\"/usr/lib/libdl.so\");
+#endif
+" >   $TMP_FILE
+
+
+if [ "$#" == 1 ]; then
+    CFILE=$1
+    echo "gROOT->ProcessLine(\".L ${CFILE}++\");" >>  $TMP_FILE
+fi
+
+if [ "$#" -gt 1 ]; then
+  echo number of parameters == $#
+  for i ; do
+      echo "gROOT->ProcessLine(\".L ${i}+\");" >>  $TMP_FILE
+  done
+fi
+
+echo "
+gROOT->ProcessLine(\".! echo ABRUPT QUIT\");
+gROOT->ProcessLine(\".qqqqqqq\");
+}
+" >>   $TMP_FILE
+
+cat  $TMP_FILE
+echo .............compile................
+
+root -n -b -q   $TMP_FILE
+exit $?
+

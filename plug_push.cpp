@@ -1,3 +1,16 @@
+#include "xml_attr.h"    // bude xml
+#include "log_term.h"    // bude xml
+#include "mut_queue.h"
+//#include "acq_core.h"  // WHY HERE????
+#include "cuts_manip.h"  //loadcuts,savecut,rmcut,cpcut.......
+
+
+  // I should define the variables that are declared (extern) in header
+ TCondition MyCond(0);
+// FILE* XTERM;When it is declared in logtermh, defined in log_term.C, no prob. here
+
+
+
 //#include <iostream>  //#include <math.h>
 #include <stdio.h>
 #include "TROOT.h"    // Main INCLUDE !!!!
@@ -7,11 +20,8 @@
 #include "TCanvas.h"  //i cannot draw in standalone???
 #include "TRandom.h"
 #include "TVector3.h"
-#include "mut_queue.h"
 //#include <pthread.h>
-#include "xml_attr.h"    // bude xml
 //#include "nano_acquis_pureconvert.C" 
-#include "cuts_manip.h"  //loadcuts,savecut,rmcut,cpcut.......
 
 #include "TSocket.h"   //net thread
 //---------------------------try server (for a client with txt...)
@@ -47,9 +57,16 @@ extern "C" {
 #endif
 
 
-  // ========= Here I have something for   mmap
-    int mmapfd;  //  =-1       file handle for mmap
+
+
+//                                                                         ===
+// ========= Here I have something for   mmap=============================MMAP
+//                                                                         ===
+
+    int mmapfd;      //  =-1       file handle for mmap
     char *mmap_file; // pointer to     mmap
+
+
 
 
   //=================== EXPORTED FUNCTIONS  START =========
@@ -171,7 +188,17 @@ extern "C" {
       int first_timer=1;
       fpos_t position;// I want to save the position of the pointer
 
-      TSmallish_xml xml(    acqxml   );
+   //-------- here I will control with    control.mmap    file------   
+    if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
+    mmap_file=(char*)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, mmapfd, 0);
+    if (mmap_file == MAP_FAILED) errx(1, "either mmap");
+    char mmap_result[100];
+   //-------- here I will control with    control.mmap    file------   
+  char  acqxml2[100];
+  TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
+
+
+      TSmallish_xml xml(    acqxml2   );
       xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","file" );
       sprintf( fname,"%s", xml.output  );
 
@@ -236,7 +263,20 @@ extern "C" {
       int buffer4;
       long long int cnt=0;
       size_t result;
-      TSmallish_xml xml(    acqxml   );
+
+
+   //-------- here I will control with    control.mmap    file------   
+    if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
+    mmap_file=(char*)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, mmapfd, 0);
+    if (mmap_file == MAP_FAILED) errx(1, "either mmap");
+    char mmap_result[100];
+   //-------- here I will control with    control.mmap    file------   
+  char  acqxml2[100];
+  TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
+
+
+
+      TSmallish_xml xml(    acqxml2   );
       xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","file" );
       sprintf( fname,"%s", xml.output  );
       infile=fopen( fname,"rb"  );
@@ -267,12 +307,25 @@ extern "C" {
   int* push_net_txtserv(int64_t* par){ // SERVER FOR TEXT FILE ... cannot be stopped, ->select crashes
 
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-remote (network,txt)  par==%d; pointer==%ld\n", (int64_t)par,(int64_t)buffer );
+   if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-remote (network,txt)  par==%ld; pointer==%ld\n", (int64_t)par,(int64_t)buffer );
       long long int cnt=0;
 
    char ipaddress[100];
    int port;
-      TSmallish_xml xml(    acqxml   );
+
+
+   //-------- here I will control with    control.mmap    file------   
+    if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
+    mmap_file=(char*)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, mmapfd, 0);
+    if (mmap_file == MAP_FAILED) errx(1, "either mmap");
+    char mmap_result[100];
+   //-------- here I will control with    control.mmap    file------   
+  char  acqxml2[100];
+  TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
+
+
+
+      TSmallish_xml xml(    acqxml2   );
       xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","ip" );
       sprintf( ipaddress,"%s", xml.output  ); // 127.0.0.1, else not possible
       xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","port" );
@@ -352,7 +405,20 @@ extern "C" {
    long long int cnt=0;
    char ipaddress[100];
    int port;
-      TSmallish_xml xml(    acqxml   );
+
+
+   //-------- here I will control with    control.mmap    file------   
+    if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
+    mmap_file=(char*)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, mmapfd, 0);
+    if (mmap_file == MAP_FAILED) errx(1, "either mmap");
+    char mmap_result[100];
+   //-------- here I will control with    control.mmap    file------   
+  char  acqxml2[100];
+  TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
+
+
+
+      TSmallish_xml xml(    acqxml2   );
       xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","ip" );
       sprintf( ipaddress,"%s", xml.output  ); // 127.0.0.1, else not possible
       xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","port" );
@@ -432,13 +498,25 @@ extern "C" {
     int lines_pushed=0;
      concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
      //if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-remote (network,txt2)  par==%d; pointer==%d\n",par,(int)buffer);
-     sprintf(ch,"PUSH push-remote (network,txt2)  par==%d; pointer==%ld", (int64_t)par,(int64_t)buffer );
+     sprintf(ch,"PUSH push-remote (network,txt2)  par==%ld; pointer==%ld", (int64_t)par,(int64_t)buffer );
      table_log(0,ch);
 
    long long int cnt=0;
    char ipaddress[100];
    int PORT;
-      TSmallish_xml xml(    acqxml   );
+
+
+   //-------- here I will control with    control.mmap    file------   
+    if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
+    mmap_file=(char*)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, mmapfd, 0);
+    if (mmap_file == MAP_FAILED) errx(1, "either mmap");
+    char mmap_result[100];
+   //-------- here I will control with    control.mmap    file------   
+  char  acqxml2[100];
+  TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
+
+
+      TSmallish_xml xml(    acqxml2   );
       xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","ip" );
       sprintf( ipaddress,"%s", xml.output  ); // 127.0.0.1, else not possible
       xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","port" );
@@ -607,7 +685,45 @@ return 0;
 
 
 
+class Cat{
+ public:
+  int fTimeOut;
+  void HandleTO();
+  void Print();
+  TTimer* qalarm;
+  Cat();
+  ~Cat();
+  TSocket* GetSocket(const char* ip, int port);
+};
 
+ void Cat::HandleTO(){
+   Info("HandleTimeOut", "timeout expired");
+   // printf(" HADLE Timeout=%s\n" ,  "" );
+   fTimeOut=1;
+   return;
+}
+ void Cat::Print(){
+   printf(" print Cat%s\n" ,  "" );
+   return;
+}
+ Cat::Cat(){
+  fTimeOut=0;
+  qalarm=new TTimer(0, kFALSE);
+  qalarm->SetInterruptSyscalls();
+  qalarm->Connect("Timeout()", "Cat", this , "HandleTO");
+  qalarm->Start(3000, kTRUE);
+}
+ Cat::~Cat(){
+  delete qalarm;
+}
+
+TSocket* Cat::GetSocket(const char* ip, int port){
+    printf("inside GetSocket   %s:%d\n" ,  ip, port );
+   TSocket *socks=new TSocket( ip, port);
+    printf("outside GetSocket   %s:%d\n" ,  ip, port );
+   return socks;
+}
+//---------------------------end of CATS-
 
 
 
@@ -619,7 +735,12 @@ return 0;
    *                         this is a client that connects to a server...
    */
  int* push_net(int64_t* par){
-   concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
+ 
+
+
+
+
+  concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
 
    char ch[200];
    //   if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-remote (network)  par==%d; pointer==%d\n", par,(int)buffer );
@@ -629,17 +750,24 @@ return 0;
 
    char ipaddress[100];
    int port;
-      TSmallish_xml xml(    acqxml   );
+
+
+   //-------- here I will control with    control.mmap    file------   
+    if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
+    mmap_file=(char*)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, mmapfd, 0);
+    if (mmap_file == MAP_FAILED) errx(1, "either mmap");
+    char mmap_result[100];
+   //-------- here I will control with    control.mmap    file------   
+  char  acqxml2[100];
+  TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
+
+
+
+      TSmallish_xml xml(    acqxml2   );
       xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","ip" );
       sprintf( ipaddress,"%s", xml.output  );
       xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","port" );
       port=atoi(xml.output  );
-
-      //-------- here I will control with    control.mmap    file------   
-    if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
-    mmap_file=(char*)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, mmapfd, 0);
-    if (mmap_file == MAP_FAILED) errx(1, "either mmap");
-      //-------- here I will control with    control.mmap    file------   
 
 
 
@@ -659,21 +787,39 @@ return 0;
     //  DRUHA STRANA LISTENS !!!!!!!!!!!!!!!!!!!!!!!!!!
     //
     //    printf("going to socket%s\n","");
-  socket=new TSocket( ipaddress, port);
+
+    Cat Blbka;
+    Blbka.Print();
+ // TTimer alarm(0, kFALSE);
+ // alarm.SetInterruptSyscalls();
+ // alarm.Connect("Timeout()", "Cat", NULL , "HandleTimeOut()");
+    
+ //    alarm.Start(5000, kTRUE);
+ sprintf(ch,"P %s\n", "before TSocket"); table_log(0,ch);
+   socket=Blbka.GetSocket( ipaddress, port ) ;
+   //   socket=new TSocket( ipaddress, port);
+ sprintf(ch,"P %s\n", "After TSocket"); table_log(0,ch);
   //    printf("after the socket%s\n","");
  
-  trials=10; //GOODF TO BE DEFINED IN XML  as also select timeout
+ // if (Blbka.fTimeOut) {
+    sprintf(ch,"P %s\n", "After TSocket - fTimeOut==1"); table_log(0,ch);
+    // }
+
+  trials=10; //GOOD TO BE DEFINED IN XML  as also select timeout
     while ( (socket)&&(1==1) ){// ----- - -- READ ONE CONNECTION --- -  -- -- - --   - - -
     //DANGER THAT I MISS 3/10 of EVENTS..... MAYBE THIS IS TO TUNE:
     //3000:50 ==1.6%
     // i==0 => TIMEOUT...... ??
     //  FINALY  2sec timeout, 10x repeat, 50ms wait (TO BE TESTED)
 
+    sprintf(ch,"P %s\n", "before select"); table_log(0,ch);
     i=(int)socket->Select(TSocket::kRead, 2000);//timeout 1sec, repeat 5x 
+    sprintf(ch,"P %s\n", "after  select"); table_log(0,ch);
 
 
 
     if (i>0) {//####CASE i>0 ####
+    sprintf(ch,"P %s\n", "before recvraw"); table_log(0,ch);
       d=(int)socket->RecvRaw(strbuf, maxtrans, kDontBlock  ); // read small buffer
       //      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw socket got %d bytes \n", d );
       sprintf(ch,"PUSH-netw socket got %d bytes ", d ); table_log(0,ch);
@@ -692,7 +838,7 @@ return 0;
     //    if(XTERM!=NULL)fprintf(XTERM,"%s","^");fflush(XTERM);
     //    usleep(1000*300); //wait
     wait=MyCond.TimedWaitRelative( 50  ) ; //
-    if (mmap_file[0]=='0'){ wait=0;} // ONE EXTRA LINE
+    wait=TokenGet(  "run=", mmap_file , mmap_result ); // if run==0 => KILL HERE
     if (wait==0){ 
       //      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw got BROADCAST SIGNAL... %s\n", "" );
       sprintf(ch,"PUSH got BROADCAST SIGNAL... %s\n", "" );table_log(0,ch);
@@ -700,6 +846,8 @@ return 0;
       break; 
     }
     //cannot be here    TThread::CancelPoint(); // When CancelOn(), here the thread can be interrupted.
+
+
 
     if (i<0){ //####CASE i<0 ####
       //if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw SOCKET LOST....%s; iii*4==%d, d=%d\n", ipaddress,ii*4,d );
@@ -721,6 +869,7 @@ return 0;
     
   }// 1==1---- ---- --    --WHILE read all the time - ONE CONNECTION --------
   socket->Delete();
+
   if (wait!=0){
      wait=MyCond.TimedWaitRelative( 5000  ) ;
   }
