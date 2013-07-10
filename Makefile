@@ -13,7 +13,7 @@ CFLAGS = -Wall
 LDFLAGS =	
 ROOTCC=`root-config --cxx --cflags` -fPIC 
 LDFLAGS= -lHist -lNet -lCore -lRIO -lGpad -lMathCore -lPhysics -lTree -lThread -lXMLIO `root-config --glibs`
-DICT = my_dict.cxx
+DICT = plug_push_dict.cxx
 
 
 
@@ -46,6 +46,9 @@ $(PROGRAM): $(OBJS)
 clean:
 	rm -f  *.o  *.pcm *.d  *.so 
 
+cleanso:
+	rm -f   plug_push.so plug_pop.so 
+
 test: 
 	echo AHOJ---------------------------;\
 	echo rootcc== $(ROOTCC) ;\
@@ -62,11 +65,19 @@ root:
 	./compile_root $(C_FILES)
 
 
+replug: cleanso  plug
+
+
 plug: plugins
 plugins:  plug_push.so plug_pop.so
 
-plug_push.so: plug_push.cpp $(C_FILES_LIBS) $(DICT)
-	$(ROOTCC)  $(OBJS_LIBS) -fPIC -shared -o plug_push.so plug_push.cpp  $(LDFLAGS)
+
+plug_push.so: $(DICT) plug_push.cpp $(C_FILES_LIBS) 
+	$(ROOTCC)  $(OBJS_LIBS) -fPIC -shared -o plug_push.so  $(DICT)   $(LDFLAGS)
+#	$(ROOTCC)  $(OBJS_LIBS) -fPIC -shared -o plug_push.so plug_push.cpp $(DICT)  $(LDFLAGS)
+
+
+
 
 plug_pop.so: plug_pop.cpp $(C_FILES_LIBS)
 	$(ROOTCC)  $(OBJS_LIBS) -fPIC -shared -o plug_pop.so plug_pop.cpp    $(LDFLAGS)
@@ -75,5 +86,6 @@ plug_pop.so: plug_pop.cpp $(C_FILES_LIBS)
 
 #  DICT I need for plug_push.cpp 
 
-$(DICT): $(C_FILES_LIBS) plug_push.cpp
-	rootcint -f $(DICT) -c $(C_FILES_LIBS) plug_push.cpp  LinkDef.h
+$(DICT): 
+	rootcint -f $(DICT) -c plug_push.cpp  LinkDef.h
+#	@echo I have no idea how to really create it for *.so	

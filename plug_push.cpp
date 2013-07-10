@@ -2,7 +2,7 @@
 #include "log_term.h"    // bude xml
 #include "mut_queue.h"
 //#include "acq_core.h"  // WHY HERE????
-#include "cuts_manip.h"  //loadcuts,savecut,rmcut,cpcut.......
+//#include "cuts_manip.h"  //loadcuts,savecut,rmcut,cpcut.......
 
 
   // I should define the variables that are declared (extern) in header
@@ -111,6 +111,7 @@ extern "C" {
    for (int i=1;i<20000;i++){  //........4*300M = 1200MB
      usleep(1000); // wait 10 ms every push
    }//for
+   return 0;
  }/*****************************end of function *********************/
 
 
@@ -139,6 +140,7 @@ extern "C" {
    }//for
       if(XTERM!=NULL)fprintf(XTERM,
 		  "push (integers)  EXIT buffer=%ld\n",(int64_t)buffer );
+   return 0;
  }/*****************************end of function *********************/
 
 
@@ -163,6 +165,7 @@ extern "C" {
    }//for
    if(XTERM!=NULL)fprintf(XTERM,
 		  "push (text)  EXIT buffer=%ld\n",(int64_t)buffer );
+   return 0;
  }/*****************************end of function *********************/
 
 
@@ -238,6 +241,7 @@ extern "C" {
       }while(wait != 0);
 
       sprintf(ch,"push (textFILE) EXIT buffer=%ld\n",(int64_t)buffer );table_log(0,ch);
+   return 0;
 
  }/*****************************end of function *********************/
 
@@ -293,6 +297,7 @@ extern "C" {
 	if(XTERM!=NULL)fprintf(XTERM,"infile %s == NULL\n", fname );
       }
       if(XTERM!=NULL)fprintf(XTERM,"push-file call finished....%s: PUSHER FINISHED\n", fname );
+   return 0;
  }/*****************************end of function ***********************/
 
 
@@ -383,6 +388,7 @@ extern "C" {
 
       }//GLOGABL WHILE
 
+   return 0;
 
  }//=====================================================================END FUNCTION
 
@@ -690,12 +696,16 @@ class Cat{
   int fTimeOut;
   void HandleTO();
   void Print();
+  int WasTimeOut();
   TTimer* qalarm;
   Cat();
   ~Cat();
   TSocket* GetSocket(const char* ip, int port);
 };
 
+ int Cat::WasTimeOut(){
+   return fTimeOut;
+ }
  void Cat::HandleTO(){
    Info("HandleTimeOut", "timeout expired");
    // printf(" HADLE Timeout=%s\n" ,  "" );
@@ -710,14 +720,16 @@ class Cat{
   fTimeOut=0;
   qalarm=new TTimer(0, kFALSE);
   qalarm->SetInterruptSyscalls();
-  qalarm->Connect("Timeout()", "Cat", this , "HandleTO");
-  qalarm->Start(3000, kTRUE);
+  qalarm->Connect("Timeout()", "Cat", this , "HandleTO()");
+  //  qalarm->Start(3000, kTRUE);
 }
  Cat::~Cat(){
   delete qalarm;
 }
 
 TSocket* Cat::GetSocket(const char* ip, int port){
+    printf("inside GetSocket alarm start  %s:%d\n" ,  ip, port );
+   qalarm->Start(3000, kTRUE);
     printf("inside GetSocket   %s:%d\n" ,  ip, port );
    TSocket *socks=new TSocket( ip, port);
     printf("outside GetSocket   %s:%d\n" ,  ip, port );
@@ -799,11 +811,13 @@ TSocket* Cat::GetSocket(const char* ip, int port){
    socket=Blbka.GetSocket( ipaddress, port ) ;
    //   socket=new TSocket( ipaddress, port);
  sprintf(ch,"P %s\n", "After TSocket"); table_log(0,ch);
+ 
   //    printf("after the socket%s\n","");
  
- // if (Blbka.fTimeOut) {
+   if ( Blbka.WasTimeOut()!=0 ) {
     sprintf(ch,"P %s\n", "After TSocket - fTimeOut==1"); table_log(0,ch);
-    // }
+    break;
+ }
 
   trials=10; //GOOD TO BE DEFINED IN XML  as also select timeout
     while ( (socket)&&(1==1) ){// ----- - -- READ ONE CONNECTION --- -  -- -- - --   - - -

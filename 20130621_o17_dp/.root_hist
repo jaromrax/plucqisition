@@ -415,3 +415,42 @@ acq()
 acq("stop")
 acq("stop")
 .qqqqqqqqqqqqq
+.L load_libs.C
+acq()
+.qqqqqqqqq
+.x load_libs.C
+acq()
+.q
+.qqqqqqq
+.x load_libs.C
+acq()
+.q
+.qqqqqqqqq
+.x load_libs.C
+acq()
+.qqqqqqqqqqq
+acq()
+.x load_libs.C
+acq()
+.qqqqqqqqqqqqqqqq
+.x load_libs.C
+acq()
+qqqqqqqqqqq
+.qqqqqqqqqqqq
+.x load_libs.C
+acq()
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+.qqqqqqqqqqqq
+.x load_libs.C
+acq()
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+acq("stop")
+.qqqqqqqqqqqqq
