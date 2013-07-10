@@ -454,3 +454,29 @@ acq("stop")
 acq("stop")
 acq("stop")
 .qqqqqqqqqqqqq
+.x load_libs.C
+acq()
+acq("stop")
+acq("stop")
+acq()
+acq("stop")
+.qqqqqqqq
+.x load_libs.C
+acq()
+acq("stop")
+TThread::Ps()
+TThread::GetThread("analyze_thread")
+TThread::GetThread("push_thread")
+TThread::GetThread("pusher_thread")
+TThread::GetThread("pusher_thread")->GetState()
+.qqqqqqqqqqqqqqqqqqq
+.x load_libs.C
+acq()
+acq("stop")
+TThread::Ps()
+TThread::Ps()
+TThread::Ps()
+TThread::Ps()
+TThread::Ps()
+.q
+.qqqqqqqqqq

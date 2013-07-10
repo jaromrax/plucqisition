@@ -852,7 +852,11 @@ TSocket* Cat::GetSocket(const char* ip, int port){
     //    if(XTERM!=NULL)fprintf(XTERM,"%s","^");fflush(XTERM);
     //    usleep(1000*300); //wait
     wait=MyCond.TimedWaitRelative( 50  ) ; //
-    wait=TokenGet(  "run=", mmap_file , mmap_result ); // if run==0 => KILL HERE
+
+    if (wait!=0){//------- this 
+      wait=TokenGet(  "run=", mmap_file , mmap_result ); // if run==0 => KILL HERE
+      sprintf(ch,"PUSH mmap: run==%d\n", wait); table_log(0,ch);
+    }
     if (wait==0){ 
       //      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw got BROADCAST SIGNAL... %s\n", "" );
       sprintf(ch,"PUSH got BROADCAST SIGNAL... %s\n", "" );table_log(0,ch);

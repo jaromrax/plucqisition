@@ -261,13 +261,25 @@ void *xml_masterthread(void* arg){
 
    // ***************************   PREVIOUS JOIN DELETE ETC.............
    printf("\nMASTER: waiting to JOIN ALL T. dl_handleS==%ld/%ld\n",(int64_t)dl_handle_push,(int64_t)dl_handle_pop);
-    while (   (TThread::GetThread("pusher_thread")!=0)|| 
+ 
+   while (   (TThread::GetThread("pusher_thread")!=0)|| 
 	      (TThread::GetThread("poper_thread")!=0)||
 	      (TThread::GetThread("analyze_thread")!=0)
 	      ){
       usleep(1000*600);  //  MAIN  WAIT IN MASTER   0.6 sec
-      //if(XTERM!=NULL)fprintf(XTERM,"%s", "" );
-    }
+      if ((TThread::GetThread("pusher_thread")!=0)&&
+	  (TThread::GetThread("pusher_thread")->GetState()==6)){
+	   TThread::GetThread("pusher_thread")->Delete();
+	  }
+      if ((TThread::GetThread("poper_thread")!=0)&&
+	  (TThread::GetThread("poper_thread")->GetState()==6)){
+	   TThread::GetThread("poper_thread")->Delete();
+	  }
+      if ((TThread::GetThread("analyze_thread")!=0)&&
+	  (TThread::GetThread("analyze_thread")->GetState()==6)){
+	   TThread::GetThread("analyze_thread")->Delete();
+	  }
+   }
     if(XTERM!=NULL)fprintf(XTERM,"%s","MASTER: ALL Threads OVER. The dl_handle \n");
 
 
