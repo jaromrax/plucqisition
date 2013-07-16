@@ -1105,4 +1105,5 @@ struct {
 #ifdef  __cplusplus
 }
 #endif
+//      ojr@edie:~$ od -v -h -A n  00_central/Root/03_programs/58_kibbler_narval/RUN018_V | perl -p -e 's/\n//g;s/0000 f000/0000 F000\n/g' | less
 
