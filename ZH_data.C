@@ -1,5 +1,5 @@
 
-#include "ZD_data.h"
+#include "ZH_data.h"
 #include "xml_attr.h"
 #include <stdio.h>        // also   4 strcmp
 
@@ -273,7 +273,7 @@ int process_ONE_EVENT(int *arr){// translate buffer with one event to data
 }//print==========================
 
 
-void ZD_data(int events){
+void ZH_data(int events){
 
   reset_chan_table();
   load_chan_table("c001=1,c002=2,c003=3,c004=4,c005=5,c006=6,c007=7,c008=8,c009=9,c010=10,c011=11,c1024=t1,c1025=t2,c1026=t3,c1027=t4,c033=s001,c035=s002,c037=s003" );

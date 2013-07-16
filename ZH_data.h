@@ -1,6 +1,6 @@
 #define DEBUG 0
-#ifndef zd_data_H
-#define zd_data_H
+#ifndef zh_data_H
+#define zh_data_H
 
 const int EOE= 0xf0000000;//end of event
 const int BOR= 0xEFFFFFFF;//begin of run
@@ -23,6 +23,6 @@ void process_EOE(); // end of event - do filling
 
 int process_ONE_EVENT(int *arr);// translate buffer with one event to data
 
-void ZD_data(int events);  // TEST
+void ZH_data(int events);  // TEST
 
 #endif
