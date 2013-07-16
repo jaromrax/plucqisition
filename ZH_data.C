@@ -1,21 +1,60 @@
 
 #include "ZH_data.h"
 #include "xml_attr.h"
+
+
 #include <stdio.h>        // also   4 strcmp
 
 #include "TROOT.h"    // Main INCLUDE !!!!
-#include "TH1F.h"
+//#include "TH1F.h"
 #include <stdlib.h>     /* atof */
 #include <string.h>         // strcmp
 #include <string>         // strcmp
 
-
 int buffer[99000000];//="ahoj\0";  // I MUST USE int!!!!!!????
-int OEbuf[1000];//="Ahoj\0";
-int OEBmax=1000;
-int DataRead=0; // HowMuch was read to buffer
+ int OEbuf[1000];//="Ahoj\0";
 
-int64_t cnt_evt=0; // event number
+ int OEBmax;// ONE EVENT LIMIT !!!!!!!!!!
+ int DataRead; // HowMuch was read to buffer
+ int64_t cnt_evt; // event number
+
+//const int MAXCHAN=2048; // time is 1024+
+   int       T_yn[MAXCHAN];//  4 levels
+   int       C_yn[MAXCHAN]; //lo hi
+   int64_t   COUN[MAXCHAN];// total
+   TH1F*     COUNhist[MAXCHAN];//histo to fill
+   int64_t   COUNtmp[MAXCHAN]; // values
+   TH1F*     HIST[MAXCHAN];
+   UShort_t* TREE[MAXCHAN];
+// - s : a 16 bit unsigned integer (UShort_t)
+
+ double cTIME; // current data TIME (always>0)
+ double bTIME; // buffered time (mostly 0)
+ double sTIME; // startup time
+ double dTIME; // difference
+
+/*----------------what can be done with channel-------------
+1/ fill histo
+ chan008
+2/ decompose time ...1st approach: any time updates current
+  a/ 1024
+  b/ 1028
+  c/ 141
+  d/ ...
+3/ run number 139
+4/ block 140
+5/ counters
+X/   FILL TREE
+nanot:
+info                 souvisle pole      individ
+timeV rnumV bnumV ...  V001 V002   ...  countrs
+
+chan   histo   map_to_ttree   time
+1       &TH1F    &var          
+ */
+
+
+
 
 
 //=======================  service===  read buffer from disk----
@@ -65,39 +104,7 @@ int fillOEB(int pos){
 int channels_in_event(int word){// mask Exxx0000 and shif by two nibbles
   return (word&0x0fff0000)>>16;
 }
-/*----------------what can be done with channel-------------
-1/ fill histo
- chan008
-2/ decompose time ...1st approach: any time updates current
-  a/ 1024
-  b/ 1028
-  c/ 141
-  d/ ...
-3/ run number 139
-4/ block 140
-5/ counters
-X/   FILL TREE
-nanot:
-info                 souvisle pole      individ
-timeV rnumV bnumV ...  V001 V002   ...  countrs
 
-chan   histo   map_to_ttree   time
-1       &TH1F    &var          
- */
-//const int MAXCHAN=2048; // time is 1024+
-  int       T_yn[MAXCHAN];//  4 levels
-  int       C_yn[MAXCHAN]; //lo hi
-  int64_t   COUN[MAXCHAN];// total
-  TH1F*     COUNhist[MAXCHAN];//histo to fill
-  int64_t   COUNtmp[MAXCHAN]; // values
-  TH1F*     HIST[MAXCHAN];
-  UShort_t* TREE[MAXCHAN];
-// - s : a 16 bit unsigned integer (UShort_t)
-
-double cTIME=0.0; // current data TIME (always>0)
-double bTIME=0.0; // buffered time (mostly 0)
-double sTIME=0.0; // startup time
-double dTIME=0.0; // difference
 
 
 void reset_chan_table(){//  PREPARE CLEAN TABLE
@@ -275,7 +282,19 @@ int process_ONE_EVENT(int *arr){// translate buffer with one event to data
 
 void ZH_data(int events){
 
+  //======== STANDARD  STARTUP ==============================
+  OEBmax=1000;// ONE EVENT LIMIT !!!!!!!!!!
+  DataRead=0; // HowMuch was read to buffer
+  cnt_evt=0; // event number
+
+ cTIME=0.0; // current data TIME (always>0)
+ bTIME=0.0; // buffered time (mostly 0)
+ sTIME=0.0; // startup time
+ dTIME=0.0; // difference
+
+
   reset_chan_table();
+
   load_chan_table("c001=1,c002=2,c003=3,c004=4,c005=5,c006=6,c007=7,c008=8,c009=9,c010=10,c011=11,c1024=t1,c1025=t2,c1026=t3,c1027=t4,c033=s001,c035=s002,c037=s003" );
 
   fillbuffer();// one time

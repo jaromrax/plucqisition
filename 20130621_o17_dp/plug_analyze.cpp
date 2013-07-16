@@ -9,6 +9,8 @@ circular buffer seems safe. but how to get right number?
 #include "mut_queue.h"
 //#include "acq_core.h"  // WHY HERE????
 #include "cuts_manip.h"  //loadcuts,savecut,rmcut,cpcut.......
+//---- I include ZH_data.h -------
+
 
   // I should define the variables that are declared (extern) in header
  TCondition MyCond(0);
