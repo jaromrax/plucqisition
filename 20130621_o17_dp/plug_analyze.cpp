@@ -1,12 +1,13 @@
+#define ANADEBUG 0
 #include "xml_attr.h"     
 #include "log_term.h"     
 #include "mut_queue.h"
 //#include "acq_core.h"  // 
 #include "cuts_manip.h"  //loadcuts,savecut,rmcut,cpcut.......
 //---- I include ZH_data.h -------
-#include "ZH_data.h"
+//#include "ZH_data.h"
 
-
+#include "TDirectory.h"
 
 //----------------------------with   mmap ------------------------
 #include <err.h>
@@ -372,35 +373,104 @@ void TACounterMulti::Display(){
 
 
 
-   sprintf(ch,"..trying to get the tree." );   table_log(2,ch);
-   TTree *tree_addr_old=(TTree*)gDirectory->FindObject("nanot");
+   TTree *tree_addr_old;
+   TTree *tree_addr;
+
+   //THESE MUST SURVIVE=====================================
+   //this is pointer
+   int64_t  entr;             // number of entries in the tree
+   int64_t  circular_bias=0; // important to have both - pos/neg 
+   //this is value contained
+   int64_t  last_event_n=-1;   // my last processed event (#)
+
+
+   while (1==1){//INFINITE==========================
+
    while (tree_addr_old==NULL){
-     sleep(1000*100);
+     usleep(1000*100);
+     if (ANADEBUG){sprintf(ch,"..trying to get the tree-huh" );   table_log(2,ch);}
      tree_addr_old=(TTree*)gDirectory->FindObject("nanot");
    }
-   sprintf(ch,"..got the tree." );   table_log(2,ch);
-   TTree *tree_addr=(TTree*)tree_addr_old->Clone();
+   if (ANADEBUG){sprintf(ch,"..got the tree. %lx", (int64_t)tree_addr_old);table_log(2,ch);}
+   tree_addr=(TTree*)tree_addr_old->Clone();
    tree_addr->SetTitle("CLONE");
    tree_addr->SetMakeClass(1);
 
-   double acTIME_root;
-   int64_t acnt_evt; // event number
-
-   long long int entr; // number of entries in the tree
-   long long  int circular_bias=0; // important to have both - pos/neg 
-
+   Double_t acTIME_root; // time
+   Long64_t acnt_evt;   // event number
    tree_addr->SetBranchAddress( "time" ,&acTIME_root );
    tree_addr->SetBranchAddress( "cnt_evt" ,&acnt_evt );// /i == UInt_t 32bit
-   entr=tree_addr->GetEntries();
-   if (entr>0){//..........................
+
+
+   //-------===============from here I can repeat=======----------
+   entr=0;
+   while (entr<=0){
+     entr=tree_addr->GetEntries();
+     usleep(1000);//wait a milisecond for events to appear
+   }
+   if (ANADEBUG){sprintf(ch,"entries== %6ld",entr );table_log(2,ch);}
+   //   if (entr>0){//..........................
+     //EVERY LOOP I redefine   circular_bias;last_event_n
+
         tree_addr->GetEntry(0);// this really starts at event #1
-	sprintf(ch,"entry %6lld .... %6ld",  0,  cnt_evt);table_log(2,ch);
-        tree_addr->GetEntry(entr);// this really starts at event #1
-	sprintf(ch,"entry %6lld .... %6ld", entr,cnt_evt);table_log(2,ch);
-   }//if (entr>0)..........................
+	sprintf(ch,"entry %6d .... %6ld",  0,  acnt_evt);table_log(2,ch);
+
+ circular_bias=last_event_n-acnt_evt+1;
+ if (circular_bias<0){ circular_bias=0;}
+
+
+if (ANADEBUG){
+       tree_addr->GetEntry(1);// this really starts at event #1
+	sprintf(ch,"entry %6d .... %6ld",  1,  acnt_evt);table_log(2,ch);
+        tree_addr->GetEntry(entr-2);// this really starts at event #1
+	sprintf(ch,"entry %6ld .... %6ld", entr-2,acnt_evt);table_log(2,ch);
+ }
+        tree_addr->GetEntry(entr-1);// this really starts at event #1
+	sprintf(ch,"entry %6ld .... %6ld", entr-1,acnt_evt);table_log(2,ch);
+
+	sprintf(ch,"circ= %6ld..%6ld; lastn .... %6ld", 
+		circular_bias, entr-1, last_event_n);
+	table_log(2,ch);
+
+	//	last_event_n=acnt_evt-1;
+	//   }//if (entr>0)..........................
+	//   else{  circular_bias=0;last_event_n=0; }
+
+
+
+   int64_t ii;
+   int64_t prev=last_event_n;
+
+   if (circular_bias>=entr){
+     sprintf(ch,"nodata%s XXXXX" ,"");table_log(2,ch);  
+     usleep(1000*200);
+     //check push  pop
+check
+   }
+
+
+   sprintf(ch,"run4 %6ld evts", entr-circular_bias);table_log(2,ch);  
+   //   if (entr-circular_bias==0){
+   //          usleep(1000*100);
+   //   }
+
+   for(  ii=circular_bias; ii<entr; ii++)  {
+     tree_addr->GetEntry(ii);
+     if (prev+1 != acnt_evt){	
+       sprintf(ch,"problem @ %6ld .. %6ld=%6ld XXX", ii,prev,acnt_evt);table_log(2,ch);  
+     }//if not==
+     prev=acnt_evt;// should be like  prev++;
+     last_event_n=acnt_evt;
+   }//for(  ii=circular_bias; ii<entr; ii++).........
+
+   
+   tree_addr->Delete(); // clean your CLONE
+   if (last_event_n<0) break;
+   //   tree_addr_old=NULL;  // 
+   }// while (1==1) ================ INFINITE =================
+
 
    //  load_chan_table( definitions );
-
 
    // long long int last_event_n=0;
    // long long int entr;

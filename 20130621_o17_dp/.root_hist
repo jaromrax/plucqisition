@@ -1,104 +1,3 @@
-.L TimedSock.C 
-.qqqqqqqq
-.L TimedSock.C 
-.L TimedSock.C 
-.qq
-.L TimedSock.C 
-.qqqqqqqqqq
-.L TimedSock.C 
-.q
-.L TimedSock.C 
-.q
-.L TimedSock.C 
-.q
-.L TimedSock.C 
-main()
-.q
-.L TimedSock.C 
-.q
-.L TimedSock.C 
-main()
-.q
-.L ../mut_queue.C+
-acq()
-.qqqqqqqqqqqqq
-.L ../mut_queue.C+
-.q
-.L ../mut_queue.C+
-acq()
-.qqqqqqqqqqqq
-.L ../mut_queue.C+
-acq()
-.L TimedSock.C
-main()
-.qqqqqqqq
-.L TimedSock.C
-main()
-.qqqqq
-.L ../mut_queue.C+
-acq()
-.qqqqqqqqqqqqqq
-.L ../mut_queue.C+
-acq()
-.qqqqqqqqqqqqq"stop"q
-.L ../mut_queue.C+
-acq()
-acq("stop")
-.qqqqqqqqqq
-.L TimedSock.C
-main()
-.q
-.L TimedSock.C
-main()
-.U TimedSock.C
-.L TimedSock.C
-.q
-.U TimedSock.C
-.L TimedSock.C
-main()
-.q
-.L TimedSock.C
-main()
-.q
-.L TimedSock.C
-main()
-.q
-.L TimedSock_main.C
-main()
-.L TimedSock.C
-main()
-.q
-.L TimedSock.C
-.L TimedSock_main.C
-main()
-.q
-.L TimedSock.C+
-.q
-acq()
-.L ../mut_queue.C+
-acq()
-a_one()
-acq()
-.q
-.L ../mut_queue.C+
-acq()
-acq("start.xml")
-acq("start")
-.q
-.L ../acq_core.C+
-.q
-.L ../acq_core.C+
-.q
-.L ../acq_core.C+
-.q
-.L ../acq_core.C+
-.q
-.L ../acq_core.C+
-.q
-.L ../acq_core.C+
-.L ../xml_attr.C+
-.L ../mut_queue.C+
-.L ../log_term.C+
 .L ../acq_core.C+
 acq()
 .q
@@ -457,3 +356,110 @@ nanot->Show()
 .L load_libs.C
 acq("fileZH.xml")
 nanot->Show()
+.qqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+acq("fileZH.xml")
+   acq("stop")
+nanot->Show(1)
+nanot->Show(2)
+nanot->Show(3)
+nanot->Show(4)
+nanot->Show(5)
+nanot->Show(6)
+nanot->Show(7)
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+.qqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+acq("stop")
+acq("stop")
+gDirectory
+gDirectory->Find("nanot")
+gDirectory->FindObject("nanot")
+nanot
+nanot
+nanot->Draw()
+acq("fileZH.xml")
+.qqqqqqqqqqqqqqqqq
+nanot->Draw()
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+gDirectory->ls()
+gDirectory->GetObject("nanot")
+gDirectory->FindObject("nanot")
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.q
+.qqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqq

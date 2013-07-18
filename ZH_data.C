@@ -23,6 +23,8 @@ int ZHbuffer[99000000];//="ahoj\0";  // I MUST USE int!!!!!!????
  int DataRead; // HowMuch was read to buffer
  int64_t cnt_evt; // event number
 
+ Long64_t cnt_evt_data; // event number, data not time// in TTree
+
 //const int MAXCHAN=2048; // time is 1024+
    int       T_yn[MAXCHAN];//  4 levels (t1 t2 t3 t4)
    TH1F*     Thist;        //  one histogram for ALL
@@ -127,6 +129,7 @@ for (int i=0;i<MAXCHAN;i++){TREE[i]=0;}
  cTIME=0.0;// current event time
  cTIME_root=0.0;// current event time
  cnt_evt=0;
+ cnt_evt_data=0;
  sTIME=0.0;
  bTIME=0.0; // just for fun - (t)event buffer
  dTIME=0.0; // just for fun - difference
@@ -182,10 +185,10 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
       printf("circular TTree %d events\n",  toki );
     }
     ZH_tree->Branch( "time" , &cTIME_root, "time/D" );// /D == Double_t 64bit
-    ZH_tree->Branch( "cnt_evt" , &cnt_evt, "n/L" );// /: == Long64_t 64bit
+    ZH_tree->Branch( "cnt_evt" , &cnt_evt_data, "n/L" );// /: == Long64_t 64bi
   }else{ // already exists..........???
     ZH_tree->SetBranchAddress( "time" ,&cTIME_root );
-    ZH_tree->SetBranchAddress( "cnt_evt" ,&cnt_evt );// /i == Long64_t 64bit
+    ZH_tree->SetBranchAddress( "cnt_evt" ,&cnt_evt_data );// /i == Long64_t 64bit
   }//==============================================ZH TREE   END====
 
 
@@ -340,6 +343,7 @@ void process_EOE(){   // end of event - do filling
   if (bTIME==0){// bTIME==0  =>  real EVENT
     //enter cTIME to TTREE struct .....
     ZH_tree->Fill();//
+    cnt_evt_data++;
   }//SAVE EVENT done
   else{// bTIME!=0  =>  just a new time.....
     cTIME=bTIME;

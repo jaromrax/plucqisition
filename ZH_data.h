@@ -28,6 +28,8 @@ extern int OEBmax;// ONE EVENT LIMIT !!!!!!!!!!
 extern int DataRead; // HowMuch was read to buffer
 
 extern int64_t cnt_evt; // event number
+//extern int64_t cnt_evt_data; // event number, data not time
+extern Long64_t cnt_evt_data; // event number, data not time// in TTree
 
 extern   int       T_yn[MAXCHAN];//  4 levels
 extern   TH1F*     Thist;

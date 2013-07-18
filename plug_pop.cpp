@@ -643,6 +643,7 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
 
   sprintf(chL,"EXITING the POP-ZH (bytes=%lld)", 4*cnt );table_log(1,chL);
   sprintf(chL,"EXITING the POP-ZH (evnts=%ld)",cnt_evt );table_log(1,chL);
+  sprintf(chL,"EXITING the POP-ZH (data =%ld)",cnt_evt_data );table_log(1,chL);
 }//pop_ZH_____________________________________________________________END___
 
 
