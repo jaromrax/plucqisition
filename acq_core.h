@@ -35,10 +35,6 @@ plugin_tint evt_pusher_remote ;
 plugin_tint evt_poper_remote ;
 plugin_tint evt_analyze_remote ;
 
-/*
-bool fexists(const char *filename)
-{  ifstream ifile(filename);  return ifile;}
-*/
 
  struct thread_info *tinfo;// create n threads ..... array. calloc:
 

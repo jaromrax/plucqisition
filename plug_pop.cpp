@@ -3,7 +3,7 @@
 #include "mut_queue.h"
 #include "acq_core.h"
 #include "cuts_manip.h"  //loadcuts,savecut,rmcut,cpcut.......
-
+#include "ZH_data.h"
 
 #include <stdlib.h>     /* atof */
 
@@ -137,7 +137,7 @@ extern "C" {
    //----------------- LOOP ----------------
      while( !buffer->empty() ){
        buffer->wait_and_pop(datum); //( datum ***)   
-       sprintf(chL,"POP:W #%3d. <%ld> <%ld>" , cnt,(int64_t)datum,(int64_t)&datum  );table_log(1,chL);
+       sprintf(chL,"POP:W #%3lld. <%ld> <%ld>" , cnt,(int64_t)datum,(int64_t)&datum  );table_log(1,chL);
 
            cnt++; 
   	TThread::CancelPoint(); // When CancelOn()...
@@ -224,16 +224,15 @@ extern "C" {
     char chL[500];
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    //   if(XTERM!=NULL)fprintf(XTERM,"  POP pop-remote  par==%d; pointer==%d\n", par,(int)buffer );
-   sprintf(chL,"POP: file  par==%ld; pointer==%ld " , (int64_t)par,(int64_t)buffer  );table_log(1,chL);
+   sprintf(chL,"POP:file  buff==%ld ",(int64_t)buffer );table_log(1,chL);
    int datum=0;
-   int runempty=0;
+   int runempty=0; // 0==no problem, files ok
 
    //STANDARD  XML  READ-------------
       FILE *outfile;  char fname[400];
       int buffer4;
       long long int cnt=0;
       size_t result;   
-
 
 //-------- here I will control with    control.mmap    file------   
     if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
@@ -242,21 +241,21 @@ extern "C" {
     char mmap_result[100];
    //-------- here I will control with    control.mmap    file------   
   char  acqxml2[100];
-
-
   TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
+  int respush=1;// PUSH is running
 
       TSmallish_xml xml(    acqxml2   );
       xml.DisplayTele( xml.mainnode, 0, "plugins","poper","file" );
       sprintf( fname ,"%s", xml.output  );
 
+
+
       if ( strlen(fname)>0){
-	//----------------OPEN FILE append and write
-      outfile=fopen( fname,"ab"  );
-      //      if(XTERM!=NULL)	fprintf(XTERM,"  POP opened %s for WRITE - appending\n", fname);
+      outfile=fopen( fname,"ab" );//----------------OPEN FILE append and write
         sprintf(chL,"POP: opened %s for WRITE - appending" , fname  );table_log(1,chL);
 
       if (outfile!=NULL){
+	while( respush==1 ){//  ...WAIT FOR PUSH
 	while( !buffer->empty() ){
 	  buffer->wait_and_pop(datum);
           if ((cnt%250000)==0){
@@ -265,31 +264,35 @@ extern "C" {
 	  } 
 	  cnt++; 
 	  fwrite ( &datum , 1 , 4  , outfile );
-	}
+	}// WHILE buffer not empty....
+	usleep(1000*100); // wait 100ms and retry again..
+	respush=TokenGet( "push=" , mmap_file , acqxml2 ); //takes a value
+	}//	while respush==1  .... push running
 	fclose(outfile);
-  	TThread::CancelPoint(); // When CancelOn(), 
-      }else{// outfile not NULL
-	//	if(XTERM!=NULL)fprintf(XTERM,"  POP outfile %s == NULL\n%s", fname );
-	sprintf(chL,"POP:   outfile %s == NULL " , fname  );table_log(1,chL);
+	//	TThread::CancelPoint(); // When CancelOn(), 
 
+      }else{// outfile not NULL
+	sprintf(chL,"POP:   outfile %s == NULL !!",fname);table_log(1,chL);
 	runempty=1;
-      }//      outfile not NULL
+      }//      if   outfile not NULL
       }//strlen fname > 0   NOT ""
-      else{
-	runempty=1;
-      }
-      if (runempty==1){
-	//-----------run empty--------
-	while( !buffer->empty() ){
-	  buffer->wait_and_pop(datum);
-          if ((cnt%250000)==0){
-	    //  if(XTERM!=NULL)fprintf(XTERM,"-   %7lld kB\n",4*cnt/1000);
-	    sprintf(chL,"POP: -   %7lld kB  " ,  4*cnt/1000 );table_log(1,chL);
-	  } 
-	  cnt++; 
-  	TThread::CancelPoint(); // When CancelOn(), here the thread can be interrupted.
-	}//while,  no writeout	
-      }//runempty
+      else{	runempty=1;      }// strlen fname == 0 ; also quit
+
+      //THIS ENSURES TO EMPTY THE MEMORY..in case of file trouble
+      // // if runempty==0 (i.e.  filename OK, file opened OK)
+      // if (runempty==0){
+      // 	while( !buffer->empty() ){
+      // 	  buffer->wait_and_pop(datum);
+      //     if ((cnt%250000)==0){
+      // 	    sprintf(chL,"POP: -   %7lld kB  " ,  4*cnt/1000 );table_log(1,chL);
+      // 	  } 
+      // 	  cnt++; 
+      // 	  //TThread::CancelPoint(); // When CancelOn()
+      // 	}//while,  no writeout	
+      // }// if runempty==0.  IF NOT =>> quit
+
+      sprintf(chL,"EXITING the POP-FILE (re==%d) (bytes=%lld) (fsize=%d)\n" ,
+	      runempty, 4*cnt, fexists(fname) );table_log(1,chL);
 }/**********************end of function *********POP2FILE***/
 
 
@@ -334,9 +337,9 @@ extern "C" {
 
 
   // returns    number   of values on the line (space separated)
-  //                        serves for  TXT TREEpop_txt_record
-  //                                                              SERVICE...4...pop_txttree
-  int pop_get_npar( const char* ch ){
+  //                        serves for  TXT TREE pop txt record
+  //                                                              SERVICE...4...pop txttree
+  int poptxt_get_npar( const char* ch ){
     char chL[500];
     TString oneline=ch, token; int j=0; double bu; 
       TObjArray *tar; 
@@ -362,8 +365,8 @@ extern "C" {
    */
 
    int ttree_inited_npars=0;
-  //                                                              SERVICE...4...pop_txttree
-  int pop_txt_record( const char* chse ){//.......SERVICE FUNCTION 
+  //                                                              SERVICE...4...pop _txttree
+  int poptxt_txt_record( const char* chse ){//.......SERVICE FUNCTION 
     TString oneline=chse, token; int j=0; double bu; 
       TObjArray *tar; 
 
@@ -418,7 +421,7 @@ extern "C" {
 
 
 
-  //                                                              SERVICE...4...pop_txttree
+  //                                                              SERVICE...4...pop _txttree
   int conv_t_init( int npar ){; // similar to conv_u_init; t[0]...t[n]
     char chL[500];
    char brname[100];  // main branch in texto......
@@ -431,7 +434,6 @@ extern "C" {
     sprintf( brname, "%s",  "main" );  // main,  not mainV
     if ( gDirectory->Get( ttree_name ) != NULL){
 
-      //      if(XTERM!=NULL)fprintf(XTERM,  "taking previously existing ttree %x !!!!\n", (int)txt_ttree);
      sprintf(chL,"POP: taking previously existing ttree %lx !!!!" , (int64_t)txt_ttree  );table_log(1,chL);
      //     txt_ttree->SetBranchAddress( brname , &t_event.t[0] );
      txt_ttree->SetBranchAddress( brname , &t_event.n );
@@ -440,8 +442,8 @@ extern "C" {
 
       gROOT->cd(); // go memory resident ttree like in "" and nano_conv.
       txt_ttree = new TTree( ttree_name , "ttree_from_textline");
-      //       if(XTERM!=NULL)fprintf(XTERM,"NEW TTREE %x\n", (int)txt_ttree );
-      sprintf(chL,"POP: NEW TTREE    %lx" , (int64_t)txt_ttree  );table_log(1,chL);
+
+      sprintf(chL,"POP: NEW TTREE  %lx",(int64_t)txt_ttree);table_log(1,chL);
      if (CIRCULAR!=0){ txt_ttree->SetCircular(CIRCULAR);}
       //  /s  is short.  
       sprintf(ch ,"%s/i", "n" );              // n    UInt_t : ordered
@@ -450,11 +452,11 @@ extern "C" {
       sprintf(ch ,"%s:%s%03d/D", ch,  "T",  i );  
 
     }// all channels branch
-    //     if(XTERM!=NULL)fprintf(XTERM,"This row defines the  Branch  main :\n%s\n", ch );  
+
      sprintf(chL,"POP: Branch(main):%s" , ch  );table_log(1,chL);
-     //    txt_ttree->Branch(brname , &t_event.t[0], ch );// 
+
     txt_ttree->Branch(brname , &t_event.n, ch );// 
-    //     if(XTERM!=NULL)fprintf(XTERM,    " ttree initialized ok    %x\n" , (int)txt_ttree );
+
      sprintf(chL,"POP: tree initialized OK  %lx" , (int64_t)txt_ttree  );table_log(1,chL);
 
     txt_ttree->ls();
@@ -524,7 +526,7 @@ extern "C" {
 
        if (ttree_inited==0){// ---ttree was not initied.........
        sprintf(chL,"POP: creating the tree... %s" , ""  );table_log(1,chL);
-       nparams=pop_get_npar( ch );
+       nparams=poptxt_get_npar( ch );
        ttree_inited_npars=nparams;
        sprintf(chL,"POP:  nparams==%d" , nparams  );table_log(1,chL);
        //       if(XTERM!=NULL)fprintf(XTERM,"       nparams==%d\n",nparams);
@@ -532,7 +534,7 @@ extern "C" {
        ttree_inited=1;// no more try to init
        }// ---ttree was not initied.........
 
-       pop_txt_record( ch ); line++;
+       poptxt_txt_record( ch ); line++;
        if (line>10000){
          sprintf(chL,"POP:  lines==%d" , lines_received  );table_log(1,chL);
 	 line=0;
@@ -563,6 +565,81 @@ extern "C" {
 
 
 
+  /*****************************************************************ZH DATA
+   *  I USE====================================
+   *   ZH_data.C      
+   *                 void ZH_data(int events);
+   *
+   *
+   */
+int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
+
+   int datum=0;// one word from the concurent queue
+   char chL[500];
+   concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
+   sprintf(chL,"POP: ZH_data : buff==%ld",(int64_t)buffer);table_log(1,chL);
+
+      //STANDARD  XML  READ-------------
+      FILE *outfile;  char fname[400];
+      int buffer4;
+      long long int cnt=0;
+      size_t result;   
+
+//-------- here I will control with    control.mmap    file------   
+    if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
+    mmap_file=(char*)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, mmapfd, 0);
+    if (mmap_file == MAP_FAILED) errx(1, "either mmap");
+    char mmap_result[100];
+//-------- here I will control with    control.mmap    file------   
+
+  char  acqxml2[100];
+  TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
+  int respush=1;// PUSH is running   "push="  token.....
+  TSmallish_xml xml(    acqxml2   );
+  //  xml.DisplayTele( xml.mainnode, 0, "plugins","poper","file" );
+  //  sprintf( fname ,"%s", xml.output  );
+
+  OEBmax=1000;// ONE EVENT LIMIT !!!!!!!!!!
+  DataRead=0; // HowMuch was read to buffer
+  cnt_evt=0; // event number
+  // I dont understand.....this should be in *.o 
+ cTIME=0.0; // current data TIME (always>0)
+ bTIME=0.0; // buffered time (mostly 0)
+ sTIME=0.0; // startup time
+ dTIME=0.0; // difference
+  reset_chan_table();
+  load_chan_table("circtree=100000,c001=1,c002=2,c003=3,c004=4,c005=5,c006=6,c007=7,c008=8,c017=17,c018=18,c019=19,c020=20,c021=21,c022=22,c023=23,c024=24,c032=32,c1024=t1,c1025=t2,c1026=t3,c1027=t4,c033=s001,c035=s002,c037=s003,c039=s004" );
+
+  // int pos=0;//  this is position in the buffer...
+  int c=0;//   position in OEbuffer..............
+  while (respush==1){//run while push is running........
+    while( !buffer->empty() ){// concurent queue "buffer" is an object HERE
+      buffer->wait_and_pop(datum);
+      if ((cnt%250000)==0){
+	sprintf(chL,"POP:W     %7lld kB",4*cnt/1000);table_log(1,chL);
+      } //printout every MB
+      cnt++; 
+      //pos=0;fillbuffer();// one time READ DATA FROM FILE
+      // NORMALY, I HAVE 99MB ZHbuffer and I take data from there.
+      //      while(1==1){//..........here it was number of events limiting
+      OEbuf[c] = datum;
+      if (OEbuf[c]==EOE){//END OF EVENT
+	process_ONE_EVENT(OEbuf);
+	c=0;// reset position in the buffer
+      }//END OF EVENT
+      else{
+	c++;
+      }
+    }//BUFFER NOT EMPTY
+
+    usleep(1000*100); // wait 100ms and retry again..
+    respush=TokenGet( "push=" , mmap_file , acqxml2 ); //takes a value    
+  }//WHILE respush==0....push running...
+
+
+  sprintf(chL,"EXITING the POP-ZH (bytes=%lld)", 4*cnt );table_log(1,chL);
+  sprintf(chL,"EXITING the POP-ZH (evnts=%ld)",cnt_evt );table_log(1,chL);
+}//pop_ZH_____________________________________________________________END___
 
 
 
@@ -573,8 +650,46 @@ extern "C" {
 
 
 
+  //===================================== MUSTR=========================START==
+// int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
+
+//     char chL[500];
+//    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
+//    sprintf(chL,"POP: ZH_data : buff==%ld",(int64_t)buffer);table_log(1,chL);
+
+//       //STANDARD  XML  READ-------------
+//       FILE *outfile;  char fname[400];
+//       int buffer4;
+//       long long int cnt=0;
+//       size_t result;   
+
+// //-------- here I will control with    control.mmap    file------   
+//     if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
+//     mmap_file=(char*)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, mmapfd, 0);
+//     if (mmap_file == MAP_FAILED) errx(1, "either mmap");
+//     char mmap_result[100];
+// //-------- here I will control with    control.mmap    file------   
+
+//   char  acqxml2[100];
+//   TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
+//   int respush=1;// PUSH is running   "push="  token.....
+//   TSmallish_xml xml(    acqxml2   );
+//   //  xml.DisplayTele( xml.mainnode, 0, "plugins","poper","file" );
+//   //  sprintf( fname ,"%s", xml.output  );
 
 
+//   while (respush==1){//run while push is running........
+// 	usleep(1000*100); // wait 100ms and retry again..
+// 	respush=TokenGet( "push=" , mmap_file , acqxml2 ); //takes a value    
+//   }//WHILE respush==0....push running...
+
+//   sprintf(chL,"EXITING the POP-ZH (bytes=%d)", 4*cnt );table_log(1,chL);
+// }//pop_ZH_____________________________________________________________END___
+  //===================================== MUSTR=========================STOP==
+
+
+
+  //  OLD-===============================================================OLD
   /*****************************************************************
    *            TEST TO SORT THE EVENTS ...........  CREATE TTREE
    *        ZDENEK HONS 
@@ -723,11 +838,11 @@ extern "C" {
 
 	  //	  one_buffer_process( (void*)&oneeventbuf, pointer , 0 ); // FROM NANOCONVERT
 
-	  if (cnt_evt%50000 ==0){sprintf(chL,"POP: evt#= %lld" , cnt_evt  );table_log(1,chL);}
+	  if (cnt_evt%50000 ==0){sprintf(chL,"POP: evt#= %ld" , cnt_evt  );table_log(1,chL);}
 	}//WHILE --- next event
 
-	if (status==0){sprintf(chL,"POP: cnt==%lld, evts= %lld --leaving" ,cnt,cnt_evt);table_log(1,chL);}
-        sprintf(chL,"POP:  evt#= %lld (@status++)" , cnt_evt );table_log(1,chL);
+	if (status==0){sprintf(chL,"POP:  evts= %ld --leaving" ,cnt_evt);table_log(1,chL);}
+        sprintf(chL,"POP:  evt#= %ld (@status++)" , cnt_evt );table_log(1,chL);
 	status++;
 
 
@@ -745,7 +860,7 @@ extern "C" {
          sprintf(chL,"POP:   -> wait %s" , "" );table_log(1,chL);
 	}//---------- INFINITE--------------------------------LOOP-------------------END
 
-      sprintf(chL,"POP:  SORT END  cnt=== %lld,  events=%lld----leaving " , cnt,  cnt_evt );table_log(1,chL);
+      sprintf(chL,"POP:  SORT END  events=%ld----leaving " , cnt_evt );table_log(1,chL);
       return 0;
 }/**********************end of function ************/
 

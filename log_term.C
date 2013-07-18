@@ -32,6 +32,19 @@ FILE * XTERM;
 //   maybe, saving the input for later (accum.)output....?
 //   what is needed :   sprintf(ch, "", i )
 void table_log(int plugin, const char* text){ // 0,1,2=Push,Pop,Ana
+  if (plugin<0){
+      if(XTERM!=NULL){
+	fprintf(XTERM,  "%s\n", text );
+	fflush(XTERM);
+      }//XTERM
+      FILE *fp;
+      fp = fopen("acq.log","a");
+      fseek(fp,0, SEEK_END);                
+      fprintf(fp, "%s\n", text ); 
+      fclose(fp);     
+ }// MASTER.... not plugin......
+
+  //IF PLUGIN::::::::::::::::::::::::
   if(XTERM!=NULL){
     //  5x  #   and then  29x " "
     fprintf(XTERM,  "%*s%*s%s\n", 3,"#",   plugin*29," " , text ); // number of spaces
@@ -52,18 +65,18 @@ void table_log(int plugin, const char* text){ // 0,1,2=Push,Pop,Ana
 
 
 
-int fexists (char * fileName)
-{
+int fexists (char * fileName){ // 0==exists;  >0  ==SIZE
    struct stat filestatus;
    int i = stat ( fileName, &filestatus );
+   //0 == exists
    //   printf("file name <%s>\n", fileName);
    //    printf("file size %d\n", (int)filestatus.st_size);
    //    cout << filestatus.st_size << " bytes\n";
    /* File found */
      if ( i == 0 )
      {
-       //       printf("i==0, ret 1, found\n");
-       return 1;
+       //   0    printf("i==0, ret 1, found\n");
+       return filestatus.st_size;
      }
      //       printf("i!=0, ret 0, NOTfound\n");
      return 0;

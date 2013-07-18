@@ -10,6 +10,12 @@ circular buffer seems safe. but how to get right number?
 //#include "acq_core.h"  // WHY HERE????
 #include "cuts_manip.h"  //loadcuts,savecut,rmcut,cpcut.......
 //---- I include ZH_data.h -------
+#include "ZH_data.h"
+//  I make the variable  "extern" in   *.h  and againI define in *.C
+//  then - when I include here (so) and I try to link *.o that was created before
+//         it works: var is allocated in *.o, reffered from *.h....................
+
+
 
 
   // I should define the variables that are declared (extern) in header

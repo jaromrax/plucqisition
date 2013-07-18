@@ -118,8 +118,14 @@ void *xml_masterthread(void* arg){
   xml.DisplayTele( xml.mainnode, 0, "plugins","poper","file" );
    sprintf( file_pop,"%s", xml.output  );
 
-   if (fexists(file_pop)==1){ printf("File %s already exists, STOPPING\n",file_pop);return NULL;}
-   if ( (strlen(file_push)>0)&&(fexists(file_push)!=1) ){printf("File %s DOESNOT exist,  STOPPING\n",file_push);return NULL;}
+   //   if (fexists(file_pop)==1){ printf("File %s already exists, STOPPING\n",file_pop);return NULL;}
+   if (fexists(file_pop)!=0){
+     char chL[500];
+     sprintf( chL,"MASTER: file %s ALREADY EXISTS....appending after %d bytes\n",
+	      file_pop, fexists(file_pop)  );table_log(-1,chL);
+   }// already exists
+
+   if ( (strlen(file_push)>0)&&(fexists(file_push)==0) ){printf("File %s DOESNOT exist,  STOPPING\n",file_push);return NULL;}
 
 
 
@@ -270,63 +276,37 @@ void *xml_masterthread(void* arg){
       if ((TThread::GetThread("pusher_thread")!=0)&&
 	  (TThread::GetThread("pusher_thread")->GetState()==6)){
 	   TThread::GetThread("pusher_thread")->Delete();
+	   char repla[4096];
+	   TokenReplace( "push=", "push=0", mmap_file, repla );
+	   strcpy( mmap_file, repla );
 	  }
       if ((TThread::GetThread("poper_thread")!=0)&&
 	  (TThread::GetThread("poper_thread")->GetState()==6)){
 	   TThread::GetThread("poper_thread")->Delete();
+	   char repla[4096];
+	   TokenReplace( "pop=", "pop=0", mmap_file, repla );
+	   strcpy( mmap_file, repla );
 	  }
       if ((TThread::GetThread("analyze_thread")!=0)&&
 	  (TThread::GetThread("analyze_thread")->GetState()==6)){
 	   TThread::GetThread("analyze_thread")->Delete();
+	   char repla[4096];
+	   TokenReplace( "analyze=", "analyze=0", mmap_file, repla );
+	   strcpy( mmap_file, repla );
 	  }
    }
     if(XTERM!=NULL)fprintf(XTERM,"%s","MASTER: ALL Threads OVER. The dl_handle \n");
 
 
-    /*   NO JOINS, al lare to be killed..........................
-    shspe_threads[1]->Join();
-    shspe_threads[2]->Join();
-    shspe_threads[3]->Join();
-    delete shspe_threads[1]->;
-    delete shspe_threads[2]->;
-    delete shspe_threads[3]->;
-    */
+ 
     TTimeStamp t_stop;  t_stop.Set();
   printf("In the MASTER:\n  start %s\n  stop  %s\n  seconds = %d\n",
 	 t_start.AsString("l"),  
 	 t_stop.AsString("l"), 
 	 (int)(t_stop.GetSec()-t_start.GetSec() ) );
-
+  printf("now ... make%s\n   acq(\"stop\")\n", "");
   // usleep(1000*1000*1);  //doesnot change much
 
-  /*
-
-    if(XTERM!=NULL)fprintf(XTERM,"%s","MASTER:ONE  ....................to dl close:\n" );
-    if(XTERM!=NULL)fprintf(XTERM,"%s","MASTER:SECOND ................. to dl close:\n" );
-
-    dlerror();
-  if (!dl_handle){
-    if(XTERM!=NULL)fprintf(XTERM,"%s","MASTER:ONE dl_handle just closing now\n" );
-    res=dlclose(dl_handle); // THIS IS DIFFICULT!!!!!!!!!!!!!!!!!
-    if(XTERM!=NULL)fprintf(XTERM,"MASTER:Result of dlclosing ==%d (should be 0); Err::%s\n", 
-			   res, dlerror() );
-    //    dl_handle=NULL;
-  } // can be closed after all threads down
-
-
-    dlerror();
-  if (!dl_handle_analyze){
-    if(XTERM!=NULL)fprintf(XTERM,"%s","MASTER:ONE dl_handle_analyze just closing now\n" );
-    res=dlclose(dl_handle_analyze); // THIS IS DIFFICULT!!!!!!!!!!!!!!!!!
-    if(XTERM!=NULL)fprintf(XTERM,"%s","MASTER:ONE  dl_handle_analyze now DONE\n" );
-    if(XTERM!=NULL)fprintf(XTERM,"MASTER:Result of dlclosing_analyze ==%d (should be 0); Err::%s\n", 
-			   res, dlerror() );
-    //    dl_handle_analyze=NULL;
-  } // can be closed after all threads down
-
-
-  TThread::Ps();
-  */
 
   return NULL;   // void* mut_master_thread()
 }
@@ -374,15 +354,20 @@ int acq(const char * startstop="start")
     //  munmap(mmap_file, 4096);        
     //  close(mmapfd);
     //I WILL NEVER  DEALOCATE THIS ..... CAN IT BE A PROBLEM?
-     }// CREATE MMAP:   in the first RUN
+    }// CREATE MMAP:   in the first RUN
 
 
      //==========================introduce optional XML file=========
      if ( strstr(startstop,".xml") - startstop ==  strlen(startstop)-4 ){
        printf("...new XML file demanded:  %s\n", startstop );
        char newline[100];
-       sprintf( newline, "%s\nrun=1\n" , startstop ); 
-       strcpy(mmap_file, newline  ); // "acq_setup.xml\nrun=1\n";
+       char newfile[4096];
+       sprintf( newline, "file=%s" , startstop ); 
+       TokenReplace( "file=", newline ,  mmap_file, newfile );
+       strcpy( mmap_file, newfile );
+       printf("...new XML file  /%s/ \n", startstop );
+       printf("...new mmap_file content  /%s/ \n", mmap_file );
+       //not strcpy(mmap_file, newline  ); // "acq_setup.xml\nrun=1\n";
      }else{
        //       printf("...new XML file NOT demanded:  %s \n", startstop );
      }
@@ -419,8 +404,9 @@ int acq(const char * startstop="start")
 
 
     do{ //while not deads
-
-      TokenReplace( "run=",  "run=0",  mmap_file );
+      char newfile[4096];
+      TokenReplace( "run=",  "run=0",  mmap_file , newfile );
+      strcpy( mmap_file, newfile);
       usleep(1000*100); // why not to wait.....a while....
       not_deads=0;
     TThread::Ps();
@@ -485,7 +471,7 @@ int acq(const char * startstop="start")
 
 
 
-    TThread::Ps(); 
+   //    TThread::Ps(); 
     if (kill_retries>=   0   ){ break;}
     kill_retries++;
     }while (not_deads>0);
@@ -552,8 +538,9 @@ int acq(const char * startstop="start")
   if (TThread::GetThread("master_thread")==0){
 
     //======START======
-
-    TokenReplace( "run=" , "run=2", mmap_file );
+    char newfile[4096];
+    TokenReplace( "run=" , "run=2", mmap_file, newfile );
+    strcpy( mmap_file,  newfile );
 
 
     tinfo = (thread_info*)calloc( 5, sizeof(struct thread_info));// 5threads

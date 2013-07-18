@@ -14,7 +14,7 @@
 // NOT IN HEADER using namespace std;
 
 double TokenGet( const char* tok, const char* remote, char* result);
-void TokenReplace( const char* tok, const char* newtok, const char* remote);
+void TokenReplace( const char* tok, const char* newtok, const char* remote, char* remoteNEW);
 
 //avoid using namespace in .h string =>  std::string
 bool FileExists1k(std::string strFilename, int minsize) ;

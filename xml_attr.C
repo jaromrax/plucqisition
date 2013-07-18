@@ -40,12 +40,12 @@ double TokenGet( const char* tok , const char* remote , char* result ){
 
 
 
-void TokenReplace( const char* tok , const char* newtok, const char* remote ){
+void TokenReplace( const char* tok , const char* newtok, const char* remote, char* remoteNEW ){
 
   char str1[4096];
   char strnew[4096];
   strcpy( str1, remote );
-  char *pch, *pch2;
+  char *pch;
   pch = strtok(str1," ,\n");
   int pos=0;
   while (pch != NULL) {
@@ -66,6 +66,7 @@ void TokenReplace( const char* tok , const char* newtok, const char* remote ){
     //printf("\n=============\n%s\n------------/%d/\n",  strnew, pos );
   }
   //not neccessary strcpy( result, strnew  );   //  
+  strcpy( remoteNEW,  strnew );
   return;
 }// TokenReplace replcs whole new for a fragment (file=bla2 for file=)
 
@@ -308,7 +309,7 @@ bool FileExists1k(string strFilename, int minsize) {
  **********************************************************************/
 //---------------------------------------------------------
 void xml_attr(){
-    char ch[100];
+
 
   if (  FileExists1k("mut_queue.xml",1) ){  //minimum size 
 

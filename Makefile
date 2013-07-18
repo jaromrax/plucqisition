@@ -3,8 +3,8 @@ ifneq (,)
     endif
 
 PROGRAM = acq_rez
-C_FILES_LIBS = xml_attr.C log_term.C mut_queue.C 
-C_FILES =      xml_attr.C log_term.C mut_queue.C acq_core.C
+C_FILES_LIBS = xml_attr.C log_term.C mut_queue.C ZH_data.C
+C_FILES =      xml_attr.C log_term.C mut_queue.C ZH_data.C acq_core.C
 OBJS_LIBS := $(C_FILES_LIBS:.C=.o)
 OBJS := $(C_FILES:.C=.o)
 ###OBJS := $(patsubst $(C_FILES))
@@ -13,7 +13,7 @@ CFLAGS = -Wall
 LDFLAGS =	
 ROOTCC=`root-config --cxx --cflags` -fPIC 
 LDFLAGS= -lHist -lNet -lCore -lRIO -lGpad -lMathCore -lPhysics -lTree -lThread -lXMLIO `root-config --glibs`
-DICT = plug_push_dict.cxx
+#DICT = plug_push_dict.cxx
 
 
 
@@ -72,11 +72,13 @@ plug: plugins
 plugins:  plug_push.so plug_pop.so
 
 
-plug_push.so: $(DICT) plug_push.cpp $(C_FILES_LIBS) 
-	$(ROOTCC)  $(OBJS_LIBS) -fPIC -shared -o plug_push.so  $(DICT)   $(LDFLAGS)
-#	$(ROOTCC)  $(OBJS_LIBS) -fPIC -shared -o plug_push.so plug_push.cpp $(DICT)  $(LDFLAGS)
+#plug_push.so: $(DICT) plug_push.cpp $(C_FILES_LIBS) 
+#	$(ROOTCC)  $(OBJS_LIBS) -fPIC -shared -o plug_push.so  $(DICT)   $(LDFLAGS)
+##	$(ROOTCC)  $(OBJS_LIBS) -fPIC -shared -o plug_push.so plug_push.cpp $(DICT)  $(LDFLAGS)
 
 
+plug_push.so:  plug_push.cpp $(C_FILES_LIBS) 
+	$(ROOTCC)  $(OBJS_LIBS) -fPIC -shared -o plug_push.so plug_push.cpp  $(LDFLAGS)
 
 
 plug_pop.so: plug_pop.cpp $(C_FILES_LIBS)
@@ -84,8 +86,7 @@ plug_pop.so: plug_pop.cpp $(C_FILES_LIBS)
 
 
 
-#  DICT I need for plug_push.cpp 
-
-$(DICT): 
-	rootcint -f $(DICT) -c plug_push.cpp  LinkDef.h
-#	@echo I have no idea how to really create it for *.so	
+#  DICT I need for plug_push.cpp ; I get redefinitions with acq_core...
+#$(DICT): 
+#	rootcint -f $(DICT) -c plug_push.cpp  LinkDef.h
+##	@echo I have no idea how to really create it for *.so	

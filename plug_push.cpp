@@ -6,7 +6,9 @@
 
 
   // I should define the variables that are declared (extern) in header
- TCondition MyCond(0);
+
+// TCondition MyCond(0);
+
 // FILE* XTERM;When it is declared in logtermh, defined in log_term.C, no prob. here
 
 
@@ -119,6 +121,13 @@ extern "C" {
 
 
 
+
+
+
+
+
+
+
   /**********************************************
    *            PUSH only integers 1.....200
    */
@@ -142,6 +151,9 @@ extern "C" {
 		  "push (integers)  EXIT buffer=%ld\n",(int64_t)buffer );
    return 0;
  }/*****************************end of function *********************/
+
+
+
 
 
 
@@ -259,9 +271,9 @@ extern "C" {
    *            PUSH binary (nanot) DATA FROM A FILE ......
    */
   int* push_file(int64_t* par){// BINARY FILE .....
-
+    char chL[500];
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   if(XTERM!=NULL)fprintf(XTERM,"push-remote (file)  par==%ld; pointer==%ld\n", (int64_t)par,(int64_t)buffer );
+   sprintf(chL,"PUSH-FILE START buff=%ld",(int64_t)buffer);table_log(0,chL);
 
       FILE *infile;  char fname[400];
       int buffer4;
@@ -284,21 +296,27 @@ extern "C" {
       xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","file" );
       sprintf( fname,"%s", xml.output  );
       infile=fopen( fname,"rb"  );
-      if(XTERM!=NULL)fprintf(XTERM,"opened %s\n", fname);
+      sprintf(chL," opened %s", fname );table_log(0,chL);
       if (infile!=NULL){
        while (!feof(infile)) {
-	 if ((cnt%250000)==0){if(XTERM!=NULL)fprintf(XTERM,"R %7lld kB\n",4*cnt/1000);} cnt++;
+	 if ((cnt%250000)==0){
+	   sprintf(chL,"PUSH %7lld kB", 4*cnt/1000 );table_log(0,chL);
+	 } 
+	 cnt++;
 	result=fread( &buffer4, 1, 4, infile );
 	if (result == 4) {	buffer->push( buffer4 ); }
        }
-       if(XTERM!=NULL)fprintf(XTERM,"push-file closed....%s\n", fname );
+       //if(XTERM!=NULL)fprintf(XTERM,"push-file closed....%s\n", fname );
 	fclose(infile);
       }else{
-	if(XTERM!=NULL)fprintf(XTERM,"infile %s == NULL\n", fname );
+	sprintf(chL,"infile NULL !!!  %s", fname );table_log(0,chL);
       }
-      if(XTERM!=NULL)fprintf(XTERM,"push-file call finished....%s: PUSHER FINISHED\n", fname );
+      sprintf(chL,"push-file FINISHED..%lld bytes", 4*cnt );table_log(0,chL);
    return 0;
  }/*****************************end of function ***********************/
+
+
+
 
 
 
@@ -401,6 +419,7 @@ extern "C" {
 
 
 
+
   //     tail -f text | nc localhost 9302
   int* push_net_txtserv2(int64_t* par){ // SERVER FOR TEXT FILE ... we try ->select
                                     //  PADA TO NA PRVNI,2. ZMACKNUTI ENTER
@@ -489,6 +508,11 @@ extern "C" {
  }//=====================================================================END FUNCTION 2
 
  
+
+
+
+
+
 
 
 

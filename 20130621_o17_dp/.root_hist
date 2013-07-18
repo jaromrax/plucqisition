@@ -1,205 +1,3 @@
-TokenReplace("mas","delas",aa)
-TokenReplace("mas","delas",aa)
-aa
-TokenReplace("se","se",aa)
-aa
-TokenReplace("se","se",aa)
-TokenReplace("se","se",aa)
-TokenReplace("se","se",aa)
-TokenReplace("se","se",aa)
-aa
-TokenReplace("se","sS",aa)
-aa
-TokenReplace("se","sS",aa)
-TokenReplace("sS","sS",aa)
-TokenReplace("sS","sS",aa)
-TokenReplace("sS","sS",aa)
-aa
-.qqqqqqq
-.L ../mut_queue.C+
-TokenGet("tak", aa )
-char aa[4000]="ahoj jak se mas takovy stabilni"
-TokenGet("tak", aa )
-TokenGet("tak", aa )
-TokenGet("tak", aa )
-aa
-.qqq
-char aa[4000]="ahoj jak se mas takovy stabilni"
-TokenGet("tak", aa )
-.L ../mut_queue.C+
-TokenGet("tak", aa )
-aa
-char aa[4000]="ahoj jak se mas takovy stabilni"
-.q
-char aa[4000]="ahoj jak se mas takovy stabilni"
-aa
-aa
-.q
-.L ../mut_queue.C+
-.L ../mut_queue.C+
-.L ../mut_queue.C+
-.L ../mut_queue.C+
-char aa[4000]="ahoj jak se mas takovy stabilni"
-TokenGet("tak", aa )
-.q
-.L ../mut_queue.C+
-char aa[4000]="ahoj jak se mas takovy stabilni"
-TokenGet("tak", aa )
-aa[16]
-.qq
-.L ../mut_queue.C+
-char aa[4000]="ahoj jak se mas takovy stabilni"
-char bb[4000]="ahoj jak se mas takovy stabilni"
-TokenGet("tak", aa, bb )
-bb
-bb[6]=' '
-bb
-for (int i=0;i<1000000;i++){ TokenGet("dataPULL=", "file=acq_setup.xml\nrun=1\ndataPUSH=0\ndataPULL=0\0",bb);}
-bb
-aa
-bb
-aa
-char a[30]="jelen=1234"
-a
-char b[30]="jelen="
-b
-a
-a-b
-b-a
-strcmp(a,b)
-strstr(a,b)
-strstr(b,a)
-strstr(a,b)
-strstr(a,b)-b
-strlen(a)-strlen(b)
-a
-a+1
-a+(strlen(a)-strlen(b)
-a+(strlen(a)-strlen(b))
-a+(strlen(a)-strlen(a)+strlen(b))
-a+(strlen(b))
-a+strlen(b)
-a+strlen(b)
-.q
-.L ../mut_queue.C+
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=1\ndataPUSH=0\ndataPULL=0\0",bb)
-char bb[4000]="ahoj jak se mas takovy stabilni"
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=1\ndataPUSH=0\ndataPULL=0\0",bb)
-TokenGet("run=", "file=acq_setup.xml\nrun=1\ndataPUSH=0\ndataPULL=0\0",bb)
-TokenGet("file=", "file=acq_setup.xml\nrun=1\ndataPUSH=0\ndataPULL=0\0",bb)
-TokenGet("file=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\0",bb)
-TokenGet("file=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\0",bb)
-TokenGet("run=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\0",bb)
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\0",bb)
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\0",bb)
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\0",bb)
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
-bb
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
-.q
-.L ../mut_queue.C+
-char bb[4000]="ahoj jak se mas takovy stabilni"
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
-.q
-.L ../mut_queue.C+
-char bb[4000]="ahoj jak se mas takovy stabilni"
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
-TokenGet("dataPUSH=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
-TokenGet("dataPUSH=", "file=acq_setup.xml\nrun=14251\ndataPUSH=10\ndataPULL=0.0012\n",bb)
-TokenGet("dataPUSH=", "file=acq_setup.xml\nrun=14251\ndataPUSH=10\ndataPULL=0.0012\n",bb)
-TokenGet("dataPUSH=", "file=acq_setup.xml\nrun=14251\ndataPUSH=10\ndataPULL=0.0012\n",bb)
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=00012\n",bb)
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
-bb
-.q
-.L ../mut_queue.C+
-char bb[4000]="ahoj jak se mas takovy stabilni"
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
-atof("012")
-atof("0.12")
-.q
-.L ../mut_queue.C+
-char bb[4000]="ahoj jak se mas takovy stabilni"
-TokenGet("dataPULL=", "file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n",bb)
-TokenReplace("dataPULL=", "dataFULL=", bb) 
-bb
-bb
-.q
-.L ../mut_queue.C+
-char bb[4000]="file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n"
-bb
-bb
-TokenReplace("dataPUSH=", "dataXXX=12", bb) 
-bb
-TokenReplace("dataPUSH=", "dataXXX=12", bb) 
-bb
-.q
-.L ../mut_queue.C+
-char bb[4000]="file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n"
-TokenReplace("dataPUSH=", "dataXXX=12", bb) 
-bb
-TokenReplace("dataXXX=", "dataXXX=112312332", bb) 
-bb
-.q
-.L ../mut_queue.C+
-.L ../mut_queue.C+
-.q
-.L ../mut_queue.C+
-char bb[4000]="file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n"
-acq()
-.L ../mut_queue.C+
-.q
-.L ../mut_queue.C+
-acq()
-.L ../mut_queue.C+
-acq()
-.L ../mut_queue.C+
-char bb[4000]="file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n"
-char cc[100]
-TokenGet("file=", bb , cc )
-cc
-.q
-.L ../mut_queue.C+
-char bb[4000]="file=acq_setup.xml\nrun=14251\ndataPUSH=0\ndataPULL=0.0012\n"
-char cc[100]
-TokenGet("file=", bb , cc )
-cc
-acq()
-acq("stop")
-.qqqqqqqq
-.L ../mut_queue.C+
-acq()
-acq("stop")
-.qqqqqqqq
-.L ../mut_queue.C+
-acq()
-acq("stop")
-acq("stop")
-acq("stop")
-.qqqqqq
-.L ../mut_queue.C+
-acq()
-.qqqqqqqqqqqqqqqqqq
-.L ../mut_queue.C+
-acq()
-acq("stop")
-acq("stop")
-acq()
-acq("stop")
-TThread::Ps()
-acq()
-acq("stop")
-acq()
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
 .qqqqqqqqqq
 .L ../mut_queue.C+
 acq()
@@ -479,4 +277,216 @@ TThread::Ps()
 TThread::Ps()
 TThread::Ps()
 .q
+.qqqqqqqqqq
+.L load_libs.C+
+.L load_libs.C
+acq("file.xml")
+.L load_libs
+.L load_libs.C
+acq("file.xml")
+.L load_libs.C
+acq("file.xml")
+.q
+.qqqqqqq
+.L load_libs.C
+acq("file.xml")
+.q
+.qqqqqqqqqqqqqq
+.L load_libs.C
+acq("file.xml")
+.qqqqqqqqqqqqqq
+.L load_libs.C
+acq("file.xml")
+.qqqqqqqqqq
+.q
+.L load_libs.C
+acq("file.xml")
+.qqqqqqqqqqq
+.L load_libs.C
+acq("file.xml")
+.qqqqqqqqqqq
+.L load_libs.C
+acq("file.xml")
+TThread::Ps()
+acq("stop")
+.! rm /tmp/RUN
+acq("file.xml")
+.qqqqqqqqqqqq
+.L load_libs.C
+acq("file.xml")
+.! rm /tmp/RUN
+acq("file.xml")
+acq("stop")
+acq("file.xml")
+.! rm /tmp/RUN
+acq("file.xml")
+acq("stop")
+.! rm /tmp/RUN
+acq("file.xml")
+.qqqqqqqqqq
+.q
+.L load_libs.C
+acq("file.xml")
+.! rm /tmp/RUN
+acq("file.xml")
+.! rm /tmp/RUN
+acq("file.xml")
+acq("file.xml")
+.qqqqqqqqqqqqqqq
+.L load_libs.C
+acq("file.xml")
+.qqqqqqqqqqqqqqqqqq
+.L load_libs.C
+acq("file.xml")
+acq("stop")
+.qqqqqqqqqq
+.L load_libs.C
+acq("file.xml")
+   acq("stop")
+.qqqqqqqqq
+.L load_libs.C
+acq("file.xml")
+.qqqqqqqqqqqqqqqqqq
+.L load_libs.C
+acq("file.xml")
+   acq("stop")
+.qqqqqqqqqqq
+.L load_libs.C
+acq("file.xml")
+   acq("stop")
+.qqqqqqqqqqqq
+.L load_libs.C
+acq("file.xml")
+   acq("stop")
+.qqqqqqqqqqqq
+.L load_libs.C
+acq("file.xml")
+   acq("stop")
+acq("file2.xml")
+   acq("stop")
+.qqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+.ls
+shspe()
+.qqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+shspe()
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+shspe()
+.qqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+shspe()
+.q
+.qqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+shspe()
+.qqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+shspe()
+.qqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.ls
+nanot
+nanot
+nanot->Print()
+nanot->Show(1)
+nanot->Show(2)
+nanot->Show(3)
+nanot->Show(4)
+nanot->Show(6)
+nanot->Show()
+nanot->Show(8)
+nanot->Draw("c001")
+nanot->Draw("c001>>h(4000,0,4000)")
+nanot->Draw("c001:c002>>h(4000,0,4000,4000,0,4000)")
+nanot->Draw("c001:c002>>h(4000,0,4000,4000,0,4000)")
+nanot->Draw("c001:c002>>h(4000,0,4000,4000,0,4000)")
+.qqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+nanot->Draw("c001:c002>>h(4000,0,4000,4000,0,4000)")
+.qqqqqqqqq
+UShort_t i[10]
+i
+i[0]
+i[0]=1
+i[1]=1
+i[2]=1
+i
+i[9]=1
+i
+UShort_t zero[10]
+memcpy( i, zero )
+memcpy( i, zero , 10)
+i
+i[9]
+memcpy( i, zero , 10*2 )
+i[9]
+sizeof(UShort_t)
+.qqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+nanot->Draw("c001:c002>>h(4000,0,4000,4000,0,4000)")
+.qqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+shspe()
+.q
+.qqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+shspe()
+nanot->Draw("c001:c017")
+nanot->Draw("c001:c017","","col")
+nanot->Draw("c017:c017+c001","","col")
+nanot->Draw("c017:c017+2*c001","","col")
+nanot->Show()
+nanot->Show()
+.qqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+shspe()
+nanot->Show()
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+nanot->Show()
+nanot->Draw(c001:time)
+nanot->Draw("c001:time")
+shspe()
+nanot->Draw("c001:time")
+.qqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+shspe()
+nanot->Draw("c001:time")
+htemp
+nanot->Draw("c001:time>>htemp")
 .qqqqqqqqqq
