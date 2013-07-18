@@ -1,16 +1,25 @@
-/*  ################################################################# 
-PLUNG_ANALYZE 
-plugin  for analysis of a tree 
-circular buffer seems safe. but how to get right number?
- */
-//======== this is a correct way to include headers and define VARS
-#include "xml_attr.h"    // bude xml
-#include "log_term.h"    // bude xml
+#include "xml_attr.h"     
+#include "log_term.h"     
 #include "mut_queue.h"
-//#include "acq_core.h"  // WHY HERE????
+//#include "acq_core.h"  // 
 #include "cuts_manip.h"  //loadcuts,savecut,rmcut,cpcut.......
 //---- I include ZH_data.h -------
 #include "ZH_data.h"
+
+
+
+//----------------------------with   mmap ------------------------
+#include <err.h>
+#include <sys/mman.h>
+
+//                                                                         ===
+// ========= Here I have something for   mmap=============================MMAP
+//                                                                         ===
+int mmapfd;      //  =-1       file handle for mmap
+char *mmap_file; // pointer to     mmap
+
+
+
 //  I make the variable  "extern" in   *.h  and againI define in *.C
 //  then - when I include here (so) and I try to link *.o that was created before
 //         it works: var is allocated in *.o, reffered from *.h....................
@@ -65,15 +74,11 @@ extern "C" {
    int wait=1;
    char ch[400];
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   //   if(XTERM!=NULL)fprintf(XTERM,"evt_analyze EMPTY...........%s\n","");
    sprintf(ch,"evt_analyze EMPTY...........%s","");table_log(2,ch);
-
     wait=MyCond.TimedWaitRelative( 300+700+2000  );
    if (wait==0){ 
-     //      if(XTERM!=NULL)fprintf(XTERM,"POP got BROADCAST SIGNAL... %s\n", "" );
       sprintf(ch,"POP got BROADCAST SIGNAL... %s", "" );table_log(2,ch);
     }
-
  }// ********************* end  of  function  ***********
 
 
@@ -333,21 +338,109 @@ void TACounterMulti::Display(){
 
 
 
+  //================= TEST TO GET     ZH_tree
+ int* evt_analyze_gettree(int* par){
+   char ch[1000];
+//-------- here I will control with    control.mmap    file------   
+    if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
+    mmap_file=(char*)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, mmapfd, 0);
+    if (mmap_file == MAP_FAILED) errx(1, "either mmap");
+    char mmap_result[100];
+//-------- here I will control with    control.mmap    file------   
+
+  char  acqxml2[100];
+  char definitions[2000];// channel definitions
+  TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
+  TSmallish_xml xml(    acqxml2   );
+  xml.DisplayTele( xml.mainnode, 0, "plugins","poper","definitions" );
+  sprintf( definitions  ,"%s", xml.output  );
+
+
+   //NOT!!  concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
+   sprintf(ch,"evt_analyze_gettree." );   table_log(2,ch);
+ //-----------------typical creation of TGraphErrors--------------
+ //-----------------typpical creation of 2D matrix-------------y,x-
+ //-------------------------- typical load of cuts -----------------
+ //------------------------------- typical creation of 1d spectra ---
+
+
+   TH1F *h_events; // THING to monitor analyzed event number 
+   h_events=(TH1F*)gDirectory->Get("h_events");
+   if (h_events==NULL){
+     h_events=new TH1F("h_events","h_events",100000,0,100000);
+   }
+
+
+
+   sprintf(ch,"..trying to get the tree." );   table_log(2,ch);
+   TTree *tree_addr_old=(TTree*)gDirectory->FindObject("nanot");
+   while (tree_addr_old==NULL){
+     sleep(1000*100);
+     tree_addr_old=(TTree*)gDirectory->FindObject("nanot");
+   }
+   sprintf(ch,"..got the tree." );   table_log(2,ch);
+   TTree *tree_addr=(TTree*)tree_addr_old->Clone();
+   tree_addr->SetTitle("CLONE");
+   tree_addr->SetMakeClass(1);
+
+   double acTIME_root;
+   int64_t acnt_evt; // event number
+
+   long long int entr; // number of entries in the tree
+   long long  int circular_bias=0; // important to have both - pos/neg 
+
+   tree_addr->SetBranchAddress( "time" ,&acTIME_root );
+   tree_addr->SetBranchAddress( "cnt_evt" ,&acnt_evt );// /i == UInt_t 32bit
+   entr=tree_addr->GetEntries();
+   if (entr>0){//..........................
+        tree_addr->GetEntry(0);// this really starts at event #1
+	sprintf(ch,"entry %6lld .... %6ld",  0,  cnt_evt);table_log(2,ch);
+        tree_addr->GetEntry(entr);// this really starts at event #1
+	sprintf(ch,"entry %6lld .... %6ld", entr,cnt_evt);table_log(2,ch);
+   }//if (entr>0)..........................
+
+   //  load_chan_table( definitions );
+
+
+   // long long int last_event_n=0;
+   // long long int entr;
+   // long long int ii; 
+   // long long int last_ii;//printout after
+   // int down=5;
+   // double downtime; int downtimef, downtimei,  wait=1;
+   // while (wait!=0){//INFINITE INFINITE INFINITE INFINITE INFINITE INFINITE
+
+   //   TTree *tree_addr_old=(TTree*)gDirectory->FindObject("nanot");
+   //   if ( tree_addr_old!=NULL ){ 
+   //     TTree *tree_addr=(TTree*)tree_addr_old->Clone();
+   //     tree_addr->SetTitle("CLONE");
+   //     tree_addr->SetMakeClass(1);//to use int,float.?http://root.cern.ch/drupal/content/accessing-ttree-tselector
+
+   //     //NOTNOW   tree_addr->SetBranchStatus("*",0); //disable all branches
+       
+   //     //       tree_addr->SetBranchAddress("mainV", &cha[1] ); 
+
+
+   // }//while____________________________________________  INFINITE INFINITE
+	
+
+
+ }//==========================================evt_analyze_gettree===END
+
+
+
+
 
 
 
 
   //=====================================================
-  //==========================================
-  //====================================
-  //==        empty 
   /**************************************************
-   *            TEST TO   TTREE 
+   *            OLD    TTREE    main /  counters / ......
    */
  int* evt_analyze_astro(int* par){
    char ch[400];
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   //   if(XTERM!=NULL)fprintf(XTERM,"evt_analyze_remote  ..........................\n" );
    sprintf(ch,"evt_analyze_remote  .........................." );   table_log(2,ch);
    usleep(1000*1000);
 

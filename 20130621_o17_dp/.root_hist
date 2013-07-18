@@ -431,3 +431,29 @@ acq("fileZH.xml")
    acq("stop")
 .qqqqqqqqqqqq
 .qqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+acq("fileZH.xml")
+.qqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+   acq("stop")
+.q
+.qqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.L load_libs.C
+acq("fileZH.xml")
+.L load_libs.C
+acq("fileZH.xml")
+nanot
+nanot->Show()
+.qqqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+nanot->Show()

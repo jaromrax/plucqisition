@@ -182,8 +182,10 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
       printf("circular TTree %d events\n",  toki );
     }
     ZH_tree->Branch( "time" , &cTIME_root, "time/D" );// /D == Double_t 64bit
+    ZH_tree->Branch( "cnt_evt" , &cnt_evt, "n/L" );// /: == Long64_t 64bit
   }else{ // already exists..........???
     ZH_tree->SetBranchAddress( "time" ,&cTIME_root );
+    ZH_tree->SetBranchAddress( "cnt_evt" ,&cnt_evt );// /i == Long64_t 64bit
   }//==============================================ZH TREE   END====
 
 
