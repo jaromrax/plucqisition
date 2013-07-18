@@ -378,7 +378,18 @@ int acq(const char * startstop="start")
     printf(".....go stop.\n%s", "" );
   }else{
     printf(".....go START.\n%s", "" );    
-    t_start.Set();
+    t_start.Set();	   
+
+    char repla[4096];
+   TokenReplace( "push=", "push=1", mmap_file, repla );
+   strcpy( mmap_file, repla );
+
+   TokenReplace( "pop=", "pop=1", mmap_file, repla );
+   strcpy( mmap_file, repla );
+
+   TokenReplace( "analyze=", "analyze=1", mmap_file, repla );
+   strcpy( mmap_file, repla );
+
   }
 
 

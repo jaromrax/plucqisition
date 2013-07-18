@@ -279,7 +279,8 @@ extern "C" {
       int buffer4;
       long long int cnt=0;
       size_t result;
-
+      char delaymsch[100];
+      int delayms=0;
 
    //-------- here I will control with    control.mmap    file------   
     if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
@@ -291,16 +292,22 @@ extern "C" {
   TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
 
 
-
       TSmallish_xml xml(    acqxml2   );
       xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","file" );
       sprintf( fname,"%s", xml.output  );
+      xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","delayms" );
+      sprintf( delaymsch,"%s", xml.output  );
+      delayms=atoi( delaymsch);
+
       infile=fopen( fname,"rb"  );
       sprintf(chL," opened %s", fname );table_log(0,chL);
       if (infile!=NULL){
        while (!feof(infile)) {
 	 if ((cnt%250000)==0){
 	   sprintf(chL,"PUSH %7lld kB", 4*cnt/1000 );table_log(0,chL);
+	   if (delayms>0){
+	     usleep(1000* delayms); 
+	   }
 	 } 
 	 cnt++;
 	result=fread( &buffer4, 1, 4, infile );

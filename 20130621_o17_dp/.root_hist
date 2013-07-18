@@ -404,3 +404,30 @@ nanot->Show()
    acq("stop")
 nanot->Draw("c001:time>>htemp")
 .qqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+TBrower *b
+TBrowser *b
+TBrowser b
+TBrowser b
+TBrowser c
+tv__tree = (TTree *) gROOT->FindObject("nanot");
+tv__tree_list->Add(tv__tree);
+tv__tree->Draw("c017:c001","","", 98202, 0);
+tv__tree->Draw("c017:c001","","col", 98202, 0);
+tv__tree->Draw("c017:c001","","col", 98202, 0);
+tv__tree->Draw("c017:c001","","col", 98202, 0);
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+acq("fileZH.xml")
+acq("stop")
+acq("stop")
+acq("fileZH.xml")
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+acq("fileZH.xml")
+   acq("stop")
+.qqqqqqqqqqqq
+.qqqqqqqqqqqq
