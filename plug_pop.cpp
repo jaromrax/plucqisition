@@ -593,11 +593,12 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
 //-------- here I will control with    control.mmap    file------   
 
   char  acqxml2[100];
+  char definitions[2000];// channel definitions
   TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
   int respush=1;// PUSH is running   "push="  token.....
   TSmallish_xml xml(    acqxml2   );
-  //  xml.DisplayTele( xml.mainnode, 0, "plugins","poper","file" );
-  //  sprintf( fname ,"%s", xml.output  );
+  xml.DisplayTele( xml.mainnode, 0, "plugins","poper","definitions" );
+  sprintf( definitions  ,"%s", xml.output  );
 
   OEBmax=1000;// ONE EVENT LIMIT !!!!!!!!!!
   DataRead=0; // HowMuch was read to buffer
@@ -607,8 +608,11 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
  bTIME=0.0; // buffered time (mostly 0)
  sTIME=0.0; // startup time
  dTIME=0.0; // difference
+
   reset_chan_table();
-  load_chan_table("circtree=100000,c001=1,c002=2,c003=3,c004=4,c005=5,c006=6,c007=7,c008=8,c017=17,c018=18,c019=19,c020=20,c021=21,c022=22,c023=23,c024=24,c032=32,c1024=t1,c1025=t2,c1026=t3,c1027=t4,c033=s001,c035=s002,c037=s003,c039=s004" );
+
+  load_chan_table( definitions  );
+  //  load_chan_table("circtree=100000,c001=1,c002=2,c003=3,c004=4,c005=5,c006=6,c007=7,c008=8,c017=17,c018=18,c019=19,c020=20,c021=21,c022=22,c023=23,c024=24,c032=32,c1024=t1,c1025=t2,c1026=t3,c1027=t4,c033=s001,c035=s002,c037=s003,c039=s004" );
 
   // int pos=0;//  this is position in the buffer...
   int c=0;//   position in OEbuffer..............

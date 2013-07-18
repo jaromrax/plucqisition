@@ -1,104 +1,3 @@
-.qqqqqqqqqq
-.L ../mut_queue.C+
-acq()
-acq("stop")
-acq("stop")
-acq("stop")
-system( "ls" )
-printf( " %d\n ", system( "ls" ) )
-printf( " %d\n", system( "ls" ) )
-printf( " %d\n", system( "ls" ) )
-printf( " %d\n", system( "ls" ) )
-printf( " %d\n", system( "nc" ) )
-printf( " %d\n", system( "nc 2>/dev/null" ) )
-printf( " %d\n", system( "nc 2>/dev/null" ) )
-printf( " %d\n", system( "nc 192.168.0.1  2>/dev/null" ) )
-.qqqqqqqqqq
-.L ../mut_queue.C+
-acq()
-acq("stop"))
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq()
-acq("stop")
-acq("stop")
-.qqqq
-.qqqqqq
-.L ../mut_queue.C+
-acq()
-.L ../mut_queue.C+
-acq()
-TSocket::IsValid()
-TSocket(127.0.0.1, 22)::IsValid()
-TSocket("127.0.0.1", 22)::IsValid()
-TSocket("127.0.0.1", 22)::fIsValid()
-TSocket("127.0.0.1", 22)::IsValid()
-TSocket::IsValid()
-TSocket::IsValid("127.0.0.1", 22)
-.qqqqqqqqqqqqqq
-.L ../mut_queue.C+
-acq()
-acq("stop")
-.qqqqqqqqqqqq
-.L ../mut_queue.C+
-acq()
-acq("stop")
-.qqqqqqqqqqqq
-.L ../mut_queue.C+
-acq("stop")
-acq()
-acq("stop")
-acq("stop")
-.qqqqqqq
-.L ../mut_queue.C+
-acq()
-acq("stop")
-.qqqqqqqqqq
-acq()
-.L ../mut_queue.C+
-acq()
-.qqqqqqqqqqqqqqqq
-.L ../mut_queue.C+
-acq()
-.qqqqqq
-TTimer  alarm(0, kFALSE);
-TTimer alarm;
-.q
-TTimer alarm(0, kFALSE)
-q
-.q
-TTimer qalarm(0, kFALSE)
- qalarm->SetInterruptSyscalls();
- qalarm.SetInterruptSyscalls();
- qalarm.Connect("Timeout()","",NULL,"")
- qalarm.Connect("Timeout()","",NULL,"Ahoj()")
- qalarm.Connect("Timeout()","TObject",NULL,"Ahoj()")
- qalarm.Connect("Timeout()","TObject",NULL,"ls()")
-qalarm->Start(1000,kTRUE)
-qalarm.Start(1000,kTRUE)
-.L ../mut_queue.C+
-acq()
-.qqqqqqqqqqqqqqqqqq
-.L ../mut_queue.C+
-acq()
-.q
-q.qqqqq.q
-.qq
-.q
-.qqqqqqqqq
-.L ../mut_queue.C+
-acq()
-.qqqqqqqqqqqq
-.L TimedSock.C 
-.L TimedSock.C 
-.x TimedSock.C
-.L TimedSock.C 
-.L TimedSock.C 
-.L TimedSock.C 
-.L TimedSock.C 
-main()
 .L TimedSock.C 
 .qqqqqqqq
 .L TimedSock.C 
@@ -490,3 +389,18 @@ nanot->Draw("c001:time")
 htemp
 nanot->Draw("c001:time>>htemp")
 .qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+.qqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+nanot->Show()
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+nanot->Show()
+   acq("stop")
+nanot->Draw("c001:time>>htemp")
+.qqqqqqqqqqq
