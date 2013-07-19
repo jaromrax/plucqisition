@@ -10,7 +10,8 @@
 #include <stdio.h>        // also   4 strcmp
 
 #include "TROOT.h"    // Main INCLUDE !!!!
-//#include "TH1F.h"
+//in h #include "TFile.h"
+//in h #include "TH1F.h"
 #include "TTree.h"
 #include <stdlib.h>     /* atof */
 #include <string.h>         // strcmp
@@ -44,6 +45,9 @@ int ZHbuffer[99000000];//="ahoj\0";  // I MUST USE int!!!!!!????
  double bTIME; // buffered time (mostly 0)
  double sTIME; // startup time
  double dTIME; // difference
+
+
+ TFile *ftree;
 
 /*----------------what can be done with channel-------------
 1/ fill histo
@@ -171,16 +175,24 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
   char brname[100];   //
   int ttree_exists=0; // NO, but to be checked...
 
-
   sprintf( ttree_name, "%s",  "nanot"  ); 
   if ( gDirectory->Get( ttree_name ) != NULL){ ttree_exists=1;  }
 
   //if (ZH_tree==NULL){//==========================ZH TREE   BEGIN==
   if ( ttree_exists==0 ){//=========================ZH TREE   BEGIN==
-    gROOT->cd(); // go to memory resident ttree
-    ZH_tree = new TTree( ttree_name , "ttree_from_ZH_data");  
+
+    toki=TokenGet( "file=", conf , tokres);
+    if (strlen(tokres)>0){
+      ftree=new TFile(tokres, "NEW" );
+      ftree->cd();
+      ZH_tree = new TTree( ttree_name , "ttree_from_ZH_data");  
+    }else{
+      gROOT->cd(); // go to memory resident ttree
+      ZH_tree = new TTree( ttree_name , "ttree_from_ZH_data");  
+    }
+
     toki=TokenGet( "circtree=", conf , tokres);
-    if (toki>0){
+    if (toki>0){//CIRCTREE = 100 000
       ZH_tree->SetCircular( toki ); //set it CIRCULAR....
       printf("circular TTree %d events\n",  toki );
     }

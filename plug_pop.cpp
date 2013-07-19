@@ -641,7 +641,11 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
     respush=TokenGet( "push=" , mmap_file , acqxml2 ); //takes a value    
   }//WHILE respush==0....push running...
 
-
+  if (ftree!=NULL){
+    //  ZH_tree->Write();
+    ftree->Write();
+    ftree->Close();
+  }
   sprintf(chL,"EXITING POP-ZH (bytes=%lld)", 4*cnt );table_log(1,chL);
   sprintf(chL,"EXITING POP-ZH (evnts=%ld)",cnt_evt );table_log(1,chL);
   sprintf(chL,"EXITING POP-ZH (data =%ld)",cnt_evt_data );table_log(1,chL);

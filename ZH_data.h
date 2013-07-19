@@ -6,6 +6,7 @@
 
 #include "TH1F.h"
 #include "TTree.h"
+#include "TFile.h"
 
 #include <inttypes.h>    //  int64_t was not known as a type...?!?
 
@@ -50,6 +51,7 @@ extern double sTIME; // startup time
 extern double dTIME; // difference
 
 
+extern TFile *ftree;
 
 
 void fillbuffer();// service: --- read buffer from disk----

@@ -407,3 +407,75 @@ nanot->Draw("V017:2*V001+V017>>hb","V032<1384 && V032>1284","colsame")
 nanot->Draw("V017:2*V001+V017>>ha","V032<1000 && V032>=0")
 nanot->Draw("V017:2*V001+V017>>hb","V032<1384 && V032>1284","colsame")
 .qqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+shspe()
+.L cuts_manip.h
+save_cut()
+savecut()
+savecut(Cut00_mtx1,"test_r18m1f2")
+.qqqqqqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+shspe()
+test_r18m1f2
+test_r18m1f2
+test_r18m1f2
+test_r18m1f2->fVarX()
+test_r18m1f2->fVarX
+test_r18m1f2->fVarX.Data()
+test_r18m1f2.fVarX.Data()
+test_r18m1f2->fVarX.Data()
+test_r18m1f2->SetVarX("V017+V001")
+test_r18m1f2->SetVarY("V017")
+test_r18m1f2->SetVarX("V017+2*V001")
+test_r18m1f2->GetVarX()
+.qqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+shspe()
+test_r18m1f2->GetVarX()
+test_r18m1f2->GetVarY()
+nanot->Draw("V017:V001")
+nanot->Draw("V017:V001","","col")
+savecut(Cut00_htemp,"cm1_d"
+savecut(Cut00_htemp,"cm1_d")
+cm1_d
+cm1_d
+cm1_d->GetVarX()
+cm1_d->GetVarY()
+cm1_d
+cm1_d->Print()
+nanot->Draw("V017:V017+2.1V001","","col")
+nanot->Draw("V017:V017+2.1*V001","","col")
+htemp
+htemp
+htemp->GetTitle()
+htemp->GetXAxis()
+htemp->GetXAxis()
+htemp->GetXaxis()
+htemp->GetXaxis()->GetTitle()
+mtx1
+mtx1->GetTitle()
+mtx1->GetXaxis
+mtx1->GetXaxis()->GetTitle()
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+shspe()
+.qqqqqqqqqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZHsave.xml")
+.qqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZHsave.xml")
+.qqqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZHsave.xml")
+.q
