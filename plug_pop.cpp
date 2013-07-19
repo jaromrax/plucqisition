@@ -621,6 +621,7 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
       buffer->wait_and_pop(datum);
       if ((cnt%250000)==0){
 	sprintf(chL,"POP:W     %7lld kB",4*cnt/1000);table_log(1,chL);
+	sprintf(chL,"POP:D     %7ld  evts",cnt_evt_data );table_log(1,chL);
       } //printout every MB
       cnt++; 
       //pos=0;fillbuffer();// one time READ DATA FROM FILE
@@ -641,9 +642,9 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
   }//WHILE respush==0....push running...
 
 
-  sprintf(chL,"EXITING the POP-ZH (bytes=%lld)", 4*cnt );table_log(1,chL);
-  sprintf(chL,"EXITING the POP-ZH (evnts=%ld)",cnt_evt );table_log(1,chL);
-  sprintf(chL,"EXITING the POP-ZH (data =%ld)",cnt_evt_data );table_log(1,chL);
+  sprintf(chL,"EXITING POP-ZH (bytes=%lld)", 4*cnt );table_log(1,chL);
+  sprintf(chL,"EXITING POP-ZH (evnts=%ld)",cnt_evt );table_log(1,chL);
+  sprintf(chL,"EXITING POP-ZH (data =%ld)",cnt_evt_data );table_log(1,chL);
 }//pop_ZH_____________________________________________________________END___
 
 

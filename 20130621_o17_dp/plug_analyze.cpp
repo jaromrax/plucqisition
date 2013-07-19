@@ -351,11 +351,15 @@ void TACounterMulti::Display(){
 
   char  acqxml2[100];
   char definitions[2000];// channel definitions
+  int delayms=100*1000; // delay can help with less printout....
   TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
   TSmallish_xml xml(    acqxml2   );
   xml.DisplayTele( xml.mainnode, 0, "plugins","poper","definitions" );
   sprintf( definitions  ,"%s", xml.output  );
 
+  xml.DisplayTele( xml.mainnode, 0, "plugins","analyze","delayms" );
+  sprintf( acqxml2  ,"%s", xml.output  );
+  delayms=atoi( acqxml2 ); if (delayms==0){ delayms=100*1000; }
 
    //NOT!!  concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    sprintf(ch,"evt_analyze_gettree." );   table_log(2,ch);
@@ -368,7 +372,7 @@ void TACounterMulti::Display(){
    TH1F *h_events; // THING to monitor analyzed event number 
    h_events=(TH1F*)gDirectory->Get("h_events");
    if (h_events==NULL){
-     h_events=new TH1F("h_events","h_events",100000,0,100000);
+     h_events=new TH1F("h_events","h_events",500000,0,500000);
    }
 
 
@@ -379,12 +383,20 @@ void TACounterMulti::Display(){
    //THESE MUST SURVIVE=====================================
    //this is pointer
    int64_t  entr;             // number of entries in the tree
-   int64_t  circular_bias=0; // important to have both - pos/neg 
+   int64_t  circular_bias=0;  // important to have both - pos/neg 
+   int64_t  total_processed=0;// good q.number
+   int64_t  lost_blocks=0;     // ++ any irregularity
+   int64_t  repeated_evts=0;  // ++ when evt_number < last_evt_n
+   int64_t  skipped_evts=0;   // ++ when evt_number > last_evt_n+1
+   int64_t  estim_span=0;   // estimated from #(@circ)..#(@entr)
+
    //this is value contained
    int64_t  last_event_n=-1;   // my last processed event (#)
 
 
-   while (1==1){//INFINITE==========================
+   int respop=1;// POP is running   "pop="  token.....
+
+   while (respop==1){//INFINITE==========================
 
    while (tree_addr_old==NULL){
      usleep(1000*100);
@@ -396,10 +408,50 @@ void TACounterMulti::Display(){
    tree_addr->SetTitle("CLONE");
    tree_addr->SetMakeClass(1);
 
+
+
+   int MAXCHAN=2048;
+  //-------------variables for tokens-------
+  char tok[10];
+  char tokres[100];
+  int toki;
+  char brname[100];   //
+
+
+  // SHADOWED SET OF VARIABLES CONNECTED TO TTREE============ a****
    Double_t acTIME_root; // time
    Long64_t acnt_evt;   // event number
+   UShort_t aTREE[MAXCHAN];  
+   UShort_t aCOUNTER[MAXCHAN];  
+   UShort_t aZERO[MAXCHAN]; 
+   //   int refer[MAXCHAN]; // e.g. refer[0]==channel; aTREE[refer[0]]==1254
+   //   int refermax=0;     // i go max up to 17 when checking
+   // NO - typical task is to  plot aTREE[0]:aTREE[17]
+
    tree_addr->SetBranchAddress( "time" ,&acTIME_root );
    tree_addr->SetBranchAddress( "cnt_evt" ,&acnt_evt );// /i == UInt_t 32bit
+
+   for (int i=1; i< MAXCHAN; i++){//  c0001-c2000
+     aZERO[i]=0;// ZERO ZERO forever
+     sprintf( tok, "c%03d=", i ); // if  c002=2 ===>>> data channel
+     toki=TokenGet( tok, definitions,tokres);//get the integer after c001=
+
+     if (toki!=0){// integer was found => it is HISTO------------
+      // DEFINE TTREE...........for every histo channel....
+       sprintf( brname,  "c%03d", i );//  branch  c001 
+       tree_addr->SetBranchAddress( brname ,&aTREE[i] );
+
+     }else if(strlen(tokres)>0){//-----NOT HISTO-----------------
+
+       if ( strstr(tokres,"s")==tokres){//counter--- =s001, =s002...
+	 sprintf( brname,  "%s", tokres );//  branch  c001 
+	 char num[15];	 strcpy( num,tokres); num[0]='0'; 
+	 tree_addr->SetBranchAddress( brname ,&aCOUNTER[ atoi(num) ] );
+	 
+       }//------------------------------counter-------------end
+     }//-------------------------------NOT HISTO--------------END
+   }//for (int i=1; i< MAXCHAN; i++)-------------
+   memcpy ( aTREE, aZERO,  sizeof( UShort_t)*MAXCHAN ) ;  //FAST CLEAR 
 
 
    //-------===============from here I can repeat=======----------
@@ -412,89 +464,110 @@ void TACounterMulti::Display(){
    //   if (entr>0){//..........................
      //EVERY LOOP I redefine   circular_bias;last_event_n
 
-        tree_addr->GetEntry(0);// this really starts at event #1
-	sprintf(ch,"entry %6d .... %6ld",  0,  acnt_evt);table_log(2,ch);
-
- circular_bias=last_event_n-acnt_evt+1;
- if (circular_bias<0){ circular_bias=0;}
-
-
-if (ANADEBUG){
-       tree_addr->GetEntry(1);// this really starts at event #1
-	sprintf(ch,"entry %6d .... %6ld",  1,  acnt_evt);table_log(2,ch);
-        tree_addr->GetEntry(entr-2);// this really starts at event #1
-	sprintf(ch,"entry %6ld .... %6ld", entr-2,acnt_evt);table_log(2,ch);
- }
-        tree_addr->GetEntry(entr-1);// this really starts at event #1
-	sprintf(ch,"entry %6ld .... %6ld", entr-1,acnt_evt);table_log(2,ch);
-
-	sprintf(ch,"circ= %6ld..%6ld; lastn .... %6ld", 
-		circular_bias, entr-1, last_event_n);
-	table_log(2,ch);
-
-	//	last_event_n=acnt_evt-1;
-	//   }//if (entr>0)..........................
-	//   else{  circular_bias=0;last_event_n=0; }
-
-
-
-   int64_t ii;
-   int64_t prev=last_event_n;
-
-   if (circular_bias>=entr){
-     sprintf(ch,"nodata%s XXXXX" ,"");table_log(2,ch);  
-     usleep(1000*200);
-     //check push  pop
-check
+   tree_addr->GetEntry(0);// this really starts at event #1
+   if (ANADEBUG){	
+     sprintf(ch,"entry %6d .... %6lld",  0,  acnt_evt);table_log(2,ch);
    }
 
+   circular_bias=last_event_n-acnt_evt+1;
+   if (circular_bias<0){ circular_bias=0;}
 
-   sprintf(ch,"run4 %6ld evts", entr-circular_bias);table_log(2,ch);  
+   sprintf(ch,"circ= %6ld..%6ld; lastn .... %6ld", 
+		circular_bias, entr-1, last_event_n);table_log(2,ch);
+
+   if (ANADEBUG){
+     tree_addr->GetEntry(1);// this really starts at event #1
+     sprintf(ch,"entry %6d .... %6lld",  1,  acnt_evt);table_log(2,ch);
+
+     tree_addr->GetEntry(circular_bias);// this really starts at event #1
+     sprintf(ch,"entry %6ld .... %6lld",circular_bias,acnt_evt);table_log(2,ch);
+
+     tree_addr->GetEntry(circular_bias+1);// this really starts at event #1
+     sprintf(ch,"entry %6ld .... %6lld",circular_bias+1,acnt_evt);table_log(2,ch);
+     tree_addr->GetEntry(circular_bias+2);// this really starts at event #1
+     sprintf(ch,"entry %6ld .... %6lld",circular_bias+2,acnt_evt);table_log(2,ch);
+   }
+   if (ANADEBUG){
+     tree_addr->GetEntry(entr-2);// this really starts at event #1
+     sprintf(ch,"entry %6ld .... %6lld", entr-2,acnt_evt);table_log(2,ch);
+   }
+   tree_addr->GetEntry(entr-1);// this really starts at event #1
+   estim_span=acnt_evt-last_event_n;//ESTIMATED SPAN...........
+   if (ANADEBUG){
+     sprintf(ch,"entry %6ld .... %6lld", entr-1,acnt_evt);table_log(2,ch);
+   }//------------------------------------ end of DEBUG pritnouts------
+
+
+   //prepare fo LOOP
+   int64_t ii;
+   int64_t prev=last_event_n; //this can keep better track than last_e_n
+
+   //the only interruption up to now
+   if (circular_bias>=entr){
+     sprintf(ch,"nodata%s                         XX" ,"");table_log(2,ch);  
+     usleep(1000*200);
+     respop=TokenGet( "pop=" , mmap_file , acqxml2 ); //takes a value    
+     //there is a big while loop- breaks with respop!=1
+   }// no data
+
+   if ( (entr-circular_bias)!=  estim_span ){
+     sprintf(ch,"run4 %6ld evts (est.%6ld)   AdHoc",
+	     entr-circular_bias,estim_span);table_log(2,ch);  
+   }else{
+     sprintf(ch,"run4 %6ld evts              ..",
+	     entr-circular_bias);table_log(2,ch);  
+   }
    //   if (entr-circular_bias==0){
    //          usleep(1000*100);
    //   }
+   int FLAG_process;
+   int reprint=0;
+   for(  ii=circular_bias; ii<entr; ii++){//.......FOR LOOP BEGIN
+     FLAG_process=1; // yes, DO 
+     tree_addr->GetEntry(ii);   
 
-   for(  ii=circular_bias; ii<entr; ii++)  {
-     tree_addr->GetEntry(ii);
-     if (prev+1 != acnt_evt){	
-       sprintf(ch,"problem @ %6ld .. %6ld=%6ld XXX", ii,prev,acnt_evt);table_log(2,ch);  
-     }//if not==
-     prev=acnt_evt;// should be like  prev++;
-     last_event_n=acnt_evt;
-   }//for(  ii=circular_bias; ii<entr; ii++).........
+     if (prev+1 != acnt_evt){	// IF THE ORDER IS INTERRUPTED:
+       if (reprint==0){
+       sprintf(ch,"!@ %6ld .. prev=%6ld;curr=%6lld **********", 
+	       ii,prev,acnt_evt); table_log(2,ch); 
+       reprint++;// after the end, they jump by 2! useless printouts
+       lost_blocks++; // I resign on the remaining part
+       }//if reprint
+       prev=acnt_evt-1; // RESET "prev"
+     }//  IF   prev+1  !=  current______> lost block
+
+     if (acnt_evt<=last_event_n){ repeated_evts++;FLAG_process=0;}//
+     if (acnt_evt>last_event_n+1){// if skipped block (not seen yet)
+       skipped_evts+=acnt_evt-last_event_n-1;
+       FLAG_process=1;
+     }//
+     if (FLAG_process==1){//NORMAL PROCESSING........BEGIN
+       //=================================================
+       prev++;
+       total_processed++;
+       last_event_n=acnt_evt;//last processed
+
+       h_events->Fill( acnt_evt );
+       
+       //=================================================
+     }//--------------------NORMAL PROCESSING........END
+   }//for(  ii=circular_bias; ii<entr; ii++).........FOR LOOP  END
 
    
    tree_addr->Delete(); // clean your CLONE
-   if (last_event_n<0) break;
-   //   tree_addr_old=NULL;  // 
-   }// while (1==1) ================ INFINITE =================
+   if (last_event_n<0) break;// not seen yet
+   //   tree_addr_old=NULL;  // why...
+   }// while (respop==1) ================ INFINITE =================
 
 
-   //  load_chan_table( definitions );
-
-   // long long int last_event_n=0;
-   // long long int entr;
-   // long long int ii; 
-   // long long int last_ii;//printout after
-   // int down=5;
-   // double downtime; int downtimef, downtimei,  wait=1;
-   // while (wait!=0){//INFINITE INFINITE INFINITE INFINITE INFINITE INFINITE
-
-   //   TTree *tree_addr_old=(TTree*)gDirectory->FindObject("nanot");
-   //   if ( tree_addr_old!=NULL ){ 
-   //     TTree *tree_addr=(TTree*)tree_addr_old->Clone();
-   //     tree_addr->SetTitle("CLONE");
-   //     tree_addr->SetMakeClass(1);//to use int,float.?http://root.cern.ch/drupal/content/accessing-ttree-tselector
-
-   //     //NOTNOW   tree_addr->SetBranchStatus("*",0); //disable all branches
-       
-   //     //       tree_addr->SetBranchAddress("mainV", &cha[1] ); 
 
 
-   // }//while____________________________________________  INFINITE INFINITE
-	
 
-
+  sprintf(ch,"EXITING AN (repeated  =%ld)",repeated_evts );table_log(2,ch);
+  sprintf(ch,"EXITING AN (skipped   =%ld)",skipped_evts  );table_log(2,ch);
+  sprintf(ch,"EXITING AN (lost blks.=%ld)",lost_blocks  );table_log(2,ch);
+  sprintf(ch,"EXITING AN (total_proc=%ld)",total_processed);table_log(2,ch);
+  sprintf(ch,"EXITING AN (last_evt_N=%ld)", last_event_n );table_log(2,ch);
  }//==========================================evt_analyze_gettree===END
 
 

@@ -1,104 +1,3 @@
-.L ../acq_core.C+
-acq()
-.q
-.x load_libs.C
-.q
-.x load_libs.C
-acq()
-.q
-.x load_libs.C
-acq()
-acq("stop")
-acq("stop")
-.qqqqqqqqqqqqq
-.L load_libs.C
-acq()
-.qqqqqqqqq
-.x load_libs.C
-acq()
-.q
-.qqqqqqq
-.x load_libs.C
-acq()
-.q
-.qqqqqqqqq
-.x load_libs.C
-acq()
-.qqqqqqqqqqq
-acq()
-.x load_libs.C
-acq()
-.qqqqqqqqqqqqqqqq
-.x load_libs.C
-acq()
-qqqqqqqqqqq
-.qqqqqqqqqqqq
-.x load_libs.C
-acq()
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-.qqqqqqqqqqqq
-.x load_libs.C
-acq()
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-acq("stop")
-.qqqqqqqqqqqqq
-.x load_libs.C
-acq()
-acq("stop")
-acq("stop")
-acq()
-acq("stop")
-.qqqqqqqq
-.x load_libs.C
-acq()
-acq("stop")
-TThread::Ps()
-TThread::GetThread("analyze_thread")
-TThread::GetThread("push_thread")
-TThread::GetThread("pusher_thread")
-TThread::GetThread("pusher_thread")->GetState()
-.qqqqqqqqqqqqqqqqqqq
-.x load_libs.C
-acq()
-acq("stop")
-TThread::Ps()
-TThread::Ps()
-TThread::Ps()
-TThread::Ps()
-TThread::Ps()
-.q
-.qqqqqqqqqq
-.L load_libs.C+
-.L load_libs.C
-acq("file.xml")
-.L load_libs
-.L load_libs.C
-acq("file.xml")
-.L load_libs.C
-acq("file.xml")
-.q
-.qqqqqqq
-.L load_libs.C
-acq("file.xml")
-.q
-.qqqqqqqqqqqqqq
-.L load_libs.C
-acq("file.xml")
-.qqqqqqqqqqqqqq
-.L load_libs.C
-acq("file.xml")
-.qqqqqqqqqq
-.q
-.L load_libs.C
-acq("file.xml")
 .qqqqqqqqqqq
 .L load_libs.C
 acq("file.xml")
@@ -463,3 +362,90 @@ acq("fileZH.xml")
 .L load_libs.C
 acq("fileZH.xml")
 .qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+.qqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+.qqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+acq("fileZH.xml")
+.qqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+..qqqqqqqqqqqqqqqqqqqqq
+..qqqqqqqqqqqqqqqqqqqqq
+.qqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.q
+.qqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.qqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+shspe()
+.qqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+shspe()
+.q
+.qqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.ls
+nanot->Show()
+char a[10]="s001"
+strstr(a,"s")
+strstr(a,"s")==a
+strstr(a,"s")==""
+.qqqqqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+.ls
+nanot->Show()
+nanot->Draw("s001:s002")
+nanot->Draw("s001")
+nanot->Draw("s001:s002","s001>0","col")
+nanot->Draw("s001:s002>>hh(100,0,30000,100,0,30000)","s001>0","col")

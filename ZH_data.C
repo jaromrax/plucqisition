@@ -223,14 +223,25 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
 	printf("ZH:time %d  defined (part %d)\n", i, T_yn[i]  );
       }//TIME
 
-      if ( strstr(tokres,"s")!=NULL){//counter--------------- =s001, =s002...
+      if ( strstr(tokres,"s")==tokres){//counter----------- =s001, =s002...
 	//        sprintf( tok, "s%03d", i ); 
 	TH1F *h=new TH1F( tokres, tokres, 60000,0,60000);
 	COUNhist[i]=h;
 	C_yn[i]=1;
 	C_yn[i+1]=2; // his number 2 - cover
 	printf("ZH:counter %d defined\n", i  );
-      }//COUNTER
+
+	// DEFINE TTREE...........for every counter channel....
+	sprintf( brname,  "%s", tokres );//  branch  s001 
+	sprintf(ch ,"%s/s", brname );  //  UShort_t ===  /s  
+	if (ttree_exists==0){// does not exist yet
+	  ZH_tree->Branch(brname , &TREE[i], ch );// 
+	}else{// already exists
+	  ZH_tree->SetBranchAddress( brname ,&TREE[i] );
+	}//ttree existence
+
+
+     }//COUNTER
     }// else....if something in the string ....NOT SOLE NUMBER
     //-------------------------------------HISTO -----------------end----
  
@@ -282,6 +293,7 @@ void process_chan(int ch,  int val){// KEY:fill propper histos,counters,time
       COUNhist[ch-1]->Fill( COUNtmp[ch-1] );// Fill Histogram
       sprintf(mmm,"TOTAL = %ld",COUN[ch-1]);
       COUNhist[ch-1]->SetTitle( mmm );
+      TREE[ch-1]= COUNtmp[ch-1] ; // prepare the variable for tree
     }
     //----------------------
     if (HIST[ch]!=NULL){// HISTO
