@@ -369,13 +369,37 @@ void TACounterMulti::Display(){
  //------------------------------- typical creation of 1d spectra ---
 
 
+
+
+   //======================================SET of variables for TREE===
+   int MAXCHAN=2048;
+  //-------------variables for tokens-------
+  char tok[10];
+  char tokres[100];
+  int toki;
+  char brname[100];   //
+
+
+  // SHADOWED SET OF VARIABLES CONNECTED TO TTREE============ a****
+   Double_t acTIME_root; // time
+   Long64_t acnt_evt;   // event number
+   UShort_t aTREE[MAXCHAN];  
+   UShort_t aCOUNTER[MAXCHAN];  
+   UShort_t aZERO[MAXCHAN]; 
+   //   int refer[MAXCHAN]; // e.g. refer[0]==channel; aTREE[refer[0]]==1254
+   //   int refermax=0;     // i go max up to 17 when checking
+   // NO - typical task is to  plot aTREE[0]:aTREE[17]
+
+
+
+
    TH1F *h_events; // THING to monitor analyzed event number 
    h_events=(TH1F*)gDirectory->Get("h_events");
    if (h_events==NULL){
      h_events=new TH1F("h_events","h_events",500000,0,500000);
    }
 
-
+#include "plug_analyze_definitions.cpp"
 
    TTree *tree_addr_old;
    TTree *tree_addr;
@@ -410,23 +434,6 @@ void TACounterMulti::Display(){
 
 
 
-   int MAXCHAN=2048;
-  //-------------variables for tokens-------
-  char tok[10];
-  char tokres[100];
-  int toki;
-  char brname[100];   //
-
-
-  // SHADOWED SET OF VARIABLES CONNECTED TO TTREE============ a****
-   Double_t acTIME_root; // time
-   Long64_t acnt_evt;   // event number
-   UShort_t aTREE[MAXCHAN];  
-   UShort_t aCOUNTER[MAXCHAN];  
-   UShort_t aZERO[MAXCHAN]; 
-   //   int refer[MAXCHAN]; // e.g. refer[0]==channel; aTREE[refer[0]]==1254
-   //   int refermax=0;     // i go max up to 17 when checking
-   // NO - typical task is to  plot aTREE[0]:aTREE[17]
 
    tree_addr->SetBranchAddress( "time" ,&acTIME_root );
    tree_addr->SetBranchAddress( "cnt_evt" ,&acnt_evt );// /i == UInt_t 32bit
@@ -438,8 +445,8 @@ void TACounterMulti::Display(){
 
      if (toki!=0){// integer was found => it is HISTO------------
       // DEFINE TTREE...........for every histo channel....
-       sprintf( brname,  "c%03d", i );//  branch  c001 
-       tree_addr->SetBranchAddress( brname ,&aTREE[i] );
+       sprintf( brname,  "V%03d", toki );//  branch  c001 
+       tree_addr->SetBranchAddress( brname ,&aTREE[toki] );
 
      }else if(strlen(tokres)>0){//-----NOT HISTO-----------------
 
@@ -451,7 +458,8 @@ void TACounterMulti::Display(){
        }//------------------------------counter-------------end
      }//-------------------------------NOT HISTO--------------END
    }//for (int i=1; i< MAXCHAN; i++)-------------
-   memcpy ( aTREE, aZERO,  sizeof( UShort_t)*MAXCHAN ) ;  //FAST CLEAR 
+   memcpy ( aTREE,    aZERO,  sizeof( UShort_t)*MAXCHAN ) ;  //FAST CLEAR 
+   memcpy ( aCOUNTER, aZERO,  sizeof( UShort_t)*MAXCHAN ) ;  //FAST CLEAR 
 
 
    //-------===============from here I can repeat=======----------
@@ -548,7 +556,13 @@ void TACounterMulti::Display(){
        last_event_n=acnt_evt;//last processed
 
        h_events->Fill( acnt_evt );
-       
+
+
+       #include "plug_analyze_actions.cpp"
+
+
+       memcpy ( aTREE, aZERO,  sizeof( UShort_t)*MAXCHAN ) ;  //FAST CLEAR 
+
        //=================================================
      }//--------------------NORMAL PROCESSING........END
    }//for(  ii=circular_bias; ii<entr; ii++).........FOR LOOP  END

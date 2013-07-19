@@ -15,7 +15,9 @@ mpath2 := $(shell echo  $(mpath) | sed  's/:/ /g')
 
 
 
-all: plug_analyze.so
+all: 	plug_analyze.so
+	@rm plug_analyze.so;\
+	$(ROOTCC)  $(OBJS_LIBS) -fPIC -I.. -shared -o plug_analyze.so plug_analyze.cpp  $(LDFLAGS)
 	@echo "make:";\
 	echo "      this help";\
 	echo " TRICK -  I incluce  ..  directory "
@@ -24,7 +26,8 @@ plug: plugins
 
 plugins: plug_analyze.so
 
-plug_analyze.so: plug_analyze.cpp
+plug_analyze.so: plug_analyze.cpp plug_analyze_actions.cpp plug_analyze_definitions.cpp
+	rm plug_analyze.so;\
 	$(ROOTCC)  $(OBJS_LIBS) -fPIC -I.. -shared -o plug_analyze.so plug_analyze.cpp  $(LDFLAGS)
 
 

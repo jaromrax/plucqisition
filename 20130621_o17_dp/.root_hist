@@ -1,104 +1,3 @@
-.qqqqqqqqqqq
-.L load_libs.C
-acq("file.xml")
-.qqqqqqqqqqq
-.L load_libs.C
-acq("file.xml")
-TThread::Ps()
-acq("stop")
-.! rm /tmp/RUN
-acq("file.xml")
-.qqqqqqqqqqqq
-.L load_libs.C
-acq("file.xml")
-.! rm /tmp/RUN
-acq("file.xml")
-acq("stop")
-acq("file.xml")
-.! rm /tmp/RUN
-acq("file.xml")
-acq("stop")
-.! rm /tmp/RUN
-acq("file.xml")
-.qqqqqqqqqq
-.q
-.L load_libs.C
-acq("file.xml")
-.! rm /tmp/RUN
-acq("file.xml")
-.! rm /tmp/RUN
-acq("file.xml")
-acq("file.xml")
-.qqqqqqqqqqqqqqq
-.L load_libs.C
-acq("file.xml")
-.qqqqqqqqqqqqqqqqqq
-.L load_libs.C
-acq("file.xml")
-acq("stop")
-.qqqqqqqqqq
-.L load_libs.C
-acq("file.xml")
-   acq("stop")
-.qqqqqqqqq
-.L load_libs.C
-acq("file.xml")
-.qqqqqqqqqqqqqqqqqq
-.L load_libs.C
-acq("file.xml")
-   acq("stop")
-.qqqqqqqqqqq
-.L load_libs.C
-acq("file.xml")
-   acq("stop")
-.qqqqqqqqqqqq
-.L load_libs.C
-acq("file.xml")
-   acq("stop")
-.qqqqqqqqqqqq
-.L load_libs.C
-acq("file.xml")
-   acq("stop")
-acq("file2.xml")
-   acq("stop")
-.qqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-.qqqqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-.qqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-.ls
-shspe()
-.qqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-shspe()
-.qqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-shspe()
-.qqqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-shspe()
-.q
-.qqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-shspe()
-.qqqqqq
-.L load_libs.C
-acq("fileZH.xml")
 shspe()
 .qqqqqqq
 .L load_libs.C
@@ -449,3 +348,62 @@ nanot->Draw("s001:s002")
 nanot->Draw("s001")
 nanot->Draw("s001:s002","s001>0","col")
 nanot->Draw("s001:s002>>hh(100,0,30000,100,0,30000)","s001>0","col")
+.q
+.qqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+.ls
+nanot->Show()
+.qqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+shspe()
+.qqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+shspe()
+.qqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+shspe()
+.qqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+shspe()
+.qqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+   acq("stop")
+shspe()
+.qqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+shspe()
+.qqqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+shspe()
+.qqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+shspe()
+gt1q
+gt1q
+gt1q->Print()
+.qqqqqqqqqqqqq
+.L load_libs.C
+acq("fileZH.xml")
+shspe()
+nanot->Show()
+nanot->Draw("2*V001+V017:V017","V032<1000","col")
+nanot->Draw("V017:2*V001+V017","V032<1000","col")
+nanot->Draw("V017:2*V001+V017","V032<1000","col")
+nanot->Draw("V017:2*V001+V017","V032<1000","col")
+nanot->Draw("V017:2*V001+V017","V032<1000 && V032>1","col")
+nanot->Draw("V017:2*V001+V017>>ha","V032<1000 && V032>=0")
+nanot->Draw("V017:2*V001+V017>>hb","V032<1000 && V032>1","colsame")
+nanot->Draw("V017:2*V001+V017>>hb","V032<1384 && V032>1284","colsame")
+nanot->Draw("V017:2*V001+V017>>ha","V032<1000 && V032>=0")
+nanot->Draw("V017:2*V001+V017>>hb","V032<1384 && V032>1284","colsame")
+.qqqqqqqqqqq

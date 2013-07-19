@@ -207,7 +207,7 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
       HIST[i]=h;
 
       // DEFINE TTREE...........for every histo channel....
-      sprintf( brname,  "c%03d", i );//  branch  c001 
+      sprintf( brname,  "V%03d", toki );//  branch  c001 
       sprintf(ch ,"%s/s", brname );  //  UShort_t ===  /s  
       if (ttree_exists==0){// does not exist yet
 	ZH_tree->Branch(brname , &TREE[i], ch );// 
