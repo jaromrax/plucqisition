@@ -4,6 +4,7 @@
 */
 #include "ZH_data.h"
 #include "xml_attr.h"
+#include "log_term.h"
 
 
 
@@ -17,7 +18,7 @@
 #include <string.h>         // strcmp
 #include <string>         // strcmp
 
-int ZHbuffer[99000000];//="ahoj\0";  // I MUST USE int!!!!!!????
+int ZHbuffer[99000000];// 99M*4  // I MUST USE int!!!!!!????
  int OEbuf[1000];//  ONE EVENT buffer; ;
 
  int OEBmax;// ONE EVENT LIMIT !!!!!!!!!!
@@ -74,15 +75,23 @@ chan   histo   map_to_ttree   time
 
 
 //=======================  service===  read buffer from disk----
-void fillbuffer(){
+int fillbuffer( const char* datafile){
   FILE *f;
   int *pch=&ZHbuffer[0];
-  //  printf( "I see   /%s/\n",   pch );
-  f=fopen("/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V","rb");
-  if (f==NULL){ printf("BAD FILE\%s\n", "" );return;}
+  printf( "I see   /%lx=%lx/\n",   (int64_t)pch, (int64_t)ZHbuffer );
+
+  if ( fexists( datafile) <= 0) {
+     printf("BAD  FILE = /%s/, file doesnot exist\n",datafile);return 1;
+  }else{
+     printf("GOOF FILE = /%s/, file exists       \n",datafile);
+  }
+
+  f=fopen( datafile , "rb" );
+  if (f==NULL){ printf("BAD FILE = /%s/, ccannot open\n",datafile);return 1;}
   DataRead=fread( pch , 1, sizeof(ZHbuffer) , f  );
   printf("%d READ\n", DataRead  );
   fclose(f);
+  return 0;
 }
 
 
@@ -165,28 +174,48 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
   strcpy( conf, str2k );
 
   //-------------variables for tokens-------
-  char tok[10];
-  char tokres[100];
+  char tok[100];
+  char tokres[300];
   int toki;
 
 
   char ch[1000];//  DEFINE TTree; I make it 1 leaf/branch
-  char ttree_name[50];//
-  char brname[100];   //
+  char ttree_name[150];//
+  char brname[300];   //
   int ttree_exists=0; // NO, but to be checked...
 
   sprintf( ttree_name, "%s",  "nanot"  ); 
   if ( gDirectory->Get( ttree_name ) != NULL){ ttree_exists=1;  }
 
-  //if (ZH_tree==NULL){//==========================ZH TREE   BEGIN==
+
+
+  time_t curtime;  struct tm *loctime;  
+  char begin[300];
+  char *end;
+  char tokres2[300];
+//if (ZH_tree==NULL){//==========================ZH TREE   BEGIN==
   if ( ttree_exists==0 ){//=========================ZH TREE   BEGIN==
 
     toki=TokenGet( "file=", conf , tokres);
     if (strlen(tokres)>0){
+      if ( fexists(tokres)>=0){
+	curtime = time (NULL);  loctime = localtime (&curtime);
+	end=strrchr( tokres, '.' ); // .root
+	memcpy( begin,  tokres,  end-tokres ); // copy begin
+	sprintf(tokres2,"%s_%04d%02d%02d_%02d%02d%02d%s", begin,
+		1900+loctime->tm_year,   1+loctime->tm_mon,  
+		loctime->tm_mday,  loctime->tm_hour,   
+		loctime->tm_min,  loctime->tm_sec,
+		end);
+       
+	printf("PROBLEM: file %s already exists, I rename it to %s\n",
+	       tokres, tokres2 );
+	sprintf(tokres, "%s", tokres2 );
+      }//fexists >=0
       ftree=new TFile(tokres, "NEW" );
       ftree->cd();
       ZH_tree = new TTree( ttree_name , "ttree_from_ZH_data");  
-    }else{
+    }else{ //TOKRES!=""  file= TOKEN -----------------------------
       gROOT->cd(); // go to memory resident ttree
       ZH_tree = new TTree( ttree_name , "ttree_from_ZH_data");  
     }
@@ -195,10 +224,11 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
     if (toki>0){//CIRCTREE = 100 000
       ZH_tree->SetCircular( toki ); //set it CIRCULAR....
       printf("circular TTree %d events\n",  toki );
-    }
+    }// toki>0
+
     ZH_tree->Branch( "time" , &cTIME_root, "time/D" );// /D == Double_t 64bit
     ZH_tree->Branch( "cnt_evt" , &cnt_evt_data, "n/L" );// /: == Long64_t 64bi
-  }else{ // already exists..........???
+}else{ // already exists..........???
     ZH_tree->SetBranchAddress( "time" ,&cTIME_root );
     ZH_tree->SetBranchAddress( "cnt_evt" ,&cnt_evt_data );// /i == Long64_t 64bit
   }//==============================================ZH TREE   END====
@@ -417,11 +447,19 @@ int process_ONE_EVENT(int *arr){// translate buffer with one event to data
 
 
 
+/*************************************************************
+ *
+ *       M A I N    part
+ *
+ *************************************************************
+ */
 
+//-------------- xmlfile:  plugins / poper / file=""
+void ZH_data(int events, const char* datafileA,  const char* xmlfile, 
+	     const char* search,const char* seq,const char* searchatt){
 
-
-
-void ZH_data(int events){
+  //  int events = 10000; // LIMIT !!!!!!!
+//void ZH_data(int events){
 
   //======== STANDARD  STARTUP ==============================
   OEBmax=1000;// ONE EVENT LIMIT !!!!!!!!!!
@@ -434,8 +472,7 @@ void ZH_data(int events){
  sTIME=0.0; // startup time
  dTIME=0.0; // difference
 
-
-  reset_chan_table();
+ reset_chan_table();
   /*
 translation
 c001  ... original channels from data (e.g.c1024==time)
@@ -443,15 +480,56 @@ translates to
 if number      1..   -> histograms  c001.. (simple channel)
 if t1..t4            -> time mark, 
 if s001..            ->counter (1st+2nd channels x 65000); "TOTAL" in title
-   */
-  load_chan_table("c001=1,c002=2,c003=3,c004=4,c005=5,c006=6,c007=7,c008=8,c009=9,c010=10,c011=11,c1024=t1,c1025=t2,c1026=t3,c1027=t4,c033=s001,c035=s002,c037=s003" );
+   */  
 
-  fillbuffer();// one time READ DATA FROM FILE
+ char  acqxml2[2000];// must be enough if you want long line
+
+ strcpy( acqxml2, xmlfile );
+ TSmallish_xml xml(    acqxml2   );
+ 
+ // xml.DisplayTele( xml.mainnode, 0, "plugins","poper","definitions" );
+ xml.DisplayTele( xml.mainnode, 0, search, seq,  searchatt );
+ sprintf( acqxml2 ,"%s", xml.output  );
+
+
+  load_chan_table(  acqxml2  );
+  printf( "LOAD_CHAN_TABLE LOADED:\n%s\n\n"  , acqxml2 );
+
+  //  load_chan_table("c001=1,c002=2,c003=3,c004=4,c005=5,c006=6,c007=7,c008=8,c009=9,c010=10,c011=11,c1024=t1,c1025=t2,c1026=t3,c1027=t4,c033=s001,c035=s002,c037=s003" );
+
+//datafile = RUN018_V
+//"/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V"
+
+// READ BUFFER// one time READ DATA FROM FILE
+//  printf( "FILL BUFFER LOAD?: /%s/\n"  ,datafileA );
+
+  if (0!= fillbuffer(datafileA) ){
+    printf ("FILE %s not opened..............ending\n", "");
+    return;
+  }
+  //  printf( "FILL BUFFER LOADED: /%s/\n"  ,datafileA );
+
   int pos=0;
 
-  for (int i=0;i<events;i++){
+#define DEBUG 0
+  int ie=0;
+  //  for (int i=0;i<events;i++){
+  while ( (events<0) || (ie<events) ){ // if events < 0=> limit
+    ie++;  
     pos=fillOEB(pos);
     if (pos<0)break;
     process_ONE_EVENT(OEbuf);
   }
+
+  printf("%d (total) events done\n" , ie);
+  gDirectory->ls();
+  printf("%d (total) events done, closing files\n" , ie);
+
+  if ( ftree!=NULL) { 
+    ZH_tree->Write();
+    ftree->Write(); 
+    ftree->Close(); 
+    
+  }
+  // NOW I HAVE ALL THE DATA in MEM & in TTREE
 }//ZH_data__________________________________________

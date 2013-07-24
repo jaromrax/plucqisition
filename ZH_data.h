@@ -54,7 +54,7 @@ extern double dTIME; // difference
 extern TFile *ftree;
 
 
-void fillbuffer();// service: --- read buffer from disk----
+int fillbuffer( const char* datafileA );// service: ---read buffer from disk
 
 int fillOEB(int pos);// fill ONE EVENT into OEbuf buffer
 
@@ -68,7 +68,9 @@ void process_EOE(); // end of event - do filling
 
 int process_ONE_EVENT(int *arr);// translate buffer with one event to data
 
-void ZH_data(int events);  // TEST
+//        void ZH_data(int events);  // TEST  events<0 == inf.
+void ZH_data(int events, const char* datafile,  const char* xmlfile, 
+	     const char* search,const char* seq,const char* searchatt);
 
 
 

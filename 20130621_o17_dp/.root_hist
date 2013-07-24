@@ -1,205 +1,3 @@
-shspe()
-.qqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-.ls
-nanot
-nanot
-nanot->Print()
-nanot->Show(1)
-nanot->Show(2)
-nanot->Show(3)
-nanot->Show(4)
-nanot->Show(6)
-nanot->Show()
-nanot->Show(8)
-nanot->Draw("c001")
-nanot->Draw("c001>>h(4000,0,4000)")
-nanot->Draw("c001:c002>>h(4000,0,4000,4000,0,4000)")
-nanot->Draw("c001:c002>>h(4000,0,4000,4000,0,4000)")
-nanot->Draw("c001:c002>>h(4000,0,4000,4000,0,4000)")
-.qqqqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-nanot->Draw("c001:c002>>h(4000,0,4000,4000,0,4000)")
-.qqqqqqqqq
-UShort_t i[10]
-i
-i[0]
-i[0]=1
-i[1]=1
-i[2]=1
-i
-i[9]=1
-i
-UShort_t zero[10]
-memcpy( i, zero )
-memcpy( i, zero , 10)
-i
-i[9]
-memcpy( i, zero , 10*2 )
-i[9]
-sizeof(UShort_t)
-.qqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-nanot->Draw("c001:c002>>h(4000,0,4000,4000,0,4000)")
-.qqqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-shspe()
-.q
-.qqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-shspe()
-nanot->Draw("c001:c017")
-nanot->Draw("c001:c017","","col")
-nanot->Draw("c017:c017+c001","","col")
-nanot->Draw("c017:c017+2*c001","","col")
-nanot->Show()
-nanot->Show()
-.qqqqqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-shspe()
-nanot->Show()
-.qqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-nanot->Show()
-nanot->Draw(c001:time)
-nanot->Draw("c001:time")
-shspe()
-nanot->Draw("c001:time")
-.qqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-shspe()
-nanot->Draw("c001:time")
-htemp
-nanot->Draw("c001:time>>htemp")
-.qqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-.qqqqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-nanot->Show()
-.qqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-nanot->Show()
-   acq("stop")
-nanot->Draw("c001:time>>htemp")
-.qqqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-TBrower *b
-TBrowser *b
-TBrowser b
-TBrowser b
-TBrowser c
-tv__tree = (TTree *) gROOT->FindObject("nanot");
-tv__tree_list->Add(tv__tree);
-tv__tree->Draw("c017:c001","","", 98202, 0);
-tv__tree->Draw("c017:c001","","col", 98202, 0);
-tv__tree->Draw("c017:c001","","col", 98202, 0);
-tv__tree->Draw("c017:c001","","col", 98202, 0);
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-acq("fileZH.xml")
-acq("stop")
-acq("stop")
-acq("fileZH.xml")
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-acq("fileZH.xml")
-   acq("stop")
-.qqqqqqqqqqqq
-.qqqqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-acq("fileZH.xml")
-.qqqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-   acq("stop")
-.q
-.qqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-.qqqqqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-.L load_libs.C
-acq("fileZH.xml")
-.L load_libs.C
-acq("fileZH.xml")
-nanot
-nanot->Show()
-.qqqqqqqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-nanot->Show()
-.qqqqqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-acq("fileZH.xml")
-   acq("stop")
-nanot->Show(1)
-nanot->Show(2)
-nanot->Show(3)
-nanot->Show(4)
-nanot->Show(5)
-nanot->Show(6)
-nanot->Show(7)
-.qqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-   acq("stop")
-.qqqqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-.qqqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-.qqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-.qqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-.qqqqqqqqqqqq
-.L load_libs.C
-acq("fileZH.xml")
-acq("stop")
-acq("stop")
-gDirectory
-gDirectory->Find("nanot")
-gDirectory->FindObject("nanot")
-nanot
-nanot
-nanot->Draw()
-acq("fileZH.xml")
-.qqqqqqqqqqqqqqqqq
-nanot->Draw()
-.L load_libs.C
-acq("fileZH.xml")
-.qqqqqqqqqq
 .L load_libs.C
 acq("fileZH.xml")
 .qqqqqqqqqqqqqqq
@@ -479,3 +277,221 @@ acq("fileZHsave.xml")
 .L load_libs.C
 acq("fileZHsave.xml")
 .q
+.L load_libs
+.L load_libs.C
+.L ../ZH_data.C+
+ZH_data("../RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.L ../ZH_data.C+
+.L load_libs.C
+.L ../ZH_data.C+
+ZH_data("../RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.L ../ZH_data.C+
+.qqqqqqqqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data("../RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.qqqqqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data("../RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.qqqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+.L ../ZH_data.C
+.qqqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data("../RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.qqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data("../RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.qqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data("/home/ojr/00_central/Root/03_programs/58_kibbler_narval/20130621_o17_dp/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.qqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data("/home/ojr/00_central/Root/03_programs/58_kibbler_narval/20130621_o17_dp/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.qqqqqqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data("/home/ojr/00_central/Root/03_programs/58_kibbler_narval/20130621_o17_dp/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.q
+.L load_libs.C
+.L ../ZH_data.C
+.! rm /tmp/RUNplug
+.! rm /tmp/RUNplug.root
+ZH_data("/home/ojr/00_central/Root/03_programs/58_kibbler_narval/20130621_o17_dp/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.qqqqqqqqqqqqqqqqqqqq
+.L load_libs
+.L load_libs.C
+ls
+.L ../ZH_data.C
+ZH_data("/home/ojr/00_central/Root/03_programs/58_kibbler_narval/20130621_o17_dp/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.q
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data("/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+q
+.qqqqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data("/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.qqqqqqqqqqq
+.L load_libs.C
+.L ../ZH_data.C+
+ZH_data("/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.q
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data("/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.q
+.L ../ZH_data.C
+.qqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data("/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.ls
+shspe()
+.qqqqqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data(100000, "/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.qqqqqqqqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data(100000, "/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.ls
+.qqqqqqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data(100000, "/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+TString sla;
+TDatime *dt=new TDatime() ;  // kTRUE previously...mess
+sla.Append( dt->AsString() );//append date
+sla
+sla.Data()
+ch[100]="/tmp/ahoj.root"
+ch[100]="/tmp/ahoj.root"
+ch[100=
+ch[100]
+.qqqqqqqqqqq
+ch[100]
+char ch[100]="/tmp/ahoj.root"
+cj
+ch
+strcmp( ch, "." )
+strstr( ch, "." )
+strrch( ch, "." )
+strrch( ch, '.' )
+strrch( ch, 11 )
+strrch( ch, '.' )
+strrch( ch, 11 )
+strrch( ch, 2 )
+strrch( ch, 24 )
+  #include <string.h>
+strrch( ch, '.' )
+int i
+i=13
+strrch( ch, i )
+strrchr( ch, i )
+strrchr( ch, '.' )
+char* end=strrchr( ch, '.' )
+end
+ch - end
+end-ch
+strn( str,  end-ch )
+memcpy( str, 0,  end-ch )
+char *nn[100]
+char nn[100]
+char w[100]
+memcpy( w, str, 0,  end-ch )
+memcpy( w, str,  end-ch )
+memcpy( w, str,  end-ch )
+.qqqqq
+char ch[100]="/tmp/ahoj.root"
+char* end=strrchr( ch, '.' )
+char w[100]
+memcpy( w, ch,  end-ch )
+w
+w
+w
+end
+.qqqqqqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data(100000, "/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+ZH_data(200000, "/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.qqqqqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data(200000, "/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.qqqqqqqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+.L ../ZH_data.C
+.qqqqqqqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data(200000, "/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+ZH_data(200000, "/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+ZH_data(200000, "/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+ZH_data(200000, "/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.qqqqqqq
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data(200000, "/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+ZH_data(200000, "/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+char tok[100]="/tmp/ahoj.root"
+char *begin
+char *end
+end=strrchr( tok, '.') 
+memcpy( begin, tok, tok-end )
+char tok[100]="/tmp/ahoj.root"
+char begin[100]
+char *end
+end=strrchr( tok, '.') 
+memcpy( begin, tok, tok-end )
+end
+tok
+end=strrchr( tok, '.') 
+end
+memcpy( begin, tok, tok-end )
+tok-end
+end-tok
+tok
+end
+end=strrchr( tok, '.') 
+end-tok
+begin
+tok
+char bbb[100]
+memcpy( bbb, tok, end-tok )
+bbb
+.qqqqqqqqq
+lod
+.L load_libs.C
+.L ../ZH_data.C
+ZH_data(200000, "/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+ftree
+ftree->ls()
+.ls
+.ls
+.qqqqqqqqqqqqqq
+load
+.L load_libs.C
+.L ../ZH_data.C+
+ZH_data(200000, "/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.ls
+.qqqqqqqq
+.L load_libs.C
+.L ../ZH_data.C+
+ZH_data(-1 , "/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.ls
+.qqqqqqqqqq
+.L load_libs.C
+.L ../ZH_data.C+
+ZH_data(-1 , "/home/ojr/00_central/Root/03_programs/58_kibbler_narval/RUN018_V", "fileZHsave.xml", "plugins", "poper", "definitions" )
+.ls
