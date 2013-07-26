@@ -281,6 +281,8 @@ extern "C" {
       size_t result;
       char delaymsch[100];
       int delayms=0;
+      char breakatch[100];
+      double breakat=0;
 
    //-------- here I will control with    control.mmap    file------   
     if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
@@ -298,6 +300,10 @@ extern "C" {
       xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","delayms" );
       sprintf( delaymsch,"%s", xml.output  );
       delayms=atoi( delaymsch);
+      xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","breakat" );
+      sprintf( breakatch ,"%s", xml.output  );
+      breakat=atof( breakatch ) /4.0;
+
 
       infile=fopen( fname,"rb"  );
       sprintf(chL," opened %s", fname );table_log(0,chL);
@@ -311,8 +317,11 @@ extern "C" {
 	 } 
 	 cnt++;
 	result=fread( &buffer4, 1, 4, infile );
-	if (result == 4) {	buffer->push( buffer4 ); }
-       }
+	if (result == 4) {	
+	  buffer->push( buffer4 ); 
+	  if ( (breakat< cnt)&&(breakat>0) )break;
+	}// push
+       }//!feof
        //if(XTERM!=NULL)fprintf(XTERM,"push-file closed....%s\n", fname );
 	fclose(infile);
       }else{

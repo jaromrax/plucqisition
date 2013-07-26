@@ -1,6 +1,6 @@
 
-   TACounterMulti *mctr;
-   if (mctr==NULL){     mctr=new TACounterMulti(12);   }
+//   TACounterMulti *mctr;
+// if (mctr==NULL){     mctr=new TACounterMulti(12);   }
 
 
 
@@ -13,11 +13,38 @@
       TCutG *m6_monitor;
       m6_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm6_mon");
 
+      TCutG *m1_gene;
+      m1_gene=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_gene");
+      TCutG *m6_gene;
+      m6_gene=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm6_gene");
+
       
+//================================================DEFINE TH1F====
+//TESTS...........
+
+TH1F* timeH=new TH1F("hTimeDiff","time intervals between counters", 
+		     1800,0,180);
+
+TH1F* counterH1=new TH1F("s001_A","counter from analyze plug", 
+		     60000,0,60000);
+TH1F* counterH4=new TH1F("s004_A","counter from analyze plug", 
+		     60000,0,60000);
+
+
+TH1F* timeCanA;    // event arrivals    TIME
+TH1F* timeCNT;     // counters arrivals TIME
+TH1F* timeCanAdE1; //dE1 arrivals       TIME
+
+TH1F* evnum=new TH1F("T_EventA","Arriving data event # (analyze)",  300000, 
+		 0, 300000 );
+
+//TH2F* time_evnum;
+
+
 //================================================DEFINE MARICES====
 int mbins=2000;
 int mrange=8000;
-double mfact=2.0;  // factor to multiply
+double mfact=1.0;  // factor to multiply
 char mchx[100];
 char mchy[100];
 char mch[100];
@@ -69,23 +96,46 @@ char mch[100];
       }
 
 //======================================================= GRAPHS =====
+
+int t1gene=0;
+int t6gene=0;
 double t1q=0.0;
+double t6q=0.0;
+double cnt_TIME=0.0;
+double cnt_TIMElast=0.0;
+
+//-------------------------------------GENE-------------------
+TGraphErrors *gt1gene;
+gt1gene=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gt1gene");
+if (gt1gene==NULL){
+  printf("creating new gt1gene%s\n","");
+  gt1gene=new TGraphErrors;   gt1gene->SetName("gt1gene");
+  gROOT->GetListOfSpecials()->Add(gt1gene);
+ }
+
+TGraphErrors *gt6gene;
+gt6gene=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gt6gene");
+if (gt6gene==NULL){
+  printf("creating new gt6gene%s\n","");
+  gt6gene=new TGraphErrors;   gt6gene->SetName("gt6gene");
+  gROOT->GetListOfSpecials()->Add(gt6gene);
+ }
+
+
+//------------------------------------------ Q---------------
 TGraphErrors *gt1q;
 gt1q=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gt1q");
 if (gt1q==NULL){
   printf("creating new gt1q%s\n","");
-  gt1q=new TGraphErrors; 
-  gt1q->SetName("gt1q");
+  gt1q=new TGraphErrors;   gt1q->SetName("gt1q");
   gROOT->GetListOfSpecials()->Add(gt1q);
  }
 
-double t6q=0.0;
 TGraphErrors *gt6q;
 gt6q=(TGraphErrors*)gROOT->GetListOfSpecials()->FindObject("gt6q");
 if (gt6q==NULL){
   printf("creating new gt6q%s\n","");
-  gt6q=new TGraphErrors; 
-  gt6q->SetName("gt6q");
+  gt6q=new TGraphErrors;   gt6q->SetName("gt6q");
   gROOT->GetListOfSpecials()->Add(gt6q);
  }
 

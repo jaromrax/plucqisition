@@ -7,7 +7,7 @@ t3->TurnOn();t3->TurnOff();
 -->
 <xmlconfig>
 <plugins>
-  <pusher  so="../plug_push.so" func="push_file"  file="/home/ojr/AA_share/DATA/20130621_o17_dp_an/RUN0105_V"  delayms="100"> </pusher>
+  <pusher  so="../plug_push.so" func="push_file"  file="/home/ojr/AA_share/DATA/20130621_o17_dp_an/RUN0105_V"  delayms="150"> </pusher>
   <poper   so="../plug_pop.so" func="pop_ZH" definitions="file=/home/ojr/AA_share/DATA/20130621_o17_dp_an/RUN0105.root,c001=1,c002=2,c003=3,c004=4,c005=5,c006=6,c007=7,c008=8,c017=17,c018=18,c019=19,c020=20,c021=21,c022=22,c023=23,c024=24,c032=32,c1024=t1,c1025=t2,c1026=t3,c1027=t4,c033=s001,c035=s002,c037=s003,c039=s004" > </poper>
   <analyze so="./plug_analyze.so" func="evt_analyze_empty"> </analyze>
   <!--analyze so="./plug_analyze.so" func="evt_analyze_gettree" delayms="100"> </analyze-->

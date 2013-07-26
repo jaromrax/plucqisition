@@ -18,22 +18,40 @@ using namespace std;
 //=============================================== Special: TokenGet
 
 double TokenGet( const char* tok , const char* remote , char* result ){
+  char *saveptr;
   char str1[4096];
+  int len=0;
   strcpy( str1, remote );
+  len=strlen( str1);
+      // if ( strstr(tok,"push")!=NULL){
+      // printf("... ? ... %s" , "" );
+      // }
+
   char *pch, *pch2;
-  pch = strtok(str1," ,\n");
+  pch = strtok_r(str1," ,\n", &saveptr );
   int pos=0;
+  double rytrn=0.0;
   while (pch != NULL) {
     //printf("tok  /%s/\n" , pch  );
     if (  strstr( pch, tok)!=NULL ){
       pch2= strstr( pch, tok) + strlen(tok);
-      //printf("found  /%s/ and cut is /%s/\n" , pch , pch2 );
       strcpy( result, pch2  );
-      return atof( pch2) ;
-    }
+      rytrn=atof( pch2);
+      //       if ( strstr(tok,"push")!=NULL){
+      //	 printf("found  /%s/ and cut is /%s/=%1.0f; pos=%d;len=%d\n" , pch , result,rytrn, pos,len );
+      //       }
+      return rytrn;
+    }// tok  je  v  pch
     pos=pos+strlen(pch);
-    pch = strtok( NULL , " ,\n");
-  }
+    pch = strtok_r( NULL , " ,\n", &saveptr);
+    // if ( strstr(tok,"push")!=NULL){
+    //   	printf("p=%d " ,   pos  );
+    // }
+  }//if pch!=NULL.....
+      // if ( strstr(tok,"push")!=NULL){
+      // 	printf("found  /%s/ and cut is /%s/=%1.0f\n REMOTE=%s\nposition=%d  len=%d\n" , 
+      // 	       pch , result,rytrn, remote, pos, len );
+      // }
   strcpy( result, ""  );   //  strlen ==0
   return 0.0;
 }// TokenGet returns rest of remote (blabla from file=blabla) + value
@@ -41,12 +59,12 @@ double TokenGet( const char* tok , const char* remote , char* result ){
 
 
 void TokenReplace( const char* tok , const char* newtok, const char* remote, char* remoteNEW ){
-
+  char *saveptr;
   char str1[4096];
   char strnew[4096];
   strcpy( str1, remote );
   char *pch;
-  pch = strtok(str1," ,\n");
+  pch = strtok_r(str1," ,\n", &saveptr);
   int pos=0;
   while (pch != NULL) {
     //printf("tok  /%s/\n" , pch  );
@@ -62,7 +80,7 @@ void TokenReplace( const char* tok , const char* newtok, const char* remote, cha
       strcpy( strnew+ pos, "\n"  );
       pos++;
     }
-    pch = strtok( NULL , " ,\n");
+    pch = strtok_r( NULL , " ,\n", &saveptr);
     //printf("\n=============\n%s\n------------/%d/\n",  strnew, pos );
   }
   //not neccessary strcpy( result, strnew  );   //  
@@ -113,18 +131,19 @@ TSmallish_xml::~TSmallish_xml(){
  */
 void TSmallish_xml::token(const char* str){// also inits!!!!
   char *pch;
+  char *saveptr;
   char mystr[1000];
   sprintf(mystr,"%s",str);
   int i=0;
   if (strlen(mystr)>0){
   if (DEBUG)printf ("Splitting string \"%s\" into tokens:\n",str);
-  pch = strtok (mystr,"/");
+  pch = strtok_r (mystr,"/" , &saveptr);
   while (pch != NULL)
   {
     addr[i]=pch; getattrlevel=i;
     if (DEBUG)printf ("(#%d)-%s- \t",i,pch);
     i++;
-    pch = (char*)strtok ( NULL, "/");
+    pch = (char*)strtok_r ( NULL, "/", &saveptr);
    }//while
   getattrlevel++; 
   leveloffset=-1;  //reset

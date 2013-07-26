@@ -370,6 +370,12 @@ void TACounterMulti::Display(){
 
 
 
+   // I move some control variables to here---------------------------
+   Long64_t ii;    // main  for   LOOP control
+   Long64_t prev;  // previous N - check for escaped events 
+   int FLAG_process;  // 1==  work with the event; 0== not a good event 
+   int reprint;       // just avoid duplicite printing of repeating events
+   int reprint_nodata;// just avoid duplicite printing of repeating events
 
    //======================================SET of variables for TREE===
    int MAXCHAN=2048;
@@ -382,6 +388,7 @@ void TACounterMulti::Display(){
 
   // SHADOWED SET OF VARIABLES CONNECTED TO TTREE============ a****
    Double_t acTIME_root; // time
+   Double_t acTIME_root_start=0.0; // time
    Long64_t acnt_evt;   // event number
    UShort_t aTREE[MAXCHAN];  
    UShort_t aCOUNTER[MAXCHAN];  
@@ -406,17 +413,19 @@ void TACounterMulti::Display(){
 
    //THESE MUST SURVIVE=====================================
    //this is pointer
-   int64_t  entr;             // number of entries in the tree
-   int64_t  circular_bias=0;  // important to have both - pos/neg 
-   int64_t  total_processed=0;// good q.number
-   int64_t  lost_blocks=0;     // ++ any irregularity
-   int64_t  repeated_evts=0;  // ++ when evt_number < last_evt_n
-   int64_t  skipped_evts=0;   // ++ when evt_number > last_evt_n+1
-   int64_t  estim_span=0;   // estimated from #(@circ)..#(@entr)
+   Long64_t   entr;             // number of entries in the tree
+   Long64_t  circular_bias=0;  // important to have both - pos/neg 
+   Long64_t  total_processed=0;// good q.number
+   Long64_t  lost_blocks=0;     // ++ any irregularity
+   Long64_t  repeated_evts=0;  // ++ when evt_number < last_evt_n
+   Long64_t  skipped_evts=0;   // ++ when evt_number > last_evt_n+1
+   Long64_t  estim_span=0;   // estimated from #(@circ)..#(@entr)
 
    //this is value contained
-   int64_t  last_event_n=-1;   // my last processed event (#)
+   Long64_t  last_event_n=-1;   // my last processed event (#)
 
+TH1F* evnumB; // throwing
+TH1F* evnumC; // throwing
 
    int respop=1;// POP is running   "pop="  token.....
 
@@ -427,7 +436,7 @@ void TACounterMulti::Display(){
      if (ANADEBUG){sprintf(ch,"..trying to get the tree-huh" );   table_log(2,ch);}
      tree_addr_old=(TTree*)gDirectory->FindObject("nanot");
    }
-   if (ANADEBUG){sprintf(ch,"..got the tree. %lx", (int64_t)tree_addr_old);table_log(2,ch);}
+   if (ANADEBUG){sprintf(ch,"..got the tree. %llx", (Long64_t)tree_addr_old);table_log(2,ch);}
    tree_addr=(TTree*)tree_addr_old->Clone();
    tree_addr->SetTitle("CLONE");
    tree_addr->SetMakeClass(1);
@@ -468,90 +477,130 @@ void TACounterMulti::Display(){
      entr=tree_addr->GetEntries();
      usleep(1000);//wait a milisecond for events to appear
    }
-   if (ANADEBUG){sprintf(ch,"entries== %6ld",entr );table_log(2,ch);}
-   //   if (entr>0){//..........................
-     //EVERY LOOP I redefine   circular_bias;last_event_n
+   if (ANADEBUG){sprintf(ch,"entries== %6lld",entr );table_log(2,ch);}
+   //EVERY LOOP I redefine   circular_bias;last_event_n
 
-   tree_addr->GetEntry(0);// this really starts at event #1
+   tree_addr->GetEntry(0,1);// this really starts at event #1
+
    if (ANADEBUG){	
-     sprintf(ch,"entry %6d .... %6lld",  0,  acnt_evt);table_log(2,ch);
+     sprintf(ch,"entry#%6d = %6lld",  0,  acnt_evt);table_log(2,ch);
    }
 
    circular_bias=last_event_n-acnt_evt+1;
    if (circular_bias<0){ circular_bias=0;}
 
-   sprintf(ch,"circ= %6ld..%6ld; lastn .... %6ld", 
-		circular_bias, entr-1, last_event_n);table_log(2,ch);
+   tree_addr->GetEntry(circular_bias,1);
+
+ if (reprint_nodata==0){
+   if (skipped_evts>0){
+     sprintf(ch,"cir%6lld(+%6lld)  %6lld<- L# %6lld  - %6lld!", 
+	     circular_bias, entr-1 -circular_bias, 
+	     acnt_evt,last_event_n, skipped_evts);table_log(2,ch);
+   }else{
+     sprintf(ch,"cir%6lld(+%6lld)  %6lld<- L# %6lld", 
+	     circular_bias, entr-1 -circular_bias,
+	     acnt_evt,last_event_n);table_log(2,ch);
+   }
+ }//nodata == 0 =>  can reprint....
 
    if (ANADEBUG){
-     tree_addr->GetEntry(1);// this really starts at event #1
-     sprintf(ch,"entry %6d .... %6lld",  1,  acnt_evt);table_log(2,ch);
+     tree_addr->GetEntry(1,1);// this really starts at event #1
+     sprintf(ch,"entry#%6d = %6lld",  1,  acnt_evt);table_log(2,ch);
 
-     tree_addr->GetEntry(circular_bias);// this really starts at event #1
-     sprintf(ch,"entry %6ld .... %6lld",circular_bias,acnt_evt);table_log(2,ch);
+     tree_addr->GetEntry(circular_bias,1);// this really starts at event #1
+     sprintf(ch,"entry#%6lld = %6lld",circular_bias,acnt_evt);table_log(2,ch);
 
      tree_addr->GetEntry(circular_bias+1);// this really starts at event #1
-     sprintf(ch,"entry %6ld .... %6lld",circular_bias+1,acnt_evt);table_log(2,ch);
+     sprintf(ch,"entry#%6lld = %6lld",circular_bias+1,acnt_evt);table_log(2,ch);
      tree_addr->GetEntry(circular_bias+2);// this really starts at event #1
-     sprintf(ch,"entry %6ld .... %6lld",circular_bias+2,acnt_evt);table_log(2,ch);
+     sprintf(ch,"entry#%6lld = %6lld",circular_bias+2,acnt_evt);table_log(2,ch);
    }
    if (ANADEBUG){
      tree_addr->GetEntry(entr-2);// this really starts at event #1
-     sprintf(ch,"entry %6ld .... %6lld", entr-2,acnt_evt);table_log(2,ch);
+     sprintf(ch,"entry#%6lld = %6lld", entr-2,acnt_evt);table_log(2,ch);
    }
-   tree_addr->GetEntry(entr-1);// this really starts at event #1
+   tree_addr->GetEntry(entr-1,1 );// this really starts at event #1
    estim_span=acnt_evt-last_event_n;//ESTIMATED SPAN...........
    if (ANADEBUG){
-     sprintf(ch,"entry %6ld .... %6lld", entr-1,acnt_evt);table_log(2,ch);
+     sprintf(ch,"entry#%6lld = %6lld", entr-1,acnt_evt);table_log(2,ch);
    }//------------------------------------ end of DEBUG pritnouts------
 
 
    //prepare fo LOOP
-   int64_t ii;
-   int64_t prev=last_event_n; //this can keep better track than last_e_n
+   //   int64_t ii;
+   prev=last_event_n; //this can keep better track than last_e_n SET HERE
 
    //the only interruption up to now
    if (circular_bias>=entr){
-     sprintf(ch,"nodata%s                         XX" ,"");table_log(2,ch);  
-     usleep(1000*200);
+     if (reprint_nodata==0){
+       sprintf(ch,"       %s                    nodata..." ,"");table_log(2,ch);      
+       sprintf(ch,"...       %9.2f           %9.2f", acTIME_root, acTIME_root-acTIME_root_start ); table_log(2,ch);
+     }
+     reprint_nodata++;
+     usleep(1000*2); // was wait 200ms!!
      respop=TokenGet( "pop=" , mmap_file , acqxml2 ); //takes a value    
      //there is a big while loop- breaks with respop!=1
    }// no data
 
+
    if ( (entr-circular_bias)!=  estim_span ){
-     sprintf(ch,"run4 %6ld evts (est.%6ld)   AdHoc",
+     sprintf(ch,"run4 %6lld evts (est.%6lld)   AdHoc",
 	     entr-circular_bias,estim_span);table_log(2,ch);  
+     sprintf(ch,"          %9.2f           %9.2f", acTIME_root, acTIME_root-acTIME_root_start );
+     table_log(2,ch);
    }else{
-     sprintf(ch,"run4 %6ld evts              ..",
-	     entr-circular_bias);table_log(2,ch);  
+     //     sprintf(ch,"run4 %6ld evts              ..",
+     //	     entr-circular_bias);table_log(2,ch);  
    }
-   //   if (entr-circular_bias==0){
-   //          usleep(1000*100);
-   //   }
-   int FLAG_process;
-   int reprint=0;
+
+   FLAG_process=1; // normaly, do it
+   reprint=0;
+
    for(  ii=circular_bias; ii<entr; ii++){//.......FOR LOOP BEGIN
-     FLAG_process=1; // yes, DO 
-     tree_addr->GetEntry(ii);   
+
+     tree_addr->GetEntry(ii,1);   
+     if (acTIME_root_start==0.0){acTIME_root_start=acTIME_root;}//set root start time
+
 
      if (prev+1 != acnt_evt){	// IF THE ORDER IS INTERRUPTED:
        if (reprint==0){
-       sprintf(ch,"!@ %6ld .. prev=%6ld;curr=%6lld **********", 
+       sprintf(ch,"!@ %6lld .. prev=%6lld;curr=%6lld **********", 
 	       ii,prev,acnt_evt); table_log(2,ch); 
        reprint++;// after the end, they jump by 2! useless printouts
        lost_blocks++; // I resign on the remaining part
        }//if reprint
        prev=acnt_evt-1; // RESET "prev"
-     }//  IF   prev+1  !=  current______> lost block
 
-     if (acnt_evt<=last_event_n){ repeated_evts++;FLAG_process=0;}//
+     }//  IF   prev+1  !=  current______> lost block______ IF NOT SEQUENTIAL
+
+     // I must put this here, it directs whether flag works or not
+     if (acnt_evt<=last_event_n){
+       repeated_evts++;
+       FLAG_process=0;
+
+       if ( (acTIME_root>0.0)&&(evnumB==NULL) ){//already elsewhere
+	 evnumB=new TH1F("T_EventA_non","Throwing repeated events #",  300000, 
+			 0, 300000 );
+       }
+       evnumB->Fill( acnt_evt  );
+
+     }// repeating
      if (acnt_evt>last_event_n+1){// if skipped block (not seen yet)
        skipped_evts+=acnt_evt-last_event_n-1;
        FLAG_process=1;
-     }//
+       if ( (acTIME_root>0.0)&&(evnumC==NULL) ){//already elsewhere
+	 evnumC=new TH1F("TimeEvNC","Skipped starting with event #",  300000, 
+			 0, 300000 );
+       }
+       evnumC->Fill( acnt_evt  );
+       
+     }//skiiped
+
+
      if (FLAG_process==1){//NORMAL PROCESSING........BEGIN
        //=================================================
        prev++;
+       reprint_nodata=0; //enable nodata mgs print
        total_processed++;
        last_event_n=acnt_evt;//last processed
 
@@ -561,10 +610,13 @@ void TACounterMulti::Display(){
        #include "plug_analyze_actions.cpp"
 
 
-       memcpy ( aTREE, aZERO,  sizeof( UShort_t)*MAXCHAN ) ;  //FAST CLEAR 
+       memcpy ( aTREE,    aZERO,  sizeof( UShort_t)*MAXCHAN ) ;  //FAST CLEAR 
+       memcpy ( aCOUNTER, aZERO,  sizeof( UShort_t)*MAXCHAN ) ;  //FAST CLEAR 
 
        //=================================================
      }//--------------------NORMAL PROCESSING........END
+     //     else{
+     //     }
    }//for(  ii=circular_bias; ii<entr; ii++).........FOR LOOP  END
 
    
@@ -577,11 +629,11 @@ void TACounterMulti::Display(){
 
 
 
-  sprintf(ch,"EXITING AN (repeated  =%ld)",repeated_evts );table_log(2,ch);
-  sprintf(ch,"EXITING AN (skipped   =%ld)",skipped_evts  );table_log(2,ch);
-  sprintf(ch,"EXITING AN (lost blks.=%ld)",lost_blocks  );table_log(2,ch);
-  sprintf(ch,"EXITING AN (total_proc=%ld)",total_processed);table_log(2,ch);
-  sprintf(ch,"EXITING AN (last_evt_N=%ld)", last_event_n );table_log(2,ch);
+  sprintf(ch,"EXITING AN (repeated  =%lld)",repeated_evts );table_log(2,ch);
+  sprintf(ch,"EXITING AN (skipped   =%lld)",skipped_evts  );table_log(2,ch);
+  sprintf(ch,"EXITING AN (lost blks.=%lld)",lost_blocks  );table_log(2,ch);
+  sprintf(ch,"EXITING AN (total_proc=%lld)",total_processed);table_log(2,ch);
+  sprintf(ch,"EXITING AN (last_evt_N=%lld)", last_event_n );table_log(2,ch);
  }//==========================================evt_analyze_gettree===END
 
 
@@ -975,7 +1027,7 @@ struct {
     TTree *tree_addr_old=(TTree*)gDirectory->FindObject("nanot");
     
     if ( tree_addr_old!=NULL ){ 
-       TTree *tree_addr=(TTree*)tree_addr_old->Clone();
+       TTree *tree_addr=(TTree*)tree_addr_old->CloneTree();
  	// ! zjistit, jestli existuje klon!!
       tree_addr->SetTitle("CLONE");
       

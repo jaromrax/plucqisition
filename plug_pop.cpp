@@ -589,13 +589,15 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
     if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
     mmap_file=(char*)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, mmapfd, 0);
     if (mmap_file == MAP_FAILED) errx(1, "either mmap");
+
     char mmap_result[100];
 //-------- here I will control with    control.mmap    file------   
 
   char  acqxml2[100];
+  char pushis[100];
   char definitions[2000];// channel definitions
   TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
-  int respush=1;// PUSH is running   "push="  token.....
+  double respush=1.0;// PUSH is running   "push="  token.....
   TSmallish_xml xml(    acqxml2   );
   xml.DisplayTele( xml.mainnode, 0, "plugins","poper","definitions" );
   sprintf( definitions  ,"%s", xml.output  );
@@ -616,12 +618,13 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
 
   // int pos=0;//  this is position in the buffer...
   int c=0;//   position in OEbuffer..............
-  while (respush==1){//run while push is running........
+  while (respush>=1.0){//run while push is running........
     while( !buffer->empty() ){// concurent queue "buffer" is an object HERE
       buffer->wait_and_pop(datum);
       if ((cnt%250000)==0){
-	sprintf(chL,"POP:W     %7lld kB",4*cnt/1000);table_log(1,chL);
-	sprintf(chL,"POP:D     %7ld  evts",cnt_evt_data );table_log(1,chL);
+	//	sprintf(chL,"POP:W     %7lld kB",4*cnt/1000);table_log(1,chL);
+	//	sprintf(chL,"POP:D     %7ld  evts",cnt_evt_data );table_log(1,chL);
+	sprintf(chL,"POP:%8lld kB %9lld  evts",4*cnt/1000, cnt_evt_data);table_log(1,chL);
       } //printout every MB
       cnt++; 
       //pos=0;fillbuffer();// one time READ DATA FROM FILE
@@ -637,9 +640,11 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
       }
     }//BUFFER NOT EMPTY
 
-    usleep(1000*100); // wait 100ms and retry again..
-    respush=TokenGet( "push=" , mmap_file , acqxml2 ); //takes a value    
+    usleep(1000*20); // wait 100ms and retry again..
+    respush=TokenGet( "push=" , mmap_file , pushis ); //takes a value
   }//WHILE respush==0....push running...
+  //  sprintf(chL,"Ending: respush==%1.0f; /%s/ ... \n/%s/", respush, pushis,mmap_file);table_log(1,chL);
+
 
   if (ftree!=NULL){
     //  ZH_tree->Write();
@@ -648,7 +653,7 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
   }
   sprintf(chL,"EXITING POP-ZH (bytes=%lld)", 4*cnt );table_log(1,chL);
   sprintf(chL,"EXITING POP-ZH (evnts=%ld)",cnt_evt );table_log(1,chL);
-  sprintf(chL,"EXITING POP-ZH (data =%ld)",cnt_evt_data );table_log(1,chL);
+  sprintf(chL,"EXITING POP-ZH (data =%lld)",cnt_evt_data );table_log(1,chL);
 }//pop_ZH_____________________________________________________________END___
 
 

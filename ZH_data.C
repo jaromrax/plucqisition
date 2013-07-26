@@ -18,6 +18,7 @@
 #include <string.h>         // strcmp
 #include <string>         // strcmp
 
+//int ZHbuffer[350000000];// 99M*4  // I MUST USE int!!!!!!????
 int ZHbuffer[99000000];// 99M*4  // I MUST USE int!!!!!!????
  int OEbuf[1000];//  ONE EVENT buffer; ;
 
@@ -29,7 +30,11 @@ int ZHbuffer[99000000];// 99M*4  // I MUST USE int!!!!!!????
 
 //const int MAXCHAN=2048; // time is 1024+
    int       T_yn[MAXCHAN];//  4 levels (t1 t2 t3 t4)
-   TH1F*     Thist;        //  one histogram for ALL
+   TH1F*     Thist;      
+  //  one histogram for ALL
+   TH1F*     ThistCNT;     //  counter's readout timediff
+   TH1F*     ThistCan=NULL;     //  channel's readout timediff
+
    int       C_yn[MAXCHAN]; //level lo or hi ==  1 or 2
    int64_t   COUN[MAXCHAN];// total (displays in title)
    TH1F*     COUNhist[MAXCHAN];//histo to fill 
@@ -140,7 +145,7 @@ for (int i=0;i<MAXCHAN;i++){HIST[i]=NULL;}
 for (int i=0;i<MAXCHAN;i++){TREE[i]=0;}   
  for (int i=0;i<MAXCHAN;i++){ZERO[i]=0;}//remains always 0
  cTIME=0.0;// current event time
- cTIME_root=0.0;// current event time
+ cTIME_root=0.0;// event reffered var by TTree -offset
  cnt_evt=0;
  cnt_evt_data=0;
  sTIME=0.0;
@@ -265,6 +270,7 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
 	printf("ZH:time %d  defined (part %d)\n", i, T_yn[i]  );
       }//TIME
 
+
       if ( strstr(tokres,"s")==tokres){//counter----------- =s001, =s002...
 	//        sprintf( tok, "s%03d", i ); 
 	TH1F *h=new TH1F( tokres, tokres, 60000,0,60000);
@@ -332,8 +338,15 @@ void process_chan(int ch,  int val){// KEY:fill propper histos,counters,time
       // VERY SPECIFIC HANDLE OF COUNTERS (PAIRS)
       COUN[ch-1]+=val<<16;
       COUNtmp[ch-1]+=val<<16;
+
       COUNhist[ch-1]->Fill( COUNtmp[ch-1] );// Fill Histogram
-      sprintf(mmm,"TOTAL = %ld",COUN[ch-1]);
+
+      //      if (ThistCNT==NULL){
+      //	ThistCNT=new TH1F("Thist_cnt","counters:time differences;seconds", 			  1800, 0, 180 );
+      //      }
+      ThistCNT->Fill(  cTIME-ROOT_offset );
+
+      sprintf(mmm,"TOTAL COUNTS = %ld",COUN[ch-1]);
       COUNhist[ch-1]->SetTitle( mmm );
       TREE[ch-1]= COUNtmp[ch-1] ; // prepare the variable for tree
     }
@@ -344,7 +357,6 @@ void process_chan(int ch,  int val){// KEY:fill propper histos,counters,time
     }
 
 
-
   }else{// TIME...... forget everything else date -d @1299941976
     //=========VERY SPECIFIC TREATMENT OF TIME INFORMATION=======
     if (T_yn[ch]==1){bTIME=bTIME+0.000001*val;}
@@ -352,13 +364,26 @@ void process_chan(int ch,  int val){// KEY:fill propper histos,counters,time
     if (T_yn[ch]==3){bTIME=bTIME+val;}
     if (T_yn[ch]==4){bTIME=bTIME+(val<<16);
       if (Thist==NULL){
+	//-----------THisto
 	Thist=new TH1F("Thist","Thist", 
 		       86400, bTIME-ROOT_offset, bTIME+86400-ROOT_offset );
 	Thist->GetXaxis()->SetTimeDisplay(1);
 	Thist->GetXaxis()->SetTimeFormat( "#splitline{%d.%m}{%H:%M}%F1994-12-31 22:00:00s" );
-      }
+	//-----------CNT
+	ThistCNT=new TH1F("ThistCNT","time in counters", 
+		       86400, bTIME-ROOT_offset, bTIME+86400-ROOT_offset );
+	ThistCNT->GetXaxis()->SetTimeDisplay(1);
+	ThistCNT->GetXaxis()->SetTimeFormat( "#splitline{%d.%m}{%H:%M}%F1994-12-31 22:00:00s" );
+	//-----------Can
+	ThistCan=new TH1F("ThistCan","time in channels", 
+		       86400, bTIME-ROOT_offset, bTIME+86400-ROOT_offset );
+	ThistCan->GetXaxis()->SetTimeDisplay(1);
+	ThistCan->GetXaxis()->SetTimeFormat( "#splitline{%d.%m}{%H:%M}%F1994-12-31 22:00:00s" );
+
+      }// Thit==NULL
       Thist->Fill( bTIME-ROOT_offset );
-      sprintf( mmm, "TOTAL %9.2f sec" , bTIME-sTIME );
+      sprintf( mmm, "TOTAL TIME %9.2f sec (%8.2f min)" , 
+	       bTIME-sTIME, (bTIME-sTIME)/60.0  );
       Thist->SetTitle( mmm );
       if (DEBUG)printf("TIME = %13.6f\n", bTIME );
     }//if ==4
@@ -396,7 +421,11 @@ void process_EOE(){   // end of event - do filling
     cnt_evt++;
   if (bTIME==0){// bTIME==0  =>  real EVENT
     //enter cTIME to TTREE struct .....
-    ZH_tree->Fill();//
+
+
+    ZH_tree->Fill();// EVERY NON TIME EVENT - WE SAVE
+    if (ThistCan!=NULL){ThistCan->Fill(  cTIME-ROOT_offset );}
+
     cnt_evt_data++;
   }//SAVE EVENT done
   else{// bTIME!=0  =>  just a new time.....
@@ -413,10 +442,12 @@ void process_EOE(){   // end of event - do filling
 
 //=========================================
 int process_ONE_EVENT(int *arr){// translate buffer with one event to data
+  // I still omit xcheck # channels:  e004 vs pos
+
   int pos=0; // normaly 1st place is e000, but can be bor...
   int chn;
   int val;
-  process_BOE();// zero counters....?
+  process_BOE();// zero TTree; reset bTIME(this evt buffr)
   while( 
 	(  (arr[pos] & BOEm) != BOE ) &&
            (arr[pos] != EOE)	// finish with EOE
@@ -430,6 +461,7 @@ int process_ONE_EVENT(int *arr){// translate buffer with one event to data
 
 
   if (DEBUG)printf("::%6ld   (%2d)   d=%.3f \n", cnt_evt,  channels_in_event(arr[pos]),  cTIME-sTIME  ); 
+
   pos++; //move next from E000
   while(  (arr[pos] != EOE)&&(pos<OEBmax)  ){ // until EOE
     chn=(arr[pos] & 0xffff0000)>>16;
@@ -438,10 +470,12 @@ int process_ONE_EVENT(int *arr){// translate buffer with one event to data
     process_chan( chn, val );
     pos++;
   }//parse events.........
+
+
   //------------------------END OF EVENT
-  process_EOE();
+  process_EOE();// cnt_evt++;cnt_evt_data++; FILL; // cTime reset
   return 0;
-}//print==========================
+}//process_ONE_EVENT__________________________________________END___
 
 
 

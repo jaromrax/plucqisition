@@ -22,6 +22,7 @@ const int MAXCHAN=2048; // time is 1024+;  maximum channels
 
 
 
+//extern int ZHbuffer[350000000];//="ahoj\0";  // I MUST USE int!!!!!!????
 extern int ZHbuffer[99000000];//="ahoj\0";  // I MUST USE int!!!!!!????
 extern int OEbuf[1000];//="Ahoj\0";
 

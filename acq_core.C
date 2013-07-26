@@ -277,21 +277,22 @@ void *xml_masterthread(void* arg){
 	  (TThread::GetThread("pusher_thread")->GetState()==6)){
 	   TThread::GetThread("pusher_thread")->Delete();
 	   char repla[4096];
-	   TokenReplace( "push=", "push=0", mmap_file, repla );
+	   TokenReplace( "push=", "push=-1", mmap_file, repla );
 	   strcpy( mmap_file, repla );
+	   
 	  }
       if ((TThread::GetThread("poper_thread")!=0)&&
 	  (TThread::GetThread("poper_thread")->GetState()==6)){
 	   TThread::GetThread("poper_thread")->Delete();
 	   char repla[4096];
-	   TokenReplace( "pop=", "pop=0", mmap_file, repla );
+	   TokenReplace( "pop=", "pop=-1", mmap_file, repla );
 	   strcpy( mmap_file, repla );
 	  }
       if ((TThread::GetThread("analyze_thread")!=0)&&
 	  (TThread::GetThread("analyze_thread")->GetState()==6)){
 	   TThread::GetThread("analyze_thread")->Delete();
 	   char repla[4096];
-	   TokenReplace( "analyze=", "analyze=0", mmap_file, repla );
+	   TokenReplace( "analyze=", "analyze=-1", mmap_file, repla );
 	   strcpy( mmap_file, repla );
 	  }
    }
@@ -376,7 +377,9 @@ int acq(const char * startstop="start")
 
   if ( strcmp(startstop,"stop")==0){//=====================IF STOP=========
     printf(".....go stop.\n%s", "" );
-  }else{
+  }else{                            //=====================IF START========
+
+
     printf(".....go START.\n%s", "" );    
     t_start.Set();	   
 
@@ -589,7 +592,7 @@ void *evt_pusher( void *arg )  // loads the queue
  int nt=mtinfo->thread_num;
      evt_pusher_remote( (int*)&buffer ); //#########EVENT#########
   mtinfo->running=0;// say stop
- printf("%s","pusher function is stoped \n");
+ printf("%s","pusher function is stopped \n");
   return NULL;
 }//--------void *evt_pusher( void *arg )  // loads the queue 
 
@@ -607,7 +610,7 @@ void *evt_poper( void *arg )  // reads the queue (pop)
  // printf("starting thread %d poper for the %dth time\n", nt, call );
  //     printf("removing ........bufsize==%10d   empty==%d \n", buffer.size(), buffer.empty() );
      evt_poper_remote(  (int*)&buffer  );
-     printf("%s","poper function is stoped\n");
+     printf("%s","poper function is stopped\n");
   mtinfo->running=0;// say stop
      return NULL;
 //jak to budu analyzovat? konec eventu je kde????
@@ -632,7 +635,7 @@ void *evt_analyze( void *arg )  //
  int nt=mtinfo->thread_num;
  int call=mtinfo->callnumber; mtinfo->callnumber++;// to keep track opened file
    evt_analyze_remote(  (int*)&buffer  ); //#########EVENT#########
- printf("%s","analyze function is stoped \n");
+ printf("%s","analyze function is stopped \n");
   mtinfo->running=0;// say stop
      return NULL;
 }
