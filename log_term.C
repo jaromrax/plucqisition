@@ -3,7 +3,7 @@
 
 #include <unistd.h>   //  stat (fexists) file size
 #include <stdio.h>    // printf
-#include<sys/stat.h>  // struct stat - gets loaded into root  .C+
+#include <sys/stat.h>  // struct stat - gets loaded into root  .C+
 #include <iostream>
 #include <stdlib.h>    // getenv  system  strlen 
 
@@ -65,7 +65,7 @@ void table_log(int plugin, const char* text){ // 0,1,2=Push,Pop,Ana
 
 
 
-int fexists (const char * fileName){ // 0==exists;  >0  ==SIZE
+Long64_t fexists (const char * fileName){ // 0==exists;  >0  ==SIZE
    struct stat filestatus;
    int i = stat ( fileName, &filestatus );
    //0 == exists

@@ -1,7 +1,9 @@
 #define DEBUG 0
 #ifndef zh_data_H
 #define zh_data_H
-
+//=================================
+//    this file 
+//
 // *.C is in Makefile as C_FILES_LIBS, so it will be linked as *.o to *.so
 
 #include "TH1F.h"
@@ -21,13 +23,16 @@ const int BOEm=0xe000ffff;//begin of event
 const int MAXCHAN=2048; // time is 1024+;  maximum channels
 
 
+extern Long64_t ZHbuffer_last;// last allocated cell 
 
 //extern int ZHbuffer[350000000];//="ahoj\0";  // I MUST USE int!!!!!!????
-extern int ZHbuffer[99000000];//="ahoj\0";  // I MUST USE int!!!!!!????
+//extern int ZHbuffer[99000000];//="ahoj\0";  // I MUST USE int!!!!!!????
+extern int ZHbuffer[199000000];// 599M*4  // I MUST USE int!!!!!!????
+
 extern int OEbuf[1000];//="Ahoj\0";
 
 extern int OEBmax;// ONE EVENT LIMIT !!!!!!!!!!
-extern int DataRead; // HowMuch was read to buffer
+extern Long64_t DataRead; // HowMuch was read to buffer
 
 extern int64_t cnt_evt; // event number
 //extern int64_t cnt_evt_data; // event number, data not time
@@ -57,7 +62,7 @@ extern TFile *ftree;
 
 int fillbuffer( const char* datafileA );// service: ---read buffer from disk
 
-int fillOEB(int pos);// fill ONE EVENT into OEbuf buffer
+Long64_t fillOEB(Long64_t pos);// fill ONE EVENT into OEbuf buffer
 
 int channels_in_event(int word);// mask Exxx0000 and shift by two nibbles
 

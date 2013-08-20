@@ -1,6 +1,15 @@
-#define DEBUG 0
+// already in *h #define DEBUG 1
 /*
     ./compile_root xml_attr.C  ZH_data.C
+----------------------------------------------
+
+.L xml_attr.C
+.L log_term.C
+.L ZH_data.C
+
+ZH_data(1000, "RUN018_V" , "zhfile.xml", "plugins", "poper", "definitions" )
+ZH_data(1000, "/home/ojr/AA_share/DATA/20130621_o17_dp_an/RUN0121_V" , "zhfile.xml", "plugins", "poper", "definitions" )
+
 */
 #include "ZH_data.h"
 #include "xml_attr.h"
@@ -19,11 +28,16 @@
 #include <string>         // strcmp
 
 //int ZHbuffer[350000000];// 99M*4  // I MUST USE int!!!!!!????
-int ZHbuffer[99000000];// 99M*4  // I MUST USE int!!!!!!????
+
+// int ZHbuffer[99000000];// 99M*4  // I MUST USE int!!!!!!????
+ int ZHbuffer[199000000];// 599M*4  // I MUST USE int!!!!!!????
  int OEbuf[1000];//  ONE EVENT buffer; ;
 
+Long64_t ZHbuffer_last; // last allocated cell
+
  int OEBmax;// ONE EVENT LIMIT !!!!!!!!!!
- int DataRead; // HowMuch was read to buffer
+ Long64_t DataRead; // HowMuch was read to buffer
+
  int64_t cnt_evt; // event number
 
  Long64_t cnt_evt_data; // event number, data not time// in TTree
@@ -94,7 +108,10 @@ int fillbuffer( const char* datafile){
   f=fopen( datafile , "rb" );
   if (f==NULL){ printf("BAD FILE = /%s/, ccannot open\n",datafile);return 1;}
   DataRead=fread( pch , 1, sizeof(ZHbuffer) , f  );
-  printf("%d READ\n", DataRead  );
+  printf("%lld bytes READ  (=%.1f MB; max=%.1f;  filesize=%.1f)\n",
+	 DataRead , 1.0*DataRead/1024./1024., 
+	 1.0*sizeof(ZHbuffer)/1014./1024.,
+	 1.0*fexists( datafile)/1014./1024. );
   fclose(f);
   return 0;
 }
@@ -113,14 +130,15 @@ int fillbuffer( const char* datafile){
 
 
 
-int fillOEB(int pos){ // 
-  int c=0;
+Long64_t fillOEB(Long64_t pos){ // 
+  Long64_t c=0;
    while( 1==1  ){
-     if (DEBUG)printf("/%08X/ ",  ZHbuffer[pos+c] );
+     if (DEBUG!=0)printf("/%08X/ ",  ZHbuffer[pos+c] );
     OEbuf[c]= ZHbuffer[pos+c];
     if (OEbuf[c]==EOE){ break;}
+    //    if (pos+c>=DataRead){ break;} // If not all data read, break
     c++; 
-    if (pos+c> DataRead )return -1;
+    if (pos+c>=DataRead )return -1;
   }//while
    if (DEBUG)printf("\n%s", ""  );//4
   //  printf("\n    sizeof(int)==%ld\n", sizeof(word)  );//4
@@ -141,6 +159,7 @@ for (int i=0;i<MAXCHAN;i++){T_yn[i]=0;}//0 1 2 3 4
 for (int i=0;i<MAXCHAN;i++){C_yn[i]=0;}
 for (int i=0;i<MAXCHAN;i++){COUN[i]=0;}
 for (int i=0;i<MAXCHAN;i++){COUNtmp[i]=0;}
+for (int i=0;i<MAXCHAN;i++){COUNhist[i]=NULL;}
 for (int i=0;i<MAXCHAN;i++){HIST[i]=NULL;}   
 for (int i=0;i<MAXCHAN;i++){TREE[i]=0;}   
  for (int i=0;i<MAXCHAN;i++){ZERO[i]=0;}//remains always 0
@@ -151,6 +170,9 @@ for (int i=0;i<MAXCHAN;i++){TREE[i]=0;}
  sTIME=0.0;
  bTIME=0.0; // just for fun - (t)event buffer
  dTIME=0.0; // just for fun - difference
+
+ Thist=NULL; // YOU CAN do again:    acq()    without crash
+ ThistCNT=NULL;
 }
 
 
@@ -195,9 +217,9 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
 
 
   time_t curtime;  struct tm *loctime;  
-  char begin[300];
+  char begin[600];
   char *end;
-  char tokres2[300];
+  char tokres2[600];
 //if (ZH_tree==NULL){//==========================ZH TREE   BEGIN==
   if ( ttree_exists==0 ){//=========================ZH TREE   BEGIN==
 
@@ -212,9 +234,12 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
 		loctime->tm_mday,  loctime->tm_hour,   
 		loctime->tm_min,  loctime->tm_sec,
 		end);
-       
-	printf("PROBLEM: file %s already exists, I rename it to %s\n",
+
+	
+	printf("*** \n%s\n%s\n    |%ld| \n%s ***\n", begin, end, end-tokres,  tokres );
+	printf("TECHNICAL: file %s , I rename it to %s\n",
 	       tokres, tokres2 );
+
 	sprintf(tokres, "%s", tokres2 );
       }//fexists >=0
       ftree=new TFile(tokres, "NEW" );
@@ -282,6 +307,7 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
 	// DEFINE TTREE...........for every counter channel....
 	sprintf( brname,  "%s", tokres );//  branch  s001 
 	sprintf(ch ,"%s/s", brname );  //  UShort_t ===  /s  
+	//	printf("defining branch /%s/\n", brname  );
 	if (ttree_exists==0){// does not exist yet
 	  ZH_tree->Branch(brname , &TREE[i], ch );// 
 	}else{// already exists
@@ -543,10 +569,10 @@ if s001..            ->counter (1st+2nd channels x 65000); "TOTAL" in title
   }
   //  printf( "FILL BUFFER LOADED: /%s/\n"  ,datafileA );
 
-  int pos=0;
+  Long64_t pos=0;
 
-#define DEBUG 0
-  int ie=0;
+  //---------already in *h   #define DEBUG 0
+  Long64_t ie=0;
   //  for (int i=0;i<events;i++){
   while ( (events<0) || (ie<events) ){ // if events < 0=> limit
     ie++;  
@@ -555,9 +581,9 @@ if s001..            ->counter (1st+2nd channels x 65000); "TOTAL" in title
     process_ONE_EVENT(OEbuf);
   }
 
-  printf("%d (total) events done\n" , ie);
+  printf("%lld (total) events done\n" , ie);
   gDirectory->ls();
-  printf("%d (total) events done, closing files\n" , ie);
+  printf("%lld (total) events done, closing files\n" , ie);
 
   if ( ftree!=NULL) { 
     ZH_tree->Write();

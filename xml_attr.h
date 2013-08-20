@@ -1,4 +1,4 @@
-#define DEBUG 0
+#define DEBUGXML 1
 #ifndef xml_attr_H
 #define xml_attr_H
  

@@ -291,7 +291,7 @@ extern "C" {
       // 	}//while,  no writeout	
       // }// if runempty==0.  IF NOT =>> quit
 
-      sprintf(chL,"EXITING the POP-FILE (re==%d) (bytes=%lld) (fsize=%d)\n" ,
+      sprintf(chL,"EXITING the POP-FILE (re==%d) (bytes=%lld) (fsize=%lld)\n" ,
 	      runempty, 4*cnt, fexists(fname) );table_log(1,chL);
 }/**********************end of function *********POP2FILE***/
 

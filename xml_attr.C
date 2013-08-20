@@ -136,12 +136,12 @@ void TSmallish_xml::token(const char* str){// also inits!!!!
   sprintf(mystr,"%s",str);
   int i=0;
   if (strlen(mystr)>0){
-  if (DEBUG)printf ("Splitting string \"%s\" into tokens:\n",str);
+  if (DEBUGXML)printf ("Splitting string \"%s\" into tokens:\n",str);
   pch = strtok_r (mystr,"/" , &saveptr);
   while (pch != NULL)
   {
     addr[i]=pch; getattrlevel=i;
-    if (DEBUG)printf ("(#%d)-%s- \t",i,pch);
+    if (DEBUGXML)printf ("(#%d)-%s- \t",i,pch);
     i++;
     pch = (char*)strtok_r ( NULL, "/", &saveptr);
    }//while
@@ -150,7 +150,7 @@ void TSmallish_xml::token(const char* str){// also inits!!!!
   FOUND=0;//reset
   inside_UID=0;// is insidde block with UID (search)
   sprintf( output, "%s", "" );
-   if (DEBUG)printf("\n...........tokening done........getattrlevel==%d\n",getattrlevel);
+   if (DEBUGXML)printf("\n...........tokening done........getattrlevel==%d\n",getattrlevel);
   }//length>0
 }//------------------------token----------------
 
@@ -167,7 +167,7 @@ void TSmallish_xml::DisplayTele( XMLNodePointer_t node, Int_t level, const char*
   TString tel;
   TString sat;
   tel.Append( xml->GetNodeName(node)  );
-  if (DEBUG)printf("I am in <%s> node\n", tel.Data() );
+  if (DEBUGXML)printf("I am in <%s> node\n", tel.Data() );
   XMLNodePointer_t child;
 
   /****************************************************************************
@@ -179,12 +179,12 @@ void TSmallish_xml::DisplayTele( XMLNodePointer_t node, Int_t level, const char*
 
     if (tel.CompareTo( search )==0){ 
       inside_UID=1;
-      if (DEBUG)printf("%*cFOUND MATCH OF UID <%s> at level .... ==%d\n",level+1,' ',search, level );
+      if (DEBUGXML)printf("%*cFOUND MATCH OF UID <%s> at level .... ==%d\n",level+1,' ',search, level );
     }//rise the flag on UID  -----search is reached--------
 
     if ((tel.CompareTo( addr[0].c_str() )==0)&&(inside_UID==1)){//FOUND AND LEVEL
       leveloffset=level;  
-      if (DEBUG)printf("%*cFOUND MATCH with <%s> at level offset.... ==%d\n\n",
+      if (DEBUGXML)printf("%*cFOUND MATCH with <%s> at level offset.... ==%d\n\n",
 		       level+1,' ',addr[0].c_str(), leveloffset );
       getattrlevel+=leveloffset-1;//  attrlevel IS RELATIVE; now I put real attr level!!!
 
@@ -192,7 +192,7 @@ void TSmallish_xml::DisplayTele( XMLNodePointer_t node, Int_t level, const char*
       // display all child nodes   
       child = xml->GetChild(node);
       while (child!=0) {
-	if (DEBUG)printf("%*c searching in children: (act.node=%s)\n", 
+	if (DEBUGXML)printf("%*c searching in children: (act.node=%s)\n", 
 		       level+1,' ',
 			 tel.Data()  );
 	DisplayTele( child, level+1, search ,"",searchatt); 
@@ -212,24 +212,24 @@ void TSmallish_xml::DisplayTele( XMLNodePointer_t node, Int_t level, const char*
  
 
   if ( (leveloffset>=0)&&(level>=leveloffset) ){ 
-    if (DEBUG)printf("%*c Level=%d ... Leveloffset=%d ,  act.node==%s\n", 
+    if (DEBUGXML)printf("%*c Level=%d ... Leveloffset=%d ,  act.node==%s\n", 
 		     level+1,' ', level, leveloffset ,
 		     tel.Data()  );
     //now we compare addr[0] to the current node.................
     if ( tel.CompareTo( addr[ level- leveloffset ].c_str() )==0){
-            if (DEBUG)printf("%*c<%s> ....  found addr[%d] field (%s), act.node=%s:\n",
+            if (DEBUGXML)printf("%*c<%s> ....  found addr[%d] field (%s), act.node=%s:\n",
 		   level+1,' ', addr[ level- leveloffset ].c_str(),
 		   level- leveloffset,
 			     addr[ level- leveloffset ].c_str() , tel.Data()  );
       // display all child nodes   
       if (getattrlevel==level){//>>>>>>>>>>>>>>>>>>>>>>>
-	if (DEBUG)printf("%*c reached attr  level(%d) .... ==%d\n",level+1,' ',getattrlevel ,level );
+	if (DEBUGXML)printf("%*c reached attr  level(%d) .... ==%d\n",level+1,' ',getattrlevel ,level );
 
 	// display attributes
 	XMLAttrPointer_t attr = xml->GetFirstAttr(node);
 	while (attr!=0) {
 	  sat=xml->GetAttrName(attr);
-	  	  if (DEBUG)printf("%*c Checking  attr (seen x addr[]) =(\"%s\" x \"%s\")\n",
+	  	  if (DEBUGXML)printf("%*c Checking  attr (seen x addr[]) =(\"%s\" x \"%s\")\n",
 			 level+1,' ',
 			 sat.Data(), searchatt  );
 		  if ( sat.CompareTo( searchatt  )==0){//*********************
@@ -237,17 +237,17 @@ void TSmallish_xml::DisplayTele( XMLNodePointer_t node, Int_t level, const char*
 		      sprintf( output, "%s",   xml->GetAttrValue(attr) );//RESULT HERE
 		      FOUND=1;
 		    }//can be also error - FOUND==-1....................
-	    if (DEBUG)printf("%*c ATTR <%s = %s (output)>  ---------------> FOUND\n",
+	    if (DEBUGXML)printf("%*c ATTR <%s = %s (output)>  ---------------> FOUND\n",
 			     level+1,' ',sat.Data() ,  output  );
 		  }// attr OK if ( sat.CompareTo( searchatt  )==0)************
-	   if (DEBUG)printf("%*c ..attr: %s value: %s\n",level+1,' ', xml->GetAttrName(attr), xml->GetAttrValue(attr));
+	   if (DEBUGXML)printf("%*c ..attr: %s value: %s\n",level+1,' ', xml->GetAttrName(attr), xml->GetAttrValue(attr));
 	  attr = xml->GetNextAttr(attr);  
 	}//while display attributeswhile (attr!=0) {.................
       }else{ // level not reached attrlevel.............  getattrlevel<=level
 
        child = xml->GetChild(node);// goes back up to root
       while (child!=0) {
-		if (DEBUG)printf("%*c searching in children: %s.  (act.node=%s)\n", 
+		if (DEBUGXML)printf("%*c searching in children: %s.  (act.node=%s)\n", 
 		       level+1,' ',
 				 addr[level- leveloffset +1].c_str(), tel.Data()  );
 		DisplayTele( child, level+1, addr[level- leveloffset +1].c_str(), "",searchatt ); 
@@ -259,16 +259,16 @@ void TSmallish_xml::DisplayTele( XMLNodePointer_t node, Int_t level, const char*
   }// leveloffset>=0		
 
   //-----------------ON LEAVE - it can step out the GOOD 'search' UID-------------
-  if (DEBUG)printf("%*c leaving node=%s) lvl=%d offs=%d, found=%d\n", 
+  if (DEBUGXML)printf("%*c leaving node=%s) lvl=%d offs=%d, found=%d\n", 
 		   level+1,' ', tel.Data(), level,leveloffset, FOUND  );
   if ((leveloffset>=0)&&(level<=leveloffset)&&(FOUND==0) ){
     // offset>=0:  already found UID
     // lvl>=offs:  still in
-    if (DEBUG)printf(" ---------------------------> NOTFOUND flag!\n%s",""); FOUND=-1;
+    if (DEBUGXML)printf(" ---------------------------> NOTFOUND flag!\n%s",""); FOUND=-1;
   }
   if ( tel.CompareTo( search)==0 ){
     inside_UID=0; // REMOVE FLAG !!!!
-  if (DEBUG)printf("%*c leaving node=%s) removing the -------------------__>flag@@@\n", 
+  if (DEBUGXML)printf("%*c leaving node=%s) removing the -------------------__>flag@@@\n", 
 		   level+1,' ', tel.Data() );
   }
 
