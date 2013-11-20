@@ -602,6 +602,11 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
   xml.DisplayTele( xml.mainnode, 0, "plugins","poper","definitions" );
   sprintf( definitions  ,"%s", xml.output  );
 
+  // things from 20130820
+  OverrideFileOUT=NULL;// NO filename out  override
+    ZHbuffer = (int*) malloc ( 10000 );
+
+
   OEBmax=1000;// ONE EVENT LIMIT !!!!!!!!!!
   DataRead=0; // HowMuch was read to buffer
   cnt_evt=0; // event number
@@ -652,8 +657,16 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
     ftree->Close();
   }
   sprintf(chL,"EXITING POP-ZH (bytes=%lld)", 4*cnt );table_log(1,chL);
+ if (ZHbuffer != NULL){ 
+    printf( "%s\n","...freeing the memory\n");
+    printf( "%s\n","...freeing the memory\n");
+    printf( "%s\n","...freeing the memory\n");
+    free (ZHbuffer); 
+  }
+
   sprintf(chL,"EXITING POP-ZH (evnts=%ld)",cnt_evt );table_log(1,chL);
   sprintf(chL,"EXITING POP-ZH (data =%lld)",cnt_evt_data );table_log(1,chL);
+
 }//pop_ZH_____________________________________________________________END___
 
 

@@ -30,7 +30,10 @@ ZH_data(1000, "/home/ojr/AA_share/DATA/20130621_o17_dp_an/RUN0121_V" , "zhfile.x
 //int ZHbuffer[350000000];// 99M*4  // I MUST USE int!!!!!!????
 
 // int ZHbuffer[99000000];// 99M*4  // I MUST USE int!!!!!!????
- int ZHbuffer[199000000];// 599M*4  // I MUST USE int!!!!!!????
+// int ZHbuffer[199000000];// 599M*4  // I MUST USE int!!!!!!????
+
+int* ZHbuffer; // I TRY to malloc it
+
  int OEbuf[1000];//  ONE EVENT buffer; ;
 
 Long64_t ZHbuffer_last; // last allocated cell
@@ -96,21 +99,29 @@ chan   histo   map_to_ttree   time
 //=======================  service===  read buffer from disk----
 int fillbuffer( const char* datafile){
   FILE *f;
-  int *pch=&ZHbuffer[0];
-  printf( "I see   /%lx=%lx/\n",   (int64_t)pch, (int64_t)ZHbuffer );
+  //  int *pch=&ZHbuffer[0];
+  //  printf( "I see   /%lx=%lx/\n",   (int64_t)pch, (int64_t)ZHbuffer );
 
   if ( fexists( datafile) <= 0) {
-     printf("BAD  FILE = /%s/, file doesnot exist\n",datafile);return 1;
+     printf("BAD  FILE = %s, file doesnot exist\n",datafile);return 1;
   }else{
-     printf("GOOF FILE = /%s/, file exists       \n",datafile);
+     printf("GOOF FILE = %s, file exists       \n",datafile);
   }
 
   f=fopen( datafile , "rb" );
   if (f==NULL){ printf("BAD FILE = /%s/, ccannot open\n",datafile);return 1;}
-  DataRead=fread( pch , 1, sizeof(ZHbuffer) , f  );
-  printf("%lld bytes READ  (=%.1f MB; max=%.1f;  filesize=%.1f)\n",
+  //  DataRead=fread( pch , 1, sizeof(ZHbuffer) , f  );
+
+  printf("Trying to allocate  /%.1f/ MB of memory\n", 1.0*fexists( datafile)/1024./1024. );
+  ZHbuffer = (int*) malloc ( fexists( datafile) );
+  ZHbuffer_last=fexists( datafile)  ;
+
+  printf("Trying to readout   /%.1f/ MB of memory\n", 1.0*fexists( datafile)/1024./1024. );
+  DataRead=fread( ZHbuffer , 1, fexists( datafile) , f  );
+
+  printf("%lld bytes READ  (=%.1f MB   filesize=%.1f)\n",
 	 DataRead , 1.0*DataRead/1024./1024., 
-	 1.0*sizeof(ZHbuffer)/1014./1024.,
+	 //	 1.0*sizeof(ZHbuffer)/1014./1024.,
 	 1.0*fexists( datafile)/1014./1024. );
   fclose(f);
   return 0;
@@ -133,12 +144,18 @@ int fillbuffer( const char* datafile){
 Long64_t fillOEB(Long64_t pos){ // 
   Long64_t c=0;
    while( 1==1  ){
+
+     //notwrk   if ( (pos+c % 1000000 )==0 ){ printf("...byte %lld\n", pos+c); }
+
      if (DEBUG!=0)printf("/%08X/ ",  ZHbuffer[pos+c] );
     OEbuf[c]= ZHbuffer[pos+c];
-    if (OEbuf[c]==EOE){ break;}
+    if (OEbuf[c]==EOE){ return pos+c+1;}
     //    if (pos+c>=DataRead){ break;} // If not all data read, break
     c++; 
-    if (pos+c>=DataRead )return -1;
+    //    if (pos+c>=ZHbuffer_last-1 )return -1;  // zhbuffer_last...
+
+     if ( (pos+c)*4>ZHbuffer_last )return -1;  // zhbuffer_last... 
+     //    if ( 4*(pos+c)>=DataRead )return -1;  // zhbuffer_last
   }//while
    if (DEBUG)printf("\n%s", ""  );//4
   //  printf("\n    sizeof(int)==%ld\n", sizeof(word)  );//4
@@ -224,11 +241,16 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
   if ( ttree_exists==0 ){//=========================ZH TREE   BEGIN==
 
     toki=TokenGet( "file=", conf , tokres);
+    if ( strlen(OverrideFileOUT)>0){
+      strcpy( tokres, OverrideFileOUT );
+    }
     if (strlen(tokres)>0){
       if ( fexists(tokres)>=0){
 	curtime = time (NULL);  loctime = localtime (&curtime);
 	end=strrchr( tokres, '.' ); // .root
 	memcpy( begin,  tokres,  end-tokres ); // copy begin
+	begin[ end-tokres] = '\0';
+
 	sprintf(tokres2,"%s_%04d%02d%02d_%02d%02d%02d%s", begin,
 		1900+loctime->tm_year,   1+loctime->tm_mon,  
 		loctime->tm_mday,  loctime->tm_hour,   
@@ -236,13 +258,16 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
 		end);
 
 	
-	printf("*** \n%s\n%s\n    |%ld| \n%s ***\n", begin, end, end-tokres,  tokres );
+	printf("TECHNICAL: /%s/ +  /%s/   |%ld| /%s/=original ***\n", begin, end, end-tokres,  tokres );
 	printf("TECHNICAL: file %s , I rename it to %s\n",
 	       tokres, tokres2 );
 
 	sprintf(tokres, "%s", tokres2 );
       }//fexists >=0
+
       ftree=new TFile(tokres, "NEW" );
+      if (ftree==NULL){ printf( "%s *** NO TTREE  FILE  OPENED !!!!\n" , ""); return;}
+
       ftree->cd();
       ZH_tree = new TTree( ttree_name , "ttree_from_ZH_data");  
     }else{ //TOKRES!=""  file= TOKEN -----------------------------
@@ -477,7 +502,8 @@ int process_ONE_EVENT(int *arr){// translate buffer with one event to data
   while( 
 	(  (arr[pos] & BOEm) != BOE ) &&
            (arr[pos] != EOE)	// finish with EOE
-	  &&(pos<OEBmax)
+	  &&(pos<OEBmax) 
+
 	 ){
     //    printf("==========> %08X\n",arr[pos] );
     pos++;
@@ -492,7 +518,8 @@ int process_ONE_EVENT(int *arr){// translate buffer with one event to data
   while(  (arr[pos] != EOE)&&(pos<OEBmax)  ){ // until EOE
     chn=(arr[pos] & 0xffff0000)>>16;
     val=(arr[pos] & 0x0000ffff);
-    if (DEBUG)printf("%3d - %6d\n",  chn, val );
+    if (DEBUG)printf("%3d - %6d\n",  chn, val );  
+    
     process_chan( chn, val );
     pos++;
   }//parse events.........
@@ -514,8 +541,18 @@ int process_ONE_EVENT(int *arr){// translate buffer with one event to data
  *************************************************************
  */
 
+
+
+
 //-------------- xmlfile:  plugins / poper / file=""
-void ZH_data(int events, const char* datafileA,  const char* xmlfile, 
+//void ZH_data(int events, const char* datafileA,  const char* xmlfile, 
+//	     const char* search,const char* seq,const char* searchatt){
+
+void ZH_data(int events, 
+	     const char* datafileIN,  
+	     const char* datafileOUT,  
+	     
+	     const char* xmlfile, 
 	     const char* search,const char* seq,const char* searchatt){
 
   //  int events = 10000; // LIMIT !!!!!!!
@@ -551,8 +588,9 @@ if s001..            ->counter (1st+2nd channels x 65000); "TOTAL" in title
  xml.DisplayTele( xml.mainnode, 0, search, seq,  searchatt );
  sprintf( acqxml2 ,"%s", xml.output  );
 
+ strcpy( OverrideFileOUT, datafileOUT ); // We will use OVERRIDE
 
-  load_chan_table(  acqxml2  );
+ load_chan_table(  acqxml2  ); //  here the "file=" token can be loaded
   printf( "LOAD_CHAN_TABLE LOADED:\n%s\n\n"  , acqxml2 );
 
   //  load_chan_table("c001=1,c002=2,c003=3,c004=4,c005=5,c006=6,c007=7,c008=8,c009=9,c010=10,c011=11,c1024=t1,c1025=t2,c1026=t3,c1027=t4,c033=s001,c035=s002,c037=s003" );
@@ -563,10 +601,13 @@ if s001..            ->counter (1st+2nd channels x 65000); "TOTAL" in title
 // READ BUFFER// one time READ DATA FROM FILE
 //  printf( "FILL BUFFER LOAD?: /%s/\n"  ,datafileA );
 
-  if (0!= fillbuffer(datafileA) ){
+
+  printf("%s","...before allocation\n");
+  if (0!= fillbuffer( datafileIN ) ){
     printf ("FILE %s not opened..............ending\n", "");
     return;
   }
+  printf("%s","...after allocation\n");
   //  printf( "FILL BUFFER LOADED: /%s/\n"  ,datafileA );
 
   Long64_t pos=0;
@@ -576,20 +617,32 @@ if s001..            ->counter (1st+2nd channels x 65000); "TOTAL" in title
   //  for (int i=0;i<events;i++){
   while ( (events<0) || (ie<events) ){ // if events < 0=> limit
     ie++;  
-    pos=fillOEB(pos);
-    if (pos<0)break;
+    if ( ie % 1000000==0){ printf("... event # %10lld\n" , ie); }
+  
+  pos=fillOEB(pos);
+
+   if (pos<0)break;
+
     process_ONE_EVENT(OEbuf);
+
+
   }
 
-  printf("%lld (total) events done\n" , ie);
+  printf("%lld (total) events done\n" , ie);   
   gDirectory->ls();
-  printf("%lld (total) events done, closing files\n" , ie);
+  printf("%lld (total) events done, closing files\n" , ie); 
 
-  if ( ftree!=NULL) { 
+  if ( ftree!=NULL) {   
+    printf( "%s\n","...Writing the tree\n");
     ZH_tree->Write();
     ftree->Write(); 
-    ftree->Close(); 
-    
+    ftree->Close();   
+  } 
+
+  if (ZHbuffer != NULL){ 
+    printf( "%s\n","...freeing the memory");
+    free (ZHbuffer); 
   }
+
   // NOW I HAVE ALL THE DATA in MEM & in TTREE
 }//ZH_data__________________________________________

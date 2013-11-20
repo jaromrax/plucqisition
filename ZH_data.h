@@ -22,12 +22,13 @@ const int BOEm=0xe000ffff;//begin of event
 
 const int MAXCHAN=2048; // time is 1024+;  maximum channels
 
-
+char OverrideFileOUT[300]; // OUTPUTFILE; normaly must be initialized to ""
 extern Long64_t ZHbuffer_last;// last allocated cell 
 
 //extern int ZHbuffer[350000000];//="ahoj\0";  // I MUST USE int!!!!!!????
 //extern int ZHbuffer[99000000];//="ahoj\0";  // I MUST USE int!!!!!!????
-extern int ZHbuffer[199000000];// 599M*4  // I MUST USE int!!!!!!????
+//extern int ZHbuffer[199000000];// 599M*4  // I MUST USE int!!!!!!????
+extern int* ZHbuffer;// 599M*4  // I MUST USE int!!!!!!????
 
 extern int OEbuf[1000];//="Ahoj\0";
 
@@ -75,7 +76,10 @@ void process_EOE(); // end of event - do filling
 int process_ONE_EVENT(int *arr);// translate buffer with one event to data
 
 //        void ZH_data(int events);  // TEST  events<0 == inf.
-void ZH_data(int events, const char* datafile,  const char* xmlfile, 
+void ZH_data(int events, 
+	     const char* datafileIN,  
+	     const char* datafileOUT,  
+	     const char* xmlfile, 
 	     const char* search,const char* seq,const char* searchatt);
 
 
