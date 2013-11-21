@@ -29,7 +29,8 @@ char *mmap_file; // pointer to     mmap
 
 
   // I should define the variables that are declared (extern) in header
- TCondition MyCond(0);
+// I cannot compile on DEBIAN/Aron      
+//         TCondition MyCond(0);
 // FILE* XTERM; When it is declared in logtermh, defined in log_term.C, no prob. here
 //------------------------------------------ My sources finished-----
 
