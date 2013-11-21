@@ -603,7 +603,8 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
   sprintf( definitions  ,"%s", xml.output  );
 
   // things from 20130820
-  OverrideFileOUT=NULL;// NO filename out  override
+  //  OverrideFileOUT=NULL;// NO filename out  override
+  sprintf( OverrideFileOUT, "%s", "" );
     ZHbuffer = (int*) malloc ( 10000 );
 
 

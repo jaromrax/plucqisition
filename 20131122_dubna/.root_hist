@@ -1,0 +1,17 @@
+.q
+.q
+git log
+.q
+ gSystem->Load("/lib/x86_64-linux-gnu/libdl.so.2")
+ gSystem->Load("/lib/libdl.so")
+.q
+.q
+.q
+.q
+.q
+acq("start")
+.qqqqqqqqqqqqqqqqqqqqq
+acq()
+.qqqqqqqqqqqqq
+acq()
+.qqqqqqqqqqqqqqq

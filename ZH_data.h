@@ -22,7 +22,7 @@ const int BOEm=0xe000ffff;//begin of event
 
 const int MAXCHAN=2048; // time is 1024+;  maximum channels
 
-char OverrideFileOUT[300]; // OUTPUTFILE; normaly must be initialized to ""
+extern char OverrideFileOUT[300]; // OUTPUTFILE; normaly must be initialized to ""
 extern Long64_t ZHbuffer_last;// last allocated cell 
 
 //extern int ZHbuffer[350000000];//="ahoj\0";  // I MUST USE int!!!!!!????

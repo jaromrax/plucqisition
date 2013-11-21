@@ -1,0 +1,16 @@
+  # PUSHNET:  entered...
+  #                                                          evt_analyze_remote  ..........................
+  #                             POP: SORT int .... starting  139925049840864
+  # P before TSocket
+
+  #                             POP: chanlo=1,chanhi=32,kc014A=-1,kc014B=-1,kc014C=-1,ltime=1024,btime=141,bnum=140,c257=-1,c32=-1,v560na=33,v560nb=65,parnam=V,tzero=788911200.000000,circular=100000
+  #                             POP: bufsize==         0 empty==1
+  #                             POP:  evts= 0 --leaving
+  #                             POP:  evt#= 0 (@status++)
+  #                             POP:  wait-> 
+  #                                                          M
+  #                             POP:   -> wait 
+  #                             POP:  evt#= 0 (@status++)
+  #                             POP:  wait-> 
+  #                                                          N
+  #                                                          M

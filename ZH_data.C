@@ -36,6 +36,7 @@ int* ZHbuffer; // I TRY to malloc it
 
  int OEbuf[1000];//  ONE EVENT buffer; ;
 
+char OverrideFileOUT[300];
 Long64_t ZHbuffer_last; // last allocated cell
 
  int OEBmax;// ONE EVENT LIMIT !!!!!!!!!!
