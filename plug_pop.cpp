@@ -577,7 +577,7 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
    int datum=0;// one word from the concurent queue
    char chL[500];
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   sprintf(chL,"POP: ZH_data : buff==%ld",(int64_t)buffer);table_log(1,chL);
+   sprintf(chL,"POP: pop_ZH  : buff==%ld",(int64_t)buffer);table_log(1,chL);
 
       //STANDARD  XML  READ-------------
       FILE *outfile;  char fname[400];
@@ -627,7 +627,10 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
   while (respush>=1.0){//run while push is running........
     while( !buffer->empty() ){// concurent queue "buffer" is an object HERE
       buffer->wait_and_pop(datum);
-      if ((cnt%250000)==0){
+      //      if ((cnt%250000)==0){
+      
+      //      if ((cnt%2500)==0){
+      if ((cnt%10000)==0){
 	//	sprintf(chL,"POP:W     %7lld kB",4*cnt/1000);table_log(1,chL);
 	//	sprintf(chL,"POP:D     %7ld  evts",cnt_evt_data );table_log(1,chL);
 	sprintf(chL,"POP:%8lld kB %9lld  evts",4*cnt/1000, cnt_evt_data);table_log(1,chL);
@@ -659,9 +662,9 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
   }
   sprintf(chL,"EXITING POP-ZH (bytes=%lld)", 4*cnt );table_log(1,chL);
  if (ZHbuffer != NULL){ 
-    printf( "%s\n","...freeing the memory\n");
-    printf( "%s\n","...freeing the memory\n");
-    printf( "%s\n","...freeing the memory\n");
+    printf( "%s\n","...freeing the memory  /ZHbuffer/ (pop)\n");
+    //    printf( "%s\n","...freeing the memory\n");
+    //    printf( "%s\n","...freeing the memory\n");
     free (ZHbuffer); 
   }
 

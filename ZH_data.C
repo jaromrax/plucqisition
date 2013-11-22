@@ -324,7 +324,7 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
 
       if ( strstr(tokres,"s")==tokres){//counter----------- =s001, =s002...
 	//        sprintf( tok, "s%03d", i ); 
-	TH1F *h=new TH1F( tokres, tokres, 60000,0,60000);
+	TH1F *h=new TH1F( tokres, tokres, 99000,0,99000);
 	COUNhist[i]=h;
 	C_yn[i]=1;
 	C_yn[i+1]=2; // his number 2 - cover
@@ -422,12 +422,12 @@ void process_chan(int ch,  int val){// KEY:fill propper histos,counters,time
 	Thist->GetXaxis()->SetTimeDisplay(1);
 	Thist->GetXaxis()->SetTimeFormat( "#splitline{%d.%m}{%H:%M}%F1994-12-31 22:00:00s" );
 	//-----------CNT
-	ThistCNT=new TH1F("ThistCNT","time in counters", 
+	ThistCNT=new TH1F("ThistCNT","event in counters vs. time", 
 		       86400, bTIME-ROOT_offset, bTIME+86400-ROOT_offset );
 	ThistCNT->GetXaxis()->SetTimeDisplay(1);
 	ThistCNT->GetXaxis()->SetTimeFormat( "#splitline{%d.%m}{%H:%M}%F1994-12-31 22:00:00s" );
 	//-----------Can
-	ThistCan=new TH1F("ThistCan","time in channels", 
+	ThistCan=new TH1F("ThistCan","event in channels vs. time", 
 		       86400, bTIME-ROOT_offset, bTIME+86400-ROOT_offset );
 	ThistCan->GetXaxis()->SetTimeDisplay(1);
 	ThistCan->GetXaxis()->SetTimeFormat( "#splitline{%d.%m}{%H:%M}%F1994-12-31 22:00:00s" );

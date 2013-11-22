@@ -22,18 +22,19 @@
 //================================================DEFINE TH1F====
 //TESTS...........
 
-TH1F* timeH=new TH1F("hTimeDiff","time intervals between counters", 
-		     1800,0,180);
+TH1F* timeH=new TH1F("hTimeDiff","time intervals between counters", 		     1800,0,180);
 
-TH1F* counterH1=new TH1F("s001_A","counter from analyze plug", 
-		     60000,0,60000);
-TH1F* counterH4=new TH1F("s004_A","counter from analyze plug", 
-		     60000,0,60000);
+//TH1F* counterH1=new TH1F("s001_A","counter from analyze plug", 		     60000,0,60000);
+//TH1F* counterH4=new TH1F("s004_A","counter from analyze plug", 		     60000,0,60000);
 
 
 TH1F* timeCanA;    // event arrivals    TIME
 TH1F* timeCNT;     // counters arrivals TIME
 TH1F* timeCanAdE1; //dE1 arrivals       TIME
+
+timeCanA=NULL;
+timeCNT=NULL;
+timeCanAdE1=NULL;
 
 TH1F* evnum=new TH1F("T_EventA","Arriving data event # (analyze)",  300000, 
 		 0, 300000 );
@@ -139,3 +140,4 @@ if (gt6q==NULL){
   gROOT->GetListOfSpecials()->Add(gt6q);
  }
 
+  printf("end of ------definitions ---------%s\n","");

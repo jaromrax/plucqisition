@@ -847,10 +847,10 @@ TSocket* Cat::GetSocket(const char* ip, int port){
  // alarm.Connect("Timeout()", "Cat", NULL , "HandleTimeOut()");
     
  //    alarm.Start(5000, kTRUE);
- sprintf(ch,"P %s\n", "before TSocket"); table_log(0,ch);
+    //-- sprintf(ch,"P %s\n", "before TSocket"); table_log(0,ch);
    socket=Blbka.GetSocket( ipaddress, port ) ;
    //   socket=new TSocket( ipaddress, port);
- sprintf(ch,"P %s\n", "After TSocket"); table_log(0,ch);
+   //-- sprintf(ch,"P %s\n", "After TSocket"); table_log(0,ch);
  
   //    printf("after the socket%s\n","");
  
@@ -866,14 +866,14 @@ TSocket* Cat::GetSocket(const char* ip, int port){
     // i==0 => TIMEOUT...... ??
     //  FINALY  2sec timeout, 10x repeat, 50ms wait (TO BE TESTED)
 
-    sprintf(ch,"P %s\n", "before select"); table_log(0,ch);
+      //--  sprintf(ch,"P %s\n", "before select"); table_log(0,ch);
     i=(int)socket->Select(TSocket::kRead, 2000);//timeout 1sec, repeat 5x 
-    sprintf(ch,"P %s\n", "after  select"); table_log(0,ch);
+    //-- sprintf(ch,"P %s\n", "after  select"); table_log(0,ch);
 
 
 
     if (i>0) {//####CASE i>0 ####
-    sprintf(ch,"P %s\n", "before recvraw"); table_log(0,ch);
+      //--  sprintf(ch,"P %s\n", "before recvraw"); table_log(0,ch);
       d=(int)socket->RecvRaw(strbuf, maxtrans, kDontBlock  ); // read small buffer
       //      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw socket got %d bytes \n", d );
       sprintf(ch,"PUSH-netw socket got %d bytes ", d ); table_log(0,ch);
@@ -895,7 +895,7 @@ TSocket* Cat::GetSocket(const char* ip, int port){
 
     if (wait!=0){//------- this 
       wait=TokenGet(  "run=", mmap_file , mmap_result ); // if run==0 => KILL HERE
-      sprintf(ch,"PUSH mmap: run==%d\n", wait); table_log(0,ch);
+      //--      sprintf(ch,"PUSH mmap: run==%d\n", wait); table_log(0,ch);
     }
     if (wait==0){ 
       //      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw got BROADCAST SIGNAL... %s\n", "" );
