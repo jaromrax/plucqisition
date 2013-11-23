@@ -13,7 +13,7 @@
  if (ANADEBUG){ sprintf(ch,"entered ACTIONS%s",  "");table_log(2,ch); }
 
 if (aTREE[17]>0) {mtx1->Fill( mfact*aTREE[1]+aTREE[17], aTREE[17] );  }
-if (aTREE[18]>0) {mtx2->Fill( mfact*aTREE[2]+aTREE[18], aTREE[18] );  }
+if (aTREE[18]>0) {mtx2->Fill( 20*aTREE[2]+aTREE[18], aTREE[18] );  }
 if (aTREE[19]>0) {mtx3->Fill( mfact*aTREE[3]+aTREE[19], aTREE[19] );  } 
 if (aTREE[20]>0) {mtx4->Fill( mfact*aTREE[4]+aTREE[20], aTREE[20] );  }
 if (aTREE[21]>0) {mtx5->Fill( mfact*aTREE[5]+aTREE[21], aTREE[21] );  }
@@ -32,22 +32,56 @@ if ( (acTIME_root>0.0)&&(timeCanA==NULL) ){
   timeCanA=new TH1F("TimeCanA","Data at time t (Analyze plug)", 86400 , 
 		    acTIME_root, acTIME_root+86400 );
  }
+if (timeCanA!=NULL)timeCanA->Fill(acTIME_root);
 
 
- if (timeCanA!=NULL)timeCanA->Fill(acTIME_root);
 
 
 
 if ( (acTIME_root>0.0)&&(timeCanAdE1==NULL) ){
   timeCanAdE1=new TH1F("TimeCanAdE1","Data in dE1 at time t (Analyze plug)",86400 , 
 		    acTIME_root, acTIME_root+86400 );
- }
-
-
-
-if (aTREE[17]>0){
- if (timeCanAdE1!=NULL)timeCanAdE1->Fill(acTIME_root);
 }
+if (aTREE[17]>0){if (timeCanAdE1!=NULL)timeCanAdE1->Fill(acTIME_root);}
+
+
+if ( (acTIME_root>0.0)&&(timeCanAdE2==NULL) ){
+  timeCanAdE2=new TH1F("TimeCanAdE2","Data in dE2 at time t (Analyze plug)",86400 , 
+		    acTIME_root, acTIME_root+86400 );
+}
+if (aTREE[18]>0){if (timeCanAdE2!=NULL)timeCanAdE2->Fill(acTIME_root);}
+
+if ( (acTIME_root>0.0)&&(timeCanAdE3==NULL) ){
+  timeCanAdE3=new TH1F("TimeCanAdE3","Data in dE3 at time t (Analyze plug)",86400 , 
+		    acTIME_root, acTIME_root+86400 );
+}
+if (aTREE[19]>0){if (timeCanAdE3!=NULL)timeCanAdE3->Fill(acTIME_root);}
+
+
+
+if ( (acTIME_root>0.0)&&(timeCanAdE5==NULL) ){
+  timeCanAdE5=new TH1F("TimeCanAdE5","Data in dE5 at time t (Analyze plug)",86400 , 
+		    acTIME_root, acTIME_root+86400 );
+}
+if (aTREE[21]>0){if (timeCanAdE5!=NULL)timeCanAdE5->Fill(acTIME_root);}
+
+if ( (acTIME_root>0.0)&&(timeCanAdE6==NULL) ){
+  timeCanAdE6=new TH1F("TimeCanAdE6","Data in dE6 at time t (Analyze plug)",86400 , 
+		    acTIME_root, acTIME_root+86400 );
+}
+if (aTREE[22]>0){if (timeCanAdE6!=NULL)timeCanAdE6->Fill(acTIME_root);}
+
+if ( (acTIME_root>0.0)&&(timeCanAdE7==NULL) ){
+  timeCanAdE7=new TH1F("TimeCanAdE7","Data in dE7 at time t (Analyze plug)",86400 , 
+		    acTIME_root, acTIME_root+86400 );
+}
+if (aTREE[23]>0){if (timeCanAdE7!=NULL)timeCanAdE7->Fill(acTIME_root);}
+
+
+
+
+
+
 
 
 //----------------event number----------------
@@ -101,6 +135,7 @@ if ( (acTIME_root>0.0)&&(timeCNT==NULL) ){
  timeCNT->Fill( acTIME_root  );
 
 
+ /*
  if (gt1q!=NULL){
   ima=gt1q->GetN();
   gt1q->Expand(ima+1);
@@ -133,5 +168,6 @@ if (gt6gene!=NULL){
  gt6gene->SetPointError( ima, 0.0,          1 );
  t6gene=0.0;
  }
+ */
 
 }//===============================WHEN aCOUNTER[1]>0=====END

@@ -435,26 +435,22 @@ TH1F* evnumC; // throwing
    while (respop==1){//INFINITE==========================
 
    while (tree_addr_old==NULL){
-     usleep(1000*100);
+     usleep(1000*1000);
      if (ANADEBUG){sprintf(ch,"..trying to get the tree-huh" );   table_log(2,ch);}
      tree_addr_old=(TTree*)gDirectory->FindObject("nanot");
    }
+    entr=0;
+    while (tree_addr_old->GetEntries()<100){
+     usleep(1000*1000);
+     if (ANADEBUG){sprintf(ch,"..trying to get the tree-huh2" );   table_log(2,ch);}
+   }
+
+
+
    if (ANADEBUG){sprintf(ch,"..got the tree. %llx", (Long64_t)tree_addr_old);table_log(2,ch);}
    tree_addr=(TTree*)tree_addr_old->Clone();
    tree_addr->SetTitle("CLONE");
    tree_addr->SetMakeClass(1);
-
-   entr=0;
-   while (entr<=0){
-     entr=tree_addr->GetEntries(); 
-     if (ANADEBUG){ sprintf(ch,"entry#%6d = %6lld",  0,  acnt_evt);table_log(2,ch); }
-     if (entr<=0){ 
-       usleep(100000);//wait a 100 milisecond for events to appear
-       tree_addr=(TTree*)tree_addr_old->Clone(); 
-       tree_addr->SetTitle("CLONE"); 
-       tree_addr->SetMakeClass(1);
-     }
-   }
 
    if (ANADEBUG){sprintf(ch,"cloned the tree %llx", (Long64_t)tree_addr );table_log(2,ch);}
 
@@ -489,6 +485,7 @@ TH1F* evnumC; // throwing
 
 
 
+    entr=tree_addr->GetEntries();
 
    //-------===============from here I can repeat=======----------
 
