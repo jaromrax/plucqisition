@@ -33,7 +33,7 @@ evnum->Fill( cnt  );  // event number recorded
 //}//IF  dE1-----------
 
 //if (ANADEBUG){ sprintf(ch,"monitor cuts ...%s",  "");table_log(2,ch); }
-
+/*
 //===============================================================
 // this is CUT that is made with 1:1
 if ((m1_monitor!=NULL)&&(m1_monitor->IsInside(chan[1],chan[17] ))){
@@ -49,3 +49,4 @@ if ((m6_monitor!=NULL)&&(m6_monitor->IsInside(chan[6],chan[22] ))){
  if ((m6_gene!=NULL)&&(m6_gene->IsInside(chan[6],chan[22] ))){
  	   t6gene=t6gene++;
   }
+*/

@@ -299,7 +299,6 @@ void *xml_masterthread(void* arg){
 	   TokenReplace( "analyze=", "analyze=-1", mmap_file, repla );
 	   strcpy( mmap_file, repla );
 	  }
-    printf("\nMASTER: waiting to JOIN ALL T. dl_handleS==%ld/%ld\n",(int64_t)dl_handle_push,(int64_t)dl_handle_pop);
   }
 
   printf("MASTER: ALL Threads OVER. The dl_handle %s\n", "");
