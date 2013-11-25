@@ -56,7 +56,9 @@ TH1F* evnum=new TH1F("T_EventA","Arriving data event # (analyze)",  300000,
 //================================================DEFINE MARICES====
 int mbins=2000;
 int mrange=8000;
-double mfact=1.0;  // factor to multiply
+double mfact[32];
+for (int i=0;i<32;i++){ mfact[i]=1.0;}  // factor to multiply
+mfact[2]=10.0;
 char mchx[100];
 char mchy[100];
 char mch[100];
@@ -64,7 +66,7 @@ char mch[100];
       TH2F *mtx1;
       mtx1=(TH2F*)gDirectory->Get("mtx1");
       if (mtx1==NULL){
-	sprintf(mchx,"V017+%.3f*V001", mfact);
+	sprintf(mchx,"V017+%.3f*V001", mfact[1]);
 	sprintf(mchy,"V017%s", "" );
 	sprintf(mch,"%s:%s", mchy, mchx);
 	mtx1=new TH2F("mtx1",mch,mbins,0,mrange,mbins,0,mrange);

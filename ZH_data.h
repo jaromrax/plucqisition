@@ -35,16 +35,16 @@ extern int OEbuf[1000];//="Ahoj\0";
 extern int OEBmax;// ONE EVENT LIMIT !!!!!!!!!!
 extern Long64_t DataRead; // HowMuch was read to buffer
 
-extern int64_t cnt_evt; // event number
+extern Long64_t cnt_evt; // event number
 //extern int64_t cnt_evt_data; // event number, data not time
 extern Long64_t cnt_evt_data; // event number, data not time// in TTree
 
 extern   int       T_yn[MAXCHAN];//  4 levels
 extern   TH1F*     Thist;
 extern   int       C_yn[MAXCHAN]; //lo hi
-extern   int64_t   COUN[MAXCHAN];// total
+extern   Long64_t   COUN[MAXCHAN];// total
 extern   TH1F*     COUNhist[MAXCHAN];//histo to fill
-extern   int64_t   COUNtmp[MAXCHAN]; // values
+extern   Long64_t   COUNtmp[MAXCHAN]; // values
 extern   TH1F*     HIST[MAXCHAN];
 extern   UShort_t  TREE[MAXCHAN];
 extern   UShort_t  ZERO[MAXCHAN];  
@@ -73,7 +73,7 @@ void process_chan(int ch,  int val);// MAIN PART: fill propper histos,counters,t
 void process_BOE();// begin of event - do cleaning
 void process_EOE(); // end of event - do filling
 
-int process_ONE_EVENT(int *arr);// translate buffer with one event to data
+int process_ONE_EVENT(int *arr,  int *BUFANAL  );// translate buffer with one event to data
 
 //        void ZH_data(int events);  // TEST  events<0 == inf.
 void ZH_data(int events, 

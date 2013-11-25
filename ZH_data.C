@@ -14,6 +14,7 @@ ZH_data(1000, "/home/ojr/AA_share/DATA/20130621_o17_dp_an/RUN0121_V" , "zhfile.x
 #include "ZH_data.h"
 #include "xml_attr.h"
 #include "log_term.h"
+#include "mut_queue.h"
 
 
 
@@ -42,7 +43,7 @@ Long64_t ZHbuffer_last; // last allocated cell
  int OEBmax;// ONE EVENT LIMIT !!!!!!!!!!
  Long64_t DataRead; // HowMuch was read to buffer
 
- int64_t cnt_evt; // event number
+ Long64_t cnt_evt; // event number
 
  Long64_t cnt_evt_data; // event number, data not time// in TTree
 
@@ -54,9 +55,9 @@ Long64_t ZHbuffer_last; // last allocated cell
    TH1F*     ThistCan=NULL;     //  channel's readout timediff
 
    int       C_yn[MAXCHAN]; //level lo or hi ==  1 or 2
-   int64_t   COUN[MAXCHAN];// total (displays in title)
+   Long64_t   COUN[MAXCHAN];// total (displays in title)
    TH1F*     COUNhist[MAXCHAN];//histo to fill 
-   int64_t   COUNtmp[MAXCHAN]; //one shot value (2 passes)
+   Long64_t   COUNtmp[MAXCHAN]; //one shot value (2 passes)
    TH1F*     HIST[MAXCHAN];    //address of NULL
    UShort_t  TREE[MAXCHAN];    //variables to clear after fill
    UShort_t  ZERO[MAXCHAN];    //fast reset to TREE
@@ -64,11 +65,11 @@ Long64_t ZHbuffer_last; // last allocated cell
    TTree *ZH_tree;
 
 
- double cTIME; // current data TIME (always>0)
- double cTIME_root; // current data TIME (always>0)
- double bTIME; // buffered time (mostly 0)
- double sTIME; // startup time
- double dTIME; // difference
+ Double_t cTIME; // current data TIME (always>0)
+ Double_t cTIME_root; // current data TIME (always>0)
+ Double_t bTIME; // buffered time (mostly 0)
+ Double_t sTIME; // startup time
+ Double_t dTIME; // difference
 
 
  TFile *ftree;
@@ -105,7 +106,7 @@ int fillbuffer( const char* datafile){
 
   if ( fexists( datafile) <= 0) {
      printf("BAD  FILE = %s, file doesnot exist\n",datafile);return 1;
-  }else{
+  }else{ 
      printf("GOOF FILE = %s, file exists       \n",datafile);
   }
 
@@ -398,7 +399,7 @@ void process_chan(int ch,  int val){// KEY:fill propper histos,counters,time
       //      }
       ThistCNT->Fill(  cTIME-ROOT_offset );
 
-      sprintf(mmm,"TOTAL COUNTS = %ld",COUN[ch-1]);
+      sprintf(mmm,"TOTAL COUNTS = %lld",COUN[ch-1]);
       COUNhist[ch-1]->SetTitle( mmm );
       TREE[ch-1]= COUNtmp[ch-1] ; // prepare the variable for tree
     }
@@ -493,8 +494,12 @@ void process_EOE(){   // end of event - do filling
 
 
 //=========================================
-int process_ONE_EVENT(int *arr){// translate buffer with one event to data
+int process_ONE_EVENT(int *arr,  int *BUFANAL ){// translate buffer with one event to data
   // I still omit xcheck # channels:  e004 vs pos
+   char chL[500];
+   concurrent_queue<int> *bubu=(concurrent_queue<int>*)BUFANAL;
+   //   sprintf(chL,"POE: ZH  : BUFF2==%ld",(int64_t)bubu);table_log(0,chL);
+
 
   int pos=0; // normaly 1st place is e000, but can be bor...
   int chn;
@@ -513,7 +518,7 @@ int process_ONE_EVENT(int *arr){// translate buffer with one event to data
   //  printf(":%08X\n",arr[pos] ); //{ printf("begin of run\n%s", "" ); }
 
 
-  if (DEBUG)printf("::%6ld   (%2d)   d=%.3f \n", cnt_evt,  channels_in_event(arr[pos]),  cTIME-sTIME  ); 
+  if (DEBUG)printf("::%6lld   (%2d)   d=%.3f \n", cnt_evt,  channels_in_event(arr[pos]),  cTIME-sTIME  ); 
 
   pos++; //move next from E000
   while(  (arr[pos] != EOE)&&(pos<OEBmax)  ){ // until EOE
@@ -522,9 +527,13 @@ int process_ONE_EVENT(int *arr){// translate buffer with one event to data
     if (DEBUG)printf("%3d - %6d\n",  chn, val );  
     
     process_chan( chn, val );
+    bubu->push( chn );
+    bubu->push( val );
+
     pos++;
   }//parse events.........
-
+  bubu->push( 0xffffffff );
+  bubu->push( 0xffffffff );
 
   //------------------------END OF EVENT
   process_EOE();// cnt_evt++;cnt_evt_data++; FILL; // cTime reset
@@ -624,7 +633,7 @@ if s001..            ->counter (1st+2nd channels x 65000); "TOTAL" in title
 
    if (pos<0)break;
 
-    process_ONE_EVENT(OEbuf);
+   process_ONE_EVENT(OEbuf, NULL);
 
 
   }

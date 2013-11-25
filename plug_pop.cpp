@@ -87,23 +87,52 @@ extern "C" {
   /**************************************************
    *            SIMPLE PRINTOUT  int
    */
-  int* pop_empty(int* par){// SIMPLE PRINTOUT ....
+  int* pop_empty(int* par, int* par2){// SIMPLE PRINTOUT ....
     char chL[500];
-    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
+    int datum=0;// one word from the concurent queue
+   concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
     int i=0;
-    int wait=1;
-    while (i<30){
-      sprintf(chL,"POP: empty i==%d" ,  i );table_log(1,chL);
-      //   if(XTERM!=NULL)fprintf(XTERM,"  POP empty: pointer==%d\n", (int)buffer );
-   wait=1;
-   wait=MyCond.TimedWaitRelative( 1000  ) ; // wait 500
-   if (wait==0){break;}
-   //   usleep(1* 1000*1000);
-   i++;
-    }
-   sprintf(chL,"POP: empty EXITed i==%d" ,  i );table_log(1,chL);
 
-   //   if(XTERM!=NULL)fprintf(XTERM,"  POP empty: EXIT buf==%d\n", (int)buffer );
+
+      //STANDARD  XML  READ-------------
+      FILE *outfile;  char fname[400];
+      int buffer4;
+      long long int cnt=0;
+      size_t result;   
+
+//-------- here I will control with    control.mmap    file------   
+    if ((mmapfd = open("control.mmap", O_RDWR, 0)) == -1) err(1, "open");
+    mmap_file=(char*)mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, mmapfd, 0);
+    if (mmap_file == MAP_FAILED) errx(1, "either mmap");
+
+    char mmap_result[100];
+//-------- here I will control with    control.mmap    file------   
+
+  char  acqxml2[100];
+  char pushis[100];
+  char definitions[2000];// channel definitions
+  TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
+  double respush=1.0;// PUSH is running   "push="  token.....
+  TSmallish_xml xml(    acqxml2   );
+  xml.DisplayTele( xml.mainnode, 0, "plugins","poper","definitions" );
+  sprintf( definitions  ,"%s", xml.output  );
+
+
+
+
+  while (respush>=1.0){//run while push is running........
+     while( !buffer->empty() ){// concurent queue "buffer" is an object HERE
+      buffer->wait_and_pop(datum);
+      if ((cnt%10000)==0){	sprintf(chL,"POP:%8lld kB ",4*cnt/1000);table_log(1,chL);
+      }  
+      cnt++; 
+     }
+         usleep(1000*20); // wait 100ms and retry again..
+    respush=TokenGet( "push=" , mmap_file , pushis ); //takes a value
+    if ( 0==TokenGet( "run=" , mmap_file , pushis ) ){ respush=0;}
+ 
+  }//respush
+   sprintf(chL,"POP: empty EXITed i==%d" ,  i );table_log(1,chL);
 
   }//-----------------------------------------------
 
@@ -572,12 +601,19 @@ extern "C" {
    *
    *
    */
-int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
+  int* pop_ZH(int* par, int* par2){// POP ... nanot ZD data 4*int system
 
    int datum=0;// one word from the concurent queue
    char chL[500];
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    sprintf(chL,"POP: pop_ZH  : buff==%ld",(int64_t)buffer);table_log(1,chL);
+
+   //=============
+   //HERE I DEFINE NEXT QUEUE
+   concurrent_queue<int> *BUFANAL=(concurrent_queue<int>*)par2;  // empty queue(..,chan,..)
+    sprintf(chL,"POP: pop_ZH  :buff2==%ld",(int64_t)BUFANAL);table_log(1,chL);
+  // send it by       (int*)&buffer 
+   //=============
 
       //STANDARD  XML  READ-------------
       FILE *outfile;  char fname[400];
@@ -620,7 +656,10 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
   reset_chan_table();
 
   load_chan_table( definitions  );
+
   //  load_chan_table("circtree=100000,c001=1,c002=2,c003=3,c004=4,c005=5,c006=6,c007=7,c008=8,c017=17,c018=18,c019=19,c020=20,c021=21,c022=22,c023=23,c024=24,c032=32,c1024=t1,c1025=t2,c1026=t3,c1027=t4,c033=s001,c035=s002,c037=s003,c039=s004" );
+
+
 
   // int pos=0;//  this is position in the buffer...
   int c=0;//   position in OEbuffer..............
@@ -641,7 +680,11 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
       //      while(1==1){//..........here it was number of events limiting
       OEbuf[c] = datum;
       if (OEbuf[c]==EOE){//END OF EVENT
-	process_ONE_EVENT(OEbuf);
+
+
+	process_ONE_EVENT(OEbuf, (int*)BUFANAL  );
+
+
 	c=0;// reset position in the buffer
       }//END OF EVENT
       else{
@@ -651,6 +694,10 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
 
     usleep(1000*20); // wait 100ms and retry again..
     respush=TokenGet( "push=" , mmap_file , pushis ); //takes a value
+    if ( 0==TokenGet( "run=" , mmap_file , pushis ) ){
+      respush=0;
+    }; //takes a value
+    
   }//WHILE respush==0....push running...
   //  sprintf(chL,"Ending: respush==%1.0f; /%s/ ... \n/%s/", respush, pushis,mmap_file);table_log(1,chL);
 
@@ -668,7 +715,7 @@ int* pop_ZH(int* par){// POP ... nanot ZD data 4*int system
     free (ZHbuffer); 
   }
 
-  sprintf(chL,"EXITING POP-ZH (evnts=%ld)",cnt_evt );table_log(1,chL);
+  sprintf(chL,"EXITING POP-ZH (evnts=%lld)",cnt_evt );table_log(1,chL);
   sprintf(chL,"EXITING POP-ZH (data =%lld)",cnt_evt_data );table_log(1,chL);
 
 }//pop_ZH_____________________________________________________________END___

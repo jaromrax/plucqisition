@@ -58,6 +58,10 @@ using namespace std;
          // this BUFFER is passed to all plugins
 concurrent_queue<int> buffer;   // empty queue
 
+   char chL[500];
+
+concurrent_queue<int> BUFFER2;   // empty queue
+
 TTimeStamp t_start;
 
 
@@ -121,7 +125,7 @@ void *xml_masterthread(void* arg){
    //   if (fexists(file_pop)==1){ printf("File %s already exists, STOPPING\n",file_pop);return NULL;}
    if (fexists(file_pop)!=0){
      char chL[500];
-     sprintf( chL,"MASTER: file %s ALREADY EXISTS....appending after %d bytes\n",
+     sprintf( chL,"MASTER: file %s ALREADY EXISTS....appending after %lld bytes\n",
 	      file_pop, fexists(file_pop)  );table_log(-1,chL);
    }// already exists
 
@@ -272,7 +276,7 @@ void *xml_masterthread(void* arg){
 	      (TThread::GetThread("poper_thread")!=0)||
 	      (TThread::GetThread("analyze_thread")!=0)
 	      ){
-      usleep(1000*600);  //  MAIN  WAIT IN MASTER   0.6 sec
+      usleep(1000*200);  //  MAIN  WAIT IN MASTER   0.6 sec
       if ((TThread::GetThread("pusher_thread")!=0)&&
 	  (TThread::GetThread("pusher_thread")->GetState()==6)){
 	   TThread::GetThread("pusher_thread")->Delete();
@@ -295,9 +299,10 @@ void *xml_masterthread(void* arg){
 	   TokenReplace( "analyze=", "analyze=-1", mmap_file, repla );
 	   strcpy( mmap_file, repla );
 	  }
-   }
-    if(XTERM!=NULL)fprintf(XTERM,"%s","MASTER: ALL Threads OVER. The dl_handle \n");
+    printf("\nMASTER: waiting to JOIN ALL T. dl_handleS==%ld/%ld\n",(int64_t)dl_handle_push,(int64_t)dl_handle_pop);
+  }
 
+  printf("MASTER: ALL Threads OVER. The dl_handle %s\n", "");
 
  
     TTimeStamp t_stop;  t_stop.Set();
@@ -307,8 +312,6 @@ void *xml_masterthread(void* arg){
 	 (int)(t_stop.GetSec()-t_start.GetSec() ) );
   printf("now ... make%s\n   acq(\"stop\")\n", "");
   // usleep(1000*1000*1);  //doesnot change much
-
-
   return NULL;   // void* mut_master_thread()
 }
 /************************************************END OF FUNCTION
@@ -340,6 +343,9 @@ int acq(const char * startstop="start")
   if (XTERM==NULL){
     if (logterm()!=0 )usleep(1000*800);
   }//ALLOCATE OR FIND XTERMINAL
+
+
+   sprintf(chL,"POE:   : BUFF2==%ld",(int64_t)&BUFFER2);table_log(0,chL);
 
 
     //===========================MMAP INIT============================
@@ -417,19 +423,21 @@ int acq(const char * startstop="start")
     }
 
 
+
+
     do{ //while not deads
       char newfile[4096];
       TokenReplace( "run=",  "run=0",  mmap_file , newfile );
       strcpy( mmap_file, newfile);
-      usleep(1000*100); // why not to wait.....a while....
+      printf("waiting 1 second\n%s", "");
+      usleep(1000*1000); // why not to wait.....a while....
       not_deads=0;
     TThread::Ps();
     //    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "...broadcasting ALL _threads");
     //    printf("%s...broadcasting to ALL threads\n","");
-    MyCond.GetMutex();
-    MyCond.Broadcast();
-    usleep(1000*100);
-
+    //    MyCond.GetMutex();
+    //    MyCond.Broadcast();
+    //    usleep(1000*100);
 
 
     TThread *t;
@@ -486,7 +494,7 @@ int acq(const char * startstop="start")
 
 
    //    TThread::Ps(); 
-    if (kill_retries>=   0   ){ break;}
+    if (kill_retries>=   5   ){ break;}
     kill_retries++;
     }while (not_deads>0);
 
@@ -496,20 +504,21 @@ int acq(const char * startstop="start")
 
 
 
-    int cdown=3;// approximately this 2 seconds it takes
+    int cdown=7;// approximately this 2 seconds it takes
     while(TThread::GetThread("master_thread")!=0){
       printf("--------------------------- wait for MASTER ... %d sec\n", cdown-- );
-      usleep(1000*500);
+      usleep(1000*1000);
       if (TThread::GetThread("master_thread")->GetState()==6){
-	TThread::GetThread("master_thread")->Delete();
+  	TThread::GetThread("master_thread")->Delete();
       }//state 6
+      TThread::Ps();
+      if (cdown<0){break;}
     }//master exists.....................
 
-
-
-    if(XTERM!=NULL)fprintf(XTERM,"%s","MASTER:SECOND ................. to dl close!\n" );
-    dlerror();
+ printf("%s","dlclose prepared to act\n");
+ //    dlerror();
     int res=dlclose(dl_handle_analyze); // THIS IS DIFFICULT!!!!!!!!!!!!!!!!!
+    if (res!=0){ printf("%s","dlclose problem\n");}
     // there is a decrement....
     // http://stackoverflow.com/questions/8792363/c-dlclose-doesnt-unload-the-shared-library
     // maybe one (analyze) dlclose is fine, maybe it make both?
@@ -548,6 +557,7 @@ int acq(const char * startstop="start")
 	TThread::GetThread("master_thread")->Delete();
       }//state 6
   }//master exists
+
   usleep(1000);
   if (TThread::GetThread("master_thread")==0){
 
@@ -589,10 +599,10 @@ int acq(const char * startstop="start")
 void *evt_pusher( void *arg )  // loads the queue 
 {
  struct thread_info *mtinfo = (struct thread_info *) arg;
- int nt=mtinfo->thread_num;
-     evt_pusher_remote( (int*)&buffer ); //#########EVENT#########
+ // int nt=mtinfo->thread_num;
+ evt_pusher_remote( (int*)&buffer , NULL ); //#########EVENT#########
   mtinfo->running=0;// say stop
- printf("%s","pusher function is stopped \n");
+ printf("%s","evt_plug: pusher function is stopped \n");
   return NULL;
 }//--------void *evt_pusher( void *arg )  // loads the queue 
 
@@ -605,12 +615,13 @@ void *evt_pusher( void *arg )  // loads the queue
 void *evt_poper( void *arg )  // reads the queue (pop)
 {
  struct thread_info *mtinfo = (struct thread_info *) arg;
- int nt=mtinfo->thread_num;
- int call=mtinfo->callnumber; mtinfo->callnumber++;// to keep track opened file
+ // int nt=mtinfo->thread_num;
+ // int call=mtinfo->callnumber; 
+ mtinfo->callnumber++;// to keep track opened file
  // printf("starting thread %d poper for the %dth time\n", nt, call );
  //     printf("removing ........bufsize==%10d   empty==%d \n", buffer.size(), buffer.empty() );
-     evt_poper_remote(  (int*)&buffer  );
-     printf("%s","poper function is stopped\n");
+ evt_poper_remote(  (int*)&buffer, (int*)&BUFFER2  );
+     printf("%s","evt_plug: poper function is stopped\n");
   mtinfo->running=0;// say stop
      return NULL;
 //jak to budu analyzovat? konec eventu je kde????
@@ -632,10 +643,10 @@ void *evt_poper( void *arg )  // reads the queue (pop)
 void *evt_analyze( void *arg )  // 
 {
  struct thread_info *mtinfo = (struct thread_info *) arg;
- int nt=mtinfo->thread_num;
- int call=mtinfo->callnumber; mtinfo->callnumber++;// to keep track opened file
-   evt_analyze_remote(  (int*)&buffer  ); //#########EVENT#########
- printf("%s","analyze function is stopped \n");
+ // int nt=mtinfo->thread_num;
+ // int call=mtinfo->callnumber; mtinfo->callnumber++;// to keep track opened file
+ evt_analyze_remote(  (int*)&BUFFER2 , NULL); //#########EVENT#########
+ printf("%s","evt_plug: analyze function is stopped \n");
   mtinfo->running=0;// say stop
      return NULL;
 }

@@ -156,7 +156,8 @@ int logterm(){
       already_ex =1 ; // NOT existed before
       //      usleep(1000*1000*3);
       //      fclose(XTERM);
-      break;
+      //      break;
+      return already_ex;
     }//if else fexists
   }//for
   }//XTERM stale NULL

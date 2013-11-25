@@ -270,7 +270,7 @@ extern "C" {
   /**********************************************
    *            PUSH binary (nanot) DATA FROM A FILE ......
    */
-  int* push_file(int64_t* par){// BINARY FILE .....
+  int* push_file(int64_t* par, int64_t* par2){// BINARY FILE .....
     char chL[500];
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
    sprintf(chL,"PUSH-FILE START buff=%ld",(int64_t)buffer);table_log(0,chL);
@@ -786,7 +786,7 @@ TSocket* Cat::GetSocket(const char* ip, int port){
    *              cat runx.dat |  nc -l -p 9302
    *                         this is a client that connects to a server...
    */
- int* push_net(int64_t* par){
+int* push_net(int64_t* par, int64_t* par2){
  
 
 
@@ -832,8 +832,8 @@ TSocket* Cat::GetSocket(const char* ip, int port){
 
   double downtime; int downtimef, downtimei,  wait=1;  // WAIT
   int trials=10; //10 seconds of timeouts
-
-  while (0==0){// ----- - -- READ ALL REPEATING CONNECTIONS --- -  -- -- - --   - - -
+  wait=1;
+  while (wait!=0){// ----- - -- READ ALL REPEATING CONNECTIONS --- -  -- -- - --   - - -
 
     //
     //  DRUHA STRANA LISTENS !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -883,7 +883,9 @@ TSocket* Cat::GetSocket(const char* ip, int port){
 	ii++;
 	if ((cnt%25000)==0){
 	  //	  if(XTERM!=NULL)fprintf(XTERM,"P %7lld kB\n",4*cnt/1000);
-	  sprintf(ch,"P %7lld kB\n",4*cnt/1000); table_log(0,ch);
+	  sprintf(ch,"P %7lld kB\n",4*cnt/1000); table_log(0,ch);  
+	  wait=TokenGet(  "run=", mmap_file , mmap_result ); // if run==0 => KILL HERE
+	  if (wait==0) {break;}
 	} cnt++;
       }//while - push
       //      if(XTERM!=NULL)fprintf(XTERM,"PUSH push-netw wait 100ms....%s; iii*4==%d, d=%d\n", ipaddress,ii*4,d );
@@ -901,11 +903,11 @@ TSocket* Cat::GetSocket(const char* ip, int port){
       //      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw got BROADCAST SIGNAL... %s\n", "" );
       sprintf(ch,"PUSH got BROADCAST SIGNAL... %s\n", "" );table_log(0,ch);
       socket->Close(); 
-      break; 
+      sprintf(ch,"PUSH socket closed... %s\n", "" );table_log(0,ch);
     }
     //cannot be here    TThread::CancelPoint(); // When CancelOn(), here the thread can be interrupted.
 
-
+    if (wait!=0){
 
     if (i<0){ //####CASE i<0 ####
       //if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw SOCKET LOST....%s; iii*4==%d, d=%d\n", ipaddress,ii*4,d );
@@ -920,31 +922,24 @@ TSocket* Cat::GetSocket(const char* ip, int port){
       if (trials<=0){
 	//       if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw I RELEASE SOCKET(ZERO)..%s; iii*4==%d, d=%d\n",
 	//			                                                            ipaddress,ii*4,d);
-	sprintf(ch,"PUSH I RELEASE SOCKET(ZERO)..%s; iii*4==%d, d=%d\n",ipaddress,ii*4,d);table_log(0,ch);
+	sprintf(ch,"PUSH I RELEASE SOCKET(ZERO)..%s; iii*4==%d, d=%d",ipaddress,ii*4,d);table_log(0,ch);
       socket->Close(); break; 
       }
     }//####CASE i==0  ####
-    
-  }// 1==1---- ---- --    --WHILE read all the time - ONE CONNECTION --------
-  socket->Delete();
+    }// wait!=0
+    if (wait==0){break;}
+    }// 1==1---- ---- --    --WHILE read all the time - ONE CONNECTION --------	
+    sprintf(ch,"PUSH deleting socket..%s; iii*4==%d, d=%d",ipaddress,ii*4,d);table_log(0,ch);
+
+    //  socket->Delete();
+    delete socket;
+    sprintf(ch,"PUSH socket deleted..%s; iii*4==%d, d=%d",ipaddress,ii*4,d);table_log(0,ch);
 
   if (wait!=0){
      wait=MyCond.TimedWaitRelative( 5000  ) ;
-  }
+  }else{ break;}
 
-  /*
-      //      double downtime; int downtimef, downtimei,  wait=1;
-         TTimeStamp t_wait;
-       downtime=t_wait.GetSec()+t_wait.GetNanoSec()*1e-9;
-       //       if(XTERM!=NULL)fprintf(XTERM,"\n\n  FTREE  wait %d , %f \n", wait, downtime );
-       downtime=downtime+2.5 + 2.5;   // 0.5 sec was NOT ENOUGH !!!
-       downtimei=(int)downtime;
-       downtimef=(int)( 1e+9*(downtime-1.0*downtimei) );
-       if(XTERM!=NULL)fprintf(XTERM,"R%s","" );
-       wait=MyCond.TimedWait(  downtimei , downtimef  ) ;
-       //       if(XTERM!=NULL)fprintf(XTERM,"\n\n  FTREE  wait %d ! %d.%d\n", wait, downtimei,downtimef);
-       */
-       if (wait==0)break;
+  if (wait==0)break;
        //       usleep(1000*300);
        //if(XTERM!=NULL)fprintf(XTERM,"S%s","" );
 

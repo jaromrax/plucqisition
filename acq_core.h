@@ -30,7 +30,7 @@ struct thread_info {       /* Used as argument to thread_start() */ //tinfo
 /********************************************
  *   these functions are located in plugin.so or  plug_queue.so
  */
-typedef int* (*plugin_tint)( int* );
+typedef int* (*plugin_tint)( int* , int* );
 plugin_tint evt_pusher_remote ;
 plugin_tint evt_poper_remote ;
 plugin_tint evt_analyze_remote ;
