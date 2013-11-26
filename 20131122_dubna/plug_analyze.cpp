@@ -131,10 +131,10 @@ extern "C" {
   int chan[32];
   int datum2=0;
   for (int i=0;i<32;i++){ chan[i]=0; }
-  printf("%s\n","waiting");
-  usleep(1000*1000);
+  //  printf("%s\n","waiting");
  //================================================DEFINE MARICES====
 #include "plug_analyze_definitions.cpp"
+  usleep(1000*1000);
 
    sprintf(ch,"ANA: after definitions%s","");table_log(2,ch);
 
@@ -147,16 +147,15 @@ extern "C" {
        buffer->wait_and_pop(datum);cnt++;
 
        if (datum==0xffffffff){cnt2=0;
-	 sprintf(ch,"ANA: ffffff%s","");table_log(2,ch);
+	 // sprintf(ch,"ANA: ffffff%s","");table_log(2,ch);
 
 }else{cnt2++;}//datum 0xffffff
        if (cnt2==1){ //====================================================
 	 //------------------analyze here --------------
 	 //	 	 if (chan[17]>0) {mtx1->Fill( chan[1]+chan[17], chan[17]);}
-	 sprintf(ch,"ANA: analyze action%s","");table_log(2,ch);
+	 //	 sprintf(ch,"ANA: analyze action%s","");table_log(2,ch);
 
-
-	 //   #include "plug_analyze_actionsB.cpp"
+  #include "plug_analyze_actionsB.cpp"
 
 	 
 	 //------------------analyze here --------------	 
@@ -175,8 +174,8 @@ extern "C" {
 
 
      }//buffer not empty  
-     sprintf(ch,"ANA:  buffer empty%s");table_log(2,ch);
-     usleep(100000);
+     sprintf(ch,"ANA:  buffer empty%s","");table_log(2,ch);
+     usleep(1000*500);
      
      usleep(1000*20); // wait 100ms and retry again..
      respush=TokenGet( "push=" , mmap_file , pushis ); //takes a value

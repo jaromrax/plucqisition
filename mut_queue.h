@@ -123,7 +123,7 @@ public:
     {
         while(the_queue.empty())
         {
-	  usleep(1000);//  1 ms wait
+	  usleep(10000);//  1 ms wait
         }
             TThread::Lock();
         popped_value=the_queue.front();
