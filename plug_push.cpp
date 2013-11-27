@@ -894,7 +894,7 @@ int* push_net(int* par, int* par2){
       for (ii=0;4*ii<d-(d%4)+ii_init;ii++){
        //     while( (ii*4<d)&&(d>=4) ){
 	buffer->push( buffer4p[ii]  );
-	  usleep(100000);
+	//	  usleep(100000);
 	if (PUSHDEBUG!=0){ sprintf(ch,"%4lld ii= %4d  %08x   %4d",cnt,ii,  buffer4p[ii],d ); table_log(0,ch);}
 	//	ii++;
 	if ((cnt%25000)==0){

@@ -440,3 +440,11 @@ acq()
 .qqqqqqqqqqqqqqq
 acq()
 shspe()
+.qqqqqqqqqqqqq
+acq()
+shspe()
+.! cat acq_setup.xml
+TTimer *t3=new TTimer("mmframe->RefreshAll()",5000);
+t3->TurnOn();
+t3->TurnOff();
+t3->TurnOn();
