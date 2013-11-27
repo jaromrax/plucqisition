@@ -126,11 +126,11 @@ extern "C" {
   xml.DisplayTele( xml.mainnode, 0, "plugins","analyze","treename" );
   sprintf( treename  ,"%s", xml.output  );
   outfile=NULL;
-  // outfile=fopen( "analyze.empty2","wb" );//-OPEN FILE append and write
+  outfile=fopen( "analyze.empty2","wb" );//-OPEN FILE append and write
 
   int cnt2=0;
   Long64_t events=0;
-  int chan[32];
+  int chan[32000];
   int datum2=0;
   for (int i=0;i<32;i++){ chan[i]=0; }
   //  printf("%s\n","waiting");
@@ -157,7 +157,7 @@ extern "C" {
 	 //	 sprintf(ch,"ANA: analyze action%s","");table_log(2,ch);
 	 if (ANADEBUG!=0){sprintf(ch,"ANA:  action; cnt==%lld", cnt);table_log(2,ch);}
 
-  #include "plug_analyze_actionsB.cpp"
+#include "plug_analyze_actionsB.cpp"
 
 	 
 	 //------------------analyze here --------------	 
@@ -166,12 +166,14 @@ extern "C" {
        }
 	 if (cnt2 % 2==1){// channel
 	   buffer->wait_and_pop(datum2);cnt++;cnt2++;
+	   if (datum<33){
 	   chan[datum]=datum2;
-	   //  if (outfile!=NULL){fwrite ( &datum , 1 , 4  , outfile );fwrite ( &datum2 , 1 , 4  , outfile );}
+	   if (outfile!=NULL){fwrite ( &datum , 1 , 4  , outfile );fwrite ( &datum2 , 1 , 4  , outfile );}
+	   }
 	 }
 
       if ((cnt%10000)==0){
-	sprintf(ch,"ANA:%8lld kB %9lld events /%d",4*cnt/1000, events,cnt2);table_log(2,ch);
+	sprintf(ch,"ANA:%8lld kB  events=%9lld /%d",4*cnt/1000, events,cnt2);table_log(2,ch);
       } //printout every MB
 
 
