@@ -465,3 +465,14 @@ shspe()
 .qqqqqqqqqq
 acq()
 shspe()
+acq()
+mtx1
+mtx1->SetStats(111111)
+mtx1->SetStats(kTRUE)
+mtx1->SetStats(kFALSE)
+mtx1->SetStats(kTRUE)
+mtx1->SetOption("stat")
+.! cat acq_setupo.xml
+.! cat acq_setup.xml
+TTimer *t3=new TTimer("mmframe->RefreshAll()",5000);
+t3->TurnOn();

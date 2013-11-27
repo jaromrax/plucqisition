@@ -209,8 +209,9 @@ for (int i=0;i<MAXCHAN;i++){TREE[i]=0;}
 
 
 //=================================== TH1F ======= TTree ==========================
-//  c001
+//  c001     normal  channels  (even block#...:(  )
 //     ===  t1 t2 t3 t4  ;   s001...     1..999
+//    c001=1  means put what arrives from channel1 to histogram 1
 //=================================================================================
 
 
@@ -322,6 +323,25 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
 	T_yn[i]=atoi( tokres );   //  Thist will be defined later
 	printf("ZH:time %d  defined (part %d)\n", i, T_yn[i]  );
       }//TIME
+
+      if ( strstr(tokres,"e")!=NULL){//extended channel c001=e001 --------
+	tokres[0]='0';
+	toki=atoi( tokres );   //  Thist will be defined later
+	if (toki!=0){// integer was found afte e  => it is HISTO------------
+	  sprintf( tok, "c%03d", toki ); // new channel=arbitrary integer<=999
+	  TH1F *h=new TH1F( tok, tok, 100000,0,100000); // EXTRA SIZE
+	  HIST[i]=h;
+	  
+	  // DEFINE TTREE...........for every histo channel....
+	  sprintf( brname,  "V%03d", toki );//  branch  c001 
+	  sprintf(ch ,"%s/s", brname );  //  UShort_t ===  /s  
+	  if (ttree_exists==0){// does not exist yet
+	    ZH_tree->Branch(brname , &TREE[i], ch );// 
+	  }else{// already exists
+	    ZH_tree->SetBranchAddress( brname ,&TREE[i] );
+	  }//ttree existence
+	}
+      }//EXTENDED - just histo size, TTREE remains the same
 
 
       if ( strstr(tokres,"s")==tokres){//counter----------- =s001, =s002...
@@ -498,7 +518,7 @@ void process_EOE(){   // end of event - do filling
 int process_ONE_EVENT(int *arr,  int *BUFANAL ){// translate buffer with one event to data
   // I still omit xcheck # channels:  e004 vs pos
 
-   concurrent_queue<uint32_t> *bubu=(concurrent_queue<uint32_t>*)BUFANAL;
+   concurrent_queue<int> *bubu=(concurrent_queue<int>*)BUFANAL;
    //   sprintf(chL,"POE: ZH  : BUFF2==%ld",(int64_t)bubu);table_log(0,chL);
 
 
@@ -523,7 +543,6 @@ int process_ONE_EVENT(int *arr,  int *BUFANAL ){// translate buffer with one eve
 
   pos++; //move next from E000
   while(  (arr[pos] != EOE)&&(pos<OEBmax)  ){ // until EOE
-
     chn=(arr[pos] & 0xffff0000)>>16;
     val=(arr[pos] & 0x0000ffff);
 
@@ -534,7 +553,7 @@ int process_ONE_EVENT(int *arr,  int *BUFANAL ){// translate buffer with one eve
 
     pos++;
   }//parse events.........
-  if (bubu!=NULL){bubu->push( 0xffffffff ); bubu->push( 0xffffffff );}
+  if (bubu!=NULL){  bubu->push( 0xffffffff );  bubu->push( 0xffffffff );}
 
   //------------------------END OF EVENT
   process_EOE();// cnt_evt++;cnt_evt_data++; FILL; // cTime reset 
@@ -631,7 +650,8 @@ if s001..            ->counter (1st+2nd channels x 65000); "TOTAL" in title
   //  for (int i=0;i<events;i++){
   while ( (events<0) || (ie<events) ){ // if events < 0=> limit
     ie++;  
-    if ( ie % 1000000==0){ printf("... event # %10lld\n" , ie); }
+        if ( ie % 1000000==0){ printf("... Mevent # %10lld\n" , ie/1000000); }
+    //    if ( ie % 1000==0){ printf("... event # %10lld\n" , ie); }
   
   pos=fillOEB(pos);
 
