@@ -1,3 +1,4 @@
+#define PUSHDEBUG 0
 #include "xml_attr.h"    // bude xml
 #include "log_term.h"    // bude xml
 #include "mut_queue.h"
@@ -781,15 +782,21 @@ TSocket* Cat::GetSocket(const char* ip, int port){
 
 
 
+
+
+
+
+
+
+
+
   /**********************************************
    * client to                  ZDENEK HONS SERVER
    *              cat runx.dat |  nc -l -p 9302
    *                         this is a client that connects to a server...
    */
-int* push_net(int64_t* par, int64_t* par2){
+int* push_net(int* par, int* par2){
  
-
-
 
 
   concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
@@ -798,7 +805,7 @@ int* push_net(int64_t* par, int64_t* par2){
    //   if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-remote (network)  par==%d; pointer==%d\n", par,(int)buffer );
    sprintf(ch,"%s","PUSHNET:  entered..." );table_log(0,ch);
 
-      long long int cnt=0;
+      Long64_t cnt=0;
 
    char ipaddress[100];
    int port;
@@ -823,7 +830,7 @@ int* push_net(int64_t* par, int64_t* par2){
 
 
 
-  char strbuf[2000000];// 2MB
+  char strbuf[2000000];// 20MB
   int *buffer4p;
   buffer4p=(int*)&strbuf[0];
   int d,i,ii;
@@ -853,13 +860,15 @@ int* push_net(int64_t* par, int64_t* par2){
    //-- sprintf(ch,"P %s\n", "After TSocket"); table_log(0,ch);
  
   //    printf("after the socket%s\n","");
- 
+  
    if ( Blbka.WasTimeOut()!=0 ) {
     sprintf(ch,"P %s\n", "After TSocket - fTimeOut==1"); table_log(0,ch);
     break;
  }
-
+   int ii_init;
   trials=10; //GOOD TO BE DEFINED IN XML  as also select timeout
+    ii_init=0;// offset if data%4 != 0
+
     while ( (socket)&&(1==1) ){// ----- - -- READ ONE CONNECTION --- -  -- -- - --   - - -
     //DANGER THAT I MISS 3/10 of EVENTS..... MAYBE THIS IS TO TUNE:
     //3000:50 ==1.6%
@@ -869,25 +878,49 @@ int* push_net(int64_t* par, int64_t* par2){
       //--  sprintf(ch,"P %s\n", "before select"); table_log(0,ch);
     i=(int)socket->Select(TSocket::kRead, 2000);//timeout 1sec, repeat 5x 
     //-- sprintf(ch,"P %s\n", "after  select"); table_log(0,ch);
+    if (PUSHDEBUG!=0){sprintf(ch,"PUSH-net    Select result=%d ", i ); table_log(0,ch);}
 
 
-
+    //d=0;//nevim jestli to tu nedela binec
     if (i>0) {//####CASE i>0 ####
       //--  sprintf(ch,"P %s\n", "before recvraw"); table_log(0,ch);
-      d=(int)socket->RecvRaw(strbuf, maxtrans, kDontBlock  ); // read small buffer
-      //      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw socket got %d bytes \n", d );
-      sprintf(ch,"PUSH-netw socket got %d bytes ", d ); table_log(0,ch);
-     ii=0;
-      while(ii*4<d){
+
+      d=(int)socket->RecvRaw( &strbuf[ii_init], maxtrans, kDontBlock  ); // read small buffer
+
+
+      if (PUSHDEBUG!=0){ sprintf(ch,"PUSH-netw socket got %d bytes; init=%d ", d, ii_init ); table_log(0,ch);}
+      //     ii=0;
+
+      for (ii=0;4*ii<d-(d%4)+ii_init;ii++){
+       //     while( (ii*4<d)&&(d>=4) ){
 	buffer->push( buffer4p[ii]  );
-	ii++;
+	  usleep(100000);
+	if (PUSHDEBUG!=0){ sprintf(ch,"%4lld ii= %4d  %08x   %4d",cnt,ii,  buffer4p[ii],d ); table_log(0,ch);}
+	//	ii++;
 	if ((cnt%25000)==0){
-	  //	  if(XTERM!=NULL)fprintf(XTERM,"P %7lld kB\n",4*cnt/1000);
 	  sprintf(ch,"P %7lld kB\n",4*cnt/1000); table_log(0,ch);  
 	  wait=TokenGet(  "run=", mmap_file , mmap_result ); // if run==0 => KILL HERE
-	  if (wait==0) {break;}
-	} cnt++;
-      }//while - push
+	  // if (wait==0) {break;}
+	  usleep(100000);
+	}
+	cnt++;
+     }//for loop  xwhile - push
+      
+      
+      if (PUSHDEBUG!=0){ sprintf(ch,"PUSH-net  modulo %4d  buf4pii=%08x ",((d+ii_init)%4) , buffer4p[ii] ); table_log(0,ch);}
+
+
+     
+     // I assume thAT D IS even
+     if (( (d+ii_init)%4)==0){  ii_init=0;}else{
+       memcpy(&strbuf[0],&strbuf[4*(ii)], 2);
+       memcpy(&strbuf[2],&strbuf[4*(ii)], 2);
+       //       memcpy(&strbuf[0],&strbuf[4*(ii)], d%4);
+       ii_init=2;
+     }
+     
+     if (PUSHDEBUG!=0){ sprintf(ch,"PUSH-net  offset %4d  buf4p0 =%08x ", ii_init , buffer4p[0] ); table_log(0,ch);}
+    }
       //      if(XTERM!=NULL)fprintf(XTERM,"PUSH push-netw wait 100ms....%s; iii*4==%d, d=%d\n", ipaddress,ii*4,d );
     }//####CASE i>0 ####  socket select was DONE;   i >0
 
@@ -900,50 +933,41 @@ int* push_net(int64_t* par, int64_t* par2){
       //--      sprintf(ch,"PUSH mmap: run==%d\n", wait); table_log(0,ch);
     }
     if (wait==0){ 
-      //      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw got BROADCAST SIGNAL... %s\n", "" );
       sprintf(ch,"PUSH got BROADCAST SIGNAL... %s\n", "" );table_log(0,ch);
       socket->Close(); 
       sprintf(ch,"PUSH socket closed... %s\n", "" );table_log(0,ch);
-    }
-    //cannot be here    TThread::CancelPoint(); // When CancelOn(), here the thread can be interrupted.
+    }//if wait ==0
 
     if (wait!=0){
-
     if (i<0){ //####CASE i<0 ####
-      //if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw SOCKET LOST....%s; iii*4==%d, d=%d\n", ipaddress,ii*4,d );
-      sprintf(ch,"PUSH SOCKET LOST....%s; iii*4==%d, d=%d\n", ipaddress,ii*4,d );table_log(0,ch);
+      sprintf(ch,"PUSH SOCKET LOST...%s; iii*4=%d, d=%d\n", ipaddress,ii*4,d );table_log(0,ch);
       socket->Close(); break; 
     }//####CASE i<0 #### 
 
     if (i==0){ //####CASE i==0  ####
       trials--;
-      //      if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw(ZERO)..%s;d=%d (%d)\n",ipaddress,d, trials);
       sprintf(ch,"PUSH (ZERO)..%s;d=%d (%d)\n",ipaddress,d, trials);table_log(0,ch);
       if (trials<=0){
-	//       if(XTERM!=NULL)fprintf(XTERM,"PUSH RS push-netw I RELEASE SOCKET(ZERO)..%s; iii*4==%d, d=%d\n",
-	//			                                                            ipaddress,ii*4,d);
 	sprintf(ch,"PUSH I RELEASE SOCKET(ZERO)..%s; iii*4==%d, d=%d",ipaddress,ii*4,d);table_log(0,ch);
       socket->Close(); break; 
       }
     }//####CASE i==0  ####
-    }// wait!=0
-    if (wait==0){break;}
-    }// 1==1---- ---- --    --WHILE read all the time - ONE CONNECTION --------	
-    sprintf(ch,"PUSH deleting socket..%s; iii*4==%d, d=%d",ipaddress,ii*4,d);table_log(0,ch);
+    }// if wait!=0
+    //    if (wait==0){break;}
+  }// while wait!=0   1==1---- ---- --    --WHILE read all the time - ONE CONNECTION --------	
+
+  sprintf(ch,"PUSH deleting socket..%s; iii*4==%d, d=%d",ipaddress,ii*4,d);table_log(0,ch);
 
     //  socket->Delete();
     delete socket;
     sprintf(ch,"PUSH socket deleted..%s; iii*4==%d, d=%d",ipaddress,ii*4,d);table_log(0,ch);
 
-  if (wait!=0){
-     wait=MyCond.TimedWaitRelative( 5000  ) ;
-  }else{ break;}
-
-  if (wait==0)break;
+    //  if (wait!=0){ wait=MyCond.TimedWaitRelative( 5000  ) ; }else{ break;}
+    //  if (wait==0)break;
        //       usleep(1000*300);
        //if(XTERM!=NULL)fprintf(XTERM,"S%s","" );
 
-  }// 0==0----- - -- READ ALL REPEATING CONNECTIONS --- -  -- -- - --   - - -
+  //}// 0==0----- - -- READ ALL REPEATING CONNECTIONS --- -  -- -- - --   - - -
 
 
 

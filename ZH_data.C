@@ -1,5 +1,5 @@
 // already in *h #define DEBUG 1
-#define ZHDEBUG 1
+#define ZHDEBUG 0
 /*
     ./compile_root xml_attr.C  ZH_data.C
 ----------------------------------------------
@@ -209,9 +209,8 @@ for (int i=0;i<MAXCHAN;i++){TREE[i]=0;}
 
 
 //=================================== TH1F ======= TTree ==========================
-//  c001     normal  channels  (even block#...:(  )
+//  c001
 //     ===  t1 t2 t3 t4  ;   s001...     1..999
-//    c001=1  means put what arrives from channel1 to histogram 1
 //=================================================================================
 
 
@@ -262,7 +261,7 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
 		end);
 
 	
-	printf("TECHNICAL: /%s/ +  /%s/   |%ld| /%s/=original ***\n", begin, end, end-tokres,  tokres );
+	printf("TECHNICAL: /%s/ +  /%s/   |%d| /%s/=original ***\n", begin, end, end-tokres,  tokres );
 	printf("TECHNICAL: file %s , I rename it to %s\n",
 	       tokres, tokres2 );
 
@@ -323,25 +322,6 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
 	T_yn[i]=atoi( tokres );   //  Thist will be defined later
 	printf("ZH:time %d  defined (part %d)\n", i, T_yn[i]  );
       }//TIME
-
-      if ( strstr(tokres,"e")!=NULL){//extended channel c001=e001 --------
-	tokres[0]='0';
-	toki=atoi( tokres );   //  Thist will be defined later
-	if (toki!=0){// integer was found afte e  => it is HISTO------------
-	  sprintf( tok, "c%03d", toki ); // new channel=arbitrary integer<=999
-	  TH1F *h=new TH1F( tok, tok, 100000,0,100000); // EXTRA SIZE
-	  HIST[i]=h;
-	  
-	  // DEFINE TTREE...........for every histo channel....
-	  sprintf( brname,  "V%03d", toki );//  branch  c001 
-	  sprintf(ch ,"%s/s", brname );  //  UShort_t ===  /s  
-	  if (ttree_exists==0){// does not exist yet
-	    ZH_tree->Branch(brname , &TREE[i], ch );// 
-	  }else{// already exists
-	    ZH_tree->SetBranchAddress( brname ,&TREE[i] );
-	  }//ttree existence
-	}
-      }//EXTENDED - just histo size, TTREE remains the same
 
 
       if ( strstr(tokres,"s")==tokres){//counter----------- =s001, =s002...
@@ -517,8 +497,8 @@ void process_EOE(){   // end of event - do filling
 //=========================================
 int process_ONE_EVENT(int *arr,  int *BUFANAL ){// translate buffer with one event to data
   // I still omit xcheck # channels:  e004 vs pos
-  //   char chL[500];
-   concurrent_queue<int> *bubu=(concurrent_queue<int>*)BUFANAL;
+
+   concurrent_queue<uint32_t> *bubu=(concurrent_queue<uint32_t>*)BUFANAL;
    //   sprintf(chL,"POE: ZH  : BUFF2==%ld",(int64_t)bubu);table_log(0,chL);
 
 
@@ -539,24 +519,28 @@ int process_ONE_EVENT(int *arr,  int *BUFANAL ){// translate buffer with one eve
   //  printf(":%08X\n",arr[pos] ); //{ printf("begin of run\n%s", "" ); }
 
 
-  if (DEBUG)printf("::%6lld   (%2d)   d=%.3f \n", cnt_evt,  channels_in_event(arr[pos]),  cTIME-sTIME  ); 
+  if (ZHDEBUG)printf("::%6lld   (%2d pairs)   d=%.3f \n", cnt_evt,  channels_in_event(arr[pos]),  cTIME-sTIME  ); 
 
   pos++; //move next from E000
   while(  (arr[pos] != EOE)&&(pos<OEBmax)  ){ // until EOE
+
     chn=(arr[pos] & 0xffff0000)>>16;
     val=(arr[pos] & 0x0000ffff);
-    if (DEBUG)printf("%3d - %6d\n",  chn, val );  
 
-    //if (ZHDEBUG!=0){ printf( "%x  %x\n",  chn,val); }
+    if (ZHDEBUG)printf("%3d/    %6d - %6d     0x%08x \n",  pos, chn, val, arr[pos] );  
+    
     process_chan( chn, val );
-    if (bubu!=NULL){    bubu->push( chn ); bubu->push( val );}
+    if (bubu!=NULL){ bubu->push( chn );bubu->push( val );}
 
     pos++;
   }//parse events.........
-  if (bubu!=NULL){  bubu->push( 0xffffffff );  bubu->push( 0xffffffff );}
+  if (bubu!=NULL){bubu->push( 0xffffffff ); bubu->push( 0xffffffff );}
 
   //------------------------END OF EVENT
-  process_EOE();// cnt_evt++;cnt_evt_data++; FILL; // cTime reset
+  process_EOE();// cnt_evt++;cnt_evt_data++; FILL; // cTime reset 
+  
+  if (ZHDEBUG)printf("::%6lld  pos==%2d \n", cnt_evt, pos); 
+
   return 0;
 }//process_ONE_EVENT__________________________________________END___
 
@@ -647,8 +631,7 @@ if s001..            ->counter (1st+2nd channels x 65000); "TOTAL" in title
   //  for (int i=0;i<events;i++){
   while ( (events<0) || (ie<events) ){ // if events < 0=> limit
     ie++;  
-        if ( ie % 1000000==0){ printf("... Mevent # %10lld\n" , ie/1000000); }
-    //    if ( ie % 1000==0){ printf("... event # %10lld\n" , ie); }
+    if ( ie % 1000000==0){ printf("... event # %10lld\n" , ie); }
   
   pos=fillOEB(pos);
 

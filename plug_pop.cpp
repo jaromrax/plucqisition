@@ -1,3 +1,4 @@
+#define POPDEBUG 0
 #include "xml_attr.h"    // bude xml
 #include "log_term.h"    // bude xml
 #include "mut_queue.h"
@@ -129,7 +130,7 @@ extern "C" {
      }
          usleep(1000*20); // wait 100ms and retry again..
     respush=TokenGet( "push=" , mmap_file , pushis ); //takes a value
-    if ( 0==TokenGet( "run=" , mmap_file , pushis ) ){ respush=0;}
+    if ( 0.0==TokenGet( "run=" , mmap_file , pushis ) ){ respush=0.0;}
  
   }//respush
    sprintf(chL,"POP: empty EXITed i==%d" ,  i );table_log(1,chL);
@@ -271,7 +272,7 @@ extern "C" {
    //-------- here I will control with    control.mmap    file------   
   char  acqxml2[100];
   TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
-  int respush=1;// PUSH is running
+  double respush=1.0;// PUSH is running
 
       TSmallish_xml xml(    acqxml2   );
       xml.DisplayTele( xml.mainnode, 0, "plugins","poper","file" );
@@ -284,7 +285,7 @@ extern "C" {
         sprintf(chL,"POP: opened %s for WRITE - appending" , fname  );table_log(1,chL);
 
       if (outfile!=NULL){
-	while( respush==1 ){//  ...WAIT FOR PUSH
+	while( respush>=1.0 ){//  ...WAIT FOR PUSH
 	while( !buffer->empty() ){
 	  buffer->wait_and_pop(datum);
           if ((cnt%250000)==0){
@@ -606,12 +607,12 @@ extern "C" {
    int datum=0;// one word from the concurent queue
    char chL[500];
    concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-   sprintf(chL,"POP: pop_ZH  : buff==%ld",(int64_t)buffer);table_log(1,chL);
+   sprintf(chL,"POP: pop_ZH  : buff==%lld",(Long64_t)buffer);table_log(1,chL);
 
    //=============
    //HERE I DEFINE NEXT QUEUE
    concurrent_queue<int> *BUFANAL=(concurrent_queue<int>*)par2;  // empty queue(..,chan,..)
-    sprintf(chL,"POP: pop_ZH  :buff2==%ld",(int64_t)BUFANAL);table_log(1,chL);
+    sprintf(chL,"POP: pop_ZH  :buff2==%lld",(Long64_t)BUFANAL);table_log(1,chL);
   // send it by       (int*)&buffer 
    //=============
 
@@ -641,7 +642,7 @@ extern "C" {
   // things from 20130820
   //  OverrideFileOUT=NULL;// NO filename out  override
   sprintf( OverrideFileOUT, "%s", "" );
-    ZHbuffer = (int*) malloc ( 10000 );
+   ZHbuffer = (int*) malloc ( 10000 );
 
 
   OEBmax=1000;// ONE EVENT LIMIT !!!!!!!!!!
@@ -654,6 +655,7 @@ extern "C" {
  dTIME=0.0; // difference
 
   reset_chan_table();
+  sprintf(chL,"POP_ZH: loading the channel table%s", "");table_log(1,chL);
 
   load_chan_table( definitions  );
 
@@ -663,41 +665,49 @@ extern "C" {
 
   // int pos=0;//  this is position in the buffer...
   int c=0;//   position in OEbuffer..............
+
   while (respush>=1.0){//run while push is running........
-    while( !buffer->empty() ){// concurent queue "buffer" is an object HERE
-      buffer->wait_and_pop(datum);
-      //      if ((cnt%250000)==0){
+      if (POPDEBUG!=0){sprintf(chL,"POP:  entering while/buffer c=%d", c);table_log(1,chL);}
       
-      //      if ((cnt%2500)==0){
+      
+    while( !buffer->empty() ){// concurent queue "buffer" is an object HERE
+      //    while( buffer->size()>2 ){// concurent queue "buffer" is an object HERE
+
+      buffer->wait_and_pop(datum);
+      if (POPDEBUG!=0){sprintf(chL,"POP:  datum; cnt==%lld   /c=%d", cnt,c);table_log(1,chL);}
+
       if ((cnt%10000)==0){
-	//	sprintf(chL,"POP:W     %7lld kB",4*cnt/1000);table_log(1,chL);
-	//	sprintf(chL,"POP:D     %7ld  evts",cnt_evt_data );table_log(1,chL);
 	sprintf(chL,"POP:%8lld kB %9lld  evts",4*cnt/1000, cnt_evt_data);table_log(1,chL);
       } //printout every MB
+
       cnt++; 
-      //pos=0;fillbuffer();// one time READ DATA FROM FILE
-      // NORMALY, I HAVE 99MB ZHbuffer and I take data from there.
-      //      while(1==1){//..........here it was number of events limiting
       OEbuf[c] = datum;
+      if (POPDEBUG!=0){sprintf(chL,"POP:oebuf[c]=%08x        %4d", OEbuf[c]    ,c);table_log(1,chL);}
+
+      //buffer [c] is either  EOE  or  NOT
       if (OEbuf[c]==EOE){//END OF EVENT
-
-
+      if (POPDEBUG!=0){sprintf(chL,"POP: proc ONE cnt==%lld", cnt);table_log(1,chL);}
+      if (POPDEBUG!=0){sprintf(chL,"POP:oebuf=%08x %08x %08x", OEbuf[0],OEbuf[1],OEbuf[2]);table_log(1,chL);}
+      if (POPDEBUG!=0){sprintf(chL,"POP:oebuf=%08x %08x %08x", OEbuf[c-2],OEbuf[c-1],OEbuf[c]);table_log(1,chL);}
 	process_ONE_EVENT(OEbuf, (int*)BUFANAL  );
-
-
+      if (POPDEBUG!=0){sprintf(chL,"POP: proc ONE cnt==%lld ok", cnt);table_log(1,chL);}
 	c=0;// reset position in the buffer
       }//END OF EVENT
       else{
 	c++;
       }
     }//BUFFER NOT EMPTY
-
-    usleep(1000*20); // wait 100ms and retry again..
-    respush=TokenGet( "push=" , mmap_file , pushis ); //takes a value
-    if ( 0==TokenGet( "run=" , mmap_file , pushis ) ){
-      respush=0;
-    }; //takes a value
     
+    usleep(1000*10); // wait 100ms and retry again..
+    respush=TokenGet( "push=" , mmap_file , pushis ); //takes a value
+    //    if ( 0.0==TokenGet( "run=" , mmap_file , pushis ) ){
+    //      respush=0.0;
+    //    } //takes a value
+    
+    if (POPDEBUG!=0){sprintf(chL,"POP:respush!=0  c=%d size==%d",c,buffer->size() );table_log(1,chL);} 
+
+
+
   }//WHILE respush==0....push running...
   //  sprintf(chL,"Ending: respush==%1.0f; /%s/ ... \n/%s/", respush, pushis,mmap_file);table_log(1,chL);
 

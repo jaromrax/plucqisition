@@ -1,4 +1,4 @@
-#define ANADEBUG 1
+#define ANADEBUG 0
 #include "xml_attr.h"     
 #include "log_term.h"     
 #include "mut_queue.h"
@@ -12,6 +12,8 @@
 //----------------------------with   mmap ------------------------
 #include <err.h>
 #include <sys/mman.h>
+
+//#include <cstdint>  //uint32_t type
 
 //#include "nanot.h"   // HERE I PUT THE TTREE CLASS +======================
 //                                                                         ===
@@ -141,19 +143,19 @@ extern "C" {
   printf("ANA %s\n"," start");
   while (respush>=1.0){//run while push is running........
 
-    //  printf("ANA %s\n","buffer !empty");
-
      while( !buffer->empty() ){// concurent queue "buffer" is an object HERE
        buffer->wait_and_pop(datum);cnt++;
 
        if (datum==0xffffffff){cnt2=0;
-	 // sprintf(ch,"ANA: ffffff%s","");table_log(2,ch);
+
+	 if (ANADEBUG!=0){sprintf(ch,"ANA:  ffffff%s","");table_log(2,ch);}
 
 }else{cnt2++;}//datum 0xffffff
        if (cnt2==1){ //====================================================
 	 //------------------analyze here --------------
 	 //	 	 if (chan[17]>0) {mtx1->Fill( chan[1]+chan[17], chan[17]);}
 	 //	 sprintf(ch,"ANA: analyze action%s","");table_log(2,ch);
+	 if (ANADEBUG!=0){sprintf(ch,"ANA:  action; cnt==%lld", cnt);table_log(2,ch);}
 
   #include "plug_analyze_actionsB.cpp"
 
@@ -174,14 +176,17 @@ extern "C" {
 
 
      }//buffer not empty  
-     sprintf(ch,"ANA:  buffer empty%s","");table_log(2,ch);
+
+     if (ANADEBUG!=0){sprintf(ch,"ANA:  buffer empty%s","");table_log(2,ch);}
      usleep(1000*500);
      
      usleep(1000*20); // wait 100ms and retry again..
      respush=TokenGet( "push=" , mmap_file , pushis ); //takes a value
-     if ( 0==TokenGet( "run=" , mmap_file , pushis ) ){
-       respush=0;
+     if ( 0.0==TokenGet( "run=" , mmap_file , pushis ) ){
+       respush=0.0;
      }; //takes a value
+
+     if (ANADEBUG!=0){sprintf(ch,"ANA:  returns to respush!=0  respush==%f",respush);table_log(2,ch);}
   }//respush>=0
 
    if (outfile!=NULL){fclose(outfile);}

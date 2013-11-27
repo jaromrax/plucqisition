@@ -1,6 +1,7 @@
 #ifndef acq_core_H
 #define acq_core_H
 
+//#include <cstdint>  // uint32_t TYPE
 #include "TThread.h"   //  CINT?   //  -lThread
 
 

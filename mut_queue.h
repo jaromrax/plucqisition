@@ -121,10 +121,20 @@ public:
     */
     void wait_and_pop(Data& popped_value)
     {
-        while(the_queue.empty())
-        {
+
+      /*****************************/
+      /* int yesno;		   */
+      /* do{			   */
+      /* TThread::Lock();	   */
+      /* yesno= the_queue.empty(); */
+      /* TThread::UnLock();	   */
+      /* }while(yesno);		   */
+      /*****************************/
+
+       while(the_queue.empty())
+       {
 	  usleep(10000);//  1 ms wait
-        }
+       }
             TThread::Lock();
         popped_value=the_queue.front();
         the_queue.pop();

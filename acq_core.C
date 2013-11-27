@@ -50,12 +50,15 @@ TCondition MyCond(0);//this has an internal mutex-LINK TO cpp plugins....
 
 #include "TTimeStamp.h"  // root own time stamping
 #include <iostream>
-#include <fstream>    
+#include <fstream>   
+//#include <cstdint>   uint32_t
+//#include "stdint.h"
 using namespace std;
 /*************************************************
  *  this is defined once here , not in .h
  */
          // this BUFFER is passed to all plugins
+//concurrent_queue<int> buffer;   // empty queue
 concurrent_queue<int> buffer;   // empty queue
 
    char chL[500];
@@ -229,7 +232,7 @@ void *xml_masterthread(void* arg){
 
 
 
-   if(XTERM!=NULL)fprintf(XTERM,"creating pusher_thread = %ld\n",(int64_t)TThread::GetThread("pusher_thread") );
+   if(XTERM!=NULL)fprintf(XTERM,"creating pusher_thread = %lld\n",(Long64_t)TThread::GetThread("pusher_thread") );
    t=TThread::GetThread("pusher_thread");
    if (t!=NULL){
      if (t->GetState()==6){ t->Delete();}//canceled
@@ -243,7 +246,7 @@ void *xml_masterthread(void* arg){
 
 
 
-   if(XTERM!=NULL)fprintf(XTERM,"creating poper_thread = %ld\n",(int64_t)TThread::GetThread("poper_thread") );
+   if(XTERM!=NULL)fprintf(XTERM,"creating poper_thread = %lld\n",(Long64_t)TThread::GetThread("poper_thread") );
    if (TThread::GetThread("poper_thread")==0){
     shspe_threads[2] = new TThread( "poper_thread"  , evt_poper, (void*) &tinfo[2] );
     if (shspe_threads[2]==NULL){ printf("exiting, thread 2 not running\n%s","");return NULL;}    
@@ -252,7 +255,7 @@ void *xml_masterthread(void* arg){
 
 
 
-   if(XTERM!=NULL)fprintf(XTERM,"creating analyze_thread = %ld\n",(int64_t)TThread::GetThread("analyze_thread") );
+   if(XTERM!=NULL)fprintf(XTERM,"creating analyze_thread = %lld\n",(Long64_t)TThread::GetThread("analyze_thread") );
    TThread *thq=(TThread*)TThread::GetThread("analyze_thread");
    if (thq!=NULL){
      if (thq->GetState()==6){printf("Killing analyze_thread\n");thq->Delete();}
@@ -270,7 +273,7 @@ void *xml_masterthread(void* arg){
 
 
    // ***************************   PREVIOUS JOIN DELETE ETC.............
-   printf("\nMASTER: waiting to JOIN ALL T. dl_handleS==%ld/%ld\n",(int64_t)dl_handle_push,(int64_t)dl_handle_pop);
+   printf("\nMASTER: waiting to JOIN ALL T. dl_handleS==%lld/%lld\n",(Long64_t)dl_handle_push,(Long64_t)dl_handle_pop);
  
    while (   (TThread::GetThread("pusher_thread")!=0)|| 
 	      (TThread::GetThread("poper_thread")!=0)||
@@ -344,7 +347,7 @@ int acq(const char * startstop="start")
   }//ALLOCATE OR FIND XTERMINAL
 
 
-   sprintf(chL,"POE:   : BUFF2==%ld",(int64_t)&BUFFER2);table_log(0,chL);
+   sprintf(chL,"POE:   : BUFF2==%lld",(Long64_t)&BUFFER2);table_log(0,chL);
 
 
     //===========================MMAP INIT============================
@@ -364,7 +367,7 @@ int acq(const char * startstop="start")
 
 
      //==========================introduce optional XML file=========
-     if ( strstr(startstop,".xml") - startstop ==  strlen(startstop)-4 ){
+     if ( strstr(startstop,".xml") - startstop ==  (int)strlen(startstop)-4 ){
        printf("...new XML file demanded:  %s\n", startstop );
        char newline[100];
        char newfile[4096];
