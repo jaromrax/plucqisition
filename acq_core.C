@@ -279,32 +279,38 @@ void *xml_masterthread(void* arg){
 	      (TThread::GetThread("poper_thread")!=0)||
 	      (TThread::GetThread("analyze_thread")!=0)
 	      ){
-      usleep(1000*200);  //  MAIN  WAIT IN MASTER   0.6 sec
-      if ((TThread::GetThread("pusher_thread")!=0)&&
-	  (TThread::GetThread("pusher_thread")->GetState()==6)){
-	   TThread::GetThread("pusher_thread")->Delete();
+      usleep(1000*100);  //  MAIN  WAIT IN MASTER   0.6 sec
+      //      printf("MM check...%s\n","");
+      if ((TThread::GetThread("pusher_thread")==0)
+	  //	  &&(TThread::GetThread("pusher_thread")->GetState()==6)
+	  ){
+	//	   TThread::GetThread("pusher_thread")->Delete();
 	   char repla[4096];
-	   TokenReplace( "push=", "push=-1", mmap_file, repla );
+	   TokenReplace( "push=", "push=0.0", mmap_file, repla );
 	   strcpy( mmap_file, repla );
-	   
+	   printf("MM...push set 0\n%s","");
 	  }
-      if ((TThread::GetThread("poper_thread")!=0)&&
-	  (TThread::GetThread("poper_thread")->GetState()==6)){
-	   TThread::GetThread("poper_thread")->Delete();
+      if ((TThread::GetThread("poper_thread")==0)
+	  //	  &&  (TThread::GetThread("poper_thread")->GetState()==6)
+	  ){
+	//	   TThread::GetThread("poper_thread")->Delete();
 	   char repla[4096];
 	   TokenReplace( "pop=", "pop=-1", mmap_file, repla );
 	   strcpy( mmap_file, repla );
+	   printf("MM...pop  set 0%s\n","");
 	  }
-      if ((TThread::GetThread("analyze_thread")!=0)&&
-	  (TThread::GetThread("analyze_thread")->GetState()==6)){
-	   TThread::GetThread("analyze_thread")->Delete();
+      if ((TThread::GetThread("analyze_thread")==0)
+	  //	  &&(TThread::GetThread("analyze_thread")->GetState()==6)
+	  ){
+	//	   TThread::GetThread("analyze_thread")->Delete();
 	   char repla[4096];
 	   TokenReplace( "analyze=", "analyze=-1", mmap_file, repla );
 	   strcpy( mmap_file, repla );
+	   printf("MM...analyze set 0%s\n","");
 	  }
-  }
+   }//while  nonzeroes
 
-  printf("MASTER: ALL Threads OVER. The dl_handle %s\n", "");
+  printf("MASTER: ALL Threads OVER........................... %s\n", "");
 
  
     TTimeStamp t_stop;  t_stop.Set();
@@ -312,7 +318,7 @@ void *xml_masterthread(void* arg){
 	 t_start.AsString("l"),  
 	 t_stop.AsString("l"), 
 	 (int)(t_stop.GetSec()-t_start.GetSec() ) );
-  printf("now ... make%s\n   acq(\"stop\")\n", "");
+  //  printf("now ... make%s\n   acq(\"stop\")\n", "");
   // usleep(1000*1000*1);  //doesnot change much
   return NULL;   // void* mut_master_thread()
 }
@@ -445,7 +451,6 @@ int acq(const char * startstop="start")
     TThread *t;
 
     //-----------------------------
-    //    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "checking the existence of the pusher_thread");
     t=TThread::GetThread("pusher_thread");
     if (t!=NULL){
       if (t->GetState()==6){if(XTERM!=NULL)fprintf(XTERM,"%s\n","pusher_thread==canceled=>DELETIN'");t->Delete();}
@@ -517,7 +522,7 @@ int acq(const char * startstop="start")
       if (cdown<0){break;}
     }//master exists.....................
 
- printf("%s","dlclose prepared to act\n");
+ printf("%s","dlclose  will be called....\n");
  //    dlerror();
     int res=dlclose(dl_handle_analyze); // THIS IS DIFFICULT!!!!!!!!!!!!!!!!!
     if (res!=0){ printf("%s","dlclose problem\n");}

@@ -754,7 +754,7 @@ class Cat{
    return;
 }
  void Cat::Print(){
-   printf(" print Cat%s\n" ,  "" );
+   //just    printf(" print Cat%s\n" ,  "" );
    return;
 }
  Cat::Cat(){
@@ -769,11 +769,12 @@ class Cat{
 }
 
 TSocket* Cat::GetSocket(const char* ip, int port){
-    printf("inside GetSocket alarm start  %s:%d\n" ,  ip, port );
+  //    printf("inside GetSocket alarm start  %s:%d\n" ,  ip, port );
    qalarm->Start(3000, kTRUE);
-    printf("inside GetSocket   %s:%d\n" ,  ip, port );
+   //    printf("inside GetSocket   %s:%d\n" ,  ip, port );
    TSocket *socks=new TSocket( ip, port);
-    printf("outside GetSocket   %s:%d\n" ,  ip, port );
+   // unfortunately it makes  STDERR print
+   //    printf("outside GetSocket   %s:%d\n" ,  ip, port );
    return socks;
 }
 //---------------------------end of CATS-
@@ -837,9 +838,12 @@ int* push_net(int* par, int* par2){
   int maxtrans=2000000;
   TSocket *socket;
 
-  double downtime; int downtimef, downtimei,  wait=1;  // WAIT
+  double   resrun; 
+  //  int downtimef;//, downtime;
+  int  wait=1;  // WAIT
   int trials=10; //10 seconds of timeouts
   wait=1;
+  
   while (wait!=0){// ----- - -- READ ALL REPEATING CONNECTIONS --- -  -- -- - --   - - -
 
     //
@@ -899,12 +903,13 @@ int* push_net(int* par, int* par2){
 	//	ii++;
 	if ((cnt%25000)==0){
 	  sprintf(ch,"P %7lld kB\n",4*cnt/1000); table_log(0,ch);  
-	  wait=TokenGet(  "run=", mmap_file , mmap_result ); // if run==0 => KILL HERE
+	  resrun=TokenGet(  "run=", mmap_file , mmap_result ); // if run==0 => KILL HERE
+	  if (resrun<1.0){wait=0;}
 	  // if (wait==0) {break;}
 	  usleep(100000);
 	}
 	cnt++;
-     }//for loop  xwhile - push
+      }//for loop  xwhile - push
       
       
       if (PUSHDEBUG!=0){ sprintf(ch,"PUSH-net  modulo %4d  buf4pii=%08x ",((d+ii_init)%4) , buffer4p[ii] ); table_log(0,ch);}
@@ -920,16 +925,16 @@ int* push_net(int* par, int* par2){
      }
      
      if (PUSHDEBUG!=0){ sprintf(ch,"PUSH-net  offset %4d  buf4p0 =%08x ", ii_init , buffer4p[0] ); table_log(0,ch);}
-    }
-      //      if(XTERM!=NULL)fprintf(XTERM,"PUSH push-netw wait 100ms....%s; iii*4==%d, d=%d\n", ipaddress,ii*4,d );
-    }//####CASE i>0 ####  socket select was DONE;   i >0
+    }// #### if i>0
+
 
     //    if(XTERM!=NULL)fprintf(XTERM,"%s","^");fflush(XTERM);
     //    usleep(1000*300); //wait
-    wait=MyCond.TimedWaitRelative( 50  ) ; //
+    //    wait=MyCond.TimedWaitRelative( 50  ) ; //
 
     if (wait!=0){//------- this 
-      wait=TokenGet(  "run=", mmap_file , mmap_result ); // if run==0 => KILL HERE
+      resrun=TokenGet(  "run=", mmap_file , mmap_result ); // if run==0 => KILL HERE
+      if (resrun<1.0){wait=0;}
       //--      sprintf(ch,"PUSH mmap: run==%d\n", wait); table_log(0,ch);
     }
     if (wait==0){ 
@@ -941,6 +946,7 @@ int* push_net(int* par, int* par2){
     if (wait!=0){
     if (i<0){ //####CASE i<0 ####
       sprintf(ch,"PUSH SOCKET LOST...%s; iii*4=%d, d=%d\n", ipaddress,ii*4,d );table_log(0,ch);
+      usleep(1000*1000);
       socket->Close(); break; 
     }//####CASE i<0 #### 
 
@@ -950,9 +956,13 @@ int* push_net(int* par, int* par2){
       if (trials<=0){
 	sprintf(ch,"PUSH I RELEASE SOCKET(ZERO)..%s; iii*4==%d, d=%d",ipaddress,ii*4,d);table_log(0,ch);
       socket->Close(); break; 
-      }
+      }//trials
+
+    }//####  socket exists
+     if (wait==0){break;}
     }//####CASE i==0  ####
-    }// if wait!=0
+     if (wait==0){break;}
+    }// if sock and 1==1
     //    if (wait==0){break;}
   }// while wait!=0   1==1---- ---- --    --WHILE read all the time - ONE CONNECTION --------	
 

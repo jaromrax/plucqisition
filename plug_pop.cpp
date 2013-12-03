@@ -129,8 +129,8 @@ extern "C" {
       cnt++; 
      }
          usleep(1000*20); // wait 100ms and retry again..
-    respush=TokenGet( "push=" , mmap_file , pushis ); //takes a value
-    if ( 0.0==TokenGet( "run=" , mmap_file , pushis ) ){ respush=0.0;}
+    respush=TokenGet( "run=" , mmap_file , pushis ); //takes a value
+    //    if ( 0.0==TokenGet( "run=" , mmap_file , pushis ) ){ respush=0.0;}
  
   }//respush
    sprintf(chL,"POP: empty EXITed i==%d" ,  i );table_log(1,chL);
@@ -699,17 +699,18 @@ extern "C" {
     }//BUFFER NOT EMPTY
     
     usleep(1000*10); // wait 100ms and retry again..
-    respush=TokenGet( "push=" , mmap_file , pushis ); //takes a value
+    respush=TokenGet( "run=" , mmap_file , pushis ); //takes a value
     //    if ( 0.0==TokenGet( "run=" , mmap_file , pushis ) ){
     //      respush=0.0;
     //    } //takes a value
-    
+    if (respush<1.0){break;}
     if (POPDEBUG!=0){sprintf(chL,"POP:respush!=0  c=%d size==%d",c,buffer->size() );table_log(1,chL);} 
 
 
 
   }//WHILE respush==0....push running...
   //  sprintf(chL,"Ending: respush==%1.0f; /%s/ ... \n/%s/", respush, pushis,mmap_file);table_log(1,chL);
+  // if (respush<1.0){break;}
 
 
   if (ftree!=NULL){
