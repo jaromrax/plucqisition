@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include <pthread.h>   //  pthread_create ,   pthread_join
-
 // usleep  in g++ needs  <unistd.h>
 #include <unistd.h>
 
@@ -11,38 +9,26 @@
 
 #include "commands.h"   
 #include "arguments.h"   
-//#include "gregory_mutex.h"   
+
+#include "vme_calls.h"
 
 /////////////////////////////////////////// THREADS 
 static const int NTHREADS=1;
-
-
-
 int  global_flag_quit=0; //QUIT == -1
-
-
-
-
 
 int filexists(const char* filename){
 FILE *fp = fopen( filename ,"r");
  if( fp ) {fclose(fp); return 1; } else {   return 0; }//else
 }//funciton
-
 //////////////////////////////////////////////////////
 
 typedef struct{    /* Used as argument to thread_start() */
      pthread_t thread_id;        /* ID returned by pthread_create() */
      int       thread_num;       /* Application-defined thread # */
  } thread_info;
-
-// thread_info *tinfo = (thread_info *) arg;
-  thread_info *tinfo;
-
+thread_info *tinfo;
 ////////////////////////////////////////////////////////
-//
 //  copied from c04_lib
-//
 ////////////////////////////////////////////////////////
 void  *loop_thread( void *arg ){
   thread_info *tinfo2 = (thread_info *) arg;
@@ -64,26 +50,35 @@ void  *loop_thread( void *arg ){
 
 
 
+
+
 /*   this will be a    function table
- *              key to interpretter that will call the compiled functions
+ *        key to interpretter that will call the compiled functions
  *2 test :  behavior on 32bit  system
  */
 
-typedef int (*functiontype)();
+typedef int  (*functiontype)();
 typedef int  (*functiontype_i)(int);
 typedef int  (*functiontype_ii)(int,int);
 
 
 struct TCompile_Line{
   char     name[32] ; // set_register_franta
-  int64_t  addr;      // real address of the function
+  functiontype_i addr;      // real address of the function
 } compile_table[40];  // 4kB size +-
 
 
-int func_get_stat_reg(int a){
-  printf("%d/%s\n" , a, "... in the get_stat_reg function");
+
+// here is one function ------ to call by a reference in ct.addr
+int vme_get_stat_reg(int a){
+  printf("%d/%s\n" , a, "... in the vme_stat_reg function");
   return 0;
 }
+int vme_get_version(int a){
+  printf("%d/%s\n" , a, "... in the vme_get_version function");
+  return 0;
+}
+
 
 
 //////////////////////////////////////////////////////
@@ -91,32 +86,36 @@ int func_get_stat_reg(int a){
 int main(int argc, char **argv)
 {
   //  thread_info *tinfo;
-
 /*************************************************************
  *   MAIN PROGRAM -  INIT
- *  look for default  tty  (e.g.   /dev/pts/2)
  */
-
-  if (argc<=1){
-  printf("%s\n","  some argument neessary....just for fun");
-    exit(0);
-  }
-  // FILL THE TABLE OF FUNCTIONS =====================================TABLE
-  sprintf( compile_table[0].name, "%s", "get_status_register" );
-  compile_table[0].addr=&func_get_stat_reg;    //seems to work in 64bit
-  functiontype_i func = compile_table[0].addr;
+  if (argc<=1){printf("%s\n","  some argument neessary....just for fun");exit(0);}
 
 
-
-  printf( "%d\n", func(7)   );
-
-  /////////////////////////////////////////// lockfile from argument (.net)
+///////////////////////////////////// lockfile from argument (.net)
   char lockfile[180]="";
   parse_arguments(argc,argv, &args);//in main=normal var, outsourced with 
-  if (args.rvalue!=NULL){
-      strncpy( lockfile ,  args.rvalue,  180 );
+  if (args.rvalue!=NULL){strncpy( lockfile ,  args.rvalue,  180 );}
+  printf( "lockfile is ...  %s\n", lockfile  );
+
+
+
+  // FILL THE TABLE OF FUNCTIONS ===========================TABLE
+  int ic=0;
+  sprintf( compile_table[ic].name, "%s", "get_status" );
+      compile_table[ic].addr=(functiontype_i)&vme_get_stat_reg;
+      ic++;
+  sprintf( compile_table[ic].name, "%s", "get_version" );
+      compile_table[ic].addr=(functiontype_i)&vme_get_version;
+      ic++;
+  int icc;
+  printf("list of known functions\n%s" , "");
+  for (icc=0;icc<ic;icc++){
+      printf( "  %s\n", compile_table[icc].name  );
   }
-  printf( "lockflie is ...  %s\n", lockfile  );
+  // END OF TABLE ==========================================TABLE
+
+
 
 
   //  initialize  threads.........................................
@@ -138,19 +137,26 @@ int main(int argc, char **argv)
 
    //==========================================CORE
    //////   command_loop();
- int cmd_param[100];   //set of parameters
- int i=0;
+ int cmd_param[100];   //set of parameters// minimum 10!
+ int i=0; // CMD counter
  int res;
  cmd_print_help();
  while(1==1){
    i++; usleep(1000);
-   cmd_line( i );                  
-   res=get_cmd_name(    cmd_param );
+   cmd_line( i );                   // shows PROMPT; reads INPUT to cmd_buffer;
+   res=get_cmd_name(    cmd_param );// 
    if (res != 0 ){ 
      if (res == 1 ){ break;} // .q
      if (res == 2 ){ ;} // .l
    } // was an internal command
    else{
+     //     printf("cmd_name=%s\n", cmd_name);
+     for (icc=0;icc<ic;icc++){
+       if ( strcmp(cmd_name,compile_table[icc].name)==0){
+	 //	 printf("  matches =%d\n", icc);
+	 compile_table[0].addr( cmd_param[0] );
+       }//match
+     }
      //PERFORM ON YOUR OWN
    }// real command
  }// INF.WHILE.

@@ -286,9 +286,9 @@ void *xml_masterthread(void* arg){
 	  ){
 	//	   TThread::GetThread("pusher_thread")->Delete();
 	   char repla[4096];
-	   TokenReplace( "push=", "push=0.0", mmap_file, repla );
+	   TokenReplace( "push=", "push=-1", mmap_file, repla );
 	   strcpy( mmap_file, repla );
-	   printf("MM...push set 0\n%s","");
+	   //	   printf("MM...push set to 0.0\n%s","");
 	  }
       if ((TThread::GetThread("poper_thread")==0)
 	  //	  &&  (TThread::GetThread("poper_thread")->GetState()==6)
@@ -297,7 +297,7 @@ void *xml_masterthread(void* arg){
 	   char repla[4096];
 	   TokenReplace( "pop=", "pop=-1", mmap_file, repla );
 	   strcpy( mmap_file, repla );
-	   printf("MM...pop  set 0%s\n","");
+	   //	   printf("MM...pop  set to -1%s\n","");
 	  }
       if ((TThread::GetThread("analyze_thread")==0)
 	  //	  &&(TThread::GetThread("analyze_thread")->GetState()==6)
@@ -306,7 +306,7 @@ void *xml_masterthread(void* arg){
 	   char repla[4096];
 	   TokenReplace( "analyze=", "analyze=-1", mmap_file, repla );
 	   strcpy( mmap_file, repla );
-	   printf("MM...analyze set 0%s\n","");
+	   //	   printf("MM...analyze set to -1%s\n","");
 	  }
    }//while  nonzeroes
 
@@ -435,12 +435,12 @@ int acq(const char * startstop="start")
 
     do{ //while not deads
       char newfile[4096];
-      TokenReplace( "run=",  "run=0",  mmap_file , newfile );
+      TokenReplace( "run=",  "run=0.0",  mmap_file , newfile );
       strcpy( mmap_file, newfile);
-      printf("waiting 1 second\n%s", "");
+      //      printf("waiting 1 second\n%s", "");
       usleep(1000*1000); // why not to wait.....a while....
       not_deads=0;
-    TThread::Ps();
+      //    TThread::Ps();
     //    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "...broadcasting ALL _threads");
     //    printf("%s...broadcasting to ALL threads\n","");
     //    MyCond.GetMutex();
@@ -459,7 +459,7 @@ int acq(const char * startstop="start")
     t=TThread::GetThread("pusher_thread");
    if (t!=NULL){
          if(XTERM!=NULL)fprintf(XTERM,"%s\n", "pusher_thread NOT DEAD, TRY AGAIN, SORRY ");
-         printf("%s\n", "pusher_thread NOT DEAD, TRY AGAIN, SORRY ");
+         printf("%s\n", "pusher_thread NOT DEAD, TRY AGAIN ");
 	 not_deads++;
    }
    //=================================================================================END
@@ -501,11 +501,14 @@ int acq(const char * startstop="start")
 
 
    //    TThread::Ps(); 
-    if (kill_retries>=   5   ){ break;}
+   if (kill_retries>=   2   ){ printf("... kill retries %d, not deads %d\n",kill_retries, not_deads); break;}
     kill_retries++;
     }while (not_deads>0);
 
-    if (not_deads>0){ 	 return 0; } // MUST EXIT HERE, SOME ZOMBIE IS THERE######################
+    if (not_deads>0){  
+      printf("... kill retries %d, not deads %d. I return acq function with thread/s running: retry acq stop\n",kill_retries, not_deads);	 
+     return 0;
+    } // MUST EXIT HERE, SOME ZOMBIE IS THERE######################
 
 
 
@@ -518,7 +521,7 @@ int acq(const char * startstop="start")
       if (TThread::GetThread("master_thread")->GetState()==6){
   	TThread::GetThread("master_thread")->Delete();
       }//state 6
-      TThread::Ps();
+      //      TThread::Ps();
       if (cdown<0){break;}
     }//master exists.....................
 

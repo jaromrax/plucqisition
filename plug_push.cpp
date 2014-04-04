@@ -1,4 +1,4 @@
-#define PUSHDEBUG 0
+#define PUSHDEBUG 1
 #include "xml_attr.h"    // bude xml
 #include "log_term.h"    // bude xml
 #include "mut_queue.h"
@@ -838,13 +838,13 @@ int* push_net(int* par, int* par2){
   int maxtrans=2000000;
   TSocket *socket;
 
-  double   resrun; 
+  double   resrun=1.0; 
   //  int downtimef;//, downtime;
-  int  wait=1;  // WAIT
+
   int trials=10; //10 seconds of timeouts
-  wait=1;
+
   
-  while (wait!=0){// ----- - -- READ ALL REPEATING CONNECTIONS --- -  -- -- - --   - - -
+  while (resrun>0.0){// ----- - -- READ ALL REPEATING CONNECTIONS --- -  -- -- - --   - - -
 
     //
     //  DRUHA STRANA LISTENS !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -873,13 +873,14 @@ int* push_net(int* par, int* par2){
   trials=10; //GOOD TO BE DEFINED IN XML  as also select timeout
     ii_init=0;// offset if data%4 != 0
 
-    while ( (socket)&&(1==1) ){// ----- - -- READ ONE CONNECTION --- -  -- -- - --   - - -
+    while ( (socket)&&(resrun>0.0) ){// ----- - -- READ ONE CONNECTION --- -  -- -- - --   - - -
     //DANGER THAT I MISS 3/10 of EVENTS..... MAYBE THIS IS TO TUNE:
     //3000:50 ==1.6%
     // i==0 => TIMEOUT...... ??
     //  FINALY  2sec timeout, 10x repeat, 50ms wait (TO BE TESTED)
 
       //--  sprintf(ch,"P %s\n", "before select"); table_log(0,ch);
+    if (PUSHDEBUG!=0){sprintf(ch,"PUSH-net    waiting result=%d ", i ); table_log(0,ch);}
     i=(int)socket->Select(TSocket::kRead, 2000);//timeout 1sec, repeat 5x 
     //-- sprintf(ch,"P %s\n", "after  select"); table_log(0,ch);
     if (PUSHDEBUG!=0){sprintf(ch,"PUSH-net    Select result=%d ", i ); table_log(0,ch);}
@@ -904,7 +905,7 @@ int* push_net(int* par, int* par2){
 	if ((cnt%25000)==0){
 	  sprintf(ch,"P %7lld kB\n",4*cnt/1000); table_log(0,ch);  
 	  resrun=TokenGet(  "run=", mmap_file , mmap_result ); // if run==0 => KILL HERE
-	  if (resrun<1.0){wait=0;}
+       	  if (resrun<1.0){ break;}
 	  // if (wait==0) {break;}
 	  usleep(100000);
 	}
@@ -932,22 +933,27 @@ int* push_net(int* par, int* par2){
     //    usleep(1000*300); //wait
     //    wait=MyCond.TimedWaitRelative( 50  ) ; //
 
-    if (wait!=0){//------- this 
+    //    if (wait!=0){//------- this 
       resrun=TokenGet(  "run=", mmap_file , mmap_result ); // if run==0 => KILL HERE
-      if (resrun<1.0){wait=0;}
+      //      sprintf(ch,"PUSH test run... %s\n", "" );table_log(0,ch);
+      //      if (resrun<1.0){wait=0;}
       //--      sprintf(ch,"PUSH mmap: run==%d\n", wait); table_log(0,ch);
-    }
-    if (wait==0){ 
+      //    }
+    if (resrun<1.0){ 
       sprintf(ch,"PUSH got BROADCAST SIGNAL... %s\n", "" );table_log(0,ch);
       socket->Close(); 
       sprintf(ch,"PUSH socket closed... %s\n", "" );table_log(0,ch);
     }//if wait ==0
 
-    if (wait!=0){
+    if (resrun>0.0){
+
     if (i<0){ //####CASE i<0 ####
       sprintf(ch,"PUSH SOCKET LOST...%s; iii*4=%d, d=%d\n", ipaddress,ii*4,d );table_log(0,ch);
-      usleep(1000*1000);
-      socket->Close(); break; 
+      usleep(1000*1000);    
+      if (PUSHDEBUG!=0){sprintf(ch,"PUSH-net    closing,breakin=%d ", i ); table_log(0,ch);}
+      socket->Close(); 
+      if (PUSHDEBUG!=0){sprintf(ch,"PUSH-net    closed ,breaked=%d ", i ); table_log(0,ch);}
+      //      break; // i removed this to have easy thread stop 
     }//####CASE i<0 #### 
 
     if (i==0){ //####CASE i==0  ####
@@ -958,10 +964,13 @@ int* push_net(int* par, int* par2){
       socket->Close(); break; 
       }//trials
 
-    }//####  socket exists
-     if (wait==0){break;}
-    }//####CASE i==0  ####
-     if (wait==0){break;}
+    }//####     if  i==0
+
+    //     if (resrun<1.0){break;}
+    }//  if resrun >0.0
+    if (resrun<1.0){socket->Close(); break;} // this must be
+     if (PUSHDEBUG!=0){sprintf(ch,"PUSH-net    end of whil socket %d", i ); table_log(0,ch);}
+
     }// if sock and 1==1
     //    if (wait==0){break;}
   }// while wait!=0   1==1---- ---- --    --WHILE read all the time - ONE CONNECTION --------	
