@@ -69,29 +69,10 @@ extern "C" {
 #endif
 
 
-  //=====================================================
-  //==========================================
-  //====================================
-  //==        empty 
-  int* evt_analyze_empty(int* par, int* par2){
-   int wait=1;
-   char ch[400];
-   concurrent_queue<int> *buffer=(concurrent_queue<int>*)par;
-
-   sprintf(ch,"evt_analyze EMPTY...........%s","");table_log(2,ch);
-    wait=MyCond.TimedWaitRelative( 300+700+2000  );
-   if (wait==0){ 
-      sprintf(ch,"POP got BROADCAST SIGNAL... %s", "" );table_log(2,ch);
-    }
- }// ********************* end  of  function  ***********
 
 
 
-
-
-
-
-  int* evt_analyze_empty2(int* par, int* par2){
+  int* PLUG(int* par, int* par2){
 
    char ch[400];
    int firsttime=0;
@@ -119,6 +100,7 @@ extern "C" {
   char treename[2000];// channel definitions
   TokenGet( "file=" , mmap_file , acqxml2 ); // takes a value from mmap
 
+
   double respush=1.0;// PUSH is running   "push="  token.....
   TSmallish_xml xml(    acqxml2   );
   xml.DisplayTele( xml.mainnode, 0, "plugins","analyze","treename" );
@@ -127,67 +109,71 @@ extern "C" {
   // outfile=fopen( "analyze.empty2","wb" );//-OPEN FILE append and write
 
   int cnt2=0;
+  int cnt3=0;
   Long64_t events=0;
   int chan[32];
   int datum2=0;
   for (int i=0;i<32;i++){ chan[i]=0; }
-  //  printf("%s\n","waiting");
- //================================================DEFINE MARICES====
+ //================================================DEFINE MATRICES====
 #include "plug_analyze_definitions.cpp"
   usleep(1000*1000);
 
-   sprintf(ch,"ANA: after definitions%s","");table_log(2,ch);
+  sprintf(ch,"ANA: after definitions%s","");table_log(2,ch);
 
   printf("ANA %s\n"," start");
   while (respush>=1.0){//run while push is running........
-
-    //  printf("ANA %s\n","buffer !empty");
-
-     while( !buffer->empty() ){// concurent queue "buffer" is an object HERE
-       buffer->wait_and_pop(datum);cnt++;
-
-       if (datum==0xffffffff){cnt2=0;
-	 // sprintf(ch,"ANA: ffffff%s","");table_log(2,ch);
-
-}else{cnt2++;}//datum 0xffffff
-       if (cnt2==1){ //====================================================
-	 //------------------analyze here --------------
-	 //	 	 if (chan[17]>0) {mtx1->Fill( chan[1]+chan[17], chan[17]);}
-	 //	 sprintf(ch,"ANA: analyze action%s","");table_log(2,ch);
-
-  #include "plug_analyze_actionsB.cpp"
-
-	 
-	 //------------------analyze here --------------	 
-	 for (int i=0;i<32;i++){ chan[i]=0; } 	 events++;
-	 //------------------analyze here --------------
-       }
-	 if (cnt2 % 2==1){// channel
-	   buffer->wait_and_pop(datum2);cnt++;cnt2++;
-	   chan[datum]=datum2;
-	   //  if (outfile!=NULL){fwrite ( &datum , 1 , 4  , outfile );fwrite ( &datum2 , 1 , 4  , outfile );}
-	 }
-
+    /*
+      HERE I USE CONCURENT QUEUE BUFFER but this time special and easy:
+      one (int)    is channel
+      second (int) is value
+      0xffffffff   twice  is  EOEvent
+     */
+    while( !buffer->empty() ){// concurent queue "buffer" is an object HERE
+      buffer->wait_and_pop(datum);cnt++;
+      
+      if (datum==0xffffffff){
+	if (cnt2!=0){cnt3++;}//cnt3==real event#   ffffffff is twice!
+	cnt2=0; // cnt2 - words in event block;
+	// sprintf(ch,"ANA: ffffff%s","");table_log(2,ch);
+      }else{cnt2++;}//datum 0xffffff
+      if (cnt2==1){ //====================================================
+	//------------------analyze here --------------
+	//	 	 if (chan[17]>0) {mtx1->Fill( chan[1]+chan[17], chan[17]);}
+	//	 sprintf(ch,"ANA: analyze action%s","");table_log(2,ch);
+	
+#include "plug_analyze_actionsB.cpp"
+	
+	
+	//------------------analyze here --------------	 
+	for (int i=0;i<32;i++){ chan[i]=0; } 	 events++;
+	//------------------analyze here --------------
+      }//  cnt2== fffffffff    ===== END OF THE EVENT  
+      if (cnt2 % 2==1){// odd is always channel
+	buffer->wait_and_pop(datum2);cnt++;cnt2++;
+	chan[datum]=datum2;
+	//  if (outfile!=NULL){fwrite ( &datum , 1 , 4  , outfile );fwrite ( &datum2 , 1 , 4  , outfile );}
+      }
+      
       if ((cnt%10000)==0){
 	sprintf(ch,"ANA:%8lld kB %9lld events /%d",4*cnt/1000, events,cnt2);table_log(2,ch);
       } //printout every MB
+      
 
-
-     }//buffer not empty  
-     sprintf(ch,"ANA:  buffer empty%s","");table_log(2,ch);
-     usleep(1000*500);
+    }//buffer not empty  
+    sprintf(ch,"ANA:  buffer empty%s","");table_log(2,ch);
+    usleep(1000*500);
      
-     usleep(1000*20); // wait 100ms and retry again..
-     respush=TokenGet( "push=" , mmap_file , pushis ); //takes a value
-     if ( 0==TokenGet( "run=" , mmap_file , pushis ) ){
-       respush=0;
-     }; //takes a value
+    respush=TokenGet( "push=" , mmap_file , pushis ); //takes a value
+    if ( 0==TokenGet( "run=" , mmap_file , pushis ) ){
+      respush=0;
+    }; //takes a value to know when to STOP
   }//respush>=0
+  
+  if (outfile!=NULL){fclose(outfile);}
+  sprintf(ch,"EXITING analyze (words=%lld)",cnt );table_log(2,ch);
+  sprintf(ch,"EXITING analyze (events+times=%d)",cnt3 );table_log(2,ch);
 
-   if (outfile!=NULL){fclose(outfile);}
- sprintf(ch,"EXITING analyze2 (evnts=%lld)",cnt );table_log(2,ch);
- sprintf(ch,"EXITING analyze2 (evnts=%lld)",cnt);table_log(2,ch);
-
+ 
  }// ********************* end  of  function  **EMPTY2 ******
 
 

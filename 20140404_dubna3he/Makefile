@@ -12,22 +12,29 @@ rs   := $(shell echo $$ROOTSYS)
 date := $(shell date +%Y%m%d_%H%M%S)
 mpath := $(shell cat ~/.rootrc | grep -v -e "^\#" | grep Unix | grep MacroPath | awk '{print $$2}')
 mpath2 := $(shell echo  $(mpath) | sed  's/:/ /g')
+plugcpp := $(wildcard plug_*.cpp)
+plugsos := $(patsubst %.cpp, %.so, $(plugcpp) )
 
 
+.PHONY:	all clean distclean
 
-all: 	plug_analyze.so
-	$(ROOTCC)  $(OBJS_LIBS) -fPIC -I.. -shared -o plug_analyze.so plug_analyze.cpp  $(LDFLAGS)
-	@echo "make:";\
-	echo "      this help";\
-	echo " TRICK -  I incluce  ..  directory "
+all: 	$(plugsos)
+	@echo " A TRICK with compile .so here -  I have included the  ..  directory ";\
+	esc=`echo "\033"`;cc_red="$${esc}[0;31m";cc_green="$${esc}[0;32m";cc_mag="$${esc}[0;35m";cc_normal=`echo "$${esc}[m\017"`;\
+	echo $${cc_mag};ls -1 *.so;echo $${cc_normal}
 
-plug: plugins
 
-plugins: plug_analyze.so
-
-plug_analyze.so: plug_analyze.cpp plug_analyze_actions.cpp plug_analyze_definitions.cpp
-	$(ROOTCC)  $(OBJS_LIBS) -fPIC -I.. -shared -o plug_analyze.so plug_analyze.cpp  $(LDFLAGS)
-
+%.so: %.cpp
+	@echo ... /$</ file searched for the int* PLUG\(\) function;\
+	cat $< | grep PLUG\(int >/dev/null;\
+	if [ $$? = 0 ]; then \
+	echo COMPILING $<;\
+	$(ROOTCC)  $(OBJS_LIBS) -fPIC -I.. -shared -o $@ $<  $(LDFLAGS) ;\
+	fi;\
 
 clean:
-	  rm plug_analyze.so 
+	@esc=`echo "\033"`;cc_red="$${esc}[0;31m";cc_green="$${esc}[0;32m";cc_normal=`echo "$${esc}[m\017"`;\
+	echo $${cc_red};ls -1 *.so;echo $${cc_normal};\
+	$(RM) $(plugsos)
+
+distclean: clean

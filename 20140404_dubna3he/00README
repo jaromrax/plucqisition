@@ -13,4 +13,8 @@ run = 0.0  means  stop all threads (they ask for the status of this)
            it is set from  acq()   acq_core.C
 
 
- 
+============================================================
+======================= to test  
+watch -n 1 cat control.mmap 
+
+cat ../RUN018_V |  nc -l -p 9302

@@ -112,15 +112,21 @@ void *xml_masterthread(void* arg){
    sprintf( so_analyze,"%s", xml.output  );
 
 
+
+   /*
    xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","func" );
    sprintf( func_push,"%s", xml.output  );
    xml.DisplayTele( xml.mainnode, 0, "plugins","poper","func" );
    sprintf( func_pop,"%s", xml.output  );
    xml.DisplayTele( xml.mainnode, 0, "plugins","analyze","func" );
    sprintf( func_analyze,"%s", xml.output  );
+   */
+   sprintf( func_push,"%s",    "PLUG" );
+   sprintf( func_pop,"%s",     "PLUG" );
+   sprintf( func_analyze,"%s", "PLUG" );
 
 
-  xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","file" );
+   xml.DisplayTele( xml.mainnode, 0, "plugins","pusher","file" );
    sprintf( file_push,"%s", xml.output  );
   xml.DisplayTele( xml.mainnode, 0, "plugins","poper","file" );
    sprintf( file_pop,"%s", xml.output  );
