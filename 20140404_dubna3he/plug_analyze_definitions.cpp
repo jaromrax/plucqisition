@@ -33,7 +33,7 @@ TH1F* timeCNT;     // counters arrivals TIME
 timeCanA=NULL;
 timeCNT=NULL;
 
-
+/*
 TH1F* timeCanAdE1; //dE1 arrivals       TIME
 timeCanAdE1=NULL;
 TH1F* timeCanAdE2; //dE2 arrivals       TIME
@@ -46,6 +46,7 @@ TH1F* timeCanAdE6; //dE6 arrivals       TIME
 timeCanAdE6=NULL;
 TH1F* timeCanAdE7; //dE7 arrivals       TIME
 timeCanAdE7=NULL;
+*/
 
 TH1F* evnum=new TH1F("T_EventA","Arriving data event # (analyze)",  300000, 
 		 0, 300000 );
@@ -58,7 +59,7 @@ int mbins=2000;
 int mrange=8000;
 double mfact[32];
 for (int i=0;i<32;i++){ mfact[i]=1.0;}  // factor to multiply
-mfact[2]=10.0;
+
 char mchx[100];
 char mchy[100];
 char mch[100];
@@ -77,7 +78,7 @@ char mch[100];
       TH2F *mtx2;
       mtx2=(TH2F*)gDirectory->Get("mtx2");
       if (mtx2==NULL){
-	mtx2=new TH2F("mtx2","V018:V018+20*V002",4500,0,90000, mbins,0, mrange);
+	mtx2=new TH2F("mtx2","V018:V018+V002",4500,0,90000, mbins,0, mrange);
       }
 
       TH2F *mtx3;
@@ -90,11 +91,13 @@ char mch[100];
       if (mtx4==NULL){
 	mtx4=new TH2F("mtx4","V020:V020+V004",mbins,0,mrange,mbins,0,mrange);
       }
+/*
       TH2F *mtx5;
       mtx5=(TH2F*)gDirectory->Get("mtx5");
       if (mtx5==NULL){
 	mtx5=new TH2F("mtx5","V021:V021+V005",mbins,0,mrange,mbins,0,mrange);
       }
+*/
       TH2F *mtx6;
       mtx6=(TH2F*)gDirectory->Get("mtx6");
       if (mtx6==NULL){
@@ -112,14 +115,12 @@ char mch[100];
       }
 
 //======================================================= GRAPHS =====
-
 int t1gene=0;
 int t6gene=0;
 double t1q=0.0;
 double t6q=0.0;
 double cnt_TIME=0.0;
 double cnt_TIMElast=0.0;
-
 
 /*
 //-------------------------------------GENE-------------------
