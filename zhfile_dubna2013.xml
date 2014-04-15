@@ -9,9 +9,9 @@ circtree=100000
 <xmlconfig>
 
 <plugins>
-  <pusher  so="../plug_push.so" func="push_file"  file="/home/ojr/AA_share/DATA/20131122_dubna_an/RUN0015_V"  delayms="120"> </pusher>
+  <pusher  so="../plug_push.so" func="push_file"  file="/home/ojr/DATA/NASTRO/20140409_3he9be/RUN0003"  delayms="120"> </pusher>
 
-  <poper   so="../plug_pop.so" func="pop_ZH" definitions="file/home/ojr/AA_share/DATA/20131122_dubna_an/run15.root,c001=1,c002=2,c003=3,c004=4,c005=5,c006=6,c007=7,c008=8,c017=17,c018=18,c019=19,c020=20,c021=21,c022=22,c023=23,c024=24,c032=32,c139=139,c140=e140,c1024=t1,c1025=t2,c1026=t3,c1027=t4,c033=s001,c035=s002,c037=s003,c039=s004,c065=s101,c067=s102,c069=s103,c071=s104" > </poper>
+  <poper   so="../plug_pop.so" func="pop_ZH" definitions="c001=1,c002=2,c003=3,c004=4,c005=5,c006=6,c007=7,c008=8,c017=17,c018=18,c019=19,c020=20,c021=21,c022=22,c023=23,c024=24,c032=32,c139=139,c140=e140,c1024=t1,c1025=t2,c1026=t3,c1027=t4,c033=s001,c035=s002,c037=s003,c039=s004,c065=s101,c067=s102,c069=s103,c071=s104" > </poper>
 
   <analyze so="./plug_analyze.so" func="evt_analyze_empty" treename="nanot"> </analyze>
 

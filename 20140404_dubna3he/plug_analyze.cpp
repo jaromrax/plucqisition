@@ -141,7 +141,7 @@ extern "C" {
 	//	 	 if (chan[17]>0) {mtx1->Fill( chan[1]+chan[17], chan[17]);}
 	//	 sprintf(ch,"ANA: analyze action%s","");table_log(2,ch);
 	
-#include "plug_analyze_actionsB.cpp"
+#include "plug_analyze_actions.cpp"
 	
 	
 	//------------------analyze here --------------	 
@@ -160,7 +160,7 @@ extern "C" {
       
 
     }//buffer not empty  
-    sprintf(ch,"ANA:  buffer empty%s","");table_log(2,ch);
+    //sprintf(ch,"ANA:  buffer empty%s","");table_log(2,ch);
     usleep(1000*500);
      
     respush=TokenGet( "push=" , mmap_file , pushis ); //takes a value
