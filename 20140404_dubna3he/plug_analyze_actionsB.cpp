@@ -9,22 +9,19 @@
 //            cm1_d->IsInside( dE,E)   will work more simple
 //            even shspe may in future recalculate ?! to transform (GetTitle,GetXaxis-gettitle
 //
-
 // if (ANADEBUG){ sprintf(ch,"entered ACTIONS%s",  "");table_log(2,ch); }
 
 if (chan[17]>0) {mtx1->Fill( mfact[1]*chan[1]+chan[17], chan[17] );  }
 if (chan[18]>0) {mtx2->Fill( mfact[2]*chan[2]+chan[18], chan[18] );  }
 if (chan[19]>0) {mtx3->Fill( mfact[3]*chan[3]+chan[19], chan[19] );  } 
 if (chan[20]>0) {mtx4->Fill( mfact[4]*chan[4]+chan[20], chan[20] );  }
-if (chan[21]>0) {mtx5->Fill( mfact[5]*chan[5]+chan[21], chan[21] );  }
+//if (chan[21]>0) {mtx5->Fill( mfact[5]*chan[5]+chan[21], chan[21] );  }
 if (chan[22]>0) {mtx6->Fill( mfact[6]*chan[6]+chan[22], chan[22] );  }
 if (chan[23]>0) {mtx7->Fill( mfact[7]*chan[7]+chan[23], chan[23] );  }
 if (chan[24]>0) {mtx8->Fill( mfact[8]*chan[8]+chan[24], chan[24] );  }
 
 //---------IF  dE1
 //if (chan[17]>0) {
-
-
 
 //----------------event number----------------
 // POZOR cnt je ZVENKU!!!!!!!!!!!!!!!!! 
