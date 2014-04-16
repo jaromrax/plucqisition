@@ -120,6 +120,22 @@ if (mL123b==NULL){
   mL123b->GetYaxis()->SetTitle(mchy);
  }//------------------------------------------------------
 
+//============== L 2 x 3
+TH2F *mL23;
+sprintf( mnam, "mL23" );
+mL23=(TH2F*)gDirectory->Get( mnam );
+if (mL23==NULL){
+  sprintf(mchy,"%sV018","" );              // Y
+  sprintf(mchx,"%s+%.2f*V002", mchy,  1.0); // X
+  sprintf(mch,"%s:%s", mchy, mchx);
+  mL23=new TH2F( mnam ,mch,mbins,0,mrange,mbins,0,mrange);
+  mL23->GetXaxis()->SetTitle(mchx);
+  mL23->GetYaxis()->SetTitle(mchy);
+ }//------------------------------------------------------
+
+
+
+
 //============== L 4+5 x 6
 TH2F *mL456;
 sprintf( mnam, "mL456" );
@@ -145,6 +161,19 @@ if (mL456b==NULL){
   mL456b=new TH2F( mnam ,mch,mbins,0,mrange,mbins,0,mrange);
   mL456b->GetXaxis()->SetTitle(mchx);
   mL456b->GetYaxis()->SetTitle(mchy);
+ }//------------------------------------------------------
+
+//============== L 5 x 6
+TH2F *mL56;
+sprintf( mnam, "mL56" );
+mL56=(TH2F*)gDirectory->Get( mnam );
+if (mL56==NULL){
+  sprintf(mchy,"%sV020", "" );              // Y
+  sprintf(mchx,"%s+%.2f*V004", mchy,  1.0); // X
+  sprintf(mch,"%s:%s", mchy, mchx);
+  mL56=new TH2F( mnam ,mch,mbins,0,mrange,mbins,0,mrange);
+  mL56->GetXaxis()->SetTitle(mchx);
+  mL56->GetYaxis()->SetTitle(mchy);
  }//------------------------------------------------------
 
 

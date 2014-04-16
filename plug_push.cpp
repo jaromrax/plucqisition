@@ -282,7 +282,7 @@ int* PLUG(int* par, int* par2){
        
        if (i<0){ //####CASE i<0 ####
 	 sprintf(ch,"PUSH SOCKET LOST...%s; iii*4=%d, d=%d\n", ipaddress,ii*4,d );table_log(0,ch);
-	 usleep(1000*1000);    
+	 usleep(2000*1000);    
 	 //============this helped to have  nice STOP THREAD ============
 	 	 if (PUSHDEBUG!=0){sprintf(ch,"PUSH-net    closing,breakin=%d ", i ); table_log(0,ch);}
 	 	 socket->Close(); // i dont know // delete socket;

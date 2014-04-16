@@ -160,8 +160,8 @@ extern "C" {
       
 
     }//buffer not empty  
-    //sprintf(ch,"ANA:  buffer empty%s","");table_log(2,ch);
-    usleep(1000*500);
+    sprintf(ch,"ANA:  buffer empty%s","");table_log(2,ch);
+    usleep(1000*2000);
      
     respush=TokenGet( "push=" , mmap_file , pushis ); //takes a value
     if ( 0==TokenGet( "run=" , mmap_file , pushis ) ){
