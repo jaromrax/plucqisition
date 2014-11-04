@@ -80,6 +80,7 @@ extern "C" {
    int datum=0;
    sprintf(ch,"evt_analyze EMPTY2...........%s","");table_log(2,ch);
 
+   sprintf(ch,"EXITING NOW %s" , "" );table_log(2,ch);
 
       //STANDARD  XML  READ-------------
       FILE *outfile;  char fname[400];
@@ -128,6 +129,10 @@ extern "C" {
       second (int) is value
       0xffffffff   twice  is  EOEvent
      */
+
+    if (ANADEBUG>0){sprintf(ch,"ANA: entering while bufferempty%s","");table_log(2,ch);}
+
+
     while( !buffer->empty() ){// concurent queue "buffer" is an object HERE
       buffer->wait_and_pop(datum);cnt++;
       
@@ -138,17 +143,21 @@ extern "C" {
       }else{cnt2++;}//datum 0xffffff
       if (cnt2==1){ //====================================================
 	//------------------analyze here --------------
-	//	 	 if (chan[17]>0) {mtx1->Fill( chan[1]+chan[17], chan[17]);}
-	//	 sprintf(ch,"ANA: analyze action%s","");table_log(2,ch);
+
+
+	//	if (ANADEBUG>0){sprintf(ch,"ANA: before actions%s","");table_log(2,ch);}
+
+	#include "plug_analyze_actions.cpp"
 	
-#include "plug_analyze_actions.cpp"
-	
-	
+	//	if (ANADEBUG>0){sprintf(ch,"ANA: after actions%s","");table_log(2,ch);}
+
 	//------------------analyze here --------------	 
 	for (int i=0;i<32;i++){ chan[i]=0; } 	 events++;
 	//------------------analyze here --------------
       }//  cnt2== fffffffff    ===== END OF THE EVENT  
-      if (cnt2 % 2==1){// odd is always channel
+ 
+
+     if (cnt2 % 2==1){// odd is always channel
 	buffer->wait_and_pop(datum2);cnt++;cnt2++;
 	chan[datum]=datum2;
 	//  if (outfile!=NULL){fwrite ( &datum , 1 , 4  , outfile );fwrite ( &datum2 , 1 , 4  , outfile );}
