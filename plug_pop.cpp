@@ -1,4 +1,3 @@
-root
 #define POPDEBUG 0
 #include "xml_attr.h"    // bude xml
 #include "log_term.h"    // bude xml

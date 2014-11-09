@@ -355,7 +355,7 @@ int acq(const char * startstop="start")
 
     //===========================XTERM INIT============================
   if (XTERM==NULL){
-    if (logterm()!=0 )usleep(1000*800);
+    if (logterm()!=0 )usleep(1000*1800);
   }//ALLOCATE OR FIND XTERMINAL
 
 

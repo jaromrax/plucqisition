@@ -225,6 +225,7 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
   char tok[100];
   char tokres[300];
   int toki;
+  int MAXCH_4000=4096;
 
 
   char ch[1000];//  DEFINE TTree; I make it 1 leaf/branch
@@ -285,6 +286,13 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
       printf("circular TTree %d events\n",  toki );
     }// toki>0
 
+    toki=TokenGet( "maxchan=", conf , tokres);
+    if (toki>0){//maximum channel 4096
+      MAXCH_4000=toki;
+      printf("maximum channel is  %d \n",  toki );
+    }// toki>0
+
+
     ZH_tree->Branch( "time" , &cTIME_root, "time/D" );// /D == Double_t 64bit
     ZH_tree->Branch( "cnt_evt" , &cnt_evt_data, "n/L" );// /: == Long64_t 64bi
 }else{ // already exists..........???
@@ -304,7 +312,7 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
 
     if (toki!=0){// integer was found => it is HISTO------------
       sprintf( tok, "c%03d", toki ); // new channel=arbitrary integer<=999
-      TH1F *h=new TH1F( tok, tok, 8000,0,8000);
+      TH1F *h=new TH1F( tok, tok, MAXCH_4000,0,MAXCH_4000);
       HIST[i]=h;
 
       // DEFINE TTREE...........for every histo channel....

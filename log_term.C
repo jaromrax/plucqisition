@@ -114,12 +114,16 @@ int logterm(){
 	sprintf( commandps, "ps -ef |grep \"00 cat$\"|grep -v \"00 sh\"|grep -v grep|grep pts|sort -rn >%s2", touchfile );
 	system( commandps );
 	sprintf( commandps, "ps -ef |grep \"00 cat$\"|grep -v \"00 sh\"|grep -v grep|grep pts|sort -rn| awk '{print \"/dev/\"$6}' > %s", touchfile );
-	system( commandps );
-      usleep(1000*100);
+
+
+ while (XTERM==NULL){
+   //run PS
+   system( commandps );
+   usleep(1000*100);
   FILE *f=fopen( touchfile ,"r");
   if (f!=NULL){
     fscanf(f,"%s", devpts);
-    printf("1Content of devpts == %s, \n",devpts);
+    //    printf("Content of devpts == %s, \n",devpts);
     /*    if (!feof(f)){
     fscanf(f,"%s", devpts2);
     printf("2Content of devpts == %s, \n",devpts2);
@@ -130,37 +134,48 @@ int logterm(){
     if ( strlen(devpts)>0){
     printf("Content of devpts == %s, trying to open\n",devpts);
     XTERM=fopen(devpts,"a");
-    printf("Content of devpts == %s\n",devpts);
-    fprintf(XTERM,"AHOJAHOJ\n\n%s","");
+    //    printf("Content of devpts == %s\n",devpts);
+    fprintf(XTERM,"AHOJ AHOJ. Dnes budu Tvuj LOG terminal\n\n%s","");
     }//res>0 jsou dve, 1. je xterm....
-  }
-  /*
-   *   If nothing works,  open directly now xterm
-   *   and believe that new /dev/pts/ii  belongs to it
-   *
-   */
+  }// if f!=NULL   ----  touchfile opened....
   if (XTERM==NULL){
-    printf("XTERM file NOT readable\n%s","");
-  for (int i=0;i<35;i++){
-    sprintf(devpts,"/dev/pts/%d", i);
-    //    printf( "file = %d\n", file_exists(devpts) );
-    if ( fexists(devpts)!=0 ){
-      //      printf("The %s exists\n", devpts);
-    }else{
-      //      printf("The %s doesnot exist\n", devpts);
-      system("xterm -T mut_terminal_log  cat&");
-      usleep(1000*1000*3 );
-      usleep(1000*1000);
-      XTERM=fopen(devpts,"a");
-      fprintf(XTERM,"AHOJAHOJ\n\n%s","");
-      already_ex =1 ; // NOT existed before
-      //      usleep(1000*1000*3);
-      //      fclose(XTERM);
-      //      break;
-      return already_ex;
-    }//if else fexists
-  }//for
-  }//XTERM stale NULL
+    printf("openning xterm....\n%s", "" );
+    system("xterm -T mut_terminal_log  cat&");
+    usleep(1000*1000);
+  }
+ } // while XTERM == NULL
+
+
+  // /*
+  //  *   If nothing works,  open directly now xterm
+  //  *   and believe that new /dev/pts/ii  belongs to it
+  //  *
+  //  */
+  // if (XTERM==NULL){
+  //   printf("XTERM file NOT readable\n%s","");
+  // for (int i=0;i<35;i++){
+  //   sprintf(devpts,"/dev/pts/%d", i);
+  //   //    printf( "file = %d\n", file_exists(devpts) );
+  //   if ( fexists(devpts)==0 ){
+  //       printf("The %s already exists\n", devpts);
+  //   }else{
+  //     printf("The %s doesnot exist\n", devpts);
+  //     system("xterm -T mut_terminal_log  cat&");
+  //     usleep(1000*1000*3 );
+  //     usleep(1000*1000);
+  //     XTERM=fopen(devpts,"a");
+  //     fprintf(XTERM,"AHOJAHOJ\n\n%s","");
+  //     already_ex =1 ; // NOT existed before
+  //     printf("...... log term opened on devpts == %s\n\n",devpts);
+  //     //      usleep(1000*1000*3);
+  //     //      fclose(XTERM);
+  //     //      break;
+  //     return already_ex;
+  //   }//if else fexists
+  // }//for
+  // }//XTERM stale NULL
+
+
   return already_ex; // already existed
 }
 
