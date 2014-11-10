@@ -69,9 +69,11 @@ extern "C" {
 
 
 
-
-  //    nc6   --exec 'cat RUN25 | pv -L 711k' -l -p 9302
-
+  //==========================================================
+//    nc6   --exec 'cat RUN25 | pv -L 711k' -l -p 9302
+//  nc6   --exec 'cat RUN0_23 | pv -s `stat -c %s RUN0_23` -L 1711k' -l -p 9302
+// ??? v
+//  pv -L 1711k  RUN0_22  |  nc6 -l -p 9302
 
 
 class Cat{
