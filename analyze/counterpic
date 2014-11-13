@@ -1,0 +1,81 @@
+#!/bin/bash
+
+
+TIMEOUT=$1 
+if [ "$TIMEOUT" = "" ]; then
+  TIMEOUT=2
+fi
+FILE=qqq
+cat COUNTER.1
+cat COUNTER.2
+
+#date +"%Y/%m/%d   %H:%M:%S" > $FILE
+echo  $((`cat COUNTER.1` / 60)) " nA*10" > $FILE
+echo  $((`cat COUNTER.2` / 60)) " cps">> $FILE
+
+PIC=counters.jpg
+
+
+###killall display 2>/dev/null
+
+COLOR=black
+BCOLOR=black
+FCOL=chartreuse
+diff $FILE  $FILE.last >/dev/null
+if [ $? == 0 ]; then
+ COLOR=red
+FCOL=red
+fi
+
+cp $FILE $FILE.last
+
+echo " " >> $FILE
+date +"%Y/%m/%d   %H:%M:%S" >> $FILE
+
+cat $FILE
+
+wc=`cat $FILE | wc -l `
+echo $wc lines
+y=-30
+first=0
+cat $FILE |
+ while read val 
+do
+   y=$(( ${y} + 70 ))
+   wc=$(( ${wc} - 1 ))
+
+   if [ $first = 0 ]; then
+          convert -size 640 -gravity center -fill red -background darkgray  \
+           -pointsize 11 -page +0+0 -extent 640x480 label:"." miff:- 
+	  first=1
+   fi
+   if [ "$wc" = "0" ]; then
+     COLOR=darkgray
+     BCOLOR=darkgray
+     FCOL=white
+     y=430
+   fi
+   convert -size 620 -gravity center -fill $FCOL -background $BCOLOR  \
+         -font Helvetica  -pointsize 44 -page +10+${y} -extent 620x67 label:"${val}" miff:-
+ done |
+#  montage -tile -background darkgray    -  +repage $PIC
+  convert -background darkgray -size 640x480 xc: - -flatten  $PIC
+###display $PIC &
+OUTFILE=/tmp/streampic_00.jpg
+echo  sending $PIC to phoenix $OUTFILE and sleepin $TIMEOUT
+scp $PIC phoenix:$OUTFILE
+
+
+sleep $TIMEOUT
+#timeout $TIMEOUT display $PIC
+#if [ $? -eq 124 ]; then
+#    echo timeout occured
+#    # Timeout occurred
+#else
+#    echo no hang
+#    # No hang
+#fi
+
+#mjpg_streamer -i "input_file.so -f /tmp/stream -n pic.jpg" -o "output_http.so -w /usr/local/www"
+
+#mjpg_streamer  -i "input_file.so -f /home/ojr/ -n counters.jpg" -o "output_http.so -p 8088 -w /var/www/cam4/"
