@@ -93,7 +93,7 @@ if (chan[24]>0) {
 
 
 //I TRY COUNTER
-/*
+
 if (chan[33]>0) 
   {
     char sysc[100];
@@ -105,7 +105,7 @@ if (chan[33]>0)
     sprintf(sysc , "echo %lld > COUNTER.2&" , sysc2 );
     system( sysc );
   }
-*/
+
 
 
 
