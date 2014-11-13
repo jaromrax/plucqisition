@@ -110,6 +110,7 @@ void *xml_masterthread(void* arg){
    sprintf( so_pop,"%s", xml.output  );
    xml.DisplayTele( xml.mainnode, 0, "plugins","analyze","so" );
    sprintf( so_analyze,"%s", xml.output  );
+   //   printf("--------------------------Analyze = %s \n", so_analyze);
 
 
 
@@ -191,13 +192,14 @@ void *xml_masterthread(void* arg){
     }// if (dlsym_error) {.....
 
 
-
+    if ( strlen(so_analyze)>0 ){
     //    printf("I want   to OPEN ANALYZE   library==\"%s\"\n", so_analyze);
     dl_handle_analyze = dlopen( so_analyze , RTLD_GLOBAL |  RTLD_LAZY);
     //    printf("I wanted to OPEN the dl_handle_analyze %d\n", (int)dl_handle_analyze);
     if (!dl_handle_analyze) {printf("Cannot open library: %s; %s\n", so_push,dlerror() );
 	 return 0;//can return 0
     }//if (dl_handle_analyze) 
+
     /*****************************
      *  I start dlopen rather here....................... ANALYZE PART
      */
@@ -211,7 +213,9 @@ void *xml_masterthread(void* arg){
         return 0;//can return 0
     }// if (dlsym_error) {.....
 
-
+    }else{
+      
+    }// so analyze exist
 
 
 
@@ -232,9 +236,11 @@ void *xml_masterthread(void* arg){
    tinfo[2].thread_num=2;//============ THREAD DEFINITION=========POP
    tinfo[2].running=1;tinfo[2].callnumber=1;tinfo[2].parent=&tinfo[0];
    sprintf(tinfo[2].file, "%s",file_pop);// send also filename
+
    tinfo[3].thread_num=3;//============ THREAD DEFINITION=========ANALYZE
    tinfo[3].running=1;tinfo[3].callnumber=1;tinfo[3].parent=&tinfo[0];
    sprintf(tinfo[3].file, "%s","temporary.root");// send also filename
+   if ( strlen(so_analyze)==0 ){  tinfo[3].running=0; } 
 
 
 
@@ -253,6 +259,7 @@ void *xml_masterthread(void* arg){
 
 
    if(XTERM!=NULL)fprintf(XTERM,"creating poper_thread = %lld\n",(Long64_t)TThread::GetThread("poper_thread") );
+
    if (TThread::GetThread("poper_thread")==0){
     shspe_threads[2] = new TThread( "poper_thread"  , evt_poper, (void*) &tinfo[2] );
     if (shspe_threads[2]==NULL){ printf("exiting, thread 2 not running\n%s","");return NULL;}    
@@ -262,6 +269,7 @@ void *xml_masterthread(void* arg){
 
 
    if(XTERM!=NULL)fprintf(XTERM,"creating analyze_thread = %lld\n",(Long64_t)TThread::GetThread("analyze_thread") );
+
    TThread *thq=(TThread*)TThread::GetThread("analyze_thread");
    if (thq!=NULL){
      if (thq->GetState()==6){printf("Killing analyze_thread\n");thq->Delete();}
@@ -616,6 +624,7 @@ void *evt_pusher( void *arg )  // loads the queue
 {
  struct thread_info *mtinfo = (struct thread_info *) arg;
  // int nt=mtinfo->thread_num;
+ printf("...calling evt pusher remote ... \n%s","");
  evt_pusher_remote( (int*)&buffer , NULL ); //#########EVENT#########
   mtinfo->running=0;// say stop
  printf("%s","evt_plug: pusher function is stopped \n");
@@ -661,7 +670,11 @@ void *evt_analyze( void *arg )  //
  struct thread_info *mtinfo = (struct thread_info *) arg;
  // int nt=mtinfo->thread_num;
  // int call=mtinfo->callnumber; mtinfo->callnumber++;// to keep track opened file
+ if ( mtinfo->running==0 ){
+   printf("No analyze.so defined\n%s","");
+ }else{
  evt_analyze_remote(  (int*)&BUFFER2 , NULL); //#########EVENT#########
+ }
  printf("%s","evt_plug: analyze function is stopped \n");
   mtinfo->running=0;// say stop
      return NULL;

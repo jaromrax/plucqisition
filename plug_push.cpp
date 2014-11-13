@@ -69,8 +69,11 @@ extern "C" {
 
 
 
-
-
+  //==========================================================
+//    nc6   --exec 'cat RUN25 | pv -L 711k' -l -p 9302
+//  nc6   --exec 'cat RUN0_23 | pv -s `stat -c %s RUN0_23` -L 1711k' -l -p 9302
+// ??? v
+//  pv -L 1711k  RUN0_22  |  nc6 -l -p 9302
 
 
 class Cat{
@@ -173,7 +176,8 @@ int* PLUG(int* par, int* par2){
 
 
 
-  char strbuf[2000000];// 20MB
+      //original  char strbuf[2000000];// 20MB
+  char strbuf[4000000];// 2MB 711kB; 4MB 1700kB
   int *buffer4p;
   buffer4p=(int*)&strbuf[0];
   int d,i,ii;
@@ -234,15 +238,27 @@ int* PLUG(int* par, int* par2){
        if (PUSHDEBUG!=0){ sprintf(ch,"PUSH-netw socket got %d bytes; init=%d ", d, ii_init ); table_log(0,ch);}
        //     ii=0;
        
+       int sizenow;
+       //---------------------------------------
        for (ii=0;4*ii<d-(d%4)+ii_init;ii++){
 	 //     while( (ii*4<d)&&(d>=4) ){
-	 buffer->push( buffer4p[ii]  );
-	 //	  usleep(100000);
+	 buffer->push( buffer4p[ii] ); 
+	 //this helps	 if ( i %10 == 0 ){usleep(1); }
+	 /*
+	   sizenow= buffer->size();
+	 while (sizenow>5000){
+	   usleep(100000); 
+	   sizenow=buffer->size();
+	 }
+	 */
+	 //  usleep(100000);
 	 if (PUSHDEBUG!=0){ sprintf(ch,"%4lld ii= %4d  %08x   %4d",cnt,ii,  buffer4p[ii],d ); table_log(0,ch);}
 	 //	ii++;
 	 if ((cnt%25000)==0){
-	   sprintf(ch,"P %7lld kB\n",4*cnt/1000); table_log(0,ch);  
+	    sizenow= buffer->size();
+	   sprintf(ch,"P %7.1f MB : %d",4.*cnt/1000000, sizenow ); table_log(0,ch);    
 	   resrun=TokenGet(  "run=", mmap_file , mmap_result ); // if run==0 => KILL HERE
+	 
 	   if (resrun<1.0){ break;}
 	   // if (wait==0) {break;}
 	   usleep(100000);
