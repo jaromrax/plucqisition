@@ -357,7 +357,7 @@ void *xml_masterthread(void* arg){
  *                                                                ====
  */
 
-int acq(const char * startstop="start")
+int acq(const char * startstop="start", int runnum=0)
 {
   //  TThread *t;
 
@@ -406,6 +406,14 @@ int acq(const char * startstop="start")
   if ( strcmp(startstop,"stop")==0){//=====================IF STOP=========
     printf(".....go stop.\n%s", "" );
   }else{                            //=====================IF START========
+
+    if (runnum>0){
+      printf(".....go extra start with CTERM.\n%s", "" );    
+      char cmd[200];
+      sprintf(cmd,".! xterm -e 'cd;pv -L 1711k RUN0%d | nc6 -l -p 9302'&",runnum);
+      printf(".....bettern no.....\n%s", "" );    
+    }
+
 
 
     printf(".....go START.\n%s", "" );    
