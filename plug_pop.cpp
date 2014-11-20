@@ -108,8 +108,17 @@ extern "C" {
 
   // things from 20130820
   //  OverrideFileOUT=NULL;// NO filename out  override
-  sprintf( OverrideFileOUT, "%s", "" );
-   ZHbuffer = (int*) malloc ( 10000 );
+  // and 20141115
+  char runnumc[100];
+  int runnum=0;
+  TokenGet( "runnum=" , mmap_file , runnumc ); 
+  if (  atoi(runnumc)>0){
+    sprintf( OverrideFileOUT, "run%s", runnumc );
+    printf("----- new filename override %s\n", OverrideFileOUT );
+  }else{
+    sprintf( OverrideFileOUT, "%s", "" );
+  }
+  ZHbuffer = (int*) malloc ( 10000 );
 
 
   OEBmax=1000;// ONE EVENT LIMIT !!!!!!!!!!
@@ -124,8 +133,10 @@ extern "C" {
   reset_chan_table();
   sprintf(chL,"POP_ZH: loading the channel table%s", "");table_log(1,chL);
 
+  printf("definitions to load\n%s","");
   load_chan_table( definitions  );
 
+  printf("definitions loaded succesfully\n%s","");
   //  load_chan_table("circtree=100000,c001=1,c002=2,c003=3,c004=4,c005=5,c006=6,c007=7,c008=8,c017=17,c018=18,c019=19,c020=20,c021=21,c022=22,c023=23,c024=24,c032=32,c1024=t1,c1025=t2,c1026=t3,c1027=t4,c033=s001,c035=s002,c037=s003,c039=s004" );
 
 

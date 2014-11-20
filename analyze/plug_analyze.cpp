@@ -21,6 +21,8 @@ int mmapfd;      //  =-1       file handle for mmap
 char *mmap_file; // pointer to     mmap
 
 
+//=============> pv -L 1711k RUN0_38 | nc6 -l -p 9302
+
 
 //  I make the variable  "extern" in   *.h  and againI define in *.C
 //  then - when I include here (so) and I try to link *.o that was created before

@@ -245,14 +245,38 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
 //if (ZH_tree==NULL){//==========================ZH TREE   BEGIN==
   if ( ttree_exists==0 ){//=========================ZH TREE   BEGIN==
 
+    // //tokres contains the output FILENAME
+    // int runnum=0;
+    // //I dont know how to enter with file= runnum here....
+    // // TokenGet("runnum=",mmap_file,runnum); // takes a value from mmap
+    // if (runnum>0){
+    //   printf("RUN NUMBER DEFINED %d\n",runnum);
+    //   char runxx[100];
+    //   sprintf( runxx, "run%d", runnum );
+    //   strcpy( tokres, runxx );
+    // }else{
     toki=TokenGet( "file=", conf , tokres);
     if ( strlen(OverrideFileOUT)>0){
-      strcpy( tokres, OverrideFileOUT );
+      //      printf("Override filename is %s\n", OverrideFileOUT );
+      strcpy( tokres, OverrideFileOUT ); // (dest,src)
+      if (strrchr( tokres, '.' )==NULL){// no .root
+	strcat( tokres, ".root");
+      }
+      //      printf("Override filename is %s\n", OverrideFileOUT );
+      //      printf("Override tokres is  %s\n",  tokres );
     }
+    //    }
+
+
     if (strlen(tokres)>0){
-      if ( fexists(tokres)>=0){
+      if ( fexists(tokres)>=0){      
+	printf("fexists tokres is  %s\n",  tokres );
+
 	curtime = time (NULL);  loctime = localtime (&curtime);
 	end=strrchr( tokres, '.' ); // .root
+	if ( end==NULL){
+	  end=strstr(tokres,""); // first occurence of "" is [0]
+	}//doesnot work much- i put start,not the end....
 	memcpy( begin,  tokres,  end-tokres ); // copy begin
 	begin[ end-tokres] = '\0';
 
