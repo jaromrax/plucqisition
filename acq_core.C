@@ -394,8 +394,16 @@ int acq(const char * startstop="start", int runnum=0)
        sprintf( newline, "file=%s" , startstop ); 
        TokenReplace( "file=", newline ,  mmap_file, newfile );
        strcpy( mmap_file, newfile );
+
        printf("...new XML file  /%s/ \n", startstop );
        printf("...new mmap_file content  /%s/ \n", mmap_file );
+
+       sprintf( newline, "runnum=%d" , runnum ); 
+       TokenReplace( "runnum=", newline ,  mmap_file, newfile );
+       strcpy( mmap_file, newfile );
+
+       printf("...new mmap_file content  /%s/ \n", mmap_file );
+
        //not strcpy(mmap_file, newline  ); // "acq_setup.xml\nrun=1\n";
      }else{
        //       printf("...new XML file NOT demanded:  %s \n", startstop );
@@ -429,6 +437,13 @@ int acq(const char * startstop="start", int runnum=0)
    TokenReplace( "analyze=", "analyze=1", mmap_file, repla );
    strcpy( mmap_file, repla );
 
+   /*
+   char newfile[4096];
+   char runactive[20];
+   sprintf( runactive,"run=%d", runnum );
+   TokenReplace( "run=",  "runactive",  mmap_file , newfile );
+   strcpy( mmap_file, newfile);
+   */
   }
 
 
@@ -462,14 +477,12 @@ int acq(const char * startstop="start", int runnum=0)
       //      printf("waiting 1 second\n%s", "");
       usleep(1000*1000); // why not to wait.....a while....
       not_deads=0;
-      //    TThread::Ps();
+     //    TThread::Ps();
     //    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "...broadcasting ALL _threads");
     //    printf("%s...broadcasting to ALL threads\n","");
     //    MyCond.GetMutex();
     //    MyCond.Broadcast();
     //    usleep(1000*100);
-
-
     TThread *t;
 
     //-----------------------------

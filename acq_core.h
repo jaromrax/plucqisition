@@ -5,7 +5,7 @@
 #include "TThread.h"   //  CINT?   //  -lThread
 
 
-const char acq_default[4096]="file=acq_setup.xml\nrun=1\npush=1\npop=1\nanalyze=1";
+const char acq_default[4096]="file=acq_setup.xml\nrun=1\npush=1\npop=1\nanalyze=1\nrunnum=0";
 
 
 /*************************************************
