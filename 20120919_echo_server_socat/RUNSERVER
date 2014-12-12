@@ -1,1 +1,0 @@
-socat EXEC:./eecho TCP-LISTEN:11111,reuseaddr,fork,crlf

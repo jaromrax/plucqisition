@@ -1,2 +1,0 @@
-#!/bin/bash
-rlwrap nc localhost 11111

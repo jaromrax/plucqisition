@@ -1,5 +1,0 @@
-#!/bin/bash
-echo connecting to gregory with 
-echo rlwrap nc localhost 11111
-echo  to get line history
-rlwrap nc localhost 11111
