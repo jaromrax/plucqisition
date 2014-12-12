@@ -2,6 +2,14 @@ ifneq (,)
     This makefile requires GNU Make.
     endif
 
+rs   := $(shell echo $$ROOTSYS)
+date := $(shell date +%Y%m%d_%H%M%S)
+mpath := $(shell cat ~/.rootrc | grep -v -e "^\#" | grep Unix | grep MacroPath | awk '{print $$2}')
+mpath2 := $(shell echo  $(mpath) | sed  's/:/ /g')
+#########this is from plug-Makefile
+plugcpp := $(wildcard plug_*.cpp)
+plugsos := $(patsubst %.cpp, %.so, $(plugcpp) )
+
 PROGRAM = acq_rez
 C_FILES_LIBS = xml_attr.C log_term.C mut_queue.C ZH_data.C
 C_FILES =      xml_attr.C log_term.C mut_queue.C ZH_data.C acq_core.C
@@ -11,19 +19,12 @@ OBJS := $(C_FILES:.C=.o)
 #OBJS_SO := $(C_FILES:.C=.so)
 CC = echo
 CFLAGS = -Wall 
+
 LDFLAGS =
 ROOTCC=`root-config --cxx --cflags` -fPIC 
 LDFLAGS= -ldl -lHist -lNet -lCore -lRIO -lGpad -lMathCore -lPhysics -lTree -lThread -lXMLIO `root-config --glibs`
 
-
 #  root -n -b -q  compile.C
-rs   := $(shell echo $$ROOTSYS)
-date := $(shell date +%Y%m%d_%H%M%S)
-mpath := $(shell cat ~/.rootrc | grep -v -e "^\#" | grep Unix | grep MacroPath | awk '{print $$2}')
-mpath2 := $(shell echo  $(mpath) | sed  's/:/ /g')
-#########this is from plug-Makefile
-plugcpp := $(wildcard plug_*.cpp)
-plugsos := $(patsubst %.cpp, %.so, $(plugcpp) )
 
 
 all: $(PROGRAM) 
