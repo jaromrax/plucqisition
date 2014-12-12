@@ -18,4 +18,11 @@ void replay(int run){
   printf( "%s\n", cmd  );
   gROOT->ProcessLine( cmd );
 
+ 
+  TCanvas *c=new TCanvas("cc","",300,100);
+  TText *t=new TText(0.1,0.1,"make acq(\"stop\")");
+  t->SetTextSize(0.4);
+  t->SetTextColor(2);
+  t->Draw();
+
 }

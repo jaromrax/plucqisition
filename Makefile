@@ -11,9 +11,9 @@ OBJS := $(C_FILES:.C=.o)
 #OBJS_SO := $(C_FILES:.C=.so)
 CC = echo
 CFLAGS = -Wall 
-LDFLAGS =	
+LDFLAGS =
 ROOTCC=`root-config --cxx --cflags` -fPIC 
-LDFLAGS= -lHist -lNet -lCore -lRIO -lGpad -lMathCore -lPhysics -lTree -lThread -lXMLIO `root-config --glibs`
+LDFLAGS= -ldl -lHist -lNet -lCore -lRIO -lGpad -lMathCore -lPhysics -lTree -lThread -lXMLIO `root-config --glibs`
 
 
 #  root -n -b -q  compile.C
