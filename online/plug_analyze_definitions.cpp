@@ -13,6 +13,7 @@
       TCutG *m6_monitor;
       m6_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm6_mon");
 
+
       TCutG *m1_gene;
       m1_gene=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_gene");
       TCutG *m6_gene;
@@ -35,7 +36,7 @@ cm8_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm8_d");
 
 //================================================DEFINE TH1F====
 //TESTS...........
-TH1F* chansH=new TH1F("TchansH","channels arrived from pop (analyze)",  1000,0,1000);
+TH1F* chansH=new TH1F("TAchansH","channels arrived from pop (analyze)",  1000,0,1000);
 
 //TH1F* timeH=new TH1F("hTimeDiff","time intervals between counters", 		     1800,0,180);
 
@@ -63,12 +64,33 @@ TH1F* timeCanAdE7; //dE7 arrivals       TIME
 timeCanAdE7=NULL;
 */
 
-TH1F* evnum=new TH1F("T_EventA","Arriving data event # (analyze)",  300000, 
+TH1F* evnum=new TH1F("TA_EventA","event number arrived from pop (analyze)",  300000, 
 		 0, 300000 );
 
 //TH2F* time_evnum;
 
+TH1F *hh;
+hh=(TH1F*)gDirectory->Get( "c017");if (hh !=NULL){hh->SetTitle("dE1");}
+hh=(TH1F*)gDirectory->Get( "c018");if (hh !=NULL){hh->SetTitle("dE2");}
+hh=(TH1F*)gDirectory->Get( "c019");if (hh !=NULL){hh->SetTitle("dE3");}
+hh=(TH1F*)gDirectory->Get( "c020");if (hh !=NULL){hh->SetTitle("dE4");}
+hh=(TH1F*)gDirectory->Get( "c021");if (hh !=NULL){hh->SetTitle("dE5");}
 
+hh=(TH1F*)gDirectory->Get( "c022");if (hh !=NULL){hh->SetTitle("dE6");}
+hh=(TH1F*)gDirectory->Get( "c023");if (hh !=NULL){hh->SetTitle("dE7");}
+hh=(TH1F*)gDirectory->Get( "c024");if (hh !=NULL){hh->SetTitle("dE8");}
+
+
+
+hh=(TH1F*)gDirectory->Get( "c001");if (hh !=NULL){hh->SetTitle("thick E1");}
+hh=(TH1F*)gDirectory->Get( "c002");if (hh !=NULL){hh->SetTitle("thick E2");}
+hh=(TH1F*)gDirectory->Get( "c003");if (hh !=NULL){hh->SetTitle("thick E3");}
+hh=(TH1F*)gDirectory->Get( "c004");if (hh !=NULL){hh->SetTitle("thick E4");}
+hh=(TH1F*)gDirectory->Get( "c005");if (hh !=NULL){hh->SetTitle("thick E5");}
+
+hh=(TH1F*)gDirectory->Get( "c006");if (hh !=NULL){hh->SetTitle("thick E6");}
+hh=(TH1F*)gDirectory->Get( "c007");if (hh !=NULL){hh->SetTitle("thick E7");}
+hh=(TH1F*)gDirectory->Get( "c008");if (hh !=NULL){hh->SetTitle("thick E8");}
 
 
 //================================================DEFINE MARICES====

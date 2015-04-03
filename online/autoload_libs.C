@@ -1,8 +1,11 @@
 {
 #if __x86_64__
   gROOT->ProcessLine("cout<<\" ------------------ 64 BIT SYSTEM \"<<endl");
-  gSystem->Load("/lib/libdl.so");
-  //  gSystem->Load("/lib/x86_64-linux-gnu/libdl.so.2");
+  // gSystem->Load("/lib/libdl.so");
+  // gSystem->Load("/lib/x86_64-linux-gnu/libdl.so.2");
+
+  gROOT->ProcessLine("cout<<\" ------------------ 64 BIT SYSTEM LOADED\"<<endl");
+   
 #else
  gROOT->ProcessLine("cout<<\"-------------------- 32 BIT SYSTEM \"<<endl");
  gSystem->Load("/usr/lib/libdl.so");

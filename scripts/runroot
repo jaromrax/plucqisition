@@ -1,0 +1,33 @@
+#!/bin/bash
+
+echo KILLALL   xterm with mut-log
+ps aux | grep xterm | grep mut_terminal_log | awk '{print $2}' | xargs kill
+
+
+echo open new xterm with mut_log
+nohup xterm -T mut_terminal_log  cat&
+sleep 1
+
+
+###################
+#
+#  LAST directory
+#
+###################
+
+actual=`ls -tr1 -d ~/DATA/NASTRO/*/ | grep acq |  tail -1`
+echo ACTUAL directory with ACQ  is = $actual
+
+#cd /home/ojr/DATA/NASTRO/20141104_3he14c_acq/20141104_3he14c
+cd $actual/online
+
+
+export ROOTSYS=/home/ojr/root
+export PATH=/home/ojr/root/bin:/home/ojr/00_central:/home/ojr/bin:/home/ojr/root/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
+export LD_LIBRARY_PATH=/home/ojr/root/lib:/home/ojr/root/lib/root
+
+#:#IBRARY_PATH
+export PATH=~/00_central:~/bin:/home/ojr/00_central:/home/ojr/bin:/home/ojr/root/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
+
+root -l  2>/dev/null
+

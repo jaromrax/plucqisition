@@ -16,25 +16,27 @@ if (chan[17]>0) {
   if (chan[1]<3){
     dia_m1->Fill(  chan[17] );
   }
-  if (cm1_d->IsInside(chan[1],chan[17] )){
+  if ( (cm1_d!=NULL) && (cm1_d->IsInside(chan[1],chan[17]) )  ){
       m1_d->Fill( mfact[1]*chan[1]+chan[17] );
     }
  }
+
 if (chan[18]>0) {
   mtx2->Fill( mfact[2]*chan[2]+chan[18], chan[18] ); 
   if (chan[2]<3){
     dia_m2->Fill(  chan[18] );
   } 
-  if (cm2_d->IsInside(chan[2],chan[18] )){
+  if ( (cm2_d!=NULL) && (cm2_d->IsInside(chan[2],chan[18]) )){
       m2_d->Fill( mfact[2]*chan[2]+chan[18] );
     }
  }
+
 if (chan[19]>0) {
   mtx3->Fill( mfact[3]*chan[3]+chan[19], chan[19] );  
     if (chan[3]<3){
     dia_m3->Fill(  chan[19] );
   }
-    if (cm3_d->IsInside(chan[3],chan[19] )){
+    if ( (cm3_d!=NULL) && (cm3_d->IsInside(chan[3],chan[19]) )){
       m3_d->Fill( mfact[3]*chan[3]+chan[19] );
     }
 
@@ -47,7 +49,7 @@ if (chan[22]>0) {
   if (chan[6]<3){
     dia_m6->Fill(  chan[22] );
   }
-  if (cm6_d->IsInside(chan[6],chan[22] )){
+  if ( (cm6_d!=NULL) && (cm6_d->IsInside(chan[6],chan[22] )) ){
       m6_d->Fill( mfact[6]*chan[6]+chan[22] );
     }
 
@@ -58,7 +60,7 @@ if (chan[23]>0) {
   if (chan[7]<3){
     dia_m7->Fill(  chan[23] );
   }
-  if (cm7_d->IsInside(chan[7],chan[23] )){
+  if ( (cm7_d!=NULL) && (cm7_d->IsInside(chan[7],chan[23]) )){
       m7_d->Fill( mfact[7]*chan[7]+chan[23] );
     }
  }
@@ -68,7 +70,7 @@ if (chan[24]>0) {
   if (chan[8]<3){
     dia_m8->Fill(  chan[24] );
   }
-  if (cm8_d->IsInside(chan[8],chan[24] )){
+  if ( (cm8_d!=NULL) && (cm8_d->IsInside(chan[8],chan[24]) )){
       m8_d->Fill( mfact[8]*chan[8]+chan[24] );
     }
  }

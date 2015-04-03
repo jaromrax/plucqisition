@@ -1,0 +1,15 @@
+#!/bin/bash
+
+rm Image.png;
+ wget --tries=1 http://192.168.1.133/Image.png; 
+
+convert Image.png -negate negated-image.jpg
+
+if [ "$1" = "" ]; then 
+  echo no filename
+else
+ echo renaming to $1
+ mv negated-image.jpg  $1
+fi
+
+

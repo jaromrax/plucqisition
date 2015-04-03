@@ -1,0 +1,87 @@
+#!/bin/bash
+
+ls -1hl ~/RUN*
+DIR=`zenity --file-selection --title="Select directory with RUN" --directory`
+
+if [ "$DIR" = "" ]; then
+    echo no directory selected...
+  exit;
+fi
+
+echo selected : $DIR
+BASE=`basename $DIR`
+
+RUNNUM=`echo $BASE | perl -ne 's/.+(0_\d+)/$1/e;print' `
+
+echo basename=$BASE
+echo and RUN=$RUNNUM
+echo  in $DIR
+cd $DIR
+SIZE=` du -bs *_u | cut  -f 1 | awk '{total = total + $1}END{printf("%d",total)}'`
+###SIZE=$(( $SIZE / 2 ))
+echo SIZE of _u files is $SIZE
+echo .
+
+DESTFILE=~/RUN$RUNNUM
+
+echo copying to  $DESTFILE
+
+if [ -e $DESTFILE ]; then
+ echo file already exists 
+ SIZEOLD=`stat -c %s $DESTFILE`
+ echo size dir $SIZE / $SIZEOLD = size file
+ if [ $SIZE = $SIZEOLD ]; then
+     echo the file is probably the same size
+     echo .           ok    
+     echo .
+ else
+     echo Not the same sizes !!!
+     echo I dont know what to do
+     exit
+ fi
+
+else
+    if [ -e $DESTFILE.bz2 ]; then
+	echo maybe file is already bzipped ............
+	ls -lh $DESTFILE.bz2
+	echo .
+	echo press enter to bunzip2 $DESTFILE.bz2
+	read
+	bunzip2 -v $DESTFILE.bz2
+    else
+	ls -1tr *.vme_u | xargs -I III cat III  | pv -s $SIZE -L 190M > ~/RUN$RUNNUM
+    fi
+fi
+
+
+
+ls -lh $DESTFILE
+#ls -1 RUN0_* | grep -v bz2 | xargs -n 1 pbzip2 -v -9 
+echo "ls -1 RUN0_* | grep -v bz2 | xargs -n 1 pbzip2 -v -9 "
+echo ...
+echo ...  prepare acq\(\"acq_local.xml\"\)
+echo ...  prepare acq\(\"acq_locnofile.xml\"\)
+echo ... press enter
+read
+echo waiting for connection onport 9302
+
+ #nc6   --exec 'cat  ~/RUN$RUNNUM | pv -s `stat -c %s  ~/RUN$RUNNUM` -L 1711k' -l -p 9302
+
+pv -L 711k  $DESTFILE | nc6 -l -p 9302
+
+
+echo dont forget to do acq\(\"stop\"\)
+
+
+echo experimental...
+DIR=`lsof /home  2>/dev/null | grep "output_20" | grep "\.root$" | sed 's/  */\t/g' | cut -f 9 | xargs dirname`
+echo _____ following dirs are supspicious of the new root file  ________
+echo $DIR
+cd $DIR
+FILE=`ls -1tr out*.root | tail -1`
+echo I am in `pwd`
+echo try 
+echo acq\(\"stop\"\)
+echo cd $DIR
+echo mv $FILE run$RUNNUM$FILE 
+

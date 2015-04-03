@@ -1,0 +1,149 @@
+
+
+##################3
+#lot of problems earlier
+###############3##
+
+
+
+
+
+
+
+4  08/21 - 10:42:15 cd /tmp/wmonitor/
+ 1005  08/21 - 10:42:17 cd bin/
+ 1006  08/21 - 10:42:18 ls
+ 1007  08/21 - 10:42:25 ./nwview
+ 1008  11/08 - 12:38:29 /sbin/ifconfig 
+ 1009  11/08 - 12:41:12 /usr/bin/vmware-config.pl
+ 1010  11/08 - 12:45:52 /sbin/ifconfig 
+ 1011  11/08 - 12:46:58 /usr/bin/vmware-config.pl
+ 1012  11/13 - 03:39:29 cd /home/`
+ 1013  12/02 - 08:31:17 cd
+ 1014  11/13 - 03:39:34 cd /home
+ 1015  11/13 - 03:39:35 ls
+ 1016  11/13 - 03:39:37 exit
+ 1017  11/13 - 03:39:45 htop
+ 1018  11/13 - 03:39:47 top
+ 1019  11/13 - 03:39:53 exit
+ 1020  11/19 - 12:18:29 ls
+ 1021  11/19 - 12:18:38 ./nwgo 
+ 1022  11/19 - 12:18:47 ./Namon 
+ 1023  11/19 - 12:21:04 SET_CFG /home/zdenek/tmp/camac6-vme/NASTRO/20121029_elast_p_3He/cfg/NAMON_ORIGINAL_UNIVERSAL.XML
+ 1024  11/19 - 12:21:04 _SWD /home/zdenek/tmp/camac6-vme/NASTRO/20121029_elast_p_3He
+ 1025  11/19 - 12:21:04 _RUNUM 2
+ 1026  11/19 - 12:21:11 ls
+ 1027  11/19 - 12:21:25 ./nwview 
+ 1028  11/19 - 12:21:38 locate libCore.so.5.20
+ 1029  11/19 - 12:21:53 cnf locate
+ 1030  11/19 - 12:21:59 which libCore.so.5.20
+ 1031  11/19 - 12:22:16 find /usr/ /lib/ -iname "libcore*"
+ 1032  11/19 - 12:22:31 find /usr/ /lib/ ~/ -iname "libcore*"
+ 1033  11/19 - 12:22:41 cd root/lib/
+ 1034  11/19 - 12:22:56 ln -s libCore.so   libCore.so.5.20
+ 1035  11/19 - 12:23:11 ~/nwview
+ 1036  11/19 - 12:23:20 find /usr/ /lib/ ~/ -iname "libcint*"
+ 1037  11/19 - 12:23:42 ln -s libCint.so libCint.so.5.20
+ 1038  11/19 - 12:23:44 ~/nwview
+ 1039  11/19 - 12:23:51 find /usr/ /lib/ ~/ -iname "librio*"
+ 1040  11/19 - 12:24:04 ln -s libRIO.so libRIO.so.5.20
+ 1041  11/19 - 12:24:07 ~/nwview
+ 1042  11/19 - 12:24:24 ln -s libNet.so libNet.so.5.20
+ 1043  11/19 - 12:24:26 ~/nwview
+ 1044  11/19 - 12:24:34 ln -s libHist.so libHist.so.5.20
+ 1045  11/19 - 12:24:36 ~/nwview
+ 1046  11/19 - 12:24:45 ln -s libGraf.so libGraf.so.5.20
+ 1047  11/19 - 12:24:46 ~/nwview
+ 1048  11/19 - 12:24:53 ln -s libGraf3d.so libGraf3d.so.5.20
+ 1049  11/19 - 12:24:54 ~/nwview
+ 1050  11/19 - 12:25:02 ln -s libGpad.so libGpad.so.5.20
+ 1051  11/19 - 12:25:03 ~/nwview
+ 1052  11/19 - 12:25:13 ln -s libTree.so libTree.so.5.20
+ 1053  11/19 - 12:25:15 ~/nwview
+ 1054  11/19 - 12:25:24 ln -s libRint.so libRint.so.5.20
+ 1055  11/19 - 12:25:25 ~/nwview
+ 1056  11/19 - 12:25:39 ln -s libPostscript.so libPostscript.so.5.20
+ 1057  11/19 - 12:25:40 ~/nwview
+ 1058  11/19 - 12:25:42 ls
+ 1059  11/19 - 12:26:02 ln -s libMatrix.so libMatrix.so.5.20
+ 1060  11/19 - 12:26:04 ~/nwview
+ 1061  11/19 - 12:26:15 ln -s libPhysics.so libPhysics.so.5.20
+ 1062  11/19 - 12:26:16 ~/nwview
+ 1063  11/19 - 12:26:26 ln -s libMathCore.so libMathCore.so.5.20
+ 1064  11/19 - 12:26:27 ~/nwview
+ 1065  11/19 - 12:26:35 ln -s 
+ 1066  11/19 - 12:26:36 ~/nwview
+ 1067  11/19 - 12:26:48 ls
+ 1068  11/19 - 12:27:15 for II in *so ; do echo $II; done
+ 1069  11/19 - 12:27:30 cd ..
+ 1070  11/19 - 12:27:41 cp lib lib_backup
+ 1071  11/19 - 12:27:46 cp lib/ lib_backup/
+ 1072  11/19 - 12:27:58 mkdir lib_backup
+ 1073  11/19 - 12:28:08 cp lib/* lib_backup/
+ 1074  11/19 - 12:28:12 cd -
+ 1075  11/19 - 12:28:25 for II in *so ; do echo $II; ln -s $II $II.5.20 ;  done
+ 1076  11/19 - 12:28:35 ~/nwview 
+ 1077  11/19 - 12:29:27 dc
+ 1078  11/21 - 06:57:58 dc Desktop/
+ 1079  11/21 - 06:57:59 ls
+ 1080  11/21 - 06:58:06 cd Desktop/
+ 1081  11/21 - 06:58:07 ls
+ 1082  11/21 - 06:58:08 ll
+ 1083  11/21 - 06:58:17 pwd
+ 1084  11/21 - 06:58:22 uname -a
+ 1085  11/21 - 07:01:52 ls 
+ 1086  11/21 - 07:01:57 cd 
+ 1087  11/21 - 07:01:58 ls 
+ 1088  11/21 - 07:04:03 ll Desktop/ -rthl
+ 1089  11/21 - 07:04:07 ls
+ 1090  11/21 - 07:11:48 ifco
+ 1091  11/21 - 07:11:53 /sbin/ifconfig 
+ 1092  11/21 - 07:12:04 ssh 192.168.1.101
+ 1093  11/21 - 07:12:09 ssh  ojr@192.168.1.101
+ 1094  11/21 - 07:23:44 scp  ojr@192.168.1.101:~/DATA/NASTRO/20131122_dubna/cfg/NAMON_VME_UNIVERSSAL.xml ./
+ 1095  11/21 - 07:24:19 scp  ojr@192.168.1.101:/home/ojr/DATA/NASTRO/20131122_dubna/cfg/NAMON_VME_UNIVERSAL.xml ./
+ 1096  11/21 - 10:44:30 emacs NAMON_VME_UNIVERSAL.xml 
+ 1097  11/22 - 07:04:16 ls Desktop/
+ 1098  11/22 - 16:34:16 emacs NAMON_U_DUBNA.xml
+ 1099  11/23 - 03:21:35 ls
+ 1100  11/23 - 03:21:44 ls n*
+ 1101  11/21 - 07:07:06 grep "X-SuSE" Desktop/*
+ 1102  11/21 - 07:07:20 grep "exec" Desktop/*
+ 1103  11/21 - 07:07:31 grep "Exec" Desktop/*
+ 1104  11/21 - 07:08:11 find . -iname "konsole.desktop"
+ 1105  11/21 - 07:08:19 find .* -iname "konsole.desktop"
+ 1106  11/21 - 07:08:31 find .* -iname "*.desktop"
+ 1107  11/21 - 07:08:40 ls .config/
+ 1108  11/21 - 07:08:53 ls .kde4/
+ 1109  11/21 - 07:09:00 find .kde4/ -iname "*.desktop"
+ 1110  11/21 - 07:09:33 ./nwview --help
+ 1111  11/21 - 07:24:55 ./nwview -i 192.168.1.6  -x  ~/NAMON_VME_UNIVERSAL.xml 
+ 1112  11/21 - 07:26:45 ping 192.168.1.6
+ 1113  11/21 - 07:26:56 ./nwview -i 192.168.1.6  -x NAMON_VME_UNIVERSAL.xml 
+ 1114  11/21 - 10:48:50 ./nwview -i 192.168.1.6  -x NAMON_U_DUBNA.xml
+ 1115  11/27 - 23:17:24 mc
+ 1116  11/27 - 23:20:27 ./Namon
+ 1117  11/27 - 23:21:04 ./Namon.till090408
+ 1118  11/09 - 06:05:22 ./nwview -i 192.168.1.6  -x NAMON_VME_UNIVERSAL.xml 
+ 1119  11/11 - 02:19:16 less NAMON_VME_UNIVERSAL.xml
+ 1120  12/02 - 08:32:37 ping 192.168.1.6
+ 1121  12/02 - 08:36:08 ./nwview -i 192.168.1.6  -x NAMON_VME_UNIVERSAL.xml 
+ 1122  04/01 - 09:22:56 bg
+ 1123  04/01 - 09:24:31 history 
+
+
+
+
+
+
+
+
+
+
+######################################################ok
+zdenek@linux-5nww:~> ping 192.168.1.6
+
+
+
+zdenek@linux-5nww:~> ./nwview -i 192.168.1.6  -x NAMON_VME_UNIVERSAL.xml 
+
