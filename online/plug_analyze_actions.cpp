@@ -41,6 +41,33 @@ if (chan[19]>0) {
     }
 
  } 
+
+
+
+if (chan[20]>0) {
+  mtx4->Fill( mfact[4]*chan[4]+chan[20], chan[20] );  
+    if (chan[4]<3){
+    dia_m4->Fill(  chan[20] );
+  }
+    if ( (cm4_d!=NULL) && (cm4_d->IsInside(chan[4],chan[20]) )){
+      m4_d->Fill( mfact[4]*chan[4]+chan[20] );
+    }
+
+ } 
+
+
+
+if (chan[21]>0) {
+  mtx5->Fill( mfact[5]*chan[5]+chan[21], chan[21] );  
+    if (chan[5]<3){
+    dia_m5->Fill(  chan[21] );
+  }
+    if ( (cm5_d!=NULL) && (cm5_d->IsInside(chan[5],chan[21]) )){
+      m5_d->Fill( mfact[5]*chan[5]+chan[21] );
+    }
+
+ } 
+
 //if (chan[20]>0) {mtx4->Fill( mfact[4]*chan[4]+chan[20], chan[20] );  }
 //if (chan[21]>0) {mtx5->Fill( mfact[5]*chan[5]+chan[21], chan[21] );  }
 

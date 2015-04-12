@@ -61,9 +61,15 @@ do
 #  montage -tile -background darkgray    -  +repage $PIC
   convert -background darkgray -size 640x480 xc: - -flatten  $PIC
 ###display $PIC &
+
 OUTFILE=/tmp/streampic_00.jpg
 echo  sending $PIC to phoenix $OUTFILE and sleepin $TIMEOUT
 scp $PIC phoenix:$OUTFILE
+
+PIC2=oscilo.jpg
+OUTFILE2=/tmp/streampic_01.jpg
+echo  sending $PIC2 to phoenix $OUTFILE2 and sleepin $TIMEOUT
+scp $PIC2 phoenix:$OUTFILE2
 
 
 sleep $TIMEOUT

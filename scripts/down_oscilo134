@@ -2,7 +2,8 @@
 ##echo watch -n 10 " $0 \`date +%Y%m%d_%H%M%S.jpg\` "
 
 rm Image.png;
- wget --tries=1 http://192.168.1.134/Image.png; 
+
+wget --tries=1 http://192.168.1.134/Image.png; 
 
 convert Image.png -negate negated-image.jpg
 

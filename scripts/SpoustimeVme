@@ -1,0 +1,39 @@
+#!/bin/bash
+
+
+#EXPERDIR="20150401_3he26mg"
+
+EXPERDIR=`pwd | xargs dirname | xargs basename`
+
+#####MYRUNP="/tmp/NASTRO/20150401_3he26mg/cfg"
+
+##MYRUNP="/tmp/NASTRO/$EXPERDIR/cfg"
+MYRUNP=`pwd`
+
+echo ===============================================================
+echo experiment name = $EXPERDIR
+echo complete measurement directory +cfg = $MYRUNP
+echo ===============================================================
+
+
+
+echo "cd /tmp/wmonitor/bin/; ./a2818_load"
+echo "  lsmod | grep a28"
+echo "cd $MYRUNP"
+#
+
+
+DIROK=`grep $EXPERDIR  $MYRUNP/vme_irq_1event_2xV560.xml`
+
+if [ "$DIROK" = "" ]; then
+
+ echo vme_irq_1event_2xV560.xml DOES NOT contain $EXPERDIR !!!
+ echo you want to measure to some other directory
+ echo I STOP !!!
+else
+  echo  vme_irq_1event_2xV560.xml contains $EXPERDIR .... all ok ... running
+  echo ===============================================================START
+  /tmp/wmonitor/bin/nwvme2718  -x $MYRUNP/vme_irq_1event_2xV560.xml
+  echo ===============================================================FINISH
+fi
+
