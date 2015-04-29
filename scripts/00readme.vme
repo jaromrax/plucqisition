@@ -1,0 +1,5 @@
+ cd /tmp/wmonitor/bin/; ./a2818_load
+
+ cd /tmp/NASTRO/20140617_3he9be/cfg/;
+./SpoustimeVme 
+

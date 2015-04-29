@@ -1,0 +1,1515 @@
+<?xml version = '1.0'?>
+<!--
+	jednotlive PCI karty jsou indexovany od 0, a zalezi na chovani motherboardu
+	a jejich poradi na PCI sbernici ( mohou byt maximalne 4 )
+	cislo crate je dano poradim crate v CAEN sbernici CONET
+	a cisluji se od 0 do 7 ( muze jich byt v siti 8 )
+	typ interface je 2818, cenuz odpovifa 1
+	jak s tim koreluje vmeHandle?
+	vmehandle je definovan trojici cisel:
+	BdType je 2718
+	Link je cislo PCI slotu ( poradi, jak jsou 2818 umistovany do PC a vlastnostech motherboardu ) 0-3
+	BdNum je cislo 2718 v CONET siti 0-7 ( crate number )
+	vypada to tak, ze vmeHandle urcuje cil komunikace; 
+	data ktera prichazeji prostrednictvim urciteho handle
+	jsou identifikovana napr. GEO adresou a cislem crate ( cislo crate je treba do modulu zapsat )
+	v pripade s nekolika 2818 mohou byt GEO adresy a cisla crate totozne 
+	pro ruzne handle
+	
+	z manualu pro 785: ( mas 785AG NEMA PAUX vodice )
+	The geographical address is automatically read out at each RESET from the SN5..SN1
+	lines of the PAUX connector. Each slot of the VME crate is identified 
+	by the status of the SN5...SN1 lines: for example, the slot #5 will have 
+	these lines respectively at 00101 and consequently the module inserted 
+	in the slot #5 will have a GEO address set to 00101
+	pokud crate ci modul nemaji PAUX vodice, musi se programove naplnit GEO register,
+	pokud data obsahuji GEO adresu
+
+	GEO adresa musi byt pozici v crate
+    hraje roli identifikatoru modulu a jeji poloha v module headeru musi byt identicka
+    pro vsechny moduly; v ramci datovych slov, pokud existuji module headery muze byt
+    GEO na ruznych mistech slova
+	tedy GEO ( krome role v adresaci na vme sbernici ) se pouziva v intencich kamakovskeho vsn
+	nemusi tedy nutne odpovidat pozici pro virtualni moduly
+	pokud je GEO identicke s pozici v crate, ztezuje to udrzbu cfg xml souboru,
+	( ale jen tehdy, pokud je GEO adresa generovana PAUX sbernici, ta u nas neni )
+	na druhe strane se vyhnu duplicitam pri vymysleni GEO adres
+    GEO adresa je 24 bitova, z toho plyne, ze shiftem=19 distanuz ni zadane GEO<->vsn
+	-->
+<!--
+modul                                       kanaly   offset  pocet   GEO_value 
+controller2718                                                               1
+
+V785                                      1 -   32        1     32           5
+V560N_1                                  33 -   64       33     32          16 10  kanalu 32 bit
+V560N_2                                  65 -   96       65     32          16 10  kanalu 32 bit
+
+                                                                              hex
+LINUX_TIME                             1024 - 1027     1024      4          33 21  virtual 255+33
+WORD_COUNT_PER_ACQUISITION_UNIT        1028 - 1029     1028      2          34 22          255+34
+WORD_COUNT_PER_ACQUISITION_UNIT_History
+EVENT_HEADERS_PER_BLOCK                1030 - 1031     1030      2          35 23          255+35
+EVENT_HEADERS_PER_U_TICK               1032 - 1033     1032      2          36 24          255+36
+EVENT_HEADERS_PER_U_TICK_History
+EXTRA_HEADERS_PER_BLOCK                1034 - 1035     1034      2          37 25          255+37
+EXTRA_HEADERS_PER_BLOCK_History
+EXTRA_HEADERS_PER_U_TICK               1036 - 1037     1036      2          38 26          255+38
+EXTRA_HEADERS_PER_U_TICK_History
+MISSING_HEADERS_PER_BLOCK              1038 - 1039     1038      2          39 27          255+39
+MISSING_HEADERS_PER_BLOCK_History
+MISSING_HEADERS_PER_U_TICK             1040 - 1041     1040      2          40 28          255+40
+MISSING_HEADERS_PER_U_TICK_History
+MISSING_DATA_IN_EVENT_PER_BLOCK        1042 - 1043     1042      2          41 29          255+41
+MISSING_DATA_IN_EVENT_PER_BLOCK_History
+qaMISSING_DATA_IN_EVENT_PER_U_TICK       1044 - 1045     1044      2          42 2a          255+42
+MISSING_DATA_IN_EVENT_PER_U_TICK_History
+
+V785_SUBEVENTS_PER_U_TICK              1056 - 1057     1056      2          65 41          255+65 
+V785_SUBEVENTS_PER_sec                 1100 - 1101     1100      2          87 57          255+87
+
+bloky v krejtu ( 0,1-21 ) mohou produkovat subeventy, jejich pocet/u_tick
+modul ma virtualni GEO =  255 + 60 + GEO_value, 
+          kanal offset = 1046 + GEO_value * 2
+bloky v krejtu ( 0,1-21 ) mohou produkovat subeventy/sec  ( pocet modulu ve VME krejtu = 21 )
+modul ma virtualni GEO =  255 + 82 + GEO_value, 
+          kanal offset = 1090 + GEO_value * 2
+obsazuji moduly cislo: 60 - 103 a kanaly 1046 - 1133
+
+interrupt info module
+INTERRUPT_INFO                         1201 - 1204     1201      4          104 68         255+104
+LINUX_TIME_2                           1205 - 1208     1205      4          105 69 virtual 255+105
+
+
+-->
+
+<nwvme_cfg>
+	<module name="controller2718" base_GEO_address="0x080000"  crate="0" base_24_address="" base_32_address="0x00010000" GEO_value="1">
+	<actions>
+		<standby>
+<!--			<section>  -->
+				<!-- set FIFO mode ( cte se porad ze stejne adresy ) pro BLT cteci cyklus, treba, pokud se pouzije BLTReadCycle 
+				<command name="CAENVME_WriteRegister" register_address="0x01" input_value="0x0100" data_width="16" repeat="1"/>
+				-->
+				<!-- set 0.ty output=pulserA -->
+<!-- 				<command name="CAENVME_WriteRegister" register_address="0x0c" input_value="0x2" data_width="16" repeat="1"/> -->
+				<!-- pocet pulsu nekonecny, delka 1.6us -->
+<!--				<command name="CAENVME_WriteRegister" register_address="0x17" input_value="0x0100" data_width="16" repeat="1"/> -->
+				<!-- perioda 64*1.6us   sirka impulsu 1.6us -->
+<!--				<command name="CAENVME_WriteRegister" register_address="0x16" input_value="0x0140" data_width="16" repeat="1"/> -->
+<!--			</section> -->
+		</standby>
+		<run_start>
+			<section>
+				 <!-- nastaveni masky preruseni, odblokovana 0. ta linie  -->
+				<command name="CAENVME_WriteRegister" register_address="0x06" input_value="0x7e" data_width="16" repeat="1"/>
+			</section>
+<!--			<section> -->
+				<!-- start pulserA -->
+<!--				<command name="CAENVME_WriteRegister" register_address="0x0a" input_value="0x1" data_width="16" repeat="1"/>  -->
+<!--			</section> -->
+		</run_start>
+		<run_stop>
+			<section>
+				 <!-- nastaveni masky preruseni, zablokovano vse  -->
+				<command name="CAENVME_WriteRegister" register_address="0x06" input_value="0x7f" data_width="16" repeat="1"/>
+			</section>
+<!--			<section> -->
+				<!-- stop pulserA-->
+<!--				<command name="CAENVME_WriteRegister" register_address="0x10" input_value="0x1" data_width="16" repeat="1"/>  -->
+				<!-- clear 0.ty output=pulserA -->
+<!--				<command name="CAENVME_WriteRegister" register_address="0x12" input_value="0x2" data_width="16" repeat="1"/>-->
+<!--			</section> -->
+		</run_stop>
+		<block_start>
+		</block_start>
+		<block_stop>
+		</block_stop>
+		<interrupt>
+		</interrupt>
+		<polling>
+		</polling>
+	</actions>
+	</module>
+	<module name="V785" base_GEO_address="0x280000"  crate="0" base_24_address="" base_32_address="0x10050000" GEO_value="5">
+<!--     GEO adresa se nastavuje polohou v crate hodnotou na vodicich PAUX ( treba nastavit softwarem, PAUX nejsou )
+	 GEO_address se vyskytuje ve vsech slovech produkovanych modulem na stejnem miste 
+	 stejne tak i identifikator crate, ten je dany polohou crate v CONET siti
+	 jejich hodnota je ziskatelna pomoci masky a shiftu
+	 base24/32_address slouzi pro konstruovani plne adresy v rezimech A24/A32, nastavuje se prepinaci v modulu
+	 v jdnotlivych komandach se pak pouziva offset24_address nebo offset_32_address a plna sdresa je napr.
+	 base24_address+offset24_address
+	 base32_address+offset_32_address
+	 baseGEO_address+offsetGEO_address
+	 v pripade adresace pres GEO, mode je implicitne 24 bit a maska i shift jsou predem dane
+	 neplest s GEO identifikaci datovych slov
+	 urceni bitove sire adresy neni ve slove offset nutne, slouzi jen jako mnemotechnicka pomucka
+	 adresova sire a typ vme cyklu urcuje address modifier
+	 -->
+	<channels unified_channel_offset="1" channel_count="32"/>
+<!--     unifikovany kanal ma implicitni bitovou delku 16
+	 pro vice nez 16 bitova slova se unifikovane 16 bitove hodnoty 
+	 definuji v zavislosti na masce a cisle kanalu 
+	 module_identifier by mohl byt pod module_event, ale co kdyz ne vsechna slova
+	 v eventu budou obsahovat identifikaci?
+	 module_identifier oznacuje prislusnost slova k urcitemu modulu
+	 ac modul nemusi mit automaticky prirazovanou GEO adresu ( chybi PAX konektor )
+	 je treba hodnotu GEO zapsat do prislusneho registru
+	 identifier identifikuje typ slova: header identifikator, datovy identifikator apod.
+-->
+	<module_event>
+		<header>
+			<module_identifier GEO_address_mask="0xf8000000" GEO_address_shift="27" crate_mask="0x00ff0000" crate_shift="16"/>
+			<identifier value="0x02000000" mask="0x07000000"/>
+			<data_word_count mask="0x00003f00" shift="8"/>
+		</header>
+		<data data_word_count="HEADER_DEFINED" channel="YES">
+			<module_identifier GEO_address_mask="0xf8000000" GEO_address_shift="27" crate_mask="0x00ff0000" crate_shift="16"/>
+			<identifier value="0x00000000" mask="0x07000000"/>
+			<not_valid value="0x06000000" mask="0x07000000"/>
+			<value mask="0x00000FFF" shift="0"/>
+			<channel mask="0x001f0000" shift="16"/>
+		</data>
+		<footer>
+			<module_identifier GEO_address_mask="0xf8000000" GEO_address_shift="27" crate_mask="0x00ff0000" crate_shift="16"/>
+			<identifier value="0x04000000" mask="0x07000000"/>
+		</footer>
+	</module_event>
+	<actions>
+		<standby>
+			<section>
+	<!--
+		handle je nepovinny, nemusi byt znamy, mame zatim jedinou 2818 a jediny 2718
+		pokud by mel system pracovat s vice 2818 a 2718, identifikace by se provadela
+		pomoci kombinace: index 2818, index 2718 v siti CONET
+		datova sirka je 8. 16, 32, 64
+		nebo -16, -32, -64 bytes jsou prohozeny vme kontrolerem
+	<command name="WRITE" handle="0" address="16" address_modifier="" data_width="" input_value="0x0005" repeat="1"/>
+	-->
+				<!-- single shot reset -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1016" address_modifier="0x09" data_width="16" input_value="0x0000" repeat="1"/>
+				<!-- reset on -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1006" address_modifier="0x09" data_width="16" input_value="0x80" repeat="1"/>
+				<!-- reset off -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1008" address_modifier="0x09" data_width="16" input_value="0x80" repeat="1"/>
+				<!-- inhibit on, clear data, pointers and counter -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1032" address_modifier="0x09" data_width="16" input_value="0x0106" repeat="1"/>
+				<!-- no clear data, pointers and counter -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1034" address_modifier="0x09" data_width="16" input_value="0x0004" repeat="1"/>
+	                        <!-- zapis GEO -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1002" address_modifier="0x09" data_width="16" input_value="0x05" repeat="1"/>
+				<!-- interrupt vector = geo -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x100c" address_modifier="0x09" data_width="16" input_value="0x0005" repeat="1"/>
+				<!-- event trigger register 1 event generates interrupt -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1020" address_modifier="0x09" data_width="16" input_value="0x0001" repeat="1"/>
+				<!-- end of block bit -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1010" address_modifier="0x09" data_width="16" input_value="0x0004" repeat="1"/>
+				<!-- thresholds default no thresholds, mazou se pouze vypnutim napajeni -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1080" address_modifier="0x09" data_width="16" input_value="0x0040" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1082" address_modifier="0x09" data_width="16" input_value="0x0040" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1084" address_modifier="0x09" data_width="16" input_value="0x0040" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1086" address_modifier="0x09" data_width="16" input_value="0x0040" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1088" address_modifier="0x09" data_width="16" input_value="0x0040" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x108A" address_modifier="0x09" data_width="16" input_value="0x0040" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x108C" address_modifier="0x09" data_width="16" input_value="0x0050" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x108E" address_modifier="0x09" data_width="16" input_value="0x0040" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1090" address_modifier="0x09" data_width="16" input_value="0x0108" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1092" address_modifier="0x09" data_width="16" input_value="0x0108" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1094" address_modifier="0x09" data_width="16" input_value="0x0108" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1096" address_modifier="0x09" data_width="16" input_value="0x0108" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1098" address_modifier="0x09" data_width="16" input_value="0x0108" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x109A" address_modifier="0x09" data_width="16" input_value="0x0108" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x109C" address_modifier="0x09" data_width="16" input_value="0x0108" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x109E" address_modifier="0x09" data_width="16" input_value="0x0050" repeat="1"/>
+				
+				<command name="CAENVME_WriteCycle" offset_32_address="0x10A0" address_modifier="0x09" data_width="16" input_value="0x0050" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x10A2" address_modifier="0x09" data_width="16" input_value="0x0040" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x10A4" address_modifier="0x09" data_width="16" input_value="0x0050" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x10A6" address_modifier="0x09" data_width="16" input_value="0x0040" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x10A8" address_modifier="0x09" data_width="16" input_value="0x0050" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x10AA" address_modifier="0x09" data_width="16" input_value="0x0040" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x10AC" address_modifier="0x09" data_width="16" input_value="0x0050" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x10AE" address_modifier="0x09" data_width="16" input_value="0x0040" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x10B0" address_modifier="0x09" data_width="16" input_value="0x0108" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x10B2" address_modifier="0x09" data_width="16" input_value="0x0108" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x10B4" address_modifier="0x09" data_width="16" input_value="0x0108" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x10B6" address_modifier="0x09" data_width="16" input_value="0x0108" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x10B8" address_modifier="0x09" data_width="16" input_value="0x0108" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x10BA" address_modifier="0x09" data_width="16" input_value="0x0108" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x10BC" address_modifier="0x09" data_width="16" input_value="0x0108" repeat="1"/>
+				<command name="CAENVME_WriteCycle" offset_32_address="0x10BE" address_modifier="0x09" data_width="16" input_value="0x0040" repeat="1"/>
+			</section>
+		</standby>
+		<run_start>
+			<section>
+				<!-- cisti event counter register -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1040" address_modifier="0x09" data_width="16" input_value="0x0000" repeat="1"/>
+				<!-- interrupt level=7   0 znamena interrupt zakazane -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x100A" address_modifier="0x09" data_width="16" input_value="0x0007" repeat="1"/>
+			</section>
+		</run_start>
+		<run_stop>
+			<section>
+				<!-- interrupt level=0   interrupt zakazane -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x100A" address_modifier="0x09" data_width="16" input_value="0x0000" repeat="1"/>
+				<!-- single shot reset -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1016" address_modifier="0x09" data_width="16" input_value="0x0000" repeat="1"/>
+			</section>
+		</run_stop>
+		<block_start>
+			<section>
+				<!-- inhibit off -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1034" address_modifier="0x09" data_width="16" input_value="0x0006" repeat="1"/>
+			</section>
+		</block_start>
+		<block_stop>
+			<section>
+				<!-- inhibit on, clear data, pointers and counter -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x1032" address_modifier="0x09" data_width="16" input_value="0x0006" repeat="1"/>
+			</section>
+		</block_stop>
+<!--
+				<command name="CAENVME_MBLTReadCycle" offset_32_address="0x0000" address_modifier="0x08" data_width="32" how_smany_times="CDEPOSIT" input_common_deposit="0"  result="SAVE"/>
+CAENVME_MBLTReadCycle(int32_t Handle, uint32_t Address, void *Buffer,
+                      int Size, CVAddressModifier AM, int *count);
+-->
+		<interrupt>
+			<section>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x100E" address_modifier="0x09" data_width="16" output_deposit="0" result="RESTODEPOSIT"/>
+				<command name="SPREAD8BITSTO07COMMONDEPOSITS" input_deposit="0" input_svalue="DEPOSIT"/>
+				<command name="TESTCOMMONDEPOSIT" common_deposit="0" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				<!-- cte predpokladany module header  -->
+				<command name="CAENVME_ReadCycle" offset_32_address="0x0000" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<!-- do commonDeposit[0]umisti pocet dat +1, predpoklada, ze v LAST_RESULT je MODULE_HEADER  -->
+				<command name="GETDATACOUNTPLUS1" input_svalue="LAST_RESULT" output_common_deposit="0" result="RESTOCDEPOSIT"/>
+<!--  how_many_times se rozumi v jednotkach, danych data_width -->
+				<command name="CAENVME_BLTReadCycle" offset_32_address="0x0000" address_modifier="0x0B" data_width="32" how_smany_times="CDEPOSIT" input_common_deposit="0"  result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x100E" address_modifier="0x09" data_width="16" output_deposit="0" result="RESTODEPOSIT"/>
+				<command name="SPREAD8BITSTO07COMMONDEPOSITS" input_deposit="0" input_svalue="DEPOSIT"/>
+				<command name="TESTCOMMONDEPOSIT" common_deposit="0" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				<!-- cte predpokladany module header  -->
+				<command name="CAENVME_ReadCycle" offset_32_address="0x0000" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<!-- do commonDeposit[0]umisti pocet dat +1, predpoklada, ze v LAST_RESULT je MODULE_HEADER  -->
+				<command name="GETDATACOUNTPLUS1" input_svalue="LAST_RESULT" output_common_deposit="0" result="RESTOCDEPOSIT"/>
+				<command name="CAENVME_BLTReadCycle" offset_32_address="0x0000" address_modifier="0x0B" data_width="32" how_smany_times="CDEPOSIT" input_common_deposit="0"  result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x100E" address_modifier="0x09" data_width="16" output_deposit="0" result="RESTODEPOSIT"/>
+				<command name="SPREAD8BITSTO07COMMONDEPOSITS" input_deposit="0" input_svalue="DEPOSIT"/>
+				<command name="TESTCOMMONDEPOSIT" common_deposit="0" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				<!-- cte predpokladany module header  -->
+				<command name="CAENVME_ReadCycle" offset_32_address="0x0000" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<!-- do commonDeposit[0]umisti pocet dat +1, predpoklada, ze v LAST_RESULT je MODULE_HEADER  -->
+				<command name="GETDATACOUNTPLUS1" input_svalue="LAST_RESULT" output_common_deposit="0" result="RESTOCDEPOSIT"/>
+				<command name="CAENVME_BLTReadCycle" offset_32_address="0x0000" address_modifier="0x0B" data_width="32" how_smany_times="CDEPOSIT" input_common_deposit="0"  result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x100E" address_modifier="0x09" data_width="16" output_deposit="0" result="RESTODEPOSIT"/>
+				<command name="SPREAD8BITSTO07COMMONDEPOSITS" input_deposit="0" input_svalue="DEPOSIT"/>
+				<command name="TESTCOMMONDEPOSIT" common_deposit="0" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				<!-- cte predpokladany module header  -->
+				<command name="CAENVME_ReadCycle" offset_32_address="0x0000" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<!-- do commonDeposit[0]umisti pocet dat +1, predpoklada, ze v LAST_RESULT je MODULE_HEADER  -->
+				<command name="GETDATACOUNTPLUS1" input_svalue="LAST_RESULT" output_common_deposit="0" result="RESTOCDEPOSIT"/>
+				<command name="CAENVME_BLTReadCycle" offset_32_address="0x0000" address_modifier="0x0B" data_width="32" how_smany_times="CDEPOSIT" input_common_deposit="0"  result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x100E" address_modifier="0x09" data_width="16" output_deposit="0" result="RESTODEPOSIT"/>
+				<command name="SPREAD8BITSTO07COMMONDEPOSITS" input_deposit="0" input_svalue="DEPOSIT"/>
+				<command name="TESTCOMMONDEPOSIT" common_deposit="0" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				<!-- cte predpokladany module header  -->
+				<command name="CAENVME_ReadCycle" offset_32_address="0x0000" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<!-- do commonDeposit[0]umisti pocet dat +1, predpoklada, ze v LAST_RESULT je MODULE_HEADER  -->
+				<command name="GETDATACOUNTPLUS1" input_svalue="LAST_RESULT" output_common_deposit="0" result="RESTOCDEPOSIT"/>
+				<command name="CAENVME_BLTReadCycle" offset_32_address="0x0000" address_modifier="0x0B" data_width="32" how_smany_times="CDEPOSIT" input_common_deposit="0"  result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x100E" address_modifier="0x09" data_width="16" output_deposit="0" result="RESTODEPOSIT"/>
+				<command name="SPREAD8BITSTO07COMMONDEPOSITS" input_deposit="0" input_svalue="DEPOSIT"/>
+				<command name="TESTCOMMONDEPOSIT" common_deposit="0" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				<!-- cte predpokladany module header  -->
+				<command name="CAENVME_ReadCycle" offset_32_address="0x0000" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<!-- do commonDeposit[0]umisti pocet dat +1, predpoklada, ze v LAST_RESULT je MODULE_HEADER  -->
+				<command name="GETDATACOUNTPLUS1" input_svalue="LAST_RESULT" output_common_deposit="0" result="RESTOCDEPOSIT"/>
+				<command name="CAENVME_BLTReadCycle" offset_32_address="0x0000" address_modifier="0x0B" data_width="32" how_smany_times="CDEPOSIT" input_common_deposit="0"  result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x100E" address_modifier="0x09" data_width="16" output_deposit="0" result="RESTODEPOSIT"/>
+				<command name="SPREAD8BITSTO07COMMONDEPOSITS" input_deposit="0" input_svalue="DEPOSIT"/>
+				<command name="TESTCOMMONDEPOSIT" common_deposit="0" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				<!-- cte predpokladany module header  -->
+				<command name="CAENVME_ReadCycle" offset_32_address="0x0000" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<!-- do commonDeposit[0]umisti pocet dat +1, predpoklada, ze v LAST_RESULT je MODULE_HEADER  -->
+				<command name="GETDATACOUNTPLUS1" input_svalue="LAST_RESULT" output_common_deposit="0" result="RESTOCDEPOSIT"/>
+				<command name="CAENVME_BLTReadCycle" offset_32_address="0x0000" address_modifier="0x0B" data_width="32" how_smany_times="CDEPOSIT" input_common_deposit="0"  result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x100E" address_modifier="0x09" data_width="16" output_deposit="0" result="RESTODEPOSIT"/>
+				<command name="SPREAD8BITSTO07COMMONDEPOSITS" input_deposit="0" input_svalue="DEPOSIT"/>
+				<command name="TESTCOMMONDEPOSIT" common_deposit="0" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				<!-- cte predpokladany module header  -->
+				<command name="CAENVME_ReadCycle" offset_32_address="0x0000" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<!-- do commonDeposit[0]umisti pocet dat +1, predpoklada, ze v LAST_RESULT je MODULE_HEADER  -->
+				<command name="GETDATACOUNTPLUS1" input_svalue="LAST_RESULT" output_common_deposit="0" result="RESTOCDEPOSIT"/>
+				<command name="CAENVME_BLTReadCycle" offset_32_address="0x0000" address_modifier="0x0B" data_width="32" how_smany_times="CDEPOSIT" input_common_deposit="0"  result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x100E" address_modifier="0x09" data_width="16" output_deposit="0" result="RESTODEPOSIT"/>
+				<command name="SPREAD8BITSTO07COMMONDEPOSITS" input_deposit="0" input_svalue="DEPOSIT"/>
+				<command name="TESTCOMMONDEPOSIT" common_deposit="0" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				<!-- cte predpokladany module header  -->
+				<command name="CAENVME_ReadCycle" offset_32_address="0x0000" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<!-- do commonDeposit[0]umisti pocet dat +1, predpoklada, ze v LAST_RESULT je MODULE_HEADER  -->
+				<command name="GETDATACOUNTPLUS1" input_svalue="LAST_RESULT" output_common_deposit="0" result="RESTOCDEPOSIT"/>
+				<command name="CAENVME_BLTReadCycle" offset_32_address="0x0000" address_modifier="0x0B" data_width="32" how_smany_times="CDEPOSIT" input_common_deposit="0"  result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x100E" address_modifier="0x09" data_width="16" output_deposit="0" result="RESTODEPOSIT"/>
+				<command name="SPREAD8BITSTO07COMMONDEPOSITS" input_deposit="0" input_svalue="DEPOSIT"/>
+				<command name="TESTCOMMONDEPOSIT" common_deposit="0" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				<!-- cte predpokladany module header  -->
+				<command name="CAENVME_ReadCycle" offset_32_address="0x0000" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<!-- do commonDeposit[0]umisti pocet dat +1, predpoklada, ze v LAST_RESULT je MODULE_HEADER  -->
+				<command name="GETDATACOUNTPLUS1" input_svalue="LAST_RESULT" output_common_deposit="0" result="RESTOCDEPOSIT"/>
+				<command name="CAENVME_BLTReadCycle" offset_32_address="0x0000" address_modifier="0x0B" data_width="32" how_smany_times="CDEPOSIT" input_common_deposit="0"  result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x100E" address_modifier="0x09" data_width="16" output_deposit="0" result="RESTODEPOSIT"/>
+				<command name="SPREAD8BITSTO07COMMONDEPOSITS" input_deposit="0" input_svalue="DEPOSIT"/>
+				<command name="TESTCOMMONDEPOSIT" common_deposit="0" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				<!-- cte predpokladany module header  -->
+				<command name="CAENVME_ReadCycle" offset_32_address="0x0000" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<!-- do commonDeposit[0]umisti pocet dat +1, predpoklada, ze v LAST_RESULT je MODULE_HEADER  -->
+				<command name="GETDATACOUNTPLUS1" input_svalue="LAST_RESULT" output_common_deposit="0" result="RESTOCDEPOSIT"/>
+				<command name="CAENVME_BLTReadCycle" offset_32_address="0x0000" address_modifier="0x0B" data_width="32" how_smany_times="CDEPOSIT" input_common_deposit="0"  result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x100E" address_modifier="0x09" data_width="16" output_deposit="0" result="RESTODEPOSIT"/>
+				<command name="SPREAD8BITSTO07COMMONDEPOSITS" input_deposit="0" input_svalue="DEPOSIT"/>
+				<command name="TESTCOMMONDEPOSIT" common_deposit="0" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				<!-- cte predpokladany module header  -->
+				<command name="CAENVME_ReadCycle" offset_32_address="0x0000" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<!-- do commonDeposit[0]umisti pocet dat +1, predpoklada, ze v LAST_RESULT je MODULE_HEADER  -->
+				<command name="GETDATACOUNTPLUS1" input_svalue="LAST_RESULT" output_common_deposit="0" result="RESTOCDEPOSIT"/>
+				<command name="CAENVME_BLTReadCycle" offset_32_address="0x0000" address_modifier="0x0B" data_width="32" how_smany_times="CDEPOSIT" input_common_deposit="0"  result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x100E" address_modifier="0x09" data_width="16" output_deposit="0" result="RESTODEPOSIT"/>
+				<command name="SPREAD8BITSTO07COMMONDEPOSITS" input_deposit="0" input_svalue="DEPOSIT"/>
+				<command name="TESTCOMMONDEPOSIT" common_deposit="0" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				<!-- cte predpokladany module header  -->
+				<command name="CAENVME_ReadCycle" offset_32_address="0x0000" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<!-- do commonDeposit[0]umisti pocet dat +1, predpoklada, ze v LAST_RESULT je MODULE_HEADER  -->
+				<command name="GETDATACOUNTPLUS1" input_svalue="LAST_RESULT" output_common_deposit="0" result="RESTOCDEPOSIT"/>
+				<command name="CAENVME_BLTReadCycle" offset_32_address="0x0000" address_modifier="0x0B" data_width="32" how_smany_times="CDEPOSIT" input_common_deposit="0"  result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x100E" address_modifier="0x09" data_width="16" output_deposit="0" result="RESTODEPOSIT"/>
+				<command name="SPREAD8BITSTO07COMMONDEPOSITS" input_deposit="0" input_svalue="DEPOSIT"/>
+				<command name="TESTCOMMONDEPOSIT" common_deposit="0" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				<!-- cte predpokladany module header  -->
+				<command name="CAENVME_ReadCycle" offset_32_address="0x0000" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<!-- do commonDeposit[0]umisti pocet dat +1, predpoklada, ze v LAST_RESULT je MODULE_HEADER  -->
+				<command name="GETDATACOUNTPLUS1" input_svalue="LAST_RESULT" output_common_deposit="0" result="RESTOCDEPOSIT"/>
+				<command name="CAENVME_BLTReadCycle" offset_32_address="0x0000" address_modifier="0x0B" data_width="32" how_smany_times="CDEPOSIT" input_common_deposit="0"  result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x100E" address_modifier="0x09" data_width="16" output_deposit="0" result="RESTODEPOSIT"/>
+				<command name="SPREAD8BITSTO07COMMONDEPOSITS" input_deposit="0" input_svalue="DEPOSIT"/>
+				<command name="TESTCOMMONDEPOSIT" common_deposit="0" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				<!-- cte predpokladany module header  -->
+				<command name="CAENVME_ReadCycle" offset_32_address="0x0000" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<!-- do commonDeposit[0]umisti pocet dat +1, predpoklada, ze v LAST_RESULT je MODULE_HEADER  -->
+				<command name="GETDATACOUNTPLUS1" input_svalue="LAST_RESULT" output_common_deposit="0" result="RESTOCDEPOSIT"/>
+				<command name="CAENVME_BLTReadCycle" offset_32_address="0x0000" address_modifier="0x0B" data_width="32" how_smany_times="CDEPOSIT" input_common_deposit="0"  result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x100E" address_modifier="0x09" data_width="16" output_deposit="0" result="RESTODEPOSIT"/>
+				<command name="SPREAD8BITSTO07COMMONDEPOSITS" input_deposit="0" input_svalue="DEPOSIT"/>
+				<command name="TESTCOMMONDEPOSIT" common_deposit="0" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				<!-- cte predpokladany module header  -->
+				<command name="CAENVME_ReadCycle" offset_32_address="0x0000" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<!-- do commonDeposit[0]umisti pocet dat +1, predpoklada, ze v LAST_RESULT je MODULE_HEADER  -->
+				<command name="GETDATACOUNTPLUS1" input_svalue="LAST_RESULT" output_common_deposit="0" result="RESTOCDEPOSIT"/>
+				<command name="CAENVME_BLTReadCycle" offset_32_address="0x0000" address_modifier="0x0B" data_width="32" how_smany_times="CDEPOSIT" input_common_deposit="0"  result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+			</section>
+		</interrupt>
+		<polling>
+		</polling>
+	</actions>
+</module>
+<module name="V560N_1" base_GEO_address="0x800000"  crate="0" base_24_address="" base_32_address="0x20001000" GEO_value="16">
+	<channels unified_channel_offset="33" channel_count="32"/>
+	<module_event>
+		<header value="0x82001000">
+			<module_identifier GEO_address_mask="0xf1000000" GEO_address_shift="27" crate_mask="0x00ff0000" crate_shift="16"/>
+			<identifier value="0x02000000" mask="0x07000000"/>
+			<data_word_count mask="0x00003f00" shift="8"/>
+		</header>
+		<pattern value="0xfffffff"/>  <!-- pattern je povinny, pokud kanal neni sdruzeny s datovou hodnotou v komunikacnim slove  -->
+		<data data_word_count="HEADER_DEFINED" channel="NO">
+			<module_identifier/>
+			<identifier/>
+			<not_valid/>
+			<value mask="0xFFFFFFFF" shift="0"/>
+			<channel/>
+		</data>
+		<footer value="0x84000000">
+			<module_identifier GEO_address_mask="0xf1000000" GEO_address_shift="27" crate_mask="0x00ff0000" crate_shift="16"/>
+			<identifier value="0x04000000" mask="0x07000000"/>
+		</footer>
+	</module_event>
+	<actions>
+		<standby>
+			<section>
+				<!-- VETO set (inhibit on ) -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x52" address_modifier="0x09" data_width="16" input_value="0x0" repeat="1"/>
+				<!-- interrupt disable -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x0a" address_modifier="0x09" data_width="16" input_value="0x0" repeat="1"/>
+				<!-- scaler clear -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x50" address_modifier="0x09" data_width="16" input_value="0x0" repeat="1"/>
+			</section>
+		</standby>
+		<run_start>
+			<section>
+			</section>
+		</run_start>
+		<run_stop>
+			<section>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+			</section>
+			<section>
+				<!-- VETO set (inhibit on ) -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x52" address_modifier="0x09" data_width="16" input_value="0x0" repeat="1"/>
+				<!-- read all 32 counters) -->
+				<command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x10" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x14" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x18" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x1c" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x20" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x24" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x28" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x2c" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x30" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x34" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x38" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x3c" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x40" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x44" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x48" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x4c" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="MODULE_FOOTER" data_width="32" result="SAVE"/>
+				<!-- scaler clear -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x50" address_modifier="0x09" data_width="16" input_value="0x0" repeat="1"/>
+			</section>
+			<section>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+			</section>
+		</run_stop>
+		<block_start>
+			<section>
+				<!-- VETO reset (inhibit off ) -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x54" address_modifier="0x09" data_width="16" input_value="0x0" repeat="1"/>
+			</section>
+		</block_start>
+		<block_stop>
+			<section>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+			</section>
+			<section>
+				<!-- VETO set (inhibit on ) -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x52" address_modifier="0x09" data_width="16" input_value="0x0" repeat="1"/>
+				<!-- read all 32 counters) -->
+				<command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x10" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x14" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x18" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x1c" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x20" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x24" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x28" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x2c" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x30" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x34" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x38" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x3c" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x40" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x44" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x48" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x4c" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="MODULE_FOOTER" data_width="32" result="SAVE"/>
+				<!-- scaler clear -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x50" address_modifier="0x09" data_width="16" input_value="0x0" repeat="1"/>
+			</section>
+			<section>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+			</section>
+		</block_stop>
+		<interrupt>
+		</interrupt>
+		<polling>
+		</polling>
+	</actions>
+</module>
+<module name="V560N_2" base_GEO_address="0x880000"  crate="0" base_24_address="" base_32_address="0x20002000" GEO_value="17">
+	<channels unified_channel_offset="65" channel_count="32"/>
+	<module_event>
+		<header value="0x8A001000">
+			<module_identifier GEO_address_mask="0xf1000000" GEO_address_shift="27" crate_mask="0x00ff0000" crate_shift="16"/>
+			<identifier value="0x02000000" mask="0x07000000"/>
+			<data_word_count mask="0x00003f00" shift="8"/>
+		</header>
+		<pattern value="0xfffffff"/>  <!-- pattern je povinny, pokud kanal neni sdruzeny s datovou hodnotou v komunikacnim slove  -->
+		<data data_word_count="HEADER_DEFINED" channel="NO">
+			<module_identifier/>
+			<identifier/>
+			<not_valid/>
+			<value mask="0xFFFFFFFF" shift="0"/>
+			<channel/>
+		</data>
+		<footer value="0x8C000000">
+			<module_identifier GEO_address_mask="0xf1000000" GEO_address_shift="27" crate_mask="0x00ff0000" crate_shift="16"/>
+			<identifier value="0x04000000" mask="0x07000000"/>
+		</footer>
+	</module_event>
+	<actions>
+		<standby>
+			<section>
+				<!-- VETO set (inhibit on ) -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x52" address_modifier="0x09" data_width="16" input_value="0x0" repeat="1"/>
+				<!-- interrupt disable -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x0a" address_modifier="0x09" data_width="16" input_value="0x0" repeat="1"/>
+				<!-- scaler clear -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x50" address_modifier="0x09" data_width="16" input_value="0x0" repeat="1"/>
+			</section>
+		</standby>
+		<run_start>
+			<section>
+			</section>
+		</run_start>
+		<run_stop>
+			<section>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+			</section>
+			<section>
+				<!-- VETO set (inhibit on ) -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x52" address_modifier="0x09" data_width="16" input_value="0x0" repeat="1"/>
+				<!-- read all 32 counters) -->
+				<command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x10" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x14" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x18" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x1c" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x20" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x24" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x28" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x2c" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x30" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x34" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x38" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x3c" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x40" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x44" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x48" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x4c" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="MODULE_FOOTER" data_width="32" result="SAVE"/>
+				<!-- scaler clear -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x50" address_modifier="0x09" data_width="16" input_value="0x0" repeat="1"/>
+			</section>
+			<section>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+			</section>
+		</run_stop>
+		<block_start>
+			<section>
+				<!-- VETO reset (inhibit off ) -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x54" address_modifier="0x09" data_width="16" input_value="0x0" repeat="1"/>
+			</section>
+		</block_start>
+		<block_stop>
+			<section>
+				<command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+			</section>
+			<section>
+				<!-- VETO set (inhibit on ) -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x52" address_modifier="0x09" data_width="16" input_value="0x0" repeat="1"/>
+				<!-- read all 32 counters) -->
+				<command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x10" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x14" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x18" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x1c" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x20" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x24" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x28" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x2c" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x30" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x34" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x38" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x3c" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x40" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x44" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x48" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="CAENVME_ReadCycle" offset_32_address="0x4c" address_modifier="0x09" data_width="32" result="SAVE"/>
+				<command name="INSERTVALUE" input_svalue="MODULE_FOOTER" data_width="32" result="SAVE"/>
+				<!-- scaler clear -->
+				<command name="CAENVME_WriteCycle" offset_32_address="0x50" address_modifier="0x09" data_width="16" input_value="0x0" repeat="1"/>
+			</section>
+			<section>
+				<command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+			</section>
+		</block_stop>
+		<interrupt>
+		</interrupt>
+		<polling>
+		</polling>
+	</actions>
+</module>
+    <module name="LINUX_TIME_1" crate="0" GEO_value="33" bit16_used="YES">
+        <channels  channel_count="4" unified_channel_offset="1024"/>
+        <module_event>
+	        <header value="0xfa000421">
+			    <identifier value="0x02000000" mask="0x07000000"/>
+                <data_word_count mask="0x0F00" shift="8"/>
+            </header>
+	        <pattern value="0x000f"/>
+            <data data_word_count="HEADER_DEFINED">
+                <value mask="0xFFFF"/>
+            </data>
+		    <footer value="0xfc000000">
+			    <identifier value="0x04000000" mask="0x07000000"/>
+		    </footer>
+        </module_event>
+    <actions>
+        <standby>
+        </standby>
+        <run_start>
+          <section>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+              <command name="GETLINUXTIME" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </run_start>
+        <run_stop>
+          <section>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+              <command name="GETLINUXTIME" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </run_stop>
+        <block_start>
+          <section>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+              <command name="GETLINUXTIME" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </block_start>
+        <block_stop>
+          <section>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+              <command name="GETLINUXTIME" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </block_stop>
+        <interrupt>
+          <section>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+              <command name="GETLINUXTIME" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </interrupt>
+        <polling>
+          <section polling_divider="1">
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+              <command name="GETLINUXTIME" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </polling>
+      </actions>
+  </module>
+    <module name="LINUX_TIME_2" crate="0" GEO_value="105" bit16_used="YES">
+        <channels  channel_count="4" unified_channel_offset="1205"/>
+        <module_event>
+	        <header value="0xfa000469">
+			    <identifier value="0x02000000" mask="0x07000000"/>
+                <data_word_count mask="0x0F00" shift="8"/>
+            </header>
+	        <pattern value="0x000f"/>
+            <data data_word_count="HEADER_DEFINED">
+                <value mask="0xFFFF"/>
+            </data>
+		    <footer value="0xfc000000">
+			    <identifier value="0x04000000" mask="0x07000000"/>
+		    </footer>
+        </module_event>
+    <actions>
+        <standby>
+        </standby>
+        <run_start>
+          <section>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+              <command name="GETLINUXTIME" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </run_start>
+        <run_stop>
+          <section>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+              <command name="GETLINUXTIME" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </run_stop>
+        <block_start>
+          <section>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+              <command name="GETLINUXTIME" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </block_start>
+        <block_stop>
+          <section>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+              <command name="GETLINUXTIME" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </block_stop>
+        <interrupt>
+          <section>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+              <command name="GETLINUXTIME" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </interrupt>
+        <polling>
+          <section polling_divider="1">
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+              <command name="GETLINUXTIME" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </polling>
+      </actions>
+  </module>
+
+    <module name="INTERRUPT_INFO" crate="0" GEO_value="104" bit16_used="NO">
+        <channels  channel_count="4" unified_channel_offset="1201"/>
+        <module_event>
+	    <header value="0xfa000468">
+		    <identifier value="0x02000000" mask="0x07000000"/>
+                    <data_word_count mask="0x0F00" shift="8"/>
+            </header>
+	    <pattern value="0x000f"/>
+            <data data_word_count="HEADER_DEFINED">
+                <value mask="0xFFFF"/>
+            </data>
+	    <footer value="0xfc000000">
+		    <identifier value="0x04000000" mask="0x07000000"/>
+	    </footer>
+        </module_event>
+    <actions>
+        <standby>
+        </standby>
+        <run_start>
+        </run_start>
+        <run_stop>
+        </run_stop>
+        <block_start>
+        </block_start>
+        <block_stop>
+        </block_stop>
+        <interrupt>
+          <section>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+              <command name="CAENVME_ReadCycle" full_address="0x1005100e" address_modifier="0x09" data_width="16" result="SAVE"/>
+              <command name="CAENVME_ReadCycle" full_address="0x1005100a" address_modifier="0x09" data_width="16" result="SAVE"/>
+              <command name="CAENVME_ReadCycle" full_address="0x1005100c" address_modifier="0x09" data_width="16" result="SAVE"/>
+              <command name="CAENVME_ReadCycle" full_address="0x10051020" address_modifier="0x09" data_width="16" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </interrupt>
+        <polling>
+        </polling>
+      </actions>
+  </module>
+<!-- drive nW16_PER_POLLING  inkrementuje se poctem dat, sklizenych bud behem polling obsluhy nebo interruptu -->
+  <module name="WORD_COUNT_PER_ACQUISITION_UNIT" GEO_value="34" bit16_used="YES">
+        <channels  channel_count="2" unified_channel_offset="1028"/>
+        <module_event>
+	        <header value="0xfa000222">
+			    <identifier value="0x02000000" mask="0x07000000"/>
+                <data_word_count mask="0x0F00" shift="8"/>
+            </header>
+	        <pattern value="0x0003"/>
+            <data data_word_count="HEADER_DEFINED">
+                <value mask="0xFFFF"/>
+            </data>
+		    <footer value="0xfc000000">
+			    <identifier value="0x04000000" mask="0x07000000"/>
+		    </footer>
+        </module_event>
+    <actions>
+        <standby>
+        </standby>
+        <run_start>
+        </run_start>
+        <run_stop>
+        </run_stop>
+        <block_start>
+        </block_start>
+        <block_stop>
+        </block_stop>
+        <interrupt>
+          <section>
+			  <command name="GETUTICKDATAREADY"/>
+			  <command name="TESTLASTRESULT" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+				  <command name="GETW16PERPOLLING" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </interrupt>
+        <polling>
+          <section polling_divider="1">
+			  <command name="GETUTICKDATAREADY"/>
+			  <command name="TESTLASTRESULT" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+				  <command name="GETW16PERPOLLING" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </polling>
+      </actions>
+  </module>
+
+<!-- drive CRATE_HEADERS_PER_BLOCK  inkrementuje se poctem dat, sklizenych bud behem polling obsluhy nebo interruptu -->
+  <module name="EVENT_HEADERS_PER_BLOCK" GEO_value="35" bit16_used="YES">
+        <channels  channel_count="2" unified_channel_offset="1030"/>
+        <module_event>
+	        <header value="0xfa000223">
+			    <identifier value="0x02000000" mask="0x07000000"/>
+                <data_word_count mask="0x0F00" shift="8"/>
+            </header>
+	        <pattern value="0x0003"/>
+            <data data_word_count="HEADER_DEFINED">
+                <value mask="0xFFFF"/>
+            </data>
+		    <footer value="0xfc000000">
+			    <identifier value="0x04000000" mask="0x07000000"/>
+		    </footer>
+        </module_event>
+    <actions>
+        <standby>
+        </standby>
+        <run_start>
+        </run_start>
+        <run_stop>
+        </run_stop>
+        <block_start>
+        </block_start>
+        <block_stop>
+          <section>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+			  <command name="GETCRATEHEADERSPERBLOCKU" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </block_stop>
+        <interrupt>
+        </interrupt>
+        <polling>
+        </polling>
+      </actions>
+  </module>
+
+<!-- drive CRATE_HEADERS_PER_U_TICK  inkrementuje se poctem dat, sklizenych bud behem polling obsluhy nebo interruptu -->
+  <module name="EVENT_HEADERS_PER_U_TICK" GEO_value="36" bit16_used="YES">
+        <channels  channel_count="2" unified_channel_offset="1032"/>
+        <module_event>
+	        <header value="0xfa000224">
+			    <identifier value="0x02000000" mask="0x07000000"/>
+                <data_word_count mask="0x0F00" shift="8"/>
+            </header>
+	        <pattern value="0x0003"/>
+            <data data_word_count="HEADER_DEFINED">
+                <value mask="0xFFFF"/>
+            </data>
+		    <footer value="0xfc000000">
+			    <identifier value="0x04000000" mask="0x07000000"/>
+		    </footer>
+        </module_event>
+    <actions>
+        <standby>
+        </standby>
+        <run_start>
+        </run_start>
+        <run_stop>
+        </run_stop>
+        <block_start>
+        </block_start>
+        <block_stop>
+        </block_stop>
+        <interrupt>
+          <section>
+			  <command name="GETUTICKDATAREADY"/>
+			  <command name="TESTLASTRESULT" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+			  <command name="GETCRATEHEADERSPERTICKU" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </interrupt>
+        <polling>
+          <section polling_divider="1">
+			  <command name="GETUTICKDATAREADY"/>
+			  <command name="TESTLASTRESULT" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+			  <command name="GETCRATEHEADERSPERTICKU" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </polling>
+      </actions>
+  </module>
+
+<!-- drive EXTRA_16BIT_SET_WORDS_PER_BLOCK  inkrementuje se poctem dat, sklizenych bud behem polling obsluhy nebo interruptu -->
+  <module name="EXTRA_HEADERS_PER_BLOCK" GEO_value="37" bit16_used="YES">
+        <channels  channel_count="2" unified_channel_offset="1034"/>
+        <module_event>
+	        <header value="0xfa000225">
+			    <identifier value="0x02000000" mask="0x07000000"/>
+                <data_word_count mask="0x0F00" shift="8"/>
+            </header>
+	        <pattern value="0x0003"/>
+            <data data_word_count="HEADER_DEFINED">
+                <value mask="0xFFFF"/>
+            </data>
+		    <footer value="0xfc000000">
+			    <identifier value="0x04000000" mask="0x07000000"/>
+		    </footer>
+        </module_event>
+    <actions>
+        <standby>
+        </standby>
+        <run_start>
+        </run_start>
+        <run_stop>
+        </run_stop>
+        <block_start>
+        </block_start>
+        <block_stop>
+          <section>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+			  <command name="GETEXTRA16THSETBITWORDSU" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </block_stop>
+        <interrupt>
+        </interrupt>
+        <polling>
+        </polling>
+      </actions>
+  </module>
+
+<!-- drive EXTRA_16BIT_SET_WORDS_PER_U_TICK  inkrementuje se poctem dat, sklizenych bud behem polling obsluhy nebo interruptu -->
+  <module name="EXTRA_HEADERS_PER_U_TICK" GEO_value="38" bit16_used="YES">
+        <channels  channel_count="2" unified_channel_offset="1036"/>
+        <module_event>
+	        <header value="0xfa000226">
+			    <identifier value="0x02000000" mask="0x07000000"/>
+                <data_word_count mask="0x0F00" shift="8"/>
+            </header>
+	        <pattern value="0x0003"/>
+            <data data_word_count="HEADER_DEFINED">
+                <value mask="0xFFFF"/>
+            </data>
+		    <footer value="0xfc000000">
+			    <identifier value="0x04000000" mask="0x07000000"/>
+		    </footer>
+        </module_event>
+    <actions>
+        <standby>
+        </standby>
+        <run_start>
+        </run_start>
+        <run_stop>
+        </run_stop>
+        <block_start>
+        </block_start>
+        <block_stop>
+        </block_stop>
+        <interrupt>
+          <section>
+			  <command name="GETUTICKDATAREADY"/>
+			  <command name="TESTLASTRESULT" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+			  <command name="GETEXTRA16THSETBITWORDSPERTICKU" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </interrupt>
+        <polling>
+          <section polling_divider="1">
+			  <command name="GETUTICKDATAREADY"/>
+			  <command name="TESTLASTRESULT" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+			  <command name="GETEXTRA16THSETBITWORDSPERTICKU" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </polling>
+      </actions>
+  </module>
+
+<!-- drive MISSING_16BIT_SET_WORDS_PER_BLOCK  inkrementuje se poctem dat, sklizenych bud behem polling obsluhy nebo interruptu -->
+  <module name="MISSING_HEADERS_PER_BLOCK" GEO_value="39" bit16_used="YES">
+        <channels  channel_count="2" unified_channel_offset="1038"/>
+        <module_event>
+	        <header value="0xfa000227">
+			    <identifier value="0x02000000" mask="0x07000000"/>
+                <data_word_count mask="0x0F00" shift="8"/>
+            </header>
+	        <pattern value="0x0003"/>
+            <data data_word_count="HEADER_DEFINED">
+                <value mask="0xFFFF"/>
+            </data>
+		    <footer value="0xfc000000">
+			    <identifier value="0x04000000" mask="0x07000000"/>
+		    </footer>
+        </module_event>
+    <actions>
+        <standby>
+        </standby>
+        <run_start>
+        </run_start>
+        <run_stop>
+        </run_stop>
+        <block_start>
+        </block_start>
+        <block_stop>
+          <section>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+			  <command name="GETMISSING16THSETBITWORDSU" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </block_stop>
+        <interrupt>
+        </interrupt>
+        <polling>
+        </polling>
+      </actions>
+  </module>
+
+<!-- drive MISSING_16BIT_SET_WORDS_PER_U_TICK  inkrementuje se poctem dat, sklizenych bud behem polling obsluhy nebo interruptu -->
+  <module name="MISSING_HEADERS_PER_U_TICK" GEO_value="40" bit16_used="YES">
+        <channels  channel_count="2" unified_channel_offset="1040"/>
+        <module_event>
+	        <header value="0xfa000228">
+			    <identifier value="0x02000000" mask="0x07000000"/>
+                <data_word_count mask="0x0F00" shift="8"/>
+            </header>
+	        <pattern value="0x0003"/>
+            <data data_word_count="HEADER_DEFINED">
+                <value mask="0xFFFF"/>
+            </data>
+		    <footer value="0xfc000000">
+			    <identifier value="0x04000000" mask="0x07000000"/>
+		    </footer>
+        </module_event>
+    <actions>
+        <standby>
+        </standby>
+        <run_start>
+        </run_start>
+        <run_stop>
+        </run_stop>
+        <block_start>
+        </block_start>
+        <block_stop>
+        </block_stop>
+        <interrupt>
+          <section>
+			  <command name="GETUTICKDATAREADY"/>
+			  <command name="TESTLASTRESULT" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+			  <command name="GETMISSING16THSETBITWORDSPERTICKU" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </interrupt>
+        <polling>
+          <section polling_divider="1">
+			  <command name="GETUTICKDATAREADY"/>
+			  <command name="TESTLASTRESULT" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+			  <command name="GETMISSING16THSETBITWORDSPERTICKU" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </polling>
+      </actions>
+  </module>
+
+<!-- drive NO_DATA_TO_CONTINUE_PANIC_PER_BLOCK  inkrementuje se poctem dat, sklizenych bud behem polling obsluhy nebo interruptu -->
+  <module name="MISSING_DATA_IN_EVENT_PER_BLOCK" GEO_value="41" bit16_used="YES">
+        <channels  channel_count="2" unified_channel_offset="1042"/>
+        <module_event>
+	        <header value="0xfa000229">
+			    <identifier value="0x02000000" mask="0x07000000"/>
+                <data_word_count mask="0x0F00" shift="8"/>
+            </header>
+	        <pattern value="0x0003"/>
+            <data data_word_count="HEADER_DEFINED">
+                <value mask="0xFFFF"/>
+            </data>
+		    <footer value="0xfc000000">
+			    <identifier value="0x04000000" mask="0x07000000"/>
+		    </footer>
+        </module_event>
+    <actions>
+        <standby>
+        </standby>
+        <run_start>
+        </run_start>
+        <run_stop>
+        </run_stop>
+        <block_start>
+        </block_start>
+        <block_stop>
+          <section>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+			  <command name="GETNODATATOCONTINUEPANICU" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </block_stop>
+        <interrupt>
+        </interrupt>
+        <polling>
+        </polling>
+      </actions>
+  </module>
+
+<!-- drive NO_DATA_TO_CONTINUE_PANIC_PER_U_TICK  inkrementuje se poctem dat, sklizenych bud behem polling obsluhy nebo interruptu -->
+  <module name="MISSING_DATA_IN_EVENT_PER_U_TICK" GEO_value="42" bit16_used="YES">
+        <channels  channel_count="2" unified_channel_offset="1044"/>
+        <module_event>
+	        <header value="0xfa00022a">
+			    <identifier value="0x02000000" mask="0x07000000"/>
+                <data_word_count mask="0x0F00" shift="8"/>
+            </header>
+	        <pattern value="0x0003"/>
+            <data data_word_count="HEADER_DEFINED">
+                <value mask="0xFFFF"/>
+            </data>
+		    <footer value="0xfc000000">
+			    <identifier value="0x04000000" mask="0x07000000"/>
+		    </footer>
+        </module_event>
+    <actions>
+        <standby>
+        </standby>
+        <run_start>
+        </run_start>
+        <run_stop>
+        </run_stop>
+        <block_start>
+        </block_start>
+        <block_stop>
+        </block_stop>
+        <interrupt>
+          <section>
+			  <command name="GETUTICKDATAREADY"/>
+			  <command name="TESTLASTRESULT" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+			  <command name="GETNODATATOCONTINUEPANICPERTICKU" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </interrupt>
+        <polling>
+          <section polling_divider="1">
+			  <command name="GETUTICKDATAREADY"/>
+			  <command name="TESTLASTRESULT" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+			  <command name="GETNODATATOCONTINUEPANICPERTICKU" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="MODULE_FOOTER" result="SAVE"/>
+              <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+          </section>
+        </polling>
+      </actions>
+  </module>
+
+  <module name="V785_SUBEVENTS_PER_U_TICK" GEO_value="65" bit16_used="YES">
+        <channels  channel_count="2" unified_channel_offset="1056"/>
+        <module_event>
+	        <header value="0xfa000241">
+			    <identifier value="0x02000000" mask="0x07000000"/>
+                <data_word_count mask="0x0F00" shift="8"/>
+            </header>
+	        <pattern value="0x0003"/>
+            <data data_word_count="HEADER_DEFINED">
+                <value mask="0xFFFF"/>
+            </data>
+		    <footer value="0xfc000000">
+			    <identifier value="0x04000000" mask="0x07000000"/>
+		    </footer>
+        </module_event>
+    <actions>
+        <standby>
+        </standby>
+        <run_start>
+        </run_start>
+        <run_stop>
+        </run_stop>
+        <block_start>
+        </block_start>
+        <block_stop>
+        </block_stop>
+        <interrupt>
+  			  <section>
+				  <command name="GETUTICKDATAREADY"/>
+				  <command name="TESTLASTRESULT" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				  <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				  <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+				  <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+				  <command name="GETMODULEHEADERSPERTICKU" input_value="5" result="SAVE"/>
+				  <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+			  </section>
+        </interrupt>
+        <polling>
+  			  <section>
+				  <command name="GETUTICKDATAREADY"/>
+				  <command name="TESTLASTRESULT" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				  <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				  <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+				  <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+				  <command name="GETMODULEHEADERSPERTICKU" input_value="5" result="SAVE"/>
+				  <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+			  </section>
+        </polling>
+      </actions>
+  </module>
+
+  <module name="V785_SUBEVENTS_PER_sec" GEO_value="87" bit16_used="YES">
+        <channels  channel_count="2" unified_channel_offset="1100"/>
+        <module_event>
+	        <header value="0xfa000257">
+			    <identifier value="0x02000000" mask="0x07000000"/>
+                <data_word_count mask="0x0F00" shift="8"/>
+            </header>
+	        <pattern value="0x0003"/>
+            <data data_word_count="HEADER_DEFINED">
+                <value mask="0xFFFF"/>
+            </data>
+		    <footer value="0xfc000000">
+			    <identifier value="0x04000000" mask="0x07000000"/>
+		    </footer>
+        </module_event>
+    <actions>
+        <standby>
+        </standby>
+        <run_start>
+        </run_start>
+        <run_stop>
+        </run_stop>
+        <block_start>
+        </block_start>
+        <block_stop>
+        </block_stop>
+        <interrupt>
+  			  <section>
+				  <command name="GETUTICKDATAREADY"/>
+				  <command name="TESTLASTRESULT" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				  <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				  <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+				  <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+				  <command name="GETMODULEHEADERSPERSECU" input_value="5" result="SAVE"/>
+				  <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+			  </section>
+        </interrupt>
+        <polling polling_divider="1000">
+  			  <section>
+				  <command name="GETUTICKDATAREADY"/>
+				  <command name="TESTLASTRESULT" test="EQ" test_value="1" success="CONTINUE" failure="BREAKSECTION"/>
+				  <command name="INSERTVALUE" input_svalue="CRATE_HEADER" result="SAVE"/>
+				  <command name="INSERTVALUE" input_svalue="MODULE_HEADER" result="SAVE"/>
+				  <command name="INSERTVALUE" input_svalue="MODULE_PATTERN" result="SAVE"/>
+				  <command name="GETMODULEHEADERSPERSECU" input_value="5" result="SAVE"/>
+				  <command name="INSERTVALUE" input_svalue="CRATE_FOOTER" result="SAVE"/>
+			  </section>
+        </polling>
+      </actions>
+  </module>
+
+
+
+<crate_event>
+	<!--
+		<crate_event outside_event_data_count="2">
+			-->
+				<header value="0xB0000000"/>
+				<footer value="0xB8000000"/>
+				<module_header_GEO_ID mask= "0xf8000000" shift="27"/>         <!-- kde se nachazi GEO v module headeru -->             
+				<module_header_ID     value="0x02000000" mask="0x07000000"/>  <!-- identifikace module headeru  -->
+				<module_footer_ID     value="0x04000000" mask="0x07000000"/>  <!-- identifikace module footeru  -->
+</crate_event>
+			
+<crate number="0">
+<!--
+<polling sleeping="1000"/>
+-->
+<!--  mask aktivni bity: 6543210  1-interrupt zakazan na prislusne linii
+	  napr. chci odblokovat preruseni na linii 1, maska bude mit hodnotu 0x7d
+	  timeout[milis]-->
+<!-- aktivni je 0.ta linie -->
+
+	<interrupt mask="0x40" timeout="400"/>
+
+</crate>
+  <framework>
+    <standby>
+      <section>
+	      <command name="CAENVME_SystemReset" />
+      </section>
+      <include module="V785" GEO_vsn="5"/>
+      <include module="V560N_1" GEO_vsn="16"/> 
+      <include module="V560N_2" GEO_vsn="17"/> 
+    </standby>
+    <run_start>
+<!--      <include module="controller2718" GEO_vsn="1"/>  -->
+		<section>
+			<command name="INSERTVALUE" input_svalue="RUN_HEADER" result="SAVE"/>
+		</section>
+      <include module="controller2718" GEO_vsn="1"/>
+      <include module="V785" GEO_vsn="5"/>
+    </run_start>
+    <run_stop>
+      <include module="controller2718" GEO_vsn="1"/>
+      <include module="V785" GEO_vsn="5"/>
+		<section>
+			<command name="INSERTVALUE" input_svalue="RUN_FOOTER" result="SAVE"/>
+		</section>
+    </run_stop>
+    <block_start>
+        <include module="V785" GEO_vsn="5"/>
+	<include module="V560N_1" GEO_vsn="16"/>
+	<include module="V560N_2" GEO_vsn="17"/>
+    </block_start>
+    <block_stop>
+      <include module="V785" GEO_vsn="5"/>
+      <include module="V560N_1" GEO_vsn="16"/> 
+      <include module="V560N_2" GEO_vsn="17"/> 
+<!--      <include module="EVENT_HEADERS_PER_BLOCK" GEO_vsn="35"/>
+      <include module="EXTRA_HEADERS_PER_BLOCK" GEO_vsn="37"/>
+      <include module="MISSING_HEADERS_PER_BLOCK" GEO_vsn="39"/>
+      <include module="MISSING_DATA_IN_EVENT_PER_BLOCK" GEO_vsn="41"/> -->
+    </block_stop>
+    <interrupt>
+      <include module="LINUX_TIME_1" GEO_vsn="33"/>
+<!--      <include module="INTERRUPT_INFO" GEO_vsn="104"/>
+          <include module="V785_SUBEVENTS_PER_sec" GEO_vsn="87"/> -->
+      <include module="V785" GEO_vsn="5"/>
+      <include module="V785" GEO_vsn="5"/>
+<!--      <include module="WORD_COUNT_PER_ACQUISITION_UNIT" GEO_vsn="34"/>
+          <include module="EVENT_HEADERS_PER_U_TICK" GEO_vsn="36"/>
+          <include module="EXTRA_HEADERS_PER_U_TICK" GEO_vsn="38"/>
+          <include module="MISSING_HEADERS_PER_U_TICK" GEO_vsn="40"/>
+          <include module="MISSING_DATA_IN_EVENT_PER_U_TICK" GEO_vsn="42"/>
+          <include module="V785_SUBEVENTS_PER_U_TICK" GEO_vsn="65"/>
+          <include module="INTERRUPT_INFO" GEO_vsn="104"/>
+          <include module="LINUX_TIME_2" GEO_vsn="105"/>   -->
+      <include module="LINUX_TIME_1" GEO_vsn="33"/>
+    </interrupt>
+    <polling>
+    </polling>
+  </framework>
+  <run name="nastro" file_extension="vme" number="1" wdir="/tmp/NASTRO/20150401_3he26mg/">
+      <unified_thread switch_on="YES" recording_step="20000"/>
+      <raw_data file="YES" recording_step="21000"/>
+      <!-- casovy interval [us] pro doplneni novych dat do souboru -->
+      <unified_data file="YES" recording_step="22000"/>
+      <raw_stream switch_on="YES" service="9301" stream_step="1000000"/>
+      <unified_stream switch_on="YES" service="9302" stream_step="1000000"/>
+      <verbose level="0xc001"/>
+      <header value="0xC0000000"/>
+      <footer value="0xC8000000"/>
+      <block size="1200000" quantity="1000000" duration="60000" number="7020"/>
+  </run>
+
+</nwvme_cfg>

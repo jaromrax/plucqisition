@@ -13,6 +13,7 @@
       TCutG *m6_monitor;
       m6_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm6_mon");
 
+
       TCutG *m1_gene;
       m1_gene=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_gene");
       TCutG *m6_gene;
@@ -22,20 +23,27 @@
 TCutG *cm1_d;
 TCutG *cm2_d;
 TCutG *cm3_d;
+TCutG *cm4_d;
+TCutG *cm5_d;
+
 TCutG *cm6_d;
 TCutG *cm7_d;
 TCutG *cm8_d;
-cm1_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_d");
-cm2_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm2_d");
-cm3_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm3_d");
-cm6_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm6_d");
-cm7_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm7_d");
-cm8_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm8_d");
+cm1_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm1_d");
+cm2_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm2_d");
+cm3_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm3_d");
+
+cm4_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm4_d");
+cm5_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm5_d");
+
+cm6_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm6_d");
+cm7_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm7_d");
+cm8_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm8_d");
 
 
 //================================================DEFINE TH1F====
 //TESTS...........
-TH1F* chansH=new TH1F("TchansH","channels arrived from pop (analyze)",  1000,0,1000);
+TH1F* chansH=new TH1F("TAchansH","channels arrived from pop (analyze)",  1000,0,1000);
 
 //TH1F* timeH=new TH1F("hTimeDiff","time intervals between counters", 		     1800,0,180);
 
@@ -63,12 +71,33 @@ TH1F* timeCanAdE7; //dE7 arrivals       TIME
 timeCanAdE7=NULL;
 */
 
-TH1F* evnum=new TH1F("T_EventA","Arriving data event # (analyze)",  300000, 
+TH1F* evnum=new TH1F("TA_EventA","event number arrived from pop (analyze)",  300000, 
 		 0, 300000 );
 
 //TH2F* time_evnum;
 
+TH1F *hh;
+hh=(TH1F*)gDirectory->Get( "c017");if (hh !=NULL){hh->SetTitle("dE1");}
+hh=(TH1F*)gDirectory->Get( "c018");if (hh !=NULL){hh->SetTitle("dE2");}
+hh=(TH1F*)gDirectory->Get( "c019");if (hh !=NULL){hh->SetTitle("dE3");}
+hh=(TH1F*)gDirectory->Get( "c020");if (hh !=NULL){hh->SetTitle("dE4");}
+hh=(TH1F*)gDirectory->Get( "c021");if (hh !=NULL){hh->SetTitle("dE5");}
 
+hh=(TH1F*)gDirectory->Get( "c022");if (hh !=NULL){hh->SetTitle("dE6");}
+hh=(TH1F*)gDirectory->Get( "c023");if (hh !=NULL){hh->SetTitle("dE7");}
+hh=(TH1F*)gDirectory->Get( "c024");if (hh !=NULL){hh->SetTitle("dE8");}
+
+
+
+hh=(TH1F*)gDirectory->Get( "c001");if (hh !=NULL){hh->SetTitle("thick E1");}
+hh=(TH1F*)gDirectory->Get( "c002");if (hh !=NULL){hh->SetTitle("thick E2");}
+hh=(TH1F*)gDirectory->Get( "c003");if (hh !=NULL){hh->SetTitle("thick E3");}
+hh=(TH1F*)gDirectory->Get( "c004");if (hh !=NULL){hh->SetTitle("thick E4");}
+hh=(TH1F*)gDirectory->Get( "c005");if (hh !=NULL){hh->SetTitle("thick E5");}
+
+hh=(TH1F*)gDirectory->Get( "c006");if (hh !=NULL){hh->SetTitle("thick E6");}
+hh=(TH1F*)gDirectory->Get( "c007");if (hh !=NULL){hh->SetTitle("thick E7");}
+hh=(TH1F*)gDirectory->Get( "c008");if (hh !=NULL){hh->SetTitle("thick E8");}
 
 
 //================================================DEFINE MARICES====
@@ -125,6 +154,34 @@ if (mtx3==NULL){
   mtx3->GetYaxis()->SetTitle(mchy);
  }//------------------------------------------------------
 
+//=========================
+TH2F *mtx4;
+sprintf( mnam, "mtx4" );
+mtx4=(TH2F*)gDirectory->Get( mnam );
+if (mtx4==NULL){
+  sprintf(mchy,"V020%s", "" );
+  sprintf(mchx,"%s+%.2f*V004", mchy, 1.0 );
+  sprintf(mch,"%s:%s", mchy, mchx);
+  mtx4=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
+  mtx4->GetXaxis()->SetTitle(mchx);
+  mtx4->GetYaxis()->SetTitle(mchy);
+ }//------------------------------------------------------
+
+
+//=========================
+TH2F *mtx5;
+sprintf( mnam, "mtx5" );
+mtx5=(TH2F*)gDirectory->Get( mnam );
+if (mtx5==NULL){
+  sprintf(mchy,"V021%s", "" );
+  sprintf(mchx,"%s+%.2f*V005", mchy, 1.0 );
+  sprintf(mch,"%s:%s", mchy, mchx);
+  mtx5=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
+  mtx5->GetXaxis()->SetTitle(mchx);
+  mtx5->GetYaxis()->SetTitle(mchy);
+ }//------------------------------------------------------
+
+
 
 //=========================
 TH2F *mtx6;
@@ -158,7 +215,7 @@ TH2F *mtx8;
 sprintf( mnam, "mtx8" );
 mtx8=(TH2F*)gDirectory->Get( mnam );
 if (mtx8==NULL){
-  sprintf(mchy,"V023%s", "" );
+  sprintf(mchy,"V024%s", "" );
   sprintf(mchx,"%s+%.2f*V008", mchy, 1.0 );
   sprintf(mch,"%s:%s", mchy, mchx);
   mtx8=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
@@ -178,14 +235,23 @@ TH1F* dia_m1=new TH1F("dia_m1","diagonal V017",  4000,  0, 4000 );
 TH1F* dia_m2=new TH1F("dia_m2","diagonal V018",  4000,  0, 4000 );
 TH1F* dia_m3=new TH1F("dia_m3","diagonal V019",  4000,  0, 4000 );
 
+TH1F* dia_m4=new TH1F("dia_m4","diagonal V020",  4000,  0, 4000 );
+TH1F* dia_m5=new TH1F("dia_m5","diagonal V021",  4000,  0, 4000 );
+
 TH1F* dia_m6=new TH1F("dia_m6","diagonal V022",  4000,  0, 4000 );
 TH1F* dia_m7=new TH1F("dia_m7","diagonal V023",  4000,  0, 4000 );
 TH1F* dia_m8=new TH1F("dia_m8","diagonal V024",  4000,  0, 4000 );
 
 
+
+
+
 TH1F* m1_d=new TH1F("m1_d","deuterons m1",  4000,  0, 4000 );
 TH1F* m2_d=new TH1F("m2_d","deuterons m2",  4000,  0, 4000 );
 TH1F* m3_d=new TH1F("m3_d","deuterons m3",  4000,  0, 4000 );
+
+TH1F* m4_d=new TH1F("m4_d","deuterons m4",  4000,  0, 4000 );
+TH1F* m5_d=new TH1F("m5_d","deuterons m5",  4000,  0, 4000 );
 
 TH1F* m6_d=new TH1F("m6_d","deuterons m6",  4000,  0, 4000 );
 TH1F* m7_d=new TH1F("m7_d","deuterons m7",  4000,  0, 4000 );

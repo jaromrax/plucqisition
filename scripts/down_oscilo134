@@ -1,0 +1,27 @@
+#!/bin/bash
+##echo watch -n 10 " $0 \`date +%Y%m%d_%H%M%S.jpg\` "
+
+rm Image.png;
+
+wget --tries=1 http://192.168.1.134/Image.png; 
+
+convert Image.png -negate negated-image.jpg
+
+if [ "$1" = "" ]; then 
+  echo no filename
+else
+    if [ "$1" = "now" ]; then
+	NNAME=`date +%Y%m%d_%H%M%S.jpg`
+	echo renaming to $NNAME
+	mv negated-image.jpg $NNAME
+    else
+	echo renaming to $1
+	mv negated-image.jpg  $1
+    fi
+fi
+
+
+echo try
+####echo watch -n 10 " $0 `date +%Y%m%d_%H%M%S.jpg` "
+echo watch -n 10 " $0 \`date +%Y%m%d_%H%M%S.jpg\` "
+echo watch -n 10 " $0 now"
