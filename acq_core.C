@@ -536,7 +536,7 @@ int acq(const char * startstop="start", int runnum=0)
 
 
    //    TThread::Ps(); 
-   if (kill_retries>=   2   ){ printf("... kill retries %d, not deads %d\n",kill_retries, not_deads); break;}
+   if (kill_retries>=   0   ){ printf("... kill retries %d, not deads %d\n",kill_retries, not_deads); break;}
     kill_retries++;
     }while (not_deads>0);
 
@@ -549,7 +549,7 @@ int acq(const char * startstop="start", int runnum=0)
 
 
 
-    int cdown=7;// approximately this 2 seconds it takes
+    int cdown=2;// approximately this 2 seconds it takes
     while(TThread::GetThread("master_thread")!=0){
       printf("--------------------------- wait for MASTER ... %d sec\n", cdown-- );
       usleep(1000*1000);
@@ -557,7 +557,7 @@ int acq(const char * startstop="start", int runnum=0)
   	TThread::GetThread("master_thread")->Delete();
       }//state 6
       //      TThread::Ps();
-      if (cdown<0){break;}
+      if (cdown<0){printf("breaking before master ended, expect a crash now :(\n%s","");break;}
     }//master exists.....................
 
  printf("%s","dlclose  will be called....\n");
