@@ -613,12 +613,15 @@ int process_ONE_EVENT(int *arr,  int *BUFANAL ){// translate buffer with one eve
 //void ZH_data(int events, const char* datafileA,  const char* xmlfile, 
 //	     const char* search,const char* seq,const char* searchatt){
 
+
+
 void ZH_data(int events, 
 	     const char* datafileIN,  
 	     const char* datafileOUT,  
 	     
 	     const char* xmlfile, 
 	     const char* search,const char* seq,const char* searchatt){
+  //	     const char* search="plugins",const char* seq="popper",const char* searchatt="definitions"){
 
   //  int events = 10000; // LIMIT !!!!!!!
 //void ZH_data(int events){
@@ -712,3 +715,17 @@ if s001..            ->counter (1st+2nd channels x 65000); "TOTAL" in title
 
   // NOW I HAVE ALL THE DATA in MEM & in TTREE
 }//ZH_data__________________________________________
+
+
+void ZH_data(int events, 
+	     const char* datafileIN,  
+	     const char* datafileOUT,  
+	     
+	     const char* xmlfile){
+	     //	     const char* search,const char* seq,const char* searchatt){
+  //	     const char* search="plugins",const char* seq="popper",const char* searchatt="definitions"){
+
+     ZH_data(events, datafileIN, datafileOUT, xmlfile, 
+             "plugins","popper","definitions"  );
+
+}

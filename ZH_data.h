@@ -76,11 +76,18 @@ void process_EOE(); // end of event - do filling
 int process_ONE_EVENT(int *arr,  int *BUFANAL  );// translate buffer with one event to data
 
 //        void ZH_data(int events);  // TEST  events<0 == inf.
+
+void ZH_data(int events, 
+	     const char* datafileIN,  
+	     const char* datafileOUT,  
+	     const char* xmlfile  );
+
 void ZH_data(int events, 
 	     const char* datafileIN,  
 	     const char* datafileOUT,  
 	     const char* xmlfile, 
-	     const char* search,const char* seq,const char* searchatt);
+	     //	     const char* search="plugins",const char* seq="popper",const char* searchatt="definitions");
+  const char* search,const char* seq,const char* searchatt);
 
 
 

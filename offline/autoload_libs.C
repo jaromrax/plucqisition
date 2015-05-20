@@ -8,6 +8,8 @@
  gSystem->Load("/usr/lib/libdl.so");
 #endif
 
+ // gSystem->Load("nrfit_C.so");
+
 gROOT->ProcessLine(".L ../xml_attr.C+");
 gROOT->ProcessLine(".L ../log_term.C+");
 gROOT->ProcessLine(".L ../mut_queue.C+");
@@ -15,6 +17,6 @@ gROOT->ProcessLine(".L ../acq_core.C+");
 
  gROOT->ProcessLine("cout<<\"-------------------- acq libraries should be loaded now \"<<endl");
 
-//------------gROOT->ProcessLine(".! echo ABRUPT QUIT");
-//------------gROOT->ProcessLine(".qqqqqqq");
+gROOT->ProcessLine(".L mkmat.C");
+
 }
