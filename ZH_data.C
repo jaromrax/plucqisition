@@ -452,7 +452,8 @@ void process_chan(int ch,  int val){// KEY:fill propper histos,counters,time
       //      }
       ThistCNT->Fill(  cTIME-ROOT_offset );
 
-      sprintf(mmm,"TOTAL COUNTS = %lld",COUN[ch-1]);
+      sprintf(mmm,"TOTAL COUNTS = %lld / %.1f",COUN[ch-1],
+	      COUNhist[ch-1]->GetEntries() * COUNhist[ch-1]->GetMean() );
       COUNhist[ch-1]->SetTitle( mmm );
       TREE[ch-1]= COUNtmp[ch-1] ; // prepare the variable for tree
     }
