@@ -102,7 +102,7 @@ TSmallish_xml::TSmallish_xml(const char* filename){
   inside_UID=0;//  check that UID  
 
   if (  FileExists1k( filename ,1) ){ 
-    printf("xml file of some size  exists <%s>\n", filename ); 
+    printf("XML file of some size  exists <%s>\n", filename ); 
   }else{
     printf("ERROR  file  <%s> DOESNOT EXIST \n", filename ); 
     //    return 1;

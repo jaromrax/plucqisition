@@ -270,7 +270,7 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
 
     if (strlen(tokres)>0){
       if ( fexists(tokres)>=0){      
-	printf("fexists tokres is  %s\n",  tokres );
+	printf("...fexists tokres is  %s\n",  tokres );
 
 	curtime = time (NULL);  loctime = localtime (&curtime);
 	end=strrchr( tokres, '.' ); // .root
@@ -287,10 +287,9 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
 		end);
 
 	
-	printf("TECHNICAL: /%s/ +  /%s/   |%d| /%s/=original ***\n", begin, end, end-tokres,  tokres );
-	printf("TECHNICAL: file %s , I rename it to %s\n",
+	printf("...TECHNICAL: {%s} + {%s} {%d}\n{%s}=original ***\n", begin, end, end-tokres,  tokres );
+	printf("...TECHNICAL: file %s\n ... I rename it to %s\n",
 	       tokres, tokres2 );
-
 	sprintf(tokres, "%s", tokres2 );
       }//fexists >=0
 
@@ -624,6 +623,7 @@ void ZH_data(int events,
 	     const char* search,const char* seq,const char* searchatt){
   //	     const char* search="plugins",const char* seq="popper",const char* searchatt="definitions"){
 
+  printf("SEARCH/SEQ/SEARCHATT= %s %s %s\n", search, seq,  searchatt );
   //  int events = 10000; // LIMIT !!!!!!!
 //void ZH_data(int events){
 
@@ -669,7 +669,6 @@ if s001..            ->counter (1st+2nd channels x 65000); "TOTAL" in title
 
 // READ BUFFER// one time READ DATA FROM FILE
 //  printf( "FILL BUFFER LOAD?: /%s/\n"  ,datafileA );
-
 
   printf("%s","...before allocation\n");
   if (0!= fillbuffer( datafileIN ) ){
@@ -725,8 +724,8 @@ void ZH_data(int events,
 	     const char* xmlfile){
 	     //	     const char* search,const char* seq,const char* searchatt){
   //	     const char* search="plugins",const char* seq="popper",const char* searchatt="definitions"){
-
+  printf("Using automatic   \"plugins\",\"popper\",\"definitions\" \n%s","");
      ZH_data(events, datafileIN, datafileOUT, xmlfile, 
-             "plugins","popper","definitions"  );
+             "plugins","poper","definitions"  );
 
 }
