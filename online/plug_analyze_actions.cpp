@@ -43,7 +43,6 @@ if (chan[19]>0) {
  } 
 
 
-
 if (chan[20]>0) {
   mtx4->Fill( mfact[4]*chan[4]+chan[20], chan[20] );  
     if (chan[4]<3){
@@ -54,7 +53,6 @@ if (chan[20]>0) {
     }
 
  } 
-
 
 
 if (chan[21]>0) {
@@ -104,8 +102,6 @@ if (chan[24]>0) {
 
 
 
-
-
   for (int i=0;i<MAXCHANA;i++){ 
     if (chan[i]!=0){ chansH->Fill(i);}
   }
@@ -121,8 +117,7 @@ if (chan[24]>0) {
 
 
 
-//I TRY COUNTER
-
+//I TRY COUNTER ....................................................
 if (chan[33]>0) 
   {
     char sysc[100];
@@ -136,25 +131,3 @@ if (chan[33]>0)
   }
 
 
-
-
-//}//IF  dE1-----------
-
-//if (ANADEBUG){ sprintf(ch,"monitor cuts ...%s",  "");table_log(2,ch); }
-/*
-//===============================================================
-// this is CUT that is made with 1:1
-if ((m1_monitor!=NULL)&&(m1_monitor->IsInside(chan[1],chan[17] ))){
-	   t1q=t1q+1.0;
- }
-if ((m6_monitor!=NULL)&&(m6_monitor->IsInside(chan[6],chan[22] ))){
-	   t6q=t6q+1.0;
- }
-
- if ((m1_gene!=NULL)&&(m1_gene->IsInside(chan[1],chan[17] ))){
- 	   t1gene=t1gene++;
-  }
- if ((m6_gene!=NULL)&&(m6_gene->IsInside(chan[6],chan[22] ))){
- 	   t6gene=t6gene++;
-  }
-*/

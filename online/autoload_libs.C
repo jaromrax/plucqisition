@@ -3,7 +3,8 @@
   gROOT->ProcessLine("cout<<\" ------------------ 64 BIT SYSTEM \"<<endl");
   // gSystem->Load("/lib/libdl.so");
   // gSystem->Load("/lib/x86_64-linux-gnu/libdl.so.2");
-
+  gSystem->Load("/lib/x86_64-linux-gnu/libdl-2.19.so");
+  
   gROOT->ProcessLine("cout<<\" ------------------ 64 BIT SYSTEM LOADED\"<<endl");
    
 #else

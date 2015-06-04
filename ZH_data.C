@@ -472,17 +472,17 @@ void process_chan(int ch,  int val){// KEY:fill propper histos,counters,time
       if (Thist==NULL){
 	//-----------THisto
 	Thist=new TH1F("Thist","Thist", 
-		       86400, bTIME-ROOT_offset, bTIME+86400-ROOT_offset );
+		       86400+4*3600, bTIME-ROOT_offset, bTIME+86400+4*3600-ROOT_offset );
 	Thist->GetXaxis()->SetTimeDisplay(1);
 	Thist->GetXaxis()->SetTimeFormat( "#splitline{%d.%m}{%H:%M}%F1994-12-31 22:00:00s" );
 	//-----------CNT
 	ThistCNT=new TH1F("ThistCNT","event in counters vs. time", 
-		       86400, bTIME-ROOT_offset, bTIME+86400-ROOT_offset );
+		       86400+4*3600, bTIME-ROOT_offset, bTIME+86400+4*3600-ROOT_offset );
 	ThistCNT->GetXaxis()->SetTimeDisplay(1);
 	ThistCNT->GetXaxis()->SetTimeFormat( "#splitline{%d.%m}{%H:%M}%F1994-12-31 22:00:00s" );
 	//-----------Can
 	ThistCan=new TH1F("ThistCan","event in channels vs. time", 
-		       86400, bTIME-ROOT_offset, bTIME+86400-ROOT_offset );
+		       86400+4*3600, bTIME-ROOT_offset, bTIME+86400+4*3600-ROOT_offset );
 	ThistCan->GetXaxis()->SetTimeDisplay(1);
 	ThistCan->GetXaxis()->SetTimeFormat( "#splitline{%d.%m}{%H:%M}%F1994-12-31 22:00:00s" );
 
