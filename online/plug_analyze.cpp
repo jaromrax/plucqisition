@@ -134,7 +134,7 @@ extern "C" {
       0xffffffff   twice  is  EOEvent
      */
 
-    if (ANADEBUG>0){sprintf(ch,"ANA: entering while bufferempty%s","");table_log(2,ch);}
+    //    if (ANADEBUG>0){sprintf(ch,"ANA: entering while bufferempty%s","");table_log(2,ch);}
 
 
     while( !buffer->empty() ){// concurent queue "buffer" is an object HERE
@@ -180,7 +180,7 @@ extern "C" {
       
 
     }//buffer not empty  
-    sprintf(ch,"ANA:  buffer empty%s","");table_log(2,ch);
+    //    sprintf(ch,"ANA:  buffer empty%s","");table_log(2,ch);
     usleep(1000*2000);
      
     respush=TokenGet( "push=" , mmap_file , pushis ); //takes a value

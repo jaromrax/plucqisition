@@ -118,16 +118,20 @@ if (chan[24]>0) {
 
 
 //I TRY COUNTER ....................................................
-if (chan[33]>0) 
+if ( (chan[33]>0)  || (chan[35]>0)  )
   {
     char sysc[100];
-    Long64_t sysc2;
+    Long64_t sysc2, sysc22;
     sysc2= chan[33]+chan[34]*65536;
-    sprintf(sysc , "echo %lld > COUNTER.1&" ,sysc2 );
+    sprintf(sysc , "echo %lld > /tmp/COUNTER.1&" ,sysc2/60 );
     system( sysc );
-    sysc2= chan[35]+chan[36]*65536;
-    sprintf(sysc , "echo %lld > COUNTER.2&" , sysc2 );
+    sysc22= chan[35]+chan[36]*65536;
+    sprintf(sysc , "echo %lld > /tmp/COUNTER.2&" , sysc22/60 );
     system( sysc );
+
+    sprintf(ch,"%lld x10 nA  %lld cps",sysc2/60, sysc22/60 );
+    table_log(2,ch);
+
   }
 
 

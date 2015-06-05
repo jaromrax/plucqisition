@@ -3,15 +3,16 @@
 
 TIMEOUT=$1 
 if [ "$TIMEOUT" = "" ]; then
-  TIMEOUT=2
+  TIMEOUT=25
 fi
-FILE=qqq
+FILE=/tmp/qqq
+touch /tmp/qqq
 cat COUNTER.1
 cat COUNTER.2
 
 #date +"%Y/%m/%d   %H:%M:%S" > $FILE
-echo  $((`cat COUNTER.1` / 60)) " nA*10" > $FILE
-echo  $((`cat COUNTER.2` / 60)) " cps">> $FILE
+echo  $((`cat /tmp/COUNTER.1`  )) " nA*10" > $FILE
+echo  $((`cat /tmp/COUNTER.2`  )) " cps">> $FILE
 
 PIC=counters.jpg
 
@@ -21,10 +22,12 @@ PIC=counters.jpg
 COLOR=black
 BCOLOR=black
 FCOL=chartreuse
+
 diff $FILE  $FILE.last >/dev/null
-if [ $? == 0 ]; then
+if [ $? = 0 ]; then
  COLOR=red
-FCOL=red
+ FCOL=red
+	echo warning....no change in countrate
 fi
 
 cp $FILE $FILE.last
@@ -36,18 +39,24 @@ cat $FILE
 
 wc=`cat $FILE | wc -l `
 echo $wc lines
-y=-30
+y=-50
 first=0
+echo parsing file $FILE to $PIC
 cat $FILE |
  while read val 
-do
+ do
+  if [ "$val" != "" ]; then 
+    
    y=$(( ${y} + 70 ))
    wc=$(( ${wc} - 1 ))
-
+   echo $y $wc ..... ${val}   1>&2
    if [ $first = 0 ]; then
           convert -size 640 -gravity center -fill red -background darkgray  \
            -pointsize 11 -page +0+0 -extent 640x480 label:"." miff:- 
 	  first=1
+	  convert -page +150+215 -resize 55%  negated-image134.jpg   miff:- 
+#         convert -size 640 -gravity center -fill red -background darkgray  \
+#          -pointsize 11 -page +0+0 -extent 640x480 label:"." miff:- 
    fi
    if [ "$wc" = "0" ]; then
      COLOR=darkgray
@@ -55,23 +64,37 @@ do
      FCOL=white
      y=430
    fi
-   convert -size 620 -gravity center -fill $FCOL -background $BCOLOR  \
-         -font Helvetica  -pointsize 44 -page +10+${y} -extent 620x67 label:"${val}" miff:-
+   convert -size 220 -gravity center -fill $FCOL -background $BCOLOR  \
+              -font Helvetica -pointsize 44 -page +10+${y} -extent 620x67 label:"${val}" miff:-
+  fi
+  #val not empty
  done |
+convert -background darkgray -size 640x480 xc: - -flatten  $PIC
+
 #  montage -tile -background darkgray    -  +repage $PIC
-  convert -background darkgray -size 640x480 xc: - -flatten  $PIC
 ###display $PIC &
 
-OUTFILE=/tmp/streampic_00.jpg
-echo  sending $PIC to phoenix $OUTFILE and sleepin $TIMEOUT
-scp $PIC phoenix:$OUTFILE
-
-PIC2=oscilo.jpg
-OUTFILE2=/tmp/streampic_01.jpg
-echo  sending $PIC2 to phoenix $OUTFILE2 and sleepin $TIMEOUT
-scp $PIC2 phoenix:$OUTFILE2
+echo converted 640x480  $PIC
 
 
+if [ -e "$PIC" ]; then
+    OUTFILE=/tmp/streampic_00.jpg
+    echo  sending $PIC to phoenix $OUTFILE and sleepin $TIMEOUT
+    scp $PIC phoenix:$OUTFILE
+else
+    echo no $PIC found
+fi
+
+if [ -e "$PIC2" ]; then
+    PIC2=oscilo.jpg
+    OUTFILE2=/tmp/streampic_01.jpg
+    echo  sending $PIC2 to phoenix $OUTFILE2 and sleepin $TIMEOUT
+    scp $PIC2 phoenix:$OUTFILE2
+else
+    echo no $PIC2 found
+fi
+
+echo sleeping $TIMEOUT
 sleep $TIMEOUT
 #timeout $TIMEOUT display $PIC
 #if [ $? -eq 124 ]; then
