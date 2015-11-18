@@ -19,7 +19,7 @@
 //                                                                         ===
 int mmapfd;      //  =-1       file handle for mmap
 char *mmap_file; // pointer to     mmap
-
+char repla[4096];
 
 
 //  I make the variable  "extern" in   *.h  and againI define in *.C
@@ -117,12 +117,15 @@ extern "C" {
   int datum2=0;
   for (int i=0;i<MAXCHANA;i++){ chan[i]=0; }
  //================================================DEFINE MATRICES====
+
+  usleep(1000*100);
 #include "plug_analyze_definitions.cpp"
-  usleep(1000*1000);
+
 
   sprintf(ch,"ANA: after definitions%s","");table_log(2,ch);
 
   printf("ANA %s\n"," start");
+  //============================================== MAIN WHILE LOOP =========
   while (respush>=1.0){//run while push is running........
     /*
       HERE I USE CONCURENT QUEUE BUFFER but this time special and easy:
@@ -131,7 +134,7 @@ extern "C" {
       0xffffffff   twice  is  EOEvent
      */
 
-    if (ANADEBUG>0){sprintf(ch,"ANA: entering while bufferempty%s","");table_log(2,ch);}
+    //    if (ANADEBUG>0){sprintf(ch,"ANA: entering while bufferempty%s","");table_log(2,ch);}
 
 
     while( !buffer->empty() ){// concurent queue "buffer" is an object HERE
@@ -149,7 +152,13 @@ extern "C" {
 
 	//	if (ANADEBUG>0){sprintf(ch,"ANA: before actions%s","");table_log(2,ch);}
 
+
+	
 	#include "plug_analyze_actions.cpp"
+
+
+
+
 	
 	//	if (ANADEBUG>0){sprintf(ch,"ANA: after actions evt=%lld", events);table_log(2,ch);}
 
@@ -171,14 +180,22 @@ extern "C" {
       
 
     }//buffer not empty  
-    sprintf(ch,"ANA:  buffer empty%s","");table_log(2,ch);
+    //    sprintf(ch,"ANA:  buffer empty%s","");table_log(2,ch);
     usleep(1000*2000);
      
     respush=TokenGet( "push=" , mmap_file , pushis ); //takes a value
-    if ( 0==TokenGet( "run=" , mmap_file , pushis ) ){
+    if ( 0.0==TokenGet( "run=" , mmap_file , pushis ) ){
       respush=0;
     }; //takes a value to know when to STOP
-  }//respush>=0
+
+    if ( 9.0==TokenGet( "run=" , mmap_file , pushis ) ){
+       sprintf(ch,"reload was demanded  (words=%lld)",cnt );table_log(2,ch);
+       TokenReplace( "run=",  "run=2.0",  mmap_file , repla );
+       strcpy( mmap_file, repla );
+       #include "plug_analyze_definitions.cpp"
+    }; //
+    
+  }//respush>=0 ================================== WHILE LOOP END ============
   
   if (outfile!=NULL){fclose(outfile);}
   sprintf(ch,"EXITING analyze (words=%lld)",cnt );table_log(2,ch);
@@ -191,15 +208,15 @@ extern "C" {
 
 
 
-  //===================================================================================
-  //===================================================================================
-  //===================================================================================
-  //===================================================================================
-  //===================================================================================
-  //===================================================================================
-  //===================================================================================
-  //===================================================================================
-  //===================================================================================
-  //===================================================================================
+  //================================================================================
+  //=================================================================================
+  //=================================================================================
+  //=================================================================================
+  //=================================================================================
+  //=================================================================================
+  //=================================================================================
+  //=================================================================================
+  //=================================================================================
+  //=================================================================================
 
 

@@ -1,0 +1,52 @@
+<!--
+A COMMENT MUST BE HERE
+  L a O not fixed yet....
+-->
+<xmlconfig>
+ <experiment date="20141104" reaction="nec14_3hed"> </experiment> 
+ <dir> /home/ojr/07_DATA_ROOT/20141104_3he14c/ </dir>
+ <telescopes>
+    <t1>
+    <V addwith="1.0" dechan="17" echan="1">      </V>
+    <O addwith="1.0"  dechan="2"  echan="1">      </O>
+    <L addwith="1.0" dechan="0"  echan="0">      </L>
+  </t1>
+  <t2>
+    <V addwith="1.0" dechan="18" echan="2">      </V>
+    <O addwith="1.0" dechan="10" echan="9">      </O>
+    <L addwith="1.0" dechan="0"  echan="0">      </L>
+  </t2>
+  <t3>
+    <V addwith="1.0" dechan="19" echan="3">      </V>
+    <O addwith="1.0" dechan="0"  echan="0">      </O>
+    <L addwith="1.0" dechan="1"  echan="1">      </L>
+  </t3>
+  <t4>
+    <V addwith="1.0" dechan="20" echan="4">      </V>
+    <O addwith="1.0" dechan="0"  echan="0">      </O>
+    <L addwith="1.0" dechan="1"  echan="1">      </L>
+  </t4>
+  <t5>
+    <V addwith="1.0" dechan="21" echan="5">      </V>
+    <O addwith="1.0" dechan="0"  echan="0">      </O>
+    <L addwith="1.0" dechan="1"  echan="1">      </L>
+  </t5>
+  <t6>
+    <V addwith="1.0" dechan="22" echan="6">      </V>
+    <O addwith="1.0" dechan="6"  echan="5">      </O>
+    <L addwith="1.0" dechan="0"  echan="0">      </L>
+  </t6>
+  <t7>
+    <V addwith="1.0" dechan="23" echan="7">      </V>
+    <O addwith="1.0" dechan="0"  echan="0">      </O>
+    <L addwith="1.0" dechan="1"  echan="1">      </L>
+  </t7>
+  <t8>
+    <V addwith="1.0" dechan="24" echan="8">      </V>
+    <O addwith="1.0" dechan="14" echan="13">      </O>
+    <L addwith="1.0" dechan="0"  echan="0">      </L>
+  </t8>
+  
+ </telescopes>
+
+</xmlconfig>

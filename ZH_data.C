@@ -270,7 +270,7 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
 
     if (strlen(tokres)>0){
       if ( fexists(tokres)>=0){      
-	printf("fexists tokres is  %s\n",  tokres );
+	printf("...fexists tokres is  %s\n",  tokres );
 
 	curtime = time (NULL);  loctime = localtime (&curtime);
 	end=strrchr( tokres, '.' ); // .root
@@ -287,10 +287,9 @@ void load_chan_table(const char *str2k ){ // LOAD channel properties into the ta
 		end);
 
 	
-	printf("TECHNICAL: /%s/ +  /%s/   |%d| /%s/=original ***\n", begin, end, end-tokres,  tokres );
-	printf("TECHNICAL: file %s , I rename it to %s\n",
+	printf("...TECHNICAL: {%s} + {%s} {%d}\n{%s}=original ***\n", begin, end, end-tokres,  tokres );
+	printf("...TECHNICAL: file %s\n ... I rename it to %s\n",
 	       tokres, tokres2 );
-
 	sprintf(tokres, "%s", tokres2 );
       }//fexists >=0
 
@@ -473,17 +472,17 @@ void process_chan(int ch,  int val){// KEY:fill propper histos,counters,time
       if (Thist==NULL){
 	//-----------THisto
 	Thist=new TH1F("Thist","Thist", 
-		       86400, bTIME-ROOT_offset, bTIME+86400-ROOT_offset );
+		       86400+4*3600, bTIME-ROOT_offset, bTIME+86400+4*3600-ROOT_offset );
 	Thist->GetXaxis()->SetTimeDisplay(1);
 	Thist->GetXaxis()->SetTimeFormat( "#splitline{%d.%m}{%H:%M}%F1994-12-31 22:00:00s" );
 	//-----------CNT
 	ThistCNT=new TH1F("ThistCNT","event in counters vs. time", 
-		       86400, bTIME-ROOT_offset, bTIME+86400-ROOT_offset );
+		       86400+4*3600, bTIME-ROOT_offset, bTIME+86400+4*3600-ROOT_offset );
 	ThistCNT->GetXaxis()->SetTimeDisplay(1);
 	ThistCNT->GetXaxis()->SetTimeFormat( "#splitline{%d.%m}{%H:%M}%F1994-12-31 22:00:00s" );
 	//-----------Can
 	ThistCan=new TH1F("ThistCan","event in channels vs. time", 
-		       86400, bTIME-ROOT_offset, bTIME+86400-ROOT_offset );
+		       86400+4*3600, bTIME-ROOT_offset, bTIME+86400+4*3600-ROOT_offset );
 	ThistCan->GetXaxis()->SetTimeDisplay(1);
 	ThistCan->GetXaxis()->SetTimeFormat( "#splitline{%d.%m}{%H:%M}%F1994-12-31 22:00:00s" );
 
@@ -614,13 +613,17 @@ int process_ONE_EVENT(int *arr,  int *BUFANAL ){// translate buffer with one eve
 //void ZH_data(int events, const char* datafileA,  const char* xmlfile, 
 //	     const char* search,const char* seq,const char* searchatt){
 
+
+
 void ZH_data(int events, 
 	     const char* datafileIN,  
 	     const char* datafileOUT,  
 	     
 	     const char* xmlfile, 
 	     const char* search,const char* seq,const char* searchatt){
+  //	     const char* search="plugins",const char* seq="popper",const char* searchatt="definitions"){
 
+  printf("SEARCH/SEQ/SEARCHATT= %s %s %s\n", search, seq,  searchatt );
   //  int events = 10000; // LIMIT !!!!!!!
 //void ZH_data(int events){
 
@@ -667,7 +670,6 @@ if s001..            ->counter (1st+2nd channels x 65000); "TOTAL" in title
 // READ BUFFER// one time READ DATA FROM FILE
 //  printf( "FILL BUFFER LOAD?: /%s/\n"  ,datafileA );
 
-
   printf("%s","...before allocation\n");
   if (0!= fillbuffer( datafileIN ) ){
     printf ("FILE %s not opened..............ending\n", "");
@@ -713,3 +715,17 @@ if s001..            ->counter (1st+2nd channels x 65000); "TOTAL" in title
 
   // NOW I HAVE ALL THE DATA in MEM & in TTREE
 }//ZH_data__________________________________________
+
+
+void ZH_data(int events, 
+	     const char* datafileIN,  
+	     const char* datafileOUT,  
+	     
+	     const char* xmlfile){
+	     //	     const char* search,const char* seq,const char* searchatt){
+  //	     const char* search="plugins",const char* seq="popper",const char* searchatt="definitions"){
+  printf("Using automatic   \"plugins\",\"popper\",\"definitions\" \n%s","");
+     ZH_data(events, datafileIN, datafileOUT, xmlfile, 
+             "plugins","poper","definitions"  );
+
+}

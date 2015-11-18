@@ -411,9 +411,15 @@ int acq(const char * startstop="start", int runnum=0)
 
 
 
-  if ( strcmp(startstop,"stop")==0){//=====================IF STOP=========
-    printf(".....go stop.\n%s", "" );
-  }else{                            //=====================IF START========
+
+     
+
+     //  if ( strcmp(startstop,"stop")==0){//=====================IF STOP=========
+     //    printf(".....go stop.\n%s", "" );
+     //  }
+
+     if ( strstr(startstop, "start") ) {                            //=====================IF START====
+    printf(".....go START.\n%s", "" );    
 
     if (runnum>0){
       printf(".....go extra start with CTERM.\n%s", "" );    
@@ -423,8 +429,6 @@ int acq(const char * startstop="start", int runnum=0)
     }
 
 
-
-    printf(".....go START.\n%s", "" );    
     t_start.Set();	   
 
     char repla[4096];
@@ -444,14 +448,63 @@ int acq(const char * startstop="start", int runnum=0)
    TokenReplace( "run=",  "runactive",  mmap_file , newfile );
    strcpy( mmap_file, newfile);
    */
+
+   
+//if(XTERM!=NULL)fprintf(XTERM,"%s\n", "===================MAKING START================\n");
+  if(XTERM!=NULL)fprintf(XTERM,"%s\n", "===================MAKING START================\n");
+  if(XTERM!=NULL)fprintf(XTERM,"%s\n", "===================MAKING START================\n");
+  if (TThread::GetThread("master_thread")!=0){
+    if (TThread::GetThread("master_thread")->GetState()==6){
+	TThread::GetThread("master_thread")->Delete();
+      }//state 6
+  }//master exists
+
+  usleep(1000);
+  if (TThread::GetThread("master_thread")==0){
+
+    //======START======
+    char newfile[4096];
+    TokenReplace( "run=" , "run=2.0", mmap_file, newfile );
+    strcpy( mmap_file,  newfile );
+
+
+    tinfo = (thread_info*)calloc( 5, sizeof(struct thread_info));// 5threads
+
+    tinfo[0].thread_num=0;//============ THREAD DEFINITION=========
+    tinfo[0].running=1; tinfo[0].callnumber=1;tinfo[0].parent=NULL;
+    sprintf(tinfo[0].file, "%s",""); 
+
+    shspe_threads[0] = new TThread( "master_thread" , xml_masterthread, (void*) &tinfo[0] );
+    if (shspe_threads[0]==NULL){ printf("exiting, MASTER thread ) NOT launched!!\n%s","");return 0;}
+    shspe_threads[0]->Run();
+    //NOT HERE IN 0... if (dl_handle!=NULL)dlclose(dl_handle); // can be closed after all threads down
+
+  }else{
+    //    TThread::Ps();
+    printf("MASTER THREAD ALREADY RUNS, TRY acq(\"stop\") %s\n","");
   }
 
+  }// startstop == "" ====================================END OF START
+
+
+
+      char newfile[4096];
+
+  
+    if ( strcmp(startstop,"reload")==0){//====================IF reload
+      // respush >=1 ... so the loop continues...
+           printf("%s\n", "trying to reload run=9 ");
+	   TokenReplace( "run=",  "run=9.0",  mmap_file , newfile );
+	   strcpy( mmap_file, newfile);
+    }
 
 
 
 
 
-  //==========================================================STOP========
+
+    
+  //===========================================================================STOP========
   if ( strcmp(startstop,"stop")==0){//====================IF STOP=========
     int not_deads=0;
     int kill_retries=0;
@@ -459,7 +512,7 @@ int acq(const char * startstop="start", int runnum=0)
     /*    First thing will be to try few time to send broadcast.....
      *    check if analyze got it --------- else exit without success...
      */
-   //=================================================================================BEGIN
+   //=======================================================BEGIN STOP
 
     if(TThread::GetThread("master_thread")==0){
           if(XTERM!=NULL)fprintf(XTERM,"%s\n", "master thread seems not to exist, acq not started????");
@@ -471,10 +524,26 @@ int acq(const char * startstop="start", int runnum=0)
 
 
     do{ //while not deads
-      char newfile[4096];
-      TokenReplace( "run=",  "run=0.0",  mmap_file , newfile );
+      // earlier      char newfile[4096];
+     printf("%s\n", "trying to set  run=0 ");
+     TokenReplace( "run=",  "run=0.0",  mmap_file , newfile );
       strcpy( mmap_file, newfile);
-      //      printf("waiting 1 second\n%s", "");
+    char repla[4096];
+    // NO IDEA WHAT IT MEANS >>>>> I TRY 
+      TokenReplace( "push=", "push=-1", mmap_file, repla );
+      strcpy( mmap_file, repla );
+      
+      TokenReplace( "pop=", "pop=-1", mmap_file, repla );
+      strcpy( mmap_file, repla );
+      
+      TokenReplace( "analyze=", "analyze=-1", mmap_file, repla );
+      strcpy( mmap_file, repla );
+      
+      printf("waiting 3 seconds\n%s", "");
+      usleep(1000*1000); // why not to wait.....a while....
+      printf("waiting 2 seconds\n%s", "");
+      usleep(1000*1000); // why not to wait.....a while....
+      printf("waiting 1 second\n%s", "");
       usleep(1000*1000); // why not to wait.....a while....
       not_deads=0;
      //    TThread::Ps();
@@ -483,7 +552,10 @@ int acq(const char * startstop="start", int runnum=0)
     //    MyCond.GetMutex();
     //    MyCond.Broadcast();
     //    usleep(1000*100);
-    TThread *t;
+   //========================================================END STOP
+
+
+      TThread *t;
 
     //-----------------------------
     t=TThread::GetThread("pusher_thread");
@@ -497,8 +569,8 @@ int acq(const char * startstop="start", int runnum=0)
          printf("%s\n", "pusher_thread NOT DEAD, TRY AGAIN ");
 	 not_deads++;
    }
-   //=================================================================================END
 
+   
 
     //----------------this is very fragile thread------------------------------------------------------
    //    if(XTERM!=NULL)fprintf(XTERM,"%s\n", "checking the existence of the analyze_thread");
@@ -542,28 +614,37 @@ int acq(const char * startstop="start", int runnum=0)
 
     if (not_deads>0){  
       printf("... kill retries %d, not deads %d. I return acq function with thread/s running: retry acq stop\n",kill_retries, not_deads);	 
-     return 0;
+      // return 0;
+      // LOCKOUt HERE =============== I continue !!!!1 with lockout
+      
     } // MUST EXIT HERE, SOME ZOMBIE IS THERE######################
 
 
 
 
 
-    int cdown=2;// approximately this 2 seconds it takes
+    int cdown=3;// approximately this 2 seconds it takes
     while(TThread::GetThread("master_thread")!=0){
-      printf("--------------------------- wait for MASTER ... %d sec\n", cdown-- );
+      printf("--------------------------- wait for MASTER ... %d sec  state=%d\n",
+	         cdown--, TThread::GetThread("master_thread")->GetState() );
       usleep(1000*1000);
       if (TThread::GetThread("master_thread")->GetState()==6){
   	TThread::GetThread("master_thread")->Delete();
       }//state 6
       //      TThread::Ps();
-      if (cdown<0){printf("breaking before master ended, expect a crash now :(\n%s","");break;}
+      if (cdown<=0){
+	printf("breaking before master ended, expect a crash now :(\n%s","");
+	TThread::GetThread("master_thread")->Delete();
+	break;
+      }
     }//master exists.....................
 
- printf("%s","dlclose  will be called....\n");
- //    dlerror();
-    int res=dlclose(dl_handle_analyze); // THIS IS DIFFICULT!!!!!!!!!!!!!!!!!
-    if (res!=0){ printf("%s","dlclose problem\n");}
+    printf("%s","dlclose  will NOT be called....\n");
+    // // //    dlerror();
+    //int res=dlclose(dl_handle_analyze); // THIS IS DIFFICULT!!!!!!!!!!!!!!!!!
+    //    if (res!=0){ printf("%s","dlclose problem\n");}
+    
+
     // there is a decrement....
     // http://stackoverflow.com/questions/8792363/c-dlclose-doesnt-unload-the-shared-library
     // maybe one (analyze) dlclose is fine, maybe it make both?
@@ -593,40 +674,6 @@ int acq(const char * startstop="start", int runnum=0)
 
 
 
-
-//if(XTERM!=NULL)fprintf(XTERM,"%s\n", "===================MAKING START================\n");
-  if(XTERM!=NULL)fprintf(XTERM,"%s\n", "===================MAKING START================\n");
-  if(XTERM!=NULL)fprintf(XTERM,"%s\n", "===================MAKING START================\n");
-  if (TThread::GetThread("master_thread")!=0){
-    if (TThread::GetThread("master_thread")->GetState()==6){
-	TThread::GetThread("master_thread")->Delete();
-      }//state 6
-  }//master exists
-
-  usleep(1000);
-  if (TThread::GetThread("master_thread")==0){
-
-    //======START======
-    char newfile[4096];
-    TokenReplace( "run=" , "run=2", mmap_file, newfile );
-    strcpy( mmap_file,  newfile );
-
-
-    tinfo = (thread_info*)calloc( 5, sizeof(struct thread_info));// 5threads
-
-    tinfo[0].thread_num=0;//============ THREAD DEFINITION=========
-    tinfo[0].running=1; tinfo[0].callnumber=1;tinfo[0].parent=NULL;
-    sprintf(tinfo[0].file, "%s",""); 
-
-    shspe_threads[0] = new TThread( "master_thread" , xml_masterthread, (void*) &tinfo[0] );
-    if (shspe_threads[0]==NULL){ printf("exiting, MASTER thread ) NOT launched!!\n%s","");return 0;}
-    shspe_threads[0]->Run();
-    //NOT HERE IN 0... if (dl_handle!=NULL)dlclose(dl_handle); // can be closed after all threads down
-
-  }else{
-    //    TThread::Ps();
-    printf("MASTER THREAD ALREADY RUNS, TRY acq(\"stop\") %s\n","");
-  }
 
   return 0;// non void function 
 }//=================================================######################### MAIN MAIN END

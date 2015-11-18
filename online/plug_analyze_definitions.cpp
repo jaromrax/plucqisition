@@ -1,25 +1,11 @@
+#ifndef PLUG_ANA_DEF
+#define PLUG_ANA_DEF
+// HERE I NEED TO SEPARATE 1st RUN and subsequent runs...... #endif
 
-//   TACounterMulti *mctr;
-// if (mctr==NULL){     mctr=new TACounterMulti(12);   }
-
-
-
-      //-------------------------- typical load of cuts -----------------
-      loadcuts();//  from cuts_manip.h          
-      //-------------------------- typical load of Gcuts -----------------
-      // EXTRA CUTS - to compare Q /T1  or Q/T6
-      TCutG *m1_monitor;
-      m1_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_mon");
-      TCutG *m6_monitor;
-      m6_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm6_mon");
-
-
-      TCutG *m1_gene;
-      m1_gene=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_gene");
-      TCutG *m6_gene;
-      m6_gene=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm6_gene");
-
-
+TCutG *m1_monitor;
+TCutG *m6_monitor;
+TCutG *m1_gene;
+TCutG *m6_gene;
 TCutG *cm1_d;
 TCutG *cm2_d;
 TCutG *cm3_d;
@@ -29,6 +15,226 @@ TCutG *cm5_d;
 TCutG *cm6_d;
 TCutG *cm7_d;
 TCutG *cm8_d;
+
+TH1F* chansH;
+
+TH1F* timeCanA;    // event arrivals    TIME
+TH1F* timeCNT;     // counters arrivals TIME
+
+timeCanA=NULL;
+timeCNT=NULL;
+TH1F* evnum;
+TH1F *hh;
+//================================================DEFINE MARICES====
+int mbins=1000;
+int mrange=4000;
+
+double mfact[32];
+char mchx[100];
+char mchy[100];
+char mch[100];
+char mnam[100];
+TH2F *mtx1;
+TH2F *mtx2;
+TH2F *mtx3;
+TH2F *mtx4;
+TH2F *mtx5;
+TH2F *mtx6;
+TH2F *mtx7;
+TH2F *mtx8;
+//==========================================  diagonal
+TH1F* dia_m1;
+TH1F* dia_m2;
+TH1F* dia_m3;
+
+TH1F* dia_m4;
+TH1F* dia_m5;
+
+TH1F* dia_m6;
+TH1F* dia_m7;
+TH1F* dia_m8;
+
+//==========================================  deuterons
+TH1F* m1_d;
+TH1F* m2_d;
+TH1F* m3_d;
+
+TH1F* m4_d;
+TH1F* m5_d;
+
+TH1F* m6_d;
+TH1F* m7_d;
+TH1F* m8_d;
+//======================================  GENE
+int t1gene=0;
+int t6gene=0;
+double t1q=0.0;
+double t6q=0.0;
+double cnt_TIME=0.0;
+double cnt_TIMElast=0.0;
+
+//=========================================What remain after reload: HERE:
+
+
+chansH=new TH1F("TAchansH","channels arrived from pop (analyze)",  1000,0,1000);
+evnum=new TH1F("TA_EventA","event number arrived from pop (analyze)",  300000, 
+		 0, 300000 );
+
+//================================================DEFINE MARICES====
+
+for (int i=0;i<32;i++){ mfact[i]=1.0;}  // factor to multiply
+
+
+//=========================
+sprintf( mnam, "mtx1" );
+mtx1=(TH2F*)gDirectory->Get( mnam );
+if (mtx1==NULL){
+  sprintf(mchy,"V017%s", "" );
+  sprintf(mchx,"%s+%.2f*V001", mchy, 1.0 );
+  sprintf(mch,"%s:%s", mchy, mchx);
+  mtx1=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
+  mtx1->GetXaxis()->SetTitle(mchx);
+  mtx1->GetYaxis()->SetTitle(mchy);
+ }//------------------------------------------------------
+
+
+
+//=========================
+sprintf( mnam, "mtx2" );
+mtx2=(TH2F*)gDirectory->Get( mnam );
+if (mtx2==NULL){
+  sprintf(mchy,"V018%s", "" );
+  sprintf(mchx,"%s+%.2f*V002", mchy, 1.0 );
+  sprintf(mch,"%s:%s", mchy, mchx);
+  mtx2=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
+  mtx2->GetXaxis()->SetTitle(mchx);
+  mtx2->GetYaxis()->SetTitle(mchy);
+ }//------------------------------------------------------
+
+//=========================
+sprintf( mnam, "mtx3" );
+mtx3=(TH2F*)gDirectory->Get( mnam );
+if (mtx3==NULL){
+  sprintf(mchy,"V019%s", "" );
+  sprintf(mchx,"%s+%.2f*V003", mchy, 1.0 );
+  sprintf(mch,"%s:%s", mchy, mchx);
+  mtx3=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
+  mtx3->GetXaxis()->SetTitle(mchx);
+  mtx3->GetYaxis()->SetTitle(mchy);
+ }//------------------------------------------------------
+
+//=========================
+sprintf( mnam, "mtx4" );
+mtx4=(TH2F*)gDirectory->Get( mnam );
+if (mtx4==NULL){
+  sprintf(mchy,"V020%s", "" );
+  sprintf(mchx,"%s+%.2f*V004", mchy, 1.0 );
+  sprintf(mch,"%s:%s", mchy, mchx);
+  mtx4=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
+  mtx4->GetXaxis()->SetTitle(mchx);
+  mtx4->GetYaxis()->SetTitle(mchy);
+ }//------------------------------------------------------
+
+
+//=========================
+sprintf( mnam, "mtx5" );
+mtx5=(TH2F*)gDirectory->Get( mnam );
+if (mtx5==NULL){
+  sprintf(mchy,"V021%s", "" );
+  sprintf(mchx,"%s+%.2f*V005", mchy, 1.0 );
+  sprintf(mch,"%s:%s", mchy, mchx);
+  mtx5=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
+  mtx5->GetXaxis()->SetTitle(mchx);
+  mtx5->GetYaxis()->SetTitle(mchy);
+ }//------------------------------------------------------
+
+
+
+//=========================
+sprintf( mnam, "mtx6" );
+mtx6=(TH2F*)gDirectory->Get( mnam );
+if (mtx6==NULL){
+  sprintf(mchy,"V022%s", "" );
+  sprintf(mchx,"%s+%.2f*V006", mchy, 1.0 );
+  sprintf(mch,"%s:%s", mchy, mchx);
+  mtx6=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
+  mtx6->GetXaxis()->SetTitle(mchx);
+  mtx6->GetYaxis()->SetTitle(mchy);
+ }//------------------------------------------------------
+
+
+//=========================
+sprintf( mnam, "mtx7" );
+mtx7=(TH2F*)gDirectory->Get( mnam );
+if (mtx7==NULL){
+  sprintf(mchy,"V023%s", "" );
+  sprintf(mchx,"%s+%.2f*V007", mchy, 1.0 );
+  sprintf(mch,"%s:%s", mchy, mchx);
+  mtx7=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
+  mtx7->GetXaxis()->SetTitle(mchx);
+  mtx7->GetYaxis()->SetTitle(mchy);
+ }//------------------------------------------------------
+
+//=========================
+sprintf( mnam, "mtx8" );
+mtx8=(TH2F*)gDirectory->Get( mnam );
+if (mtx8==NULL){
+  sprintf(mchy,"V024%s", "" );
+  sprintf(mchx,"%s+%.2f*V008", mchy, 1.0 );
+  sprintf(mch,"%s:%s", mchy, mchx);
+  mtx8=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
+  mtx8->GetXaxis()->SetTitle(mchx);
+  mtx8->GetYaxis()->SetTitle(mchy);
+ }//------------------------------------------------------
+
+
+
+
+
+
+//====================================SINGLE=========================
+ dia_m1=new TH1F("dia_m1","diagonal V017",  4000,  0, 4000 );
+ dia_m2=new TH1F("dia_m2","diagonal V018",  4000,  0, 4000 );
+ dia_m3=new TH1F("dia_m3","diagonal V019",  4000,  0, 4000 );
+
+ dia_m4=new TH1F("dia_m4","diagonal V020",  4000,  0, 4000 );
+ dia_m5=new TH1F("dia_m5","diagonal V021",  4000,  0, 4000 );
+
+ dia_m6=new TH1F("dia_m6","diagonal V022",  4000,  0, 4000 );
+ dia_m7=new TH1F("dia_m7","diagonal V023",  4000,  0, 4000 );
+ dia_m8=new TH1F("dia_m8","diagonal V024",  4000,  0, 4000 );
+
+
+
+
+ m1_d=new TH1F("m1_d","deuterons m1",  4000,  0, 4000 );
+ m2_d=new TH1F("m2_d","deuterons m2",  4000,  0, 4000 );
+ m3_d=new TH1F("m3_d","deuterons m3",  4000,  0, 4000 );
+
+ m4_d=new TH1F("m4_d","deuterons m4",  4000,  0, 4000 );
+ m5_d=new TH1F("m5_d","deuterons m5",  4000,  0, 4000 );
+
+ m6_d=new TH1F("m6_d","deuterons m6",  4000,  0, 4000 );
+ m7_d=new TH1F("m7_d","deuterons m7",  4000,  0, 4000 );
+ m8_d=new TH1F("m8_d","deuterons m8",  4000,  0, 4000 );
+
+
+
+#endif
+//=================================================================NEXT IS
+//===============================================WHAT CAN BE RELOADED !!
+
+      //-------------------------- typical load of cuts -----------------
+loadcuts();//  from cuts_manip.h          
+      //-------------------------- typical load of Gcuts -----------------
+      // EXTRA CUTS - to compare Q /T1  or Q/T6
+m1_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_mon");
+m6_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm6_mon");
+
+m1_gene=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_gene");
+m6_gene=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm6_gene");
+
+
 cm1_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm1_d");
 cm2_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm2_d");
 cm3_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm3_d");
@@ -41,42 +247,7 @@ cm7_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm7_d");
 cm8_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm8_d");
 
 
-//================================================DEFINE TH1F====
-//TESTS...........
-TH1F* chansH=new TH1F("TAchansH","channels arrived from pop (analyze)",  1000,0,1000);
 
-//TH1F* timeH=new TH1F("hTimeDiff","time intervals between counters", 		     1800,0,180);
-
-//TH1F* counterH1=new TH1F("s001_A","counter from analyze plug", 		     60000,0,60000);
-//TH1F* counterH4=new TH1F("s004_A","counter from analyze plug", 		     60000,0,60000);
-
-
-TH1F* timeCanA;    // event arrivals    TIME
-TH1F* timeCNT;     // counters arrivals TIME
-timeCanA=NULL;
-timeCNT=NULL;
-
-/*
-TH1F* timeCanAdE1; //dE1 arrivals       TIME
-timeCanAdE1=NULL;
-TH1F* timeCanAdE2; //dE2 arrivals       TIME
-timeCanAdE2=NULL;
-TH1F* timeCanAdE3; //dE3 arrivals       TIME
-timeCanAdE3=NULL;
-TH1F* timeCanAdE5; //dE5 arrivals       TIME
-timeCanAdE5=NULL;
-TH1F* timeCanAdE6; //dE6 arrivals       TIME
-timeCanAdE6=NULL;
-TH1F* timeCanAdE7; //dE7 arrivals       TIME
-timeCanAdE7=NULL;
-*/
-
-TH1F* evnum=new TH1F("TA_EventA","event number arrived from pop (analyze)",  300000, 
-		 0, 300000 );
-
-//TH2F* time_evnum;
-
-TH1F *hh;
 hh=(TH1F*)gDirectory->Get( "c017");if (hh !=NULL){hh->SetTitle("dE1");}
 hh=(TH1F*)gDirectory->Get( "c018");if (hh !=NULL){hh->SetTitle("dE2");}
 hh=(TH1F*)gDirectory->Get( "c019");if (hh !=NULL){hh->SetTitle("dE3");}
@@ -100,163 +271,6 @@ hh=(TH1F*)gDirectory->Get( "c007");if (hh !=NULL){hh->SetTitle("thick E7");}
 hh=(TH1F*)gDirectory->Get( "c008");if (hh !=NULL){hh->SetTitle("thick E8");}
 
 
-//================================================DEFINE MARICES====
-int mbins=1000;
-int mrange=4000;
-
-double mfact[32];
-for (int i=0;i<32;i++){ mfact[i]=1.0;}  // factor to multiply
-
-char mchx[100];
-char mchy[100];
-char mch[100];
-char mnam[100];
-
-
-//=========================
-TH2F *mtx1;
-sprintf( mnam, "mtx1" );
-mtx1=(TH2F*)gDirectory->Get( mnam );
-if (mtx1==NULL){
-  sprintf(mchy,"V017%s", "" );
-  sprintf(mchx,"%s+%.2f*V001", mchy, 1.0 );
-  sprintf(mch,"%s:%s", mchy, mchx);
-  mtx1=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
-  mtx1->GetXaxis()->SetTitle(mchx);
-  mtx1->GetYaxis()->SetTitle(mchy);
- }//------------------------------------------------------
-
-
-
-//=========================
-TH2F *mtx2;
-sprintf( mnam, "mtx2" );
-mtx2=(TH2F*)gDirectory->Get( mnam );
-if (mtx2==NULL){
-  sprintf(mchy,"V018%s", "" );
-  sprintf(mchx,"%s+%.2f*V002", mchy, 1.0 );
-  sprintf(mch,"%s:%s", mchy, mchx);
-  mtx2=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
-  mtx2->GetXaxis()->SetTitle(mchx);
-  mtx2->GetYaxis()->SetTitle(mchy);
- }//------------------------------------------------------
-
-//=========================
-TH2F *mtx3;
-sprintf( mnam, "mtx3" );
-mtx3=(TH2F*)gDirectory->Get( mnam );
-if (mtx3==NULL){
-  sprintf(mchy,"V019%s", "" );
-  sprintf(mchx,"%s+%.2f*V003", mchy, 1.0 );
-  sprintf(mch,"%s:%s", mchy, mchx);
-  mtx3=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
-  mtx3->GetXaxis()->SetTitle(mchx);
-  mtx3->GetYaxis()->SetTitle(mchy);
- }//------------------------------------------------------
-
-//=========================
-TH2F *mtx4;
-sprintf( mnam, "mtx4" );
-mtx4=(TH2F*)gDirectory->Get( mnam );
-if (mtx4==NULL){
-  sprintf(mchy,"V020%s", "" );
-  sprintf(mchx,"%s+%.2f*V004", mchy, 1.0 );
-  sprintf(mch,"%s:%s", mchy, mchx);
-  mtx4=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
-  mtx4->GetXaxis()->SetTitle(mchx);
-  mtx4->GetYaxis()->SetTitle(mchy);
- }//------------------------------------------------------
-
-
-//=========================
-TH2F *mtx5;
-sprintf( mnam, "mtx5" );
-mtx5=(TH2F*)gDirectory->Get( mnam );
-if (mtx5==NULL){
-  sprintf(mchy,"V021%s", "" );
-  sprintf(mchx,"%s+%.2f*V005", mchy, 1.0 );
-  sprintf(mch,"%s:%s", mchy, mchx);
-  mtx5=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
-  mtx5->GetXaxis()->SetTitle(mchx);
-  mtx5->GetYaxis()->SetTitle(mchy);
- }//------------------------------------------------------
-
-
-
-//=========================
-TH2F *mtx6;
-sprintf( mnam, "mtx6" );
-mtx6=(TH2F*)gDirectory->Get( mnam );
-if (mtx6==NULL){
-  sprintf(mchy,"V022%s", "" );
-  sprintf(mchx,"%s+%.2f*V006", mchy, 1.0 );
-  sprintf(mch,"%s:%s", mchy, mchx);
-  mtx6=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
-  mtx6->GetXaxis()->SetTitle(mchx);
-  mtx6->GetYaxis()->SetTitle(mchy);
- }//------------------------------------------------------
-
-
-//=========================
-TH2F *mtx7;
-sprintf( mnam, "mtx7" );
-mtx7=(TH2F*)gDirectory->Get( mnam );
-if (mtx7==NULL){
-  sprintf(mchy,"V023%s", "" );
-  sprintf(mchx,"%s+%.2f*V007", mchy, 1.0 );
-  sprintf(mch,"%s:%s", mchy, mchx);
-  mtx7=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
-  mtx7->GetXaxis()->SetTitle(mchx);
-  mtx7->GetYaxis()->SetTitle(mchy);
- }//------------------------------------------------------
-
-//=========================
-TH2F *mtx8;
-sprintf( mnam, "mtx8" );
-mtx8=(TH2F*)gDirectory->Get( mnam );
-if (mtx8==NULL){
-  sprintf(mchy,"V024%s", "" );
-  sprintf(mchx,"%s+%.2f*V008", mchy, 1.0 );
-  sprintf(mch,"%s:%s", mchy, mchx);
-  mtx8=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
-  mtx8->GetXaxis()->SetTitle(mchx);
-  mtx8->GetYaxis()->SetTitle(mchy);
- }//------------------------------------------------------
-
-
-
-
-
-
-//====================================SINGLE=========================
-
-
-TH1F* dia_m1=new TH1F("dia_m1","diagonal V017",  4000,  0, 4000 );
-TH1F* dia_m2=new TH1F("dia_m2","diagonal V018",  4000,  0, 4000 );
-TH1F* dia_m3=new TH1F("dia_m3","diagonal V019",  4000,  0, 4000 );
-
-TH1F* dia_m4=new TH1F("dia_m4","diagonal V020",  4000,  0, 4000 );
-TH1F* dia_m5=new TH1F("dia_m5","diagonal V021",  4000,  0, 4000 );
-
-TH1F* dia_m6=new TH1F("dia_m6","diagonal V022",  4000,  0, 4000 );
-TH1F* dia_m7=new TH1F("dia_m7","diagonal V023",  4000,  0, 4000 );
-TH1F* dia_m8=new TH1F("dia_m8","diagonal V024",  4000,  0, 4000 );
-
-
-
-
-
-TH1F* m1_d=new TH1F("m1_d","deuterons m1",  4000,  0, 4000 );
-TH1F* m2_d=new TH1F("m2_d","deuterons m2",  4000,  0, 4000 );
-TH1F* m3_d=new TH1F("m3_d","deuterons m3",  4000,  0, 4000 );
-
-TH1F* m4_d=new TH1F("m4_d","deuterons m4",  4000,  0, 4000 );
-TH1F* m5_d=new TH1F("m5_d","deuterons m5",  4000,  0, 4000 );
-
-TH1F* m6_d=new TH1F("m6_d","deuterons m6",  4000,  0, 4000 );
-TH1F* m7_d=new TH1F("m7_d","deuterons m7",  4000,  0, 4000 );
-TH1F* m8_d=new TH1F("m8_d","deuterons m8",  4000,  0, 4000 );
-
 
 
 
@@ -265,12 +279,12 @@ TH1F* m8_d=new TH1F("m8_d","deuterons m8",  4000,  0, 4000 );
 
 
 //======================================================= GRAPHS =====
-int t1gene=0;
-int t6gene=0;
-double t1q=0.0;
-double t6q=0.0;
-double cnt_TIME=0.0;
-double cnt_TIMElast=0.0;
+ t1gene=0;
+ t6gene=0;
+ t1q=0.0;
+ t6q=0.0;
+ cnt_TIME=0.0;
+ cnt_TIMElast=0.0;
 
 /*
 //-------------------------------------GENE-------------------
@@ -310,3 +324,5 @@ if (gt6q==NULL){
 */
 
   printf("end of ------definitions ---------%s\n","");
+
+
