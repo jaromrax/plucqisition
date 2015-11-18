@@ -1,10 +1,18 @@
 #!/bin/bash
 
-
 TIMEOUT=$1 
 if [ "$TIMEOUT" = "" ]; then
-  TIMEOUT=25
+  TIMEOUT=1
 fi
+
+sec=`date +%S`
+while [ "$sec" -gt 2 ]; do
+    echo -n $sec " "
+    sleep 1
+    sec=`date +%S`
+done
+
+
 FILE=/tmp/qqq
 touch /tmp/qqq
 cat COUNTER.1
@@ -15,7 +23,6 @@ echo  $((`cat /tmp/COUNTER.1`  )) " nA*10" > $FILE
 echo  $((`cat /tmp/COUNTER.2`  )) " cps">> $FILE
 
 PIC=counters.jpg
-
 
 ###killall display 2>/dev/null
 
