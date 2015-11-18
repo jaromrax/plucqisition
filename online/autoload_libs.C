@@ -3,7 +3,9 @@
   gROOT->ProcessLine("cout<<\" ------------------ 64 BIT SYSTEM \"<<endl");
   // gSystem->Load("/lib/libdl.so");
   // gSystem->Load("/lib/x86_64-linux-gnu/libdl.so.2");
-  gSystem->Load("/lib/x86_64-linux-gnu/libdl-2.19.so");
+  // good on Debian 8
+  //not on edie ubu1510  gSystem->Load("/lib/x86_64-linux-gnu/libdl-2.19.so");
+    gSystem->Load("/lib/x86_64-linux-gnu/libdl-2.21.so");
   
   gROOT->ProcessLine("cout<<\" ------------------ 64 BIT SYSTEM LOADED\"<<endl");
    
