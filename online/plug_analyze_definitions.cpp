@@ -6,6 +6,7 @@ TCutG *m1_monitor;
 TCutG *m6_monitor;
 TCutG *m1_gene;
 TCutG *m6_gene;
+
 TCutG *cm1_d;
 TCutG *cm2_d;
 TCutG *cm3_d;
@@ -15,6 +16,29 @@ TCutG *cm5_d;
 TCutG *cm6_d;
 TCutG *cm7_d;
 TCutG *cm8_d;
+
+// protons
+TCutG *cm1_p;
+TCutG *cm2_p;
+TCutG *cm3_p;
+TCutG *cm4_p;
+TCutG *cm5_p;
+
+TCutG *cm6_p;
+TCutG *cm7_p;
+TCutG *cm8_p;
+
+// tritons
+TCutG *cm1_t;
+TCutG *cm2_t;
+TCutG *cm3_t;
+TCutG *cm4_t;
+TCutG *cm5_t;
+
+TCutG *cm6_t;
+TCutG *cm7_t;
+TCutG *cm8_t;
+
 
 TH1F* chansH;
 
@@ -65,6 +89,28 @@ TH1F* m5_d;
 TH1F* m6_d;
 TH1F* m7_d;
 TH1F* m8_d;
+//==========================================  protons
+TH1F* m1_p;
+TH1F* m2_p;
+TH1F* m3_p;
+
+TH1F* m4_p;
+TH1F* m5_p;
+
+TH1F* m6_p;
+TH1F* m7_p;
+TH1F* m8_p;
+//==========================================  tritons
+TH1F* m1_t;
+TH1F* m2_t;
+TH1F* m3_t;
+
+TH1F* m4_t;
+TH1F* m5_t;
+
+TH1F* m6_t;
+TH1F* m7_t;
+TH1F* m8_t;
 //======================================  GENE
 int t1gene=0;
 int t6gene=0;
@@ -220,6 +266,33 @@ if (mtx8==NULL){
 
 
 
+
+ m1_p=new TH1F("m1_p","protons m1",  4000,  0, 4000 );
+ m2_p=new TH1F("m2_p","protons m2",  4000,  0, 4000 );
+ m3_p=new TH1F("m3_p","protons m3",  4000,  0, 4000 );
+
+ m4_p=new TH1F("m4_p","protons m4",  4000,  0, 4000 );
+ m5_p=new TH1F("m5_p","protons m5",  4000,  0, 4000 );
+
+ m6_p=new TH1F("m6_p","protons m6",  4000,  0, 4000 );
+ m7_p=new TH1F("m7_p","protons m7",  4000,  0, 4000 );
+ m8_p=new TH1F("m8_p","protons m8",  4000,  0, 4000 );
+
+
+
+ m1_t=new TH1F("m1_t","tritons m1",  4000,  0, 4000 );
+ m2_t=new TH1F("m2_t","tritons m2",  4000,  0, 4000 );
+ m3_t=new TH1F("m3_t","tritons m3",  4000,  0, 4000 );
+
+ m4_t=new TH1F("m4_t","tritons m4",  4000,  0, 4000 );
+ m5_t=new TH1F("m5_t","tritons m5",  4000,  0, 4000 );
+
+ m6_t=new TH1F("m6_t","tritons m6",  4000,  0, 4000 );
+ m7_t=new TH1F("m7_t","tritons m7",  4000,  0, 4000 );
+ m8_t=new TH1F("m8_t","tritons m8",  4000,  0, 4000 );
+
+
+
 #endif
 //=================================================================NEXT IS
 //===============================================WHAT CAN BE RELOADED !!
@@ -246,6 +319,33 @@ cm6_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm6_d");
 cm7_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm7_d");
 cm8_d=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm8_d");
 
+
+
+cm1_p=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm1_p");
+cm2_p=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm2_p");
+cm3_p=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm3_p");
+
+cm4_p=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm4_p");
+cm5_p=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm5_p");
+
+cm6_p=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm6_p");
+cm7_p=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm7_p");
+cm8_p=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm8_p");
+
+
+
+
+
+cm1_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm1_t");
+cm2_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm2_t");
+cm3_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm3_t");
+
+cm4_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm4_t");
+cm5_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm5_t");
+
+cm6_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm6_t");
+cm7_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm7_t");
+cm8_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm8_t");
 
 
 hh=(TH1F*)gDirectory->Get( "c017");if (hh !=NULL){hh->SetTitle("dE1");}
