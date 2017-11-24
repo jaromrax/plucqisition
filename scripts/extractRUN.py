@@ -18,11 +18,12 @@ def run_and_show( CMD ):
 
 print("Select the directory with raw runs:")
 
-#dir=file_selection(directory=True)
 dir="/home/ojr/DATA/NASTRO/20171115_dp26mg/201117:160945,nastro-0_16"
 dir="/home/ojr/DATA/NASTRO/20171115_dp26mg/231117:164316,nastro-0_26"
 #dir="./a_1"
 #dir="/home/ojr/DATA/NASTRO/20171115_dp26mg/231117:164316,nastro-0"
+
+dir=file_selection(directory=True)
 print( dir )
 
 print("i... getting basename and RUNNUM")
