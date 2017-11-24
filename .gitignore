@@ -6,6 +6,9 @@ online/*.root
 online/*.ps
 online/*.eps
 online/*.jpg
+online/*.txt
+online/*.asc
+online/.CURRENTFILE
 offline/*.root
 offline/*.jpg
 offline/*.eps

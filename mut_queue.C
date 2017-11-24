@@ -5,7 +5,8 @@
  *   and the other poping... (priority is push)
  */
 
- TCondition MyCond;
+// TCondition MyCond;  // i dont know why it is commented-it just works comm.
+
 
 void queue_test(){
 
