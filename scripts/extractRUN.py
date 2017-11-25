@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import uuid
 import glob
 import subprocess
 import os 
@@ -82,7 +83,7 @@ else:
             for i in files:
                 esize=os.path.getsize( i )
                 tsize=tsize+esize
-                print("+... {:30s} {:9d}   {:9d}/{:9d} bytes".format(os.path.basename(i),esize, tsize, size) )
+                print("+... {:30s} {:9d}   {:6d}/{:6d} Mbytes".format(os.path.basename(i),esize, int(tsize/1024/1024), int(size/1024/1024) ) )
                 with open(i, "rb") as file2:
                     myfile.write(file2.read())
 #################################################                    
@@ -93,12 +94,46 @@ workdir=os.path.dirname( dir )+"_acq/plucqisition/"
 outdir =os.path.dirname( dir )+"_root/"
 outname=outdir+runbase+".root"
 
-print("\n\n cd "+workdir)
-print("\nroot -l")
-#zhfile.xml
-print('ZH_data(-1,"'+dest+'","'+outname+'","zhfile_26mg.xml") ')
-print(".q\n\n")
 
+unique="z"+str( uuid.uuid4().hex )[:6]
+uniqueC="/tmp/"+unique+".C"
+
+print("\n\n cd "+workdir)
+ROOTCMD="/home/ojr/root/bin/root -l -q -b "+uniqueC
+print("\n"+ROOTCMD)
+
+
+with open(uniqueC,"w") as f:
+
+    #zhfile.xml
+
+    aa='void '+unique+"(){\n"
+    f.write( aa  )
+    print(aa)
+    #print('ZH_data(-1,"'+dest+'","'+outname+'","zhfile_26mg.xml") ')
+    aa='ZH_data(-1,"'+dest+'","'+outname+'","zhfile_26mg.xml"); \n'
+    f.write( aa  )
+    print(aa)
+    aa="}\n"
+    f.write( aa  )
+    print(aa)
+
+#####################
+#   run   ZH_data()  root   C script from /tmp/
+#####################
+print(  "Run ROOT conversion?"  )
+if question( "Run ROOT conversion?" , text="Run ROOT conversion of "+dest+"?"):
+    print("Yes, I convert now")
+else:
+    print("No conversion, quitting")
+    quit()
+os.chdir( workdir )
+p = subprocess.Popen("xterm -fa 'Monospace' -fs 14  -hold -e '"+ROOTCMD+"' ",
+                     shell=True, stdout=subprocess.PIPE)
+#tty_path = readline(p.stdout)
+#tty = open(tty_path, 'r+')
+    
+#print(".q\n\n")
 print("cd")
 print("ls -1 RUN_* | grep -v bz2 | xargs -n 1 pbzip2 -v -9 ")
 print("cd -\n\n")
