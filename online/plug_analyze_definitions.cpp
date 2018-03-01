@@ -2,6 +2,17 @@
 #define PLUG_ANA_DEF
 // HERE I NEED TO SEPARATE 1st RUN and subsequent runs...... #endif
 
+
+
+int NMINUTE; // I want to record minute of the measurements 20171126 
+NMINUTE=0;    // 10 000 minutes in a week
+TH2F *genestab;  //matrix for gene stability 
+TH2F *genestab2;  //matrix for gene stability 
+double genesum[8];  // this will kee last generator value
+double genedif[8];  // this will kee last generator value
+
+
+
 TCutG *m1_monitor;
 TCutG *m6_monitor;
 TCutG *m1_gene;
@@ -122,8 +133,8 @@ double cnt_TIMElast=0.0;
 //=========================================What remain after reload: HERE:
 
 
-chansH=new TH1F("TAchansH","channels arrived from pop (analyze)",  1000,0,1000);
-evnum=new TH1F("TA_EventA","event number arrived from pop (analyze)",  300000, 
+chansH=new TH1F("zTAchansH","channels arrived from pop (analyze)",  1000,0,1000);
+evnum=new TH1F("zTA_EventA","event number arrived from pop (analyze)",  300000, 
 		 0, 300000 );
 
 //================================================DEFINE MARICES====
@@ -131,17 +142,39 @@ evnum=new TH1F("TA_EventA","event number arrived from pop (analyze)",  300000,
 for (int i=0;i<32;i++){ mfact[i]=1.0;}  // factor to multiply
 
 
+// //=========================
+// sprintf( mnam, "mtx1" );
+// mtx1=(TH2F*)gDirectory->Get( mnam );
+// if (mtx1==NULL){
+//   sprintf(mchy,"V017%s", "" );
+//   sprintf(mchx,"%s+%.2f*V001", mchy, 1.0 );
+//   sprintf(mch,"%s:%s", mchy, mchx);
+//   mtx1=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
+//   mtx1->GetXaxis()->SetTitle(mchx);
+//   mtx1->GetYaxis()->SetTitle(mchy);
+//  }//------------------------------------------------------
+
+
 //=========================
-sprintf( mnam, "mtx1" );
-mtx1=(TH2F*)gDirectory->Get( mnam );
-if (mtx1==NULL){
-  sprintf(mchy,"V017%s", "" );
-  sprintf(mchx,"%s+%.2f*V001", mchy, 1.0 );
-  sprintf(mch,"%s:%s", mchy, mchx);
-  mtx1=new TH2F( mnam  ,mch,mbins,0,mrange,mbins,0,mrange);
-  mtx1->GetXaxis()->SetTitle(mchx);
-  mtx1->GetYaxis()->SetTitle(mchy);
+sprintf( mnam, "genestab" );
+genestab=(TH2F*)gDirectory->Get( mnam );
+if (genestab ==NULL){
+  genestab=new TH2F( mnam  ,"generator stabibility",   10000,0,10000, 500, 1500,2500 );
+  //  i make sum dE + E /2
+  genestab->GetYaxis()->SetTitle("gene (dE+E)/2");
+  genestab->GetXaxis()->SetTitle("minutes from the start");
  }//------------------------------------------------------
+sprintf( mnam, "genestab2" );
+genestab2=(TH2F*)gDirectory->Get( mnam );
+if (genestab2 ==NULL){
+  genestab2=new TH2F( mnam  ,"generator stabibility2",   10000,0,10000, 500, 0,1000 );
+  //  i make sum dE - E 
+  genestab2->GetYaxis()->SetTitle("gene abs(dE-E)");
+  genestab2->GetXaxis()->SetTitle("minutes from the start");
+ }//------------------------------------------------------
+
+
+
 
 
 
@@ -239,7 +272,7 @@ if (mtx8==NULL){
 
 
 //====================================SINGLE=========================
- dia_m1=new TH1F("dia_m1","diagonal V017",  4000,  0, 4000 );
+//dia_m1=new TH1F("dia_m1","diagonal V017",  4000,  0, 4000 );
  dia_m2=new TH1F("dia_m2","diagonal V018",  4000,  0, 4000 );
  dia_m3=new TH1F("dia_m3","diagonal V019",  4000,  0, 4000 );
 
@@ -253,7 +286,7 @@ if (mtx8==NULL){
 
 
 
- m1_d=new TH1F("m1_d","deuterons m1",  4000,  0, 4000 );
+// m1_d=new TH1F("m1_d","deuterons m1",  4000,  0, 4000 );
  m2_d=new TH1F("m2_d","deuterons m2",  4000,  0, 4000 );
  m3_d=new TH1F("m3_d","deuterons m3",  4000,  0, 4000 );
 
@@ -267,7 +300,7 @@ if (mtx8==NULL){
 
 
 
- m1_p=new TH1F("m1_p","protons m1",  4000,  0, 4000 );
+// m1_p=new TH1F("m1_p","protons m1",  4000,  0, 4000 );
  m2_p=new TH1F("m2_p","protons m2",  4000,  0, 4000 );
  m3_p=new TH1F("m3_p","protons m3",  4000,  0, 4000 );
 
@@ -280,16 +313,16 @@ if (mtx8==NULL){
 
 
 
- m1_t=new TH1F("m1_t","tritons m1",  4000,  0, 4000 );
- m2_t=new TH1F("m2_t","tritons m2",  4000,  0, 4000 );
- m3_t=new TH1F("m3_t","tritons m3",  4000,  0, 4000 );
+// // m1_t=new TH1F("m1_t","tritons m1",  4000,  0, 4000 );
+//  m2_t=new TH1F("m2_t","tritons m2",  4000,  0, 4000 );
+//  m3_t=new TH1F("m3_t","tritons m3",  4000,  0, 4000 );
 
- m4_t=new TH1F("m4_t","tritons m4",  4000,  0, 4000 );
- m5_t=new TH1F("m5_t","tritons m5",  4000,  0, 4000 );
+//  m4_t=new TH1F("m4_t","tritons m4",  4000,  0, 4000 );
+//  m5_t=new TH1F("m5_t","tritons m5",  4000,  0, 4000 );
 
- m6_t=new TH1F("m6_t","tritons m6",  4000,  0, 4000 );
- m7_t=new TH1F("m7_t","tritons m7",  4000,  0, 4000 );
- m8_t=new TH1F("m8_t","tritons m8",  4000,  0, 4000 );
+//  m6_t=new TH1F("m6_t","tritons m6",  4000,  0, 4000 );
+//  m7_t=new TH1F("m7_t","tritons m7",  4000,  0, 4000 );
+//  m8_t=new TH1F("m8_t","tritons m8",  4000,  0, 4000 );
 
 
 
@@ -301,10 +334,10 @@ if (mtx8==NULL){
 loadcuts();//  from cuts_manip.h          
       //-------------------------- typical load of Gcuts -----------------
       // EXTRA CUTS - to compare Q /T1  or Q/T6
-m1_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_mon");
+//m1_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_mon");
 m6_monitor=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm6_mon");
 
-m1_gene=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_gene");
+//m1_gene=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm1_gene");
 m6_gene=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cutm6_gene");
 
 
@@ -336,19 +369,19 @@ cm8_p=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm8_p");
 
 
 
-cm1_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm1_t");
-cm2_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm2_t");
-cm3_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm3_t");
+// cm1_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm1_t");
+// cm2_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm2_t");
+// cm3_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm3_t");
 
-cm4_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm4_t");
-cm5_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm5_t");
+// cm4_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm4_t");
+// cm5_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm5_t");
 
-cm6_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm6_t");
-cm7_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm7_t");
-cm8_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm8_t");
+// cm6_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm6_t");
+// cm7_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm7_t");
+// cm8_t=(TCutG*)gROOT->GetListOfSpecials()->FindObject("cm8_t");
 
 
-hh=(TH1F*)gDirectory->Get( "c017");if (hh !=NULL){hh->SetTitle("dE1");}
+//hh=(TH1F*)gDirectory->Get( "c017");if (hh !=NULL){hh->SetTitle("dE1");}
 hh=(TH1F*)gDirectory->Get( "c018");if (hh !=NULL){hh->SetTitle("dE2");}
 hh=(TH1F*)gDirectory->Get( "c019");if (hh !=NULL){hh->SetTitle("dE3");}
 hh=(TH1F*)gDirectory->Get( "c020");if (hh !=NULL){hh->SetTitle("dE4");}
@@ -360,7 +393,7 @@ hh=(TH1F*)gDirectory->Get( "c024");if (hh !=NULL){hh->SetTitle("dE8");}
 
 
 
-hh=(TH1F*)gDirectory->Get( "c001");if (hh !=NULL){hh->SetTitle("thick E1");}
+//hh=(TH1F*)gDirectory->Get( "c001");if (hh !=NULL){hh->SetTitle("thick E1");}
 hh=(TH1F*)gDirectory->Get( "c002");if (hh !=NULL){hh->SetTitle("thick E2");}
 hh=(TH1F*)gDirectory->Get( "c003");if (hh !=NULL){hh->SetTitle("thick E3");}
 hh=(TH1F*)gDirectory->Get( "c004");if (hh !=NULL){hh->SetTitle("thick E4");}
