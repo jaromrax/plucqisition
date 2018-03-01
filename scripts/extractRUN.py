@@ -1,11 +1,16 @@
 #!/usr/bin/python3
-
+###############################
+#
+#  see .desktop code at the end
+#
+###############################
 import uuid
 import glob
 import subprocess
 import os 
 from zenipy import calendar,message,error,warning,question,entry,password,file_selection,scale,color_selection,zlist
 
+import argparse
 
 
 def run_and_show( CMD ):
@@ -17,14 +22,24 @@ def run_and_show( CMD ):
     print("-------------------------------------------------")
 
 
+
+parser=argparse.ArgumentParser(description="")
+parser.add_argument("-d","--directory",default="")
+args=parser.parse_args()
+
+
+    
 print("Select the directory with raw runs:")
 
 dir="/home/ojr/DATA/NASTRO/20171115_dp26mg/201117:160945,nastro-0_16"
 dir="/home/ojr/DATA/NASTRO/20171115_dp26mg/231117:164316,nastro-0_26"
 #dir="./a_1"
 #dir="/home/ojr/DATA/NASTRO/20171115_dp26mg/231117:164316,nastro-0"
-
-dir=file_selection(directory=True)
+print("DIR SELECTION:  e.g.  \n",dir,"\n")
+if args.directory=="":
+    dir=file_selection(directory=True)
+else:
+    dir=args.directory
 print( dir )
 
 print("i... getting basename and RUNNUM")
@@ -73,7 +88,8 @@ else:
     if os.path.exists(dest+".bz2"):
         print("i... file "+dest+" exists and is BZIPPED2 ...")
         run_and_show( "bunzip2 -v "+dest+".bz2")
-        quit()
+        # i dont quit and look.....
+        #quit()
     else:
         files = glob.glob(dir+"/*.vme_u")
         files.sort(key=os.path.getmtime)   # SORT BY TIME
@@ -90,10 +106,20 @@ else:
 print("\n\n")
 run_and_show("ls -ltrh "+dest)
 
-workdir=os.path.dirname( dir )+"_acq/plucqisition/"
-outdir =os.path.dirname( dir )+"_root/"
+######   somethimes i use .backed_up and then I return there ...
+ext_backedup=dir.find(".backed_up")
+print("D... extension  .backed_up... pos={}",ext_backedup)
+dir2=dir
+
+if ext_backedup>0:
+    dir2=dir[:ext_backedup]+"/"   # / needed in case of .backedup
+    print(" .backed_up extension removed...",dir2)
+    #quit()
+workdir=os.path.dirname( dir2 )+"_acq/plucqisition/"
+outdir =os.path.dirname( dir2 )+"_root/"
 outname=outdir+runbase+".root"
 
+print("workdir={}\n outdir={}\n outname={}\n", workdir, outdir, outname)
 
 unique="z"+str( uuid.uuid4().hex )[:6]
 uniqueC="/tmp/"+unique+".C"
@@ -118,17 +144,24 @@ with open(uniqueC,"w") as f:
     f.write( aa  )
     print(aa)
 
+
+    
 #####################
 #   run   ZH_data()  root   C script from /tmp/
 #####################
 print(  "Run ROOT conversion?"  )
-if question( "Run ROOT conversion?" , text="Run ROOT conversion of "+dest+"?"):
-    print("Yes, I convert now")
-else:
-    print("No conversion, quitting")
-    quit()
+print(  "Run ROOT conversion?  YES ALWAYS "  )
+
+#if question( "Run ROOT conversion?" , text="Run ROOT conversion of "+dest+"?"):
+#    print("Yes, I convert now")
+#else:
+#    print("No conversion, quitting")
+#    quit()
+
+    
 os.chdir( workdir )
-p = subprocess.Popen("xterm -fa 'Monospace' -fs 14  -hold -e '"+ROOTCMD+"' ",
+## xterm  -hold
+p = subprocess.Popen("xterm -fa 'Monospace' -fs 14 -hold  -e '"+ROOTCMD+"' ",
                      shell=True, stdout=subprocess.PIPE)
 #tty_path = readline(p.stdout)
 #tty = open(tty_path, 'r+')
@@ -137,3 +170,25 @@ p = subprocess.Popen("xterm -fa 'Monospace' -fs 14  -hold -e '"+ROOTCMD+"' ",
 print("cd")
 print("ls -1 RUN_* | grep -v bz2 | xargs -n 1 pbzip2 -v -9 ")
 print("cd -\n\n")
+
+##############################################
+#
+#
+#
+############################   without ; read   # it doesnt work properly
+# [Desktop Entry]
+# Encoding=UTF-8
+# Type=Application
+# Exec=xterm -fa 'Monospace' -fs 14 -e 'source ~/.bashrc;/home/ojr/bin/extractRUN.py; read'
+# Terminal=false
+# Name=CONVERT_OFFLINE
+# StartupNotify=true
+# Categories=Science;Development;Application;
+# Icon=/usr/share/icons/hicolor/48x48/apps/transmission.png
+#
+##
+#
+#
+##
+#
+#
