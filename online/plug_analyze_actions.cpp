@@ -27,18 +27,20 @@
  //     }
  //  }
 
- if (chan[18]>0) {
-   mtx2->Fill( mfact[2]*chan[2]+chan[18], chan[18] ); 
-   if (chan[2]<3){
-     dia_m2->Fill(  chan[18] );
-   } 
-   if ( (cm2_d!=NULL) && (cm2_d->IsInside(chan[2],chan[18]) )){
-       m2_d->Fill( mfact[2]*chan[2]+chan[18] );
-     }
-   if ( (cm2_p!=NULL) && (cm2_p->IsInside(chan[2],chan[18]) )){
-       m2_p->Fill( mfact[2]*chan[2]+chan[18] );
-     }
-  }
+
+
+ // if (chan[18]>0) {
+ //   mtx2->Fill( mfact[2]*chan[2]+chan[18], chan[18] ); 
+ //   if (chan[2]<3){
+ //     dia_m2->Fill(  chan[18] );
+ //   } 
+ //   if ( (cm2_d!=NULL) && (cm2_d->IsInside(chan[2],chan[18]) )){
+ //       m2_d->Fill( mfact[2]*chan[2]+chan[18] );
+ //     }
+ //   if ( (cm2_p!=NULL) && (cm2_p->IsInside(chan[2],chan[18]) )){
+ //       m2_p->Fill( mfact[2]*chan[2]+chan[18] );
+ //     }
+ //  }
 
 
 
@@ -131,18 +133,18 @@ if (chan[23]>0) {
     }
  }
 
- if (chan[24]>0) {
-   mtx8->Fill( mfact[8]*chan[8]+chan[24], chan[24] );  
-   if (chan[8]<3){
-     dia_m8->Fill(  chan[24] );
-   }
-   if ( (cm8_d!=NULL) && (cm8_d->IsInside(chan[8],chan[24]) )){
-       m8_d->Fill( mfact[8]*chan[8]+chan[24] );
-     }
-   if ( (cm8_p!=NULL) && (cm8_p->IsInside(chan[8],chan[24]) )){
-       m8_p->Fill( mfact[8]*chan[8]+chan[24] );
-     }
-  }
+ // if (chan[24]>0) {
+ //   mtx8->Fill( mfact[8]*chan[8]+chan[24], chan[24] );  
+ //   if (chan[8]<3){
+ //     dia_m8->Fill(  chan[24] );
+ //   }
+ //   if ( (cm8_d!=NULL) && (cm8_d->IsInside(chan[8],chan[24]) )){
+ //       m8_d->Fill( mfact[8]*chan[8]+chan[24] );
+ //     }
+ //   if ( (cm8_p!=NULL) && (cm8_p->IsInside(chan[8],chan[24]) )){
+ //       m8_p->Fill( mfact[8]*chan[8]+chan[24] );
+ //     }
+ //  }
 
 
 
@@ -181,6 +183,8 @@ if (chan[23]>0) {
      genedif[7]= abs(chan[23]-chan[7]) ;
      genedif[8]= abs(chan[24]-chan[8]) ;
  }
+
+
 
 //I TRY COUNTER .................................................... i define NMINUTE
 if ( (chan[33]>0)  || (chan[35]>0)  )
