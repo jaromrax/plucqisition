@@ -16,7 +16,19 @@
 #include <unistd.h>
 #include <assert.h>
 
-
+//--------- when mmap:
+#include <err.h>
+#include <sys/mman.h>
+#include <fcntl.h>   //  open,  O_RW
+#include <TMapFile.h>
+#include <TH1F.h>
+//-------- get_time
+//#include <time.h>
+//#include <ctime>
+//#include <iomanip>
+//#include <sys/timeb.h>
+#include <sys/time.h>
+long CurrentTime, PrevRateTime, ElapsedTime; //StartTime=global
 
 unsigned char zmqtext[1024*1024]; //3boardsx8 chans x3 vals ... 100*4 chars  NO
 int PORT=25700;
@@ -24,15 +36,76 @@ int PORT=25700;
 
 // FOR FILE READ/ WRITE
 unsigned char buffer[1024*1024];
-// FILE *ptr;
+
+TMapFile *mmapfd3=NULL;
+TH1F *harray[7*8];
+
+
+
+/***************************************************
+ *
+ *
+ *
+ *
+ ***************************************************/
+long get_time()
+{
+    long time_ms;
+#ifdef WIN32
+    struct _timeb timebuffer;
+    _ftime( &timebuffer );
+    time_ms = (long)timebuffer.time * 1000 + (long)timebuffer.millitm;
+#else
+    struct timeval t1;
+    struct timezone tz;
+    gettimeofday(&t1, &tz);
+    time_ms = (t1.tv_sec) * 1000 + t1.tv_usec / 1000;
+#endif
+    return time_ms;
+}
 
 
 
 
 
+TMapFile* init_histograms_mmap(  int records  ){
+
+  int reco=records;
+  printf("D...  record lenght for  HARRAY=%d\n", reco);  char fname3[500];
+  char DataPath[1000]=".";
+  sprintf( fname3, "%s/mmap.histo",  DataPath );  
+  mmapfd3 = TMapFile::Create( fname3  ,"RECREATE" , 16*1024000 ,  "TH1F_16");   // why 4194304 ?
+  char thname[10];
+  char tnamed[100];
+  ///    CHANNELS OF the 1st board only..................
+  
+  for (int i=0;i<8;i++){ // channels
+    sprintf(thname,"b0c%02d", i);
+    harray[i]=new TH1F( thname ,"vme_histogram",8192*2,0,8192*2);
+    printf("D... NEW   spe  harray %d,   addr=%lu\n", i, (long unsigned)harray[i] );
+
+    sprintf(tnamed,"b0c%02d", i+1);
+    TNamed *n=new TNamed("display_with",tnamed);
+    harray[i]->GetListOfFunctions()->Add(n);
+    
+    mmapfd3->Add( harray[i] );
+    harray[i]->Fill( i*400+400 );
+  
+  }
+  printf("D... histo added  %s\n",fname3 );
+  mmapfd3->Update(  );
+
+  return mmapfd3;
+}
 
 
 
+/***************************************************
+ *
+ *
+ *
+ *
+ ***************************************************/
 
 
 //dd if=/dev/urandom of=test.bin count=1024 bs=2
@@ -90,20 +163,19 @@ void write_binary_file( unsigned long afileLen ){
 
 
 
-//======================= CLIENT ===========================
+/***************************************************
+ *
+ *
+ *       CLIENT
+ *
+ ***************************************************/
 int client ()
 {
+    CurrentTime = get_time();
+    PrevRateTime= get_time();
     int rc;
-    //zmq::context_t *context= zmq_ctx_new();
     void *context= zmq_ctx_new();
-    //zmq::socket_t  zmqsocket (context, ZMQ_SUB);
-    //zmq::socket_t subscriber = zmq_socket(context, ZMQ_SUB);
     void* subscriber = zmq_socket(context, ZMQ_SUB);
-
-    //void *context = zmq_ctx_new();
-    //  Socket to talk to server
-    //printf ("Collecting updates from server...I am SUB\n");
-    //void *subscriber = zmq_socket(context, ZMQ_SUB);
     char address[100];
     sprintf( address, "%s:%d", "tcp://127.0.0.1",  PORT );
     printf("i..CLIENT: to connect : %s\n",address );
@@ -114,6 +186,10 @@ int client ()
     printf("i..CLIENT: registering: %s\n",address );
     //zmq_msg_init( ZMQ_POLLIN );
 
+
+    init_histograms_mmap(  500  ); //  TMAPFILE HISTOGRAMS
+
+    
     int count=0;
     while(1){
       // Receive message from server
@@ -129,17 +205,29 @@ int client ()
 	continue;   // go back to start
       }
       printf("...CLIENT: %d. after if recv\n" , count);
-      int size = zmq_msg_size (&message);
+      unsigned int size = zmq_msg_size (&message);
       if (size>sizeof(buffer)){size=sizeof(buffer);}
       
       //char string[10000]; // = malloc (size + 1);
-      printf("...CLIENT: %d. copy to mem %d\n",count++,size);
+      printf("...CLIENT: %d. copy to mem %d\n",count,size);
       //memcpy (string, zmq_msg_data (&message), size);
       memcpy (buffer, zmq_msg_data (&message), size);
       zmq_msg_close (&message);
       //string [size] = 0;
       //printf("W..CLIENT:Message is: %s\n",string);
-      write_binary_file( size ); //== write from buffer
+      //==========  WRITE TEST HERE: UNCOMMENT
+      //write_binary_file( size ); //== write from buffer
+      harray[0]->Fill(count % 10000);
+      harray[1]->Fill(count % 12000);
+      
+      CurrentTime = get_time();
+      ElapsedTime = CurrentTime - PrevRateTime; /* milliseconds */
+      if (ElapsedTime>500){
+	mmapfd3->Update(  ); // update each cycle
+	PrevRateTime=CurrentTime; /* milliseconds */
+      }
+
+      count++;
     }
 
     zmq_close (subscriber);
@@ -153,9 +241,13 @@ int client ()
 
 
 
-//============================== SERVER =========
-
-int server(){
+/***************************************************
+ *
+ *
+ *               SERVER
+ *
+ ***************************************************/
+void server(){
   unsigned long rd;
   rd=read_binary_file(); //======== read bin file to buffer 
   //write_binary_file( rd ); //========write from buffer 
@@ -169,7 +261,7 @@ int server(){
    zmqsocket.bind ( address   );
    usleep(1000*300);  // wait 300ms for register
    
-   for (int i=0;i<1;i++){
+   for (int i=0;i<100000;i++){
      // it has delay 200 loops 2048kB/1ms when sleep is 10us
      sprintf( tmp, "%05d%d", i,12345 );
      memcpy( &zmqtext, tmp, strlen(tmp) );
@@ -183,7 +275,11 @@ int server(){
        memcpy ((void *) reply.data(), buffer, rd  );
        // // //printf("hwserver  PUB  sending /%s/\n", zmqtext);
        zmqsocket.send ( reply ); 
-       usleep(1000*1);  // SEND EVERY  1ms
+       usleep(50*1);  // SEND EVERY  1ms
+       // IF every event is MMAP->Update(): 0.25ms is ok (1sec delay client)
+       // TEST with 500ms UPDATE in CLIENT:
+       //          1us sleep is enough to catchup==100us in fact
+       
      }
    }//======= for i 1000
 }
