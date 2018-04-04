@@ -291,7 +291,7 @@ void server( int loops ){
        // // //printf("hwserver  PUB  sending /%s/\n", zmqtext);
        zmqsocket.send ( reply ); 
        usleep(50*1);  // SEND EVERY  1ms
-       //usleep(1000*2000);  // DELAY FOR BIG FILE
+       usleep(1000*2000);  // DELAY FOR BIG FILE
        // IF every event is MMAP->Update(): 0.25ms is ok (1sec delay client)
        // TEST with 500ms UPDATE in CLIENT:
        //          1us sleep is enough to catchup==100us in fact
