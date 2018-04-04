@@ -48,6 +48,7 @@ TMapFile *mmapfd3=NULL;
 TH1F *harray[7*8];
 
 bool  writefile = true; // arguments: client nowrite 
+char address[100];
 
 
 /***************************************************
@@ -184,8 +185,6 @@ int client ( bool writefile)
     int rc;
     void *context= zmq_ctx_new();
     void* subscriber = zmq_socket(context, ZMQ_SUB);
-    char address[100];
-    sprintf( address, "%s:%d", "tcp://127.0.0.1",  PORT );
     printf("i... CLIENT: to connect : %s\n",address );
     rc = zmq_connect (subscriber,  address );
     assert (rc == 0);
@@ -332,12 +331,21 @@ int main( int argc, char *argv []){
       if (argc>2){
 	if ( strstr(argv[2],"nowrite")!=NULL){
 	  writefile=false;}
+	printf("D... NEW write status : %d\n", writefile );
+
+      }
+      sprintf( address, "%s:%d", "tcp://127.0.0.1",  PORT );
+      if (argc>3){
+	sprintf( address, "tcp://%s:%d" , argv[3] ,PORT );
+	printf("D... NEW address  %s\n", address);
       }
       client( writefile );
     }
   }else{
     printf("\nNO ARGUMENTS. [server|client]%s\n","");
   }
+  printf("\n    client [nowrite|aaa]  [127.0.0.1] %s\n","");
+  printf("\n    server [1|10|1000]  %s\n","");
   
   // zmq::context_t context(1);
   // //  Subscriber tells us when it's ready here
