@@ -27,7 +27,7 @@ LDFLAGS= `root-config --new --glibs`  -lstdc++    -lHist -lNet -lCore -lRIO -lGp
 all	:	$(EXE) 
 
 test	:	
-		time dd if=/dev/urandom of=test.bin count=1 bs=1024; rm tcpy.bin; ./zmq_pub client& time ./zmq_pub server; ls -l *bin;sleep 1;killall zmq_pub; diff tcpy.bin test.bin -s
+		time dd if=/dev/urandom of=test.bin count=100 bs=1024; rm tcpy.bin; ./zmq_pub client& time ./zmq_pub server; ls -l *bin;sleep 1;killall zmq_pub; diff tcpy.bin test.bin -s
 
 
 clean	:

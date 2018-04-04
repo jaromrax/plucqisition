@@ -6,6 +6,13 @@
  *   start the publisher, run it,
  *   client will register later and read the data
  *
+ *-------------------------TESTS DONE------------
+ * 1. files identical 1k 1M 10M
+ * 2. speed test - server needs to sleep 50us to match client 1kB
+ * 3. client 1st; server 2nd. works
+ * 4. server runs, client 2nd. works, looses 1st data
+ * 5. client 1st; server 2nd-runsaway: server 3rd: clients reconnected!
+ *      few zero buffers
  ***********************************************/
 
 //client.c
@@ -40,6 +47,7 @@ unsigned char buffer[1024*1024];
 TMapFile *mmapfd3=NULL;
 TH1F *harray[7*8];
 
+bool  writefile = true; // arguments: client nowrite 
 
 
 /***************************************************
@@ -116,7 +124,7 @@ unsigned long read_binary_file(){
  //struct stat info;
  unsigned long fileLen;
  
- printf("i... opening the binary file %s\n", filename );
+ printf("i... opening the binary file (r) %s\n", filename );
  ptr = fopen( filename ,"rb");  // r for read, b for binary
  //info.st_size * sizeof(char);
  fseek(ptr, 0, SEEK_END);
@@ -143,12 +151,12 @@ void write_binary_file( unsigned long afileLen ){
  //struct stat info;
  // unsigned long fileLen;
  
- printf("i... opening the binary file %s\n", filename );
+ printf("i... opening the binary file (w) %s\n", filename );
  ptr = fopen( filename ,"wb");  // r for read, b for binary
- printf("w...FILE %s SIZE: %lu\n", filename , fileLen );
+ printf("w... FILE %s SIZE: %lu\n", filename , fileLen );
  if (fileLen>sizeof(buffer)) {
    fileLen=sizeof(buffer);
-   printf("w...FILE %s SIZE: %lu\n", filename , fileLen );
+   printf("w... FILE %s SIZE: %lu\n", filename , fileLen );
  }
  fwrite(buffer, fileLen ,1,ptr); //
  fclose(ptr);
@@ -169,7 +177,7 @@ void write_binary_file( unsigned long afileLen ){
  *       CLIENT
  *
  ***************************************************/
-int client ()
+int client ( bool writefile)
 {
     CurrentTime = get_time();
     PrevRateTime= get_time();
@@ -178,53 +186,58 @@ int client ()
     void* subscriber = zmq_socket(context, ZMQ_SUB);
     char address[100];
     sprintf( address, "%s:%d", "tcp://127.0.0.1",  PORT );
-    printf("i..CLIENT: to connect : %s\n",address );
+    printf("i... CLIENT: to connect : %s\n",address );
     rc = zmq_connect (subscriber,  address );
     assert (rc == 0);
     zmq_setsockopt( subscriber, ZMQ_SUBSCRIBE, "", 0 );
-    printf("i..CLIENT: connected  : %s\n",address );
-    printf("i..CLIENT: registering: %s\n",address );
+    printf("i... CLIENT: connected  : %s\n",address );
+    printf("i... CLIENT: entering while-loop and init(): %s\n",address );
     //zmq_msg_init( ZMQ_POLLIN );
 
 
-    init_histograms_mmap(  500  ); //  TMAPFILE HISTOGRAMS
-
+    if (writefile){
+      init_histograms_mmap(  500  ); //  TMAPFILE HISTOGRAMS
+    }
     
     int count=0;
     while(1){
       // Receive message from server
       zmq_msg_t message;
-      //printf ("...CLIENT: init ...I am SUB\n");
+      //printf ("c... CLIENT: init ...I am SUB\n");
       zmq_msg_init (&message);
-      printf ("...CLIENT: after init ...waiting to receive\n");
+      printf ("c... CLIENT: after init() ...waiting to receive\n");
       //int a=zmq_msg_recv(subscriber, &message, 0);
       int a=zmq_msg_recv( &message, subscriber, 0);
-      printf("...CLIENT: just received a==%d / \n",a );
+      printf("c... CLIENT: just received: a==%d \n",a );
       if( a==0){
-	//usleep(1*1); //0.1 ms    10ms sleep// NO SLEEP ALSO OK
+	// CLIENT - no need to sleep, no cpuload without.
+	usleep(1); //0.1 ms    10ms sleep// NO SLEEP ALSO OK
 	continue;   // go back to start
       }
-      printf("...CLIENT: %d. after if recv\n" , count);
+      //printf("...CLIENT: %d. after recv, a!=0\n" , count);
       unsigned int size = zmq_msg_size (&message);
-      if (size>sizeof(buffer)){size=sizeof(buffer);}
+      if (size>sizeof(buffer)){size=sizeof(buffer);} //dont overflow
       
       //char string[10000]; // = malloc (size + 1);
-      printf("...CLIENT: %d. copy to mem %d\n",count,size);
+      printf("c... CLIENT: %d. copy to mem/buffer %d\n",count,size);
       //memcpy (string, zmq_msg_data (&message), size);
       memcpy (buffer, zmq_msg_data (&message), size);
       zmq_msg_close (&message);
       //string [size] = 0;
       //printf("W..CLIENT:Message is: %s\n",string);
-      //==========  WRITE TEST HERE: UNCOMMENT
-      //write_binary_file( size ); //== write from buffer
-      harray[0]->Fill(count % 10000);
-      harray[1]->Fill(count % 12000);
+      if (writefile){
+	//==========  WRITE TEST HERE: UNCOMMENT
+	write_binary_file( size ); //== write from buffer
+	//================ Fill MMAP Histo Test
+	harray[0]->Fill(count % 10000);
+	harray[1]->Fill(count % 12000);
       
-      CurrentTime = get_time();
-      ElapsedTime = CurrentTime - PrevRateTime; /* milliseconds */
-      if (ElapsedTime>500){
-	mmapfd3->Update(  ); // update each cycle
-	PrevRateTime=CurrentTime; /* milliseconds */
+	CurrentTime = get_time();
+	ElapsedTime = CurrentTime - PrevRateTime; /* milliseconds */
+	if (ElapsedTime>500){
+	  mmapfd3->Update(  ); // update NOT TOO FREQUENTLY
+	  PrevRateTime=CurrentTime; /* milliseconds */
+	}
       }
 
       count++;
@@ -247,7 +260,7 @@ int client ()
  *               SERVER
  *
  ***************************************************/
-void server(){
+void server( int loops ){
   unsigned long rd;
   rd=read_binary_file(); //======== read bin file to buffer 
   //write_binary_file( rd ); //========write from buffer 
@@ -257,16 +270,18 @@ void server(){
    zmq::context_t context (1);
    zmq::socket_t  zmqsocket (context, ZMQ_PUB); //ZMQ_REP
    sprintf( address, "%s:%d", "tcp://*",  PORT );
-   printf("SERVER: binding  %s\n",address );
+   printf("s... SERVER: binding  %s\n",address );
    zmqsocket.bind ( address   );
-   usleep(1000*300);  // wait 300ms for register
+   usleep(1000*300);  // wait 300ms for register. Cleint 1st, this is SAFE
    
-   for (int i=0;i<100000;i++){
+   //   for (int i=0;i<100000;i++){
+   //==========  SINGLE/MULTI TEST HERE: 
+   for (int i=0;i<loops;i++){
      // it has delay 200 loops 2048kB/1ms when sleep is 10us
      sprintf( tmp, "%05d%d", i,12345 );
      memcpy( &zmqtext, tmp, strlen(tmp) );
-     printf("SERVER: %d.   %ld ... is not real sizenow, %lu is\n",
-	    i, strlen(tmp),  rd  );
+     printf("s... SERVER: %4d/%4d   %ld ... is not real sizenow, %lu is\n",
+	    i, loops, strlen(tmp),  rd  );
      if (1==1){
        // // //========== ZMQ SEND PUB : define "replay"
        //zmq::message_t reply ( strlen(tmp) );
@@ -276,6 +291,7 @@ void server(){
        // // //printf("hwserver  PUB  sending /%s/\n", zmqtext);
        zmqsocket.send ( reply ); 
        usleep(50*1);  // SEND EVERY  1ms
+       //usleep(1000*2000);  // DELAY FOR BIG FILE
        // IF every event is MMAP->Update(): 0.25ms is ok (1sec delay client)
        // TEST with 500ms UPDATE in CLIENT:
        //          1us sleep is enough to catchup==100us in fact
@@ -295,18 +311,29 @@ void server(){
  **********************************************/
 
 int main( int argc, char *argv []){
-  printf("I am zmq publisher/subscriber on port=%d\n", PORT );
+  printf("I am an zmq publisher/subscriber test on port=%d\n", PORT );
 
   printf("parameters...%d\n", argc);
+  int loops=1;
   if (argc>1){
-    printf("i... parameter %s\n", argv[1]);
+    printf("i... parameter: %s\n", argv[1]);
     if ( strstr(argv[1],"server")!=NULL){
-      printf("%s\n","server");
-      server();
+      printf(".... %s\n","server");
+      if (argc>2){
+	if ( atoi(argv[2])>0){
+	  loops=atoi(argv[2]);}
+	printf("D... LOOPS %s : %d\n", argv[2], loops );
+      }
+      server( loops );
     }
     if ( strstr(argv[1],"client")!=NULL){
-      printf("%s\n","client");
-      client();
+      printf(".... %s\n","client");
+      writefile=true;
+      if (argc>2){
+	if ( strstr(argv[2],"nowrite")!=NULL){
+	  writefile=false;}
+      }
+      client( writefile );
     }
   }else{
     printf("\nNO ARGUMENTS. [server|client]%s\n","");
