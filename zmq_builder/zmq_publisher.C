@@ -37,12 +37,12 @@
 #include <sys/time.h>
 long CurrentTime, PrevRateTime, ElapsedTime; //StartTime=global
 
-unsigned char zmqtext[1024*1024]; //3boardsx8 chans x3 vals ... 100*4 chars  NO
+unsigned char zmqtext[10240*1024]; //3boardsx8 chans x3 vals ... 100*4 chars  NO
 int PORT=25700;
 // g++  -Wall --permissive -g  zmqtest2sub.c -lzmq   -o zmqtest2sub  
 
 // FOR FILE READ/ WRITE
-unsigned char buffer[1024*1024];
+unsigned char buffer[10240*1024];
 
 TMapFile *mmapfd3=NULL;
 TH1F *harray[7*8];
@@ -290,7 +290,7 @@ void server( int loops ){
        // // //printf("hwserver  PUB  sending /%s/\n", zmqtext);
        zmqsocket.send ( reply ); 
        usleep(50*1);  // SEND EVERY  1ms
-       usleep(1000*2000);  // DELAY FOR BIG FILE
+       usleep(1000*1000);  // DELAY FOR BIG FILE
        // IF every event is MMAP->Update(): 0.25ms is ok (1sec delay client)
        // TEST with 500ms UPDATE in CLIENT:
        //          1us sleep is enough to catchup==100us in fact
